@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.longfor.itserver.mapper.ProgramEmployeeMapper" >
+  <resultMap id="BaseResultMap" type="com.longfor.itserver.entity.ProgramEmployee" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="program_id" property="programId" jdbcType="BIGINT" />
+    <result column="account_id" property="accountId" jdbcType="VARCHAR" />
+    <result column="employee_code" property="employeeCode" jdbcType="BIGINT" />
+    <result column="employee_name" property="employeeName" jdbcType="VARCHAR" />
+    <result column="full_dept_path" property="fullDeptPath" jdbcType="VARCHAR" />
+    <result column="employee_type" property="employeeType" jdbcType="INTEGER" />
+    <result column="employee_type_id" property="employeeTypeId" jdbcType="BIGINT" />
+    <result column="employee_type_text" property="employeeTypeText" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, program_id, account_id, employee_code, employee_name, full_dept_path, employee_type, 
+    employee_type_id, employee_type_text, status, create_time, modified_time
+  </sql>
+</mapper>

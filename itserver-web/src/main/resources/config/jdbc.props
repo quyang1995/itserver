@@ -7,7 +7,7 @@
 driverClass=com.mysql.jdbc.Driver
 url=jdbc:mysql://localhost:3306/itplus?useUnicode=true&characterEncoding=UTF-8
 username=root
-password=b123456
+password=password123
 initial.size=3
 max.active=60
 

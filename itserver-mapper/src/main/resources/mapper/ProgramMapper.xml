@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.longfor.itserver.mapper.ProgramMapper">
+  <resultMap id="BaseResultMap" type="com.longfor.itserver.entity.Program">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="descp" jdbcType="VARCHAR" property="descp" />
+    <result column="commit_date" jdbcType="TIMESTAMP" property="commitDate" />
+    <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
+    <result column="gray_release_date" jdbcType="TIMESTAMP" property="grayReleaseDate" />
+    <result column="release_date" jdbcType="TIMESTAMP" property="releaseDate" />
+    <result column="like_product" jdbcType="VARCHAR" property="likeProduct" />
+    <result column="like_program" jdbcType="VARCHAR" property="likeProgram" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="program_status" jdbcType="INTEGER" property="programStatus" />
+    <result column="modified_account_id" jdbcType="VARCHAR" property="modifiedAccountId" />
+    <result column="modified_name" jdbcType="VARCHAR" property="modifiedName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, product_id, name, descp, commit_date, start_date, gray_release_date, release_date, 
+    like_product, like_program, type, program_status, modified_account_id, modified_name, 
+    create_time, modified_time
+  </sql>
+</mapper>

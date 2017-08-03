@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.longfor.itserver.mapper.ProgramEmployeeChangeLogMapper" >
+  <resultMap id="BaseResultMap" type="com.longfor.itserver.entity.ProgramEmployeeChangeLog" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="program_id" property="programId" jdbcType="BIGINT" />
+    <result column="action_change_info" property="actionChangeInfo" jdbcType="VARCHAR" />
+    <result column="modified_account_id" property="modifiedAccountId" jdbcType="VARCHAR" />
+    <result column="modified_name" property="modifiedName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, program_id, action_change_info, modified_account_id, modified_name, create_time, 
+    modified_time
+  </sql>
+</mapper>

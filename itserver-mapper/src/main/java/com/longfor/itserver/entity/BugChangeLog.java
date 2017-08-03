@@ -1,0 +1,202 @@
+package com.longfor.itserver.entity;
+
+import java.util.Date;
+import javax.persistence.*;
+
+@Table(name = "bug_change_log")
+public class BugChangeLog {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    /**
+     * bug id
+     */
+    @Column(name = "bug_id")
+    private Long bugId;
+
+    /**
+     * 改之前bug描述
+     */
+    @Column(name = "bef_descp")
+    private String befDescp;
+
+    /**
+     * 日志信息
+     */
+    @Column(name = "action_change_info")
+    private String actionChangeInfo;
+
+    /**
+     * 日志修改类型：1=描述修改，2=其它修改
+     */
+    private Integer type;
+
+    /**
+     * 最后修改人账户id
+     */
+    @Column(name = "modified_account_id")
+    private String modifiedAccountId;
+
+    /**
+     * 最后修改人名称
+     */
+    @Column(name = "modified_name")
+    private String modifiedName;
+
+    @Column(name = "create_time")
+    private Date createTime;
+
+    @Column(name = "modified_time")
+    private Date modifiedTime;
+
+    /**
+     * @return id
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * @param id
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
+     * 获取bug id
+     *
+     * @return bug_id - bug id
+     */
+    public Long getBugId() {
+        return bugId;
+    }
+
+    /**
+     * 设置bug id
+     *
+     * @param bugId bug id
+     */
+    public void setBugId(Long bugId) {
+        this.bugId = bugId;
+    }
+
+    /**
+     * 获取改之前bug描述
+     *
+     * @return bef_descp - 改之前bug描述
+     */
+    public String getBefDescp() {
+        return befDescp;
+    }
+
+    /**
+     * 设置改之前bug描述
+     *
+     * @param befDescp 改之前bug描述
+     */
+    public void setBefDescp(String befDescp) {
+        this.befDescp = befDescp == null ? null : befDescp.trim();
+    }
+
+    /**
+     * 获取日志信息
+     *
+     * @return action_change_info - 日志信息
+     */
+    public String getActionChangeInfo() {
+        return actionChangeInfo;
+    }
+
+    /**
+     * 设置日志信息
+     *
+     * @param actionChangeInfo 日志信息
+     */
+    public void setActionChangeInfo(String actionChangeInfo) {
+        this.actionChangeInfo = actionChangeInfo == null ? null : actionChangeInfo.trim();
+    }
+
+    /**
+     * 获取日志修改类型：1=描述修改，2=其它修改
+     *
+     * @return type - 日志修改类型：1=描述修改，2=其它修改
+     */
+    public Integer getType() {
+        return type;
+    }
+
+    /**
+     * 设置日志修改类型：1=描述修改，2=其它修改
+     *
+     * @param type 日志修改类型：1=描述修改，2=其它修改
+     */
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    /**
+     * 获取最后修改人账户id
+     *
+     * @return modified_account_id - 最后修改人账户id
+     */
+    public String getModifiedAccountId() {
+        return modifiedAccountId;
+    }
+
+    /**
+     * 设置最后修改人账户id
+     *
+     * @param modifiedAccountId 最后修改人账户id
+     */
+    public void setModifiedAccountId(String modifiedAccountId) {
+        this.modifiedAccountId = modifiedAccountId == null ? null : modifiedAccountId.trim();
+    }
+
+    /**
+     * 获取最后修改人名称
+     *
+     * @return modified_name - 最后修改人名称
+     */
+    public String getModifiedName() {
+        return modifiedName;
+    }
+
+    /**
+     * 设置最后修改人名称
+     *
+     * @param modifiedName 最后修改人名称
+     */
+    public void setModifiedName(String modifiedName) {
+        this.modifiedName = modifiedName == null ? null : modifiedName.trim();
+    }
+
+    /**
+     * @return create_time
+     */
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    /**
+     * @param createTime
+     */
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    /**
+     * @return modified_time
+     */
+    public Date getModifiedTime() {
+        return modifiedTime;
+    }
+
+    /**
+     * @param modifiedTime
+     */
+    public void setModifiedTime(Date modifiedTime) {
+        this.modifiedTime = modifiedTime;
+    }
+}
