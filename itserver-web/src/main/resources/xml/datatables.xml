@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<saber-datatables xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:noNamespaceSchemaLocation="xsd/datatables.xsd">
+
+    <version value="1.0"/>
+
+    <globalValue name="totalRecordsKey" value="iTotalRecords"/>
+    <globalValue name="totalDisplayRecordsKey" value="iTotalDisplayRecords"/>
+    <globalValue name="dataKey" value="aaData"/>
+
+    <language>
+        <item name="sInfoFiltered" text="longfor.dt.sInfoFiltered" defText="(搜索自 _MAX_ 条数据)"/>
+        <item name="sLengthMenu" text="longfor.dt.sLengthMenu" defText="每页显示 _MENU_ 条数据"/>
+        <item name="sZeroRecords" text="longfor.dt.sZeroRecords" defText="没有数据"/>
+        <item name="sInfo" text="longfor.dt.sInfo" defText="_START_ 到 _END_ /共 _TOTAL_ "/>
+        <item name="sInfoEmpty" text="longfor.dt.sInfoEmpty" defText=" "/>
+        <item name="sProcessing" text="" defText="加载中..."/>
+        <item name="sSearch" text="longfor.dt.sSearch" defText="搜索"/>
+        <paginate>
+            <item name="sFirst" text="" defText="首页"/>
+            <item name="sPrevious" text="" defText="前一页"/>
+            <item name="sNext" text="" defText="后一页"/>
+            <item name="sLast" text="" defText="尾页"/>
+        </paginate>
+    </language>
+
+
+    <datatables>
+
+        <!--
+        未使用
+        ******** dafault datatable ********
+        -->
+        <datatable id="default" name="默认样式的datatable">
+            <property name="bLengthChange" value="false"/>
+            <property name="bServerSide" value="true"/>
+            <property name="sAjaxSource" value="" isURL="true"/>
+            <property name="language" value="dt/ajax_dt/lag" isURL="true"/>
+            <property name="pagingType" value="bootstrap_full_number"/>
+            <property name="pageLength" value="10"/>
+            <property name="bStateSave" value="false"/>
+        </datatable>
+        <!-- ******** dafault datatable end ******** -->
+
+
+    </datatables>
+
+
+    <!-- ——————————————————————————————————————————我是分割线—————————————————————————————————————————— -->
+
+</saber-datatables>

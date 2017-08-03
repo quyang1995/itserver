@@ -1,0 +1,18 @@
+#
+#  MQ CONFIG 配置文件
+#
+
+[mq<development>]
+ONSAddr=http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
+accessKey=LTAIRSZLXZmSeZfB
+secretKey=EaYwNaVnxzrEQcWXCqM9tH04ZkFEgW
+
+[mq<uat>]
+ONSAddr=http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
+accessKey=LTAIRSZLXZmSeZfB
+secretKey=EaYwNaVnxzrEQcWXCqM9tH04ZkFEgW
+
+[mq<production>]
+ONSAddr=http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
+accessKey=LTAIRSZLXZmSeZfB
+secretKey=EaYwNaVnxzrEQcWXCqM9tH04ZkFEgW

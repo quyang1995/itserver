@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.longfor.itserver.mapper.CompanyMapper">
+    <resultMap id="BaseResultMap" type="com.longfor.itserver.entity.Company">
+        <result column="COMPANY" jdbcType="VARCHAR" property="company"/>
+        <result column="EFFDT" jdbcType="TIMESTAMP" property="effdt"/>
+        <result column="EFF_STATUS" jdbcType="VARCHAR" property="effStatus"/>
+        <result column="DESCR" jdbcType="VARCHAR" property="descr"/>
+        <result column="DESCRSHORT" jdbcType="VARCHAR" property="descrshort"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        COMPANY, EFFDT, EFF_STATUS, DESCR, DESCRSHORT
+    </sql>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from PS_HPS_COMPANY_VW
+    </select>
+</mapper>

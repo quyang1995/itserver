@@ -1,0 +1,23 @@
+#
+#  全局配置文件
+#
+
+# [development:开发模式/uat:測試模式/production:生产模式   @profiles:激活配置]
+@profiles=development
+
+#产品版本号#
+product.version=v1.0
+#产品名称(切勿修改)#
+product.name=IT+
+#产品英文简称#
+product.code=IT+
+##———————————————————————————————————————————
+
+
+[system]
+#是否开启token检查 [true:开启/false:关闭]#
+token.use=false
+##———————————————————————————————————————————
+
+
+

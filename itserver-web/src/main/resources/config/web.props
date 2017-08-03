@@ -1,0 +1,68 @@
+#
+#  Web端配置文件
+#
+
+
+#
+#  前端地址配置及密钥
+#
+#project.url        前端地址
+[web<development>]
+project.url=http://www.baidu.com
+
+[web<uat>]
+project.url=http://www.baidu.com
+
+[web<production>]
+project.url=http://www.baidu.com
+##———————————————————————————————————————————
+
+#
+#  跨域配置
+#
+#use            是否开启跨域 [true:开启/false:关闭]#
+#allow.origin   白名单 [多个值时用英文逗号分隔]#
+#max.age        免预检测时间 [单位:秒]#
+#allow.headers  Headers中自定义的值,注意使用小写 [多个值时用英文逗号分隔]#
+#               注意: x-authentication-token是约定名称,如需修改,token.name也要同步更新#
+[cross<development>]
+use=true
+allow.origin=*
+max.age=1728000
+allow.headers=x-authentication-token
+
+[cross<uat>]
+use=true
+allow.origin=*
+max.age=1728000
+allow.headers=x-authentication-token
+
+[cross<production>]
+use=true
+allow.origin=*
+max.age=1728000
+allow.headers=x-authentication-token
+##———————————————————————————————————————————
+
+
+#
+#  TOKEN配置
+#
+#use    是否开启token检查 [true:开启/false:关闭]#
+#key    密钥#
+#name   token的key, 约定名称, 如需修改, cross.allow.headers中也要添加#
+[token<development>]
+use=true
+key=bad57711ec31f2148faa4a9d75ae1800
+name=x-authentication-token
+
+[token<uat>]
+use=true
+key=bad57711ec31f2148faa4a9d75ae1800
+name=x-authentication-token
+
+[token<production>]
+use=true
+key=bad57711ec31f2148faa4a9d75ae1800
+name=x-authentication-token
+##———————————————————————————————————————————

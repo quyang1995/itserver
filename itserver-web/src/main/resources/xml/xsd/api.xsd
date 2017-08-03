@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:annotation>
+		<xs:appinfo>api xsd</xs:appinfo>
+		<xs:documentation xml:lang="en">
+			tss.rajax.me
+		</xs:documentation>
+	</xs:annotation>
+
+
+	<xs:attribute name="id" type="xs:string" />
+	<xs:attribute name="value" type="xs:string" />
+	<xs:attribute name="ref" type="xs:string" />
+	<xs:attribute name="except" type="xs:boolean" />
+
+	<xs:attribute name="name" type="xs:string" />
+	<xs:attribute name="text" type="xs:string" />
+	<xs:attribute name="type" type="xs:string" />
+	<xs:attribute name="searchFor" type="xs:string" />
+	<xs:attribute name="allowFiles" type="xs:string" />
+	<xs:attribute name="binaryName" type="xs:string" />
+	<xs:attribute name="minLength" type="xs:string" />
+	<xs:attribute name="maxLength" type="xs:string" />
+	<xs:attribute name="maxSize" type="xs:int" />
+	<xs:attribute name="maxUploadCount" type="xs:int" />
+	<xs:attribute name="regex" type="xs:string" />
+	<xs:attribute name="required" type="xs:boolean" />
+	<xs:attribute name="description" type="xs:string" />
+
+	<xs:attributeGroup name="propertyAttrGroup">
+	    <xs:attribute ref="ref" />
+	    <xs:attribute ref="name" />
+		<xs:attribute ref="type" />
+		<xs:attribute ref="searchFor" />
+		<xs:attribute ref="allowFiles" />
+		<xs:attribute ref="binaryName" />
+		<xs:attribute ref="minLength" />
+		<xs:attribute ref="maxLength" />
+		<xs:attribute ref="maxSize" />
+		<xs:attribute ref="maxUploadCount" />
+		<xs:attribute ref="regex" />
+		<xs:attribute ref="required" />
+		<xs:attribute ref="description" />
+	</xs:attributeGroup>
+
+	<xs:element name="api">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="version" />
+				<xs:element ref="common-property" maxOccurs="unbounded" />
+				<xs:element ref="item" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+    <xs:element name="version">
+        <xs:complexType>
+            <xs:attribute ref="value" use="required" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="common-property">
+        <xs:complexType>
+            <xs:attribute ref="name" use="required" />
+            <xs:attribute ref="type" use="required" />
+            <xs:attribute ref="description" use="required" />
+            <xs:attribute ref="required"/>
+            <xs:attribute ref="regex"/>
+            <xs:attribute ref="minLength"/>
+            <xs:attribute ref="maxLength"/>
+        </xs:complexType>
+    </xs:element>
+	<xs:element name="item">
+		<xs:complexType>
+			<xs:sequence>
+                <xs:element name="request" maxOccurs="1" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="property" maxOccurs="unbounded" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:attributeGroup ref="propertyAttrGroup"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="response" maxOccurs="1" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="property" maxOccurs="unbounded"  minOccurs="0">
+                                <xs:complexType>
+                                    <xs:attribute ref="name"/>
+                                    <xs:attribute ref="except"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+			</xs:sequence>
+			<xs:attribute ref="id" use="required" />
+			<xs:attribute ref="description" use="required" />
+		</xs:complexType>
+	</xs:element>
+
+
+</xs:schema>

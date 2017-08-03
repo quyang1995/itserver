@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd"
+       default-lazy-init="false">
+
+    <description>bee shiro</description>
+
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="shiroAdminDbRealm"/>
+        <property name="cacheManager" ref="shiroEhcacheManager"/>
+    </bean>
+
+    <bean id="shiroAdminDbRealm" class="com.longfor.itserver.shiro.ShiroAdminDbRealm"/>
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="${web.project.url}"/>
+        <property name="successUrl" value="${web.project.url}"/>
+        <property name="unauthorizedUrl" value="${web.project.url}"/>
+        <property name="filters">
+            <map>
+                <!--web-->
+                <entry key="client_I" value-ref="clientAPIFilter"/>
+                <entry key="config_I" value-ref="configAPIFilter"/>
+                <entry key="token_I" value-ref="tokenAPIFilter"/>
+                <entry key="parseParams_I" value-ref="parseParamsAPIFilter"/>
+                <entry key="checkParams_I" value-ref="checkParamsAPIFilter"/>
+            </map>
+        </property>
+        <property name="filterChainDefinitions">
+            <value>
+                <!--管理台过滤器链-->
+                /assets/** = anon
+                /image/** = anon
+
+                <!--通用功能过滤器链-->
+
+                <!--api过滤器链-->
+                /api/** = client_I, config_I, token_I, parseParams_I, checkParams_I
+
+                /** = anon
+            </value>
+        </property>
+    </bean>
+
+    <!--web filter-->
+    <bean id="clientAPIFilter" class="com.longfor.itserver.filter.web.ClientAPIFilter"/>
+    <bean id="configAPIFilter" class="com.longfor.itserver.filter.web.configAPIFilter"/>
+    <bean id="tokenAPIFilter" class="com.longfor.itserver.filter.web.TokenAPIFilter"/>
+    <bean id="parseParamsAPIFilter" class="com.longfor.itserver.filter.web.ParseParamsAPIFilter"/>
+    <bean id="checkParamsAPIFilter" class="com.longfor.itserver.filter.web.CheckParamsAPIFilter"/>
+
+    <bean id="shiroEhcacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManagerConfigFile" value="classpath:cache/ehcache-shiro.xml"/>
+    </bean>
+
+</beans>

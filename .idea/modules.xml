@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/itserver.iml" filepath="$PROJECT_DIR$/itserver.iml" />
+      <module fileurl="file://$PROJECT_DIR$/itserver-common/itserver-common.iml" filepath="$PROJECT_DIR$/itserver-common/itserver-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/itserver-controller/itserver-controller.iml" filepath="$PROJECT_DIR$/itserver-controller/itserver-controller.iml" />
+      <module fileurl="file://$PROJECT_DIR$/itserver-esi/itserver-esi.iml" filepath="$PROJECT_DIR$/itserver-esi/itserver-esi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/itserver-mapper/itserver-mapper.iml" filepath="$PROJECT_DIR$/itserver-mapper/itserver-mapper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/itserver-service/itserver-service.iml" filepath="$PROJECT_DIR$/itserver-service/itserver-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/itserver-web/itserver-web.iml" filepath="$PROJECT_DIR$/itserver-web/itserver-web.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation="xsd/api.xsd">
+
+    <version value="0.1"/>
+
+    <!--
+
+    以下属性可用于 common-property 和 property 对象;
+
+    name：           [必填][唯一]全局标识, 相同name时后面覆盖前面；
+    type：           [必填]类型, 目前支持: string, int, long, double, date[YYYY-MM-DD hh:mm:ss/YYYY-MM-DD]；
+    description：    [必填]描述；
+    regex：          [非必填]正则表达式；
+    maxLength：      [非必填]最大长度；
+    minLength：      [非必填]最小长度；
+    searchFor：      [非必填]模糊查询字段, 格式: 字段名1@字段名2...；
+                            该属性仅可用在 name="searchText" 对象上;
+    maxSize：        [非必填]上传附件的最大尺寸；
+    maxUploadCount： [非必填]附件上传最大数量；
+    allowFiles：     [非必填]允许上传的附件文件类型；
+    required：       [非必填]是否必填, 可选值: false|true；
+    ref：            [非必填]property独有属性, 用于引用common-property对象；
+    -->
+
+    <!--
+
+    ******** common开头的全局属性必须定义在xml文件最顶部 ********
+
+    全局属性
+    用于定义各种全局属性,供后面接口中引用
+    -->
+    <common-property name="code" type="string" required="true" description="返回码"/>
+    <common-property name="msg" type="string" required="true" description="返回信息"/>
+    <common-property name="pageNum" type="int" required="true" description="页码"/>
+    <common-property name="pageSize" type="int" required="true" description="每页显示记录数"/>
+    <common-property name="total" type="int" required="true" description="总记录数"/>
+
+    <!--业务层通用字段抽取-->
+    <common-property name="mobileNo" type="String" regex="^(13[0-9]|14[0-9]|15[0-9]|16[0-9]|17[0-9]|18[0-9])[0-9]{8}$"
+                     maxLength="11" description="手机号"/>
+    <common-property name="email" type="String"
+                     regex="^[a-zA-Z0-9.!#$%'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
+                     maxLength="50" description="电子邮箱"/>
+    <common-property name="password" type="String" regex="^([a-zA-Z0-9!@#$%^*_]{8,16})$" maxLength="16"
+                     description="管理员登录密码"/>
+
+    <common-property name="employeeCode" type="String" description="登录员工code" />
+    <common-property name="employeeName" type="String" description="登录员工名" />
+
+
+    <!-- ——————————————————————————————————————————我是分割线—————————————————————————————————————————— -->
+
+    <!--
+    ******** PRODUCT ********
+    -->
+    <!--
+        URL:
+        /api/product/list
+
+        说明:
+
+    -->
+    <item id="api_product_list" description="">
+        <request>
+            <property ref="pageNum"/>
+            <property ref="pageSize"/>
+            <property name="searchText" type="string" searchFor="name@globalName@displayName" required="true"
+                      maxLength="30" description="搜索内容"/>
+        </request>
+    </item>
+
+
+
+
+
+
+
+
+</api>

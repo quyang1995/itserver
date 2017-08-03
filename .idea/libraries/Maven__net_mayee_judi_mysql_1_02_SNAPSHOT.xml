@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: net.mayee:judi-mysql:1.02-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/dev/repository/net/mayee/judi-mysql/1.02-SNAPSHOT/judi-mysql-1.02-20170706.013115-1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/dev/repository/net/mayee/judi-mysql/1.02-SNAPSHOT/judi-mysql-1.02-20170706.013115-1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/dev/repository/net/mayee/judi-mysql/1.02-SNAPSHOT/judi-mysql-1.02-20170706.013115-1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

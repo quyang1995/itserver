@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:annotation>
+        <xs:appinfo>hanna datatables xsd</xs:appinfo>
+        <xs:documentation xml:lang="en">
+            java-tools.com
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:attribute name="id" type="xs:string"/>
+    <xs:attribute name="value" type="xs:string"/>
+    <xs:attribute name="text" type="xs:string"/>
+    <xs:attribute name="defText" type="xs:string"/>
+    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="isURL" type="xs:boolean"/>
+
+    <xs:element name="saber-datatables">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="version" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="globalValue" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="language" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="datatables" minOccurs="0" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="version">
+        <xs:complexType>
+            <xs:attribute ref="value" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="globalValue">
+        <xs:complexType>
+            <xs:attribute ref="name" use="required"/>
+            <xs:attribute ref="value" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="language">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="item" minOccurs="1" maxOccurs="unbounded"/>
+                <xs:element ref="paginate" minOccurs="1" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="datatables">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="datatable" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="datatable">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="property" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute ref="id" use="required"/>
+            <xs:attribute ref="name" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="property">
+        <xs:complexType>
+            <xs:attribute ref="name" use="required"/>
+            <xs:attribute ref="value" use="required"/>
+            <xs:attribute ref="isURL"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="item">
+        <xs:complexType>
+            <xs:attribute ref="name" use="required"/>
+            <xs:attribute ref="text" use="required"/>
+            <xs:attribute ref="defText" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="paginate">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="item" minOccurs="0" maxOccurs="4"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

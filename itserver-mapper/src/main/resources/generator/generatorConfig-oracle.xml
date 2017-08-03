@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<!--mybatis-generator:generate-->
+<generatorConfiguration>
+    <properties resource="generator/mybatis-generator.properties"/>
+
+    <context id="oracle">
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter"/>
+
+        <!--<plugin type="tk.mybaagatepper.generator.MapperPlugin">-->
+            <!--<property name="mappers" value="tk.mybaagatepper.common.Mapper"/>-->
+        <!--</plugin>-->
+
+        <commentGenerator>
+            <property name="suppressDate" value="${MBG.config.suppressDate}"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <jdbcConnection driverClass="${MBG.oracle.jdbc.driverClass}"
+                        connectionURL="${MBG.oracle.jdbc.url}"
+                        userId="${MBG.oracle.jdbc.user}"
+                        password="${MBG.oracle.jdbc.password}">
+        </jdbcConnection>
+        <javaTypeResolver>
+            <property name="forceLongs" value="false"/>
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="${MBG.config.model.targetPackage}"
+                            targetProject="${MBG.config.model.targetProject}">
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="${MBG.config.map.targetPackage}"
+                         targetProject="${MBG.config.map.targetProject}"/>
+
+        <javaClientGenerator targetPackage="${MBG.config.client.targetPackage}"
+                             targetProject="${MBG.config.client.targetProject}"
+                             type="XMLMAPPER"/>
+
+        <table tableName="PS_HPS_COMPANY_VW" domainObjectName="Company"/>
+
+    </context>
+
+</generatorConfiguration>
