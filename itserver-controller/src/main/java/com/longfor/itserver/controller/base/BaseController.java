@@ -2,6 +2,7 @@ package com.longfor.itserver.controller.base;
 
 
 import com.longfor.itserver.common.helper.JoddHelper;
+import com.longfor.itserver.service.*;
 import net.mayee.redis.RedisCache;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -32,6 +33,97 @@ public class BaseController {
     private HttpServletRequest request;
     @Autowired
     private RedisCache redisCache;
+
+    @Autowired
+    private IBugChangeLogService bugChangeLogService;
+    @Autowired
+    private IBugCommentService bugCommentService;
+    @Autowired
+    private IBugInfoService bugInfoService;
+    @Autowired
+    private IDemandChangeLogService demandChangeLogService;
+    @Autowired
+    private IDemandCommentService demandCommentService;
+    @Autowired
+    private IDemandService demandService;
+    @Autowired
+    private IEmployeeTypeService employeeTypeService;
+    @Autowired
+    private IProductCommentService productCommentService;
+    @Autowired
+    private IProductEmployeeChangeLogService productEmployeeChangeLogService;
+    @Autowired
+    private IProductEmployeeService productEmployeeService;
+    @Autowired
+    private IProductService productService;
+    @Autowired
+    private IProgramCommentService programCommentService;
+    @Autowired
+    private IProgramEmployeeChangeLogService programEmployeeChangeLogService;
+    @Autowired
+    private IProgramEmployeeService programEmployeeService;
+    @Autowired
+    private IProgramService programService;
+
+    public IBugChangeLogService getBugChangeLogService() {
+        return bugChangeLogService;
+    }
+
+    public IBugCommentService getBugCommentService() {
+        return bugCommentService;
+    }
+
+    public IBugInfoService getBugInfoService() {
+        return bugInfoService;
+    }
+
+    public IDemandChangeLogService getDemandChangeLogService() {
+        return demandChangeLogService;
+    }
+
+    public IDemandCommentService getDemandCommentService() {
+        return demandCommentService;
+    }
+
+    public IDemandService getDemandService() {
+        return demandService;
+    }
+
+    public IEmployeeTypeService getEmployeeTypeService() {
+        return employeeTypeService;
+    }
+
+    public IProductCommentService getProductCommentService() {
+        return productCommentService;
+    }
+
+    public IProductEmployeeChangeLogService getProductEmployeeChangeLogService() {
+        return productEmployeeChangeLogService;
+    }
+
+    public IProductEmployeeService getProductEmployeeService() {
+        return productEmployeeService;
+    }
+
+    public IProductService getProductService() {
+        return productService;
+    }
+
+    public IProgramCommentService getProgramCommentService() {
+        return programCommentService;
+    }
+
+    public IProgramEmployeeChangeLogService getProgramEmployeeChangeLogService() {
+        return programEmployeeChangeLogService;
+    }
+
+    public IProgramEmployeeService getProgramEmployeeService() {
+        return programEmployeeService;
+    }
+
+    public IProgramService getProgramService() {
+        return programService;
+    }
 
     public RedisCache getRedisCache() {
         return redisCache;
