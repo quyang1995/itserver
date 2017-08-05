@@ -1,11 +1,14 @@
 package com.longfor.itserver.common.util;
 
 import jodd.datetime.JDateTime;
+import net.mayee.encrypt.JudiEncrypt;
+import org.apache.shiro.codec.Hex;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 import java.io.*;
+import java.util.Arrays;
 
 /**
  *
@@ -16,20 +19,21 @@ import java.io.*;
  **/
 public class JJWTUtil {
 
-    private static String key = "bad57711ec31f2148faa4a9d75ae1800";
+    private static String key = "2b122b926f70812077c517e6955ecdf1";
 
-    //pcs/agate
-    //eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJwY3MiLCJpYXQiOjE0OTg1MzU3NDksInN1YiI6InBjcyIsImlzcyI6ImFnYXRlIn0.tmHpnupQsmzR1LuDjttZcRm_AQi77PJbesMAA1hRQU4
+    //it+/itplus
+    //eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJpdCsiLCJpYXQiOjE1MDE4OTg0MTksInN1YiI6Iml0KyIsImlzcyI6Iml0cGx1cyJ9.2GyK2lt_V4rryS_CiitbqenXAd1GeWMYW4RnZ8NCMlQ
 
     public static void main(String[] args) throws IOException {
-//        String projectId = "pcs";
-//        String token = CommonUtils.createJWT(
-//                projectId,
-//                "agate",
-//                projectId,//getSsoAccessKey
-//                -1,
-//                key);
-//        System.out.println("Token: " + token);
+//        System.out.println(Hex.encodeToString(JudiEncrypt.generateAesKey()));
+        String projectId = "it+";
+        String token = CommonUtils.createJWT(
+                projectId,
+                "itplus",
+                projectId,//getSsoAccessKey
+                -1,
+                key);
+        System.out.println("Token: " + token);
 
     }
 

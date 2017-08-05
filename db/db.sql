@@ -39,6 +39,18 @@ CREATE TABLE IF NOT EXISTS `itplus`.`product` (
 )
   ENGINE = InnoDB;
 
+
+INSERT INTO itplus.product (name, descp, contact_account_id, contact_employee_code, contact_employee_name, contact_full_dept_path, like_product, type, status, modified_account_id, modified_name, create_time, modified_time)
+VALUES ('productName', '描述', 'zhangchi4', 1000000111, '小白', 'j集团总部-流程与信息中心', ',11，22', 1, 1, 'zhangchi4', '小黑',
+        '2017-08-05 16:54:07', '2017-08-05 16:54:24');
+INSERT INTO itplus.product (name, descp, contact_account_id, contact_employee_code, contact_employee_name, contact_full_dept_path, like_product, type, status, modified_account_id, modified_name, create_time, modified_time)
+VALUES ('产品222', NULL, 'jojo', 1000000111, '小白', 'j集团总部-流程与信息中心', ',11，22', 0, 1, 'jojo', '小黑', '2017-08-05 16:55:12',
+        '2017-08-05 17:04:32');
+INSERT INTO itplus.product (name, descp, contact_account_id, contact_employee_code, contact_employee_name, contact_full_dept_path, like_product, type, status, modified_account_id, modified_name, create_time, modified_time)
+VALUES ('产品AAA', NULL, 'zhangchi4', 1000000111, '小白', 'j集团总部-流程与信息中心', ',11，22', 0, 1, 'zhangchi4', '小黑',
+        '2017-08-05 16:55:44', '2017-08-05 16:55:44');
+
+
 -- -----------------------------------------------------
 -- Table `itplus`.`employee_type` 人员类型
 -- -----------------------------------------------------
@@ -89,6 +101,12 @@ CREATE TABLE IF NOT EXISTS `itplus`.`product_employee` (
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB;
+
+INSERT INTO itplus.product_employee (product_id, account_id, employee_code, employee_name, full_dept_path, employee_type, status, create_time, modified_time)
+VALUES (2, 'zhangchi4', 1000000111, 'x小白', '集团总部-流程', 1, 1, '2017-08-05 16:56:41', '2017-08-05 16:59:12');
+INSERT INTO itplus.product_employee (product_id, account_id, employee_code, employee_name, full_dept_path, employee_type, status, create_time, modified_time)
+VALUES (3, 'zhangchi4', 1000000111, 'x小白', '集团总部-流程', 2, 1, '2017-08-05 17:13:05', '2017-08-05 17:13:05');
+
 
 -- -----------------------------------------------------
 -- Table `itplus`.`product_employee_change_log` 产品-人员-变更日志
