@@ -40,12 +40,15 @@
     FROM program p,
     (SELECT *
     FROM program_employee pe WHERE pe.account_id = #{accountId, jdbcType=VARCHAR}) as e
-    WHERE p.id = e.program_id
-    <if test='programStatus != "" and programStatus != null and programStatus != 3'>
-      and (p.program_status = #{programStatus} OR p.type = 1)
+    WHERE
+    <if test='isPart == 0'>
+      (p.id = e.program_id OR p.type = 1)
     </if>
-    <if test='programStatus == 3'>
-      and e.account_id = #{accountId, jdbcType=VARCHAR}
+    <if test='isPart == 1'>
+      p.id = e.program_id and e.account_id = #{accountId, jdbcType=VARCHAR}
+    </if>
+    <if test='programStatus != "" and programStatus != null'>
+      and p.program_status = #{programStatus}
     </if>
     <if test='searchText != "" and searchText != null'>
       and (p.name like concat(concat('%',#{searchText}),'%') OR e.employee_name like concat(concat('%',#{searchText}),'%'))
