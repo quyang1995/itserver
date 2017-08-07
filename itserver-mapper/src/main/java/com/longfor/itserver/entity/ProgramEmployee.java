@@ -1,10 +1,15 @@
 package com.longfor.itserver.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import net.mayee.commons.CustomFullDateSerializer;
+
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "program_employee")
-public class ProgramEmployee {
+public class ProgramEmployee implements Serializable {
+    private static final long serialVersionUID = -6776870685616143799L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -63,9 +68,11 @@ public class ProgramEmployee {
     private Integer status;
 
     @Column(name = "create_time")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date createTime;
 
     @Column(name = "modified_time")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date modifiedTime;
 
     /**

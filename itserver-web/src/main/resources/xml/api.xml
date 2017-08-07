@@ -75,6 +75,61 @@
 
 
 
+    <!--
+        ******** PROGRAM ********
+        -->
+    <!--
+        URL:
+        /api/program/list
 
+        说明:获取项目列表信息
+
+    -->
+    <item id="api_program_list" description="获取项目列表信息">
+        <request>
+            <property ref="pageNum"/>
+            <property ref="pageSize"/>
+            <property name="accountId" type="string" required="true"/>
+            <property name="programStatus" type="int" required="false"/>
+            <property name="searchText" type="string" required="true" maxLength="30" description="搜索内容"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
+        /api/program/limitList
+
+        说明:模糊搜索返回20条项目列表信息
+
+    -->
+    <item id="api_program_limitList" description="模糊搜索返回20条项目列表信息">
+        <request>
+            <property name="name" type="string" required="true" minLength="2" description="搜索内容"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
+        /api/program/add
+
+        说明:新增项目基本信息
+
+    -->
+    <item id="api_program_add" description="新增项目基本信息">
+        <request>
+            <property name="productId" type="int" required="true"/>
+            <property name="name" type="string" required="true"/>
+            <property name="descp" type="string" required="false"/>
+            <property name="commitDate" type="string" required="true"/>
+            <property name="startDate" type="string" required="true"/>
+            <property name="grayReleaseDate" type="string" required="true"/>
+            <property name="releaseDate" type="string" required="true"/>
+            <property name="likeProduct" type="string" required="false"/>
+            <property name="likeProgram" type="string" required="false"/>
+            <property name="type" type="int" required="true"/>
+            <property name="programStatus" type="int" required="true"/>
+            <property name="programEmployee" type="string" required="false"/>
+        </request>
+    </item>
 
 </api>

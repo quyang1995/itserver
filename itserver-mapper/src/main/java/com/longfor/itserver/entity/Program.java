@@ -1,9 +1,16 @@
 package com.longfor.itserver.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import net.mayee.commons.CustomFullDateSerializer;
+
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
+@Table(name = "program")
+public class Program implements Serializable {
 
-public class Program {
+    private static final long serialVersionUID = -6776870685616143799L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,24 +35,28 @@ public class Program {
      * 立项日期
      */
     @Column(name = "commit_date")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date commitDate;
 
     /**
      * 启动日期
      */
     @Column(name = "start_date")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date startDate;
 
     /**
      * 灰度日期
      */
     @Column(name = "gray_release_date")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date grayReleaseDate;
 
     /**
      * 发布日期
      */
     @Column(name = "release_date")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date releaseDate;
 
     /**
@@ -84,9 +95,11 @@ public class Program {
     private String modifiedName;
 
     @Column(name = "create_time")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date createTime;
 
     @Column(name = "modified_time")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date modifiedTime;
 
     /**
@@ -364,4 +377,6 @@ public class Program {
     public void setModifiedTime(Date modifiedTime) {
         this.modifiedTime = modifiedTime;
     }
+
+
 }

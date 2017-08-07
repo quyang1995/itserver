@@ -5,9 +5,9 @@
 
 [jdbc<development>]
 driverClass=com.mysql.jdbc.Driver
-url=jdbc:mysql://localhost:3306/itplus?useUnicode=true&characterEncoding=UTF-8
-username=root
-password=password123
+url=jdbc:mysql://192.168.96.71:3306/itplus?useUnicode=true&characterEncoding=UTF-8
+username=itplusprod
+password=11hs47uZQLyTjNZg
 initial.size=3
 max.active=60
 

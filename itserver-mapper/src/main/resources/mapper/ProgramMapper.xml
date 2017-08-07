@@ -30,4 +30,32 @@
     like_product, like_program, type, program_status, modified_account_id, modified_name, 
     create_time, modified_time
   </sql>
+
+  <!-- 项目列表 -->
+  <select id="programList" parameterType="map" resultMap="BaseResultMap">
+    SELECT DISTINCT
+    p.id, p.product_id, p.name, p.descp, p.commit_date, p.start_date, p.gray_release_date, p.release_date,
+    p.like_product, p.like_program, p.type, p.program_status, p.modified_account_id, p.modified_name,
+    p.create_time, p.modified_time,e.account_id,e.employee_name
+    FROM program p,
+    (SELECT *
+    FROM program_employee pe WHERE pe.account_id = #{accountId, jdbcType=VARCHAR}) as e
+    WHERE p.id = e.program_id
+    <if test='programStatus != "" and programStatus != null and programStatus != 3'>
+      and (p.program_status = #{programStatus} OR p.type = 1)
+    </if>
+    <if test='programStatus == 3'>
+      and e.account_id = #{accountId, jdbcType=VARCHAR}
+    </if>
+    <if test='searchText != "" and searchText != null'>
+      and (p.name like concat(concat('%',#{searchText}),'%') OR e.employee_name like concat(concat('%',#{searchText}),'%'))
+    </if>
+  </select>
+
+  <!-- 项目列表模糊搜索返回20条 -->
+  <select id="programLimitList" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM program
+      WHERE name LIKE CONCAT('%', #{name, jdbcType=VARCHAR}, '%')
+      LIMIT 0, 20
+  </select>
 </mapper>
