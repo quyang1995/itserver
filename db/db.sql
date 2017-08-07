@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `itplus`.`product` (
   `type`                   INT             NOT NULL
   COMMENT '公开类型：0=私有，1=公开',
   `status`                 INT             NOT NULL
-  COMMENT '状态：0=已关闭，1=未关闭',
+  COMMENT '状态：0=已下线，1=正常',
   `modified_account_id`    VARCHAR(50)     NULL
   COMMENT '最后修改人账户id',
   `modified_name`          VARCHAR(50)     NULL
