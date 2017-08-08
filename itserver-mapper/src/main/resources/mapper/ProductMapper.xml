@@ -20,6 +20,8 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
   </resultMap>
+  <resultMap id="ApiBaseResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsProduct">
+  </resultMap>
   <sql id="Base_Column_List" >
     <!--
       WARNING - @mbggenerated
@@ -28,4 +30,35 @@
     contact_full_dept_path, like_product, type, status, modified_account_id, modified_name, 
     create_time, modified_time
   </sql>
+  <select id="selectList" resultMap="BaseResultMap">
+    SELECT DISTINCT ta.*
+    FROM product ta LEFT JOIN product_employee tb ON ta.id = tb.product_id
+    WHERE
+    <if test="mySelf != null and mySelf != '' and mySelf == 0">
+      (tb.account_id = #{accountId}
+      OR ta.contact_account_id = #{accountId}
+      OR ta.type=1)
+    </if>
+    <if test="mySelf != null and mySelf != '' and mySelf == 1">
+      (tb.account_id = #{accountId}
+      OR ta.contact_account_id = #{accountId})
+    </if>
+    <if test="productStatus != null and productStatus != '' ">
+      AND ta.status= #{productStatus}
+    </if>
+    <if test="searchText != null and searchText != ''">
+      AND (tb.employee_name LIKE concat('%',#{searchText},'%') OR ta.name LIKE concat('%',#{searchText},'%') OR ta.contact_employee_name LIKE concat('%',#{searchText},'%'))
+    </if>
+  </select>
+
+  <select id="selectLikeList" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM product
+    WHERE   1=1
+    <if test="name != null and name != ''">
+      and name LIKE concat('%',#{name},'%')
+    </if>
+    limit 0,20
+  </select>
 </mapper>

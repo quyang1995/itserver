@@ -12,5 +12,15 @@ import org.springframework.stereotype.Service;
  */
 @Service("ProductService")
 public class ProductServiceImpl extends AdminBaseService<Product> implements IProductService {
+    @Autowired
+    ProductMapper productMapper;
+    @Override
+    public List<Product> searchList(Map map) {
+        return productMapper.selectList(map);
+    }
 
+    @Override
+    public List<Product> searchLikeList(Map map) {
+        return productMapper.selectLikeList(map);
+    }
 }
