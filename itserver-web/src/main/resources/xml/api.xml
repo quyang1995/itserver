@@ -125,6 +125,19 @@
 
     <!--
         URL:
+        /api/program/get
+
+        说明:通过ID获取项目基本信息
+
+    -->
+    <item id="api_program_get" description="通过ID获取项目基本信息">
+        <request>
+            <property name="id" type="int" required="true"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
         /api/program/add
 
         说明:新增项目基本信息

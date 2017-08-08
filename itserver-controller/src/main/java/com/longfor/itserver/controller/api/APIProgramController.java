@@ -86,6 +86,32 @@ public class APIProgramController extends BaseController {
         return resultMap;
     }
 
+
+    /**
+     * 通过ID获取项目基本信息
+     *
+     * @author lovex
+     * @create 2017/8/5 下午2:25
+     *
+     * @version v1.0
+     */
+    @RequestMapping(value = "/get", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Map programGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        /* 获得已经验证过的参数map */
+        @SuppressWarnings("unchecked")
+        Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+
+        long id = Long.parseLong(paramsMap.get("id").toString());
+
+        Program program = this.getProgramService().selectById(id);
+
+        /* 返回报文 */
+        Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        resultMap.put("data", program);
+        return resultMap;
+    }
+
     /**
      * 新增项目列表
      *
