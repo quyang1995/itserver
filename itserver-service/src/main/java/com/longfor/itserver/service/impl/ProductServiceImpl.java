@@ -1,9 +1,14 @@
 package com.longfor.itserver.service.impl;
 
 import com.longfor.itserver.entity.Product;
+import com.longfor.itserver.mapper.ProductMapper;
 import com.longfor.itserver.service.IProductService;
 import com.longfor.itserver.service.base.AdminBaseService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author wax
