@@ -9,6 +9,7 @@ import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.ProductEmployee;
+import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ps.PsProduct;
 import net.mayee.commons.helper.APIHelper;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -118,6 +120,72 @@ public class APIProductController extends BaseController {
         return map;
     }
 
+    /**
+     * 根据id获取产品信息
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/get", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Map get(HttpServletRequest request,HttpServletResponse response){
+        /* 获得已经验证过的参数map*/
+        Map<String,String> map = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        String id = map.get("id");
+        ProductEmployee productEmployee = new ProductEmployee();
+        productEmployee.setProductId(Long.parseLong(id));
+        /*查询数据*/
+        PsProduct psProduct = this.getPsProductService().getById(Integer.parseInt(id));
+        /*产品相关人员*/
+        //List<ProductEmployee> productEmployees = this.getProductEmployeeService().select(productEmployee);
+        //psProduct.setProductEmployees(productEmployees);
+        /*产品关联项目*/
+        String likeProgram = psProduct.getLikeProgram();
+        String[] strings = likeProgram.split(",");
 
+        ArrayList<Program> list = new ArrayList();
+        Program program = new Program();
+        String str = "";
+        for (int i=1;i<strings.length-1;i++){
+            str=strings[i];
+            if (str != null && str != ""){
+                program = this.getProgramService().selectById(Long.parseLong(str));
+                list.add(program);
+            }
+        }
+        psProduct.setPrograms(list);
+        /*返回数据*/
+        Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        resultMap.put("pro",psProduct);
+        return resultMap;
+    }
+
+    /**
+     * 新增产品信息
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Map addProduct(HttpServletRequest request,HttpServletResponse response){
+        /* 获得已经验证过的参数map*/
+        Map<String,String> paramsMap = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        /*新增产品信息*/
+        this.getProductService().addProduct(paramsMap);
+        /*返回数据*/
+        Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
+        return map;
+    }
+
+    /**
+     * 更新产品信息
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public String updateProduct(HttpServletRequest request,HttpServletResponse response){
+        Map<String,String> map = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        return null;
+    }
 
 }

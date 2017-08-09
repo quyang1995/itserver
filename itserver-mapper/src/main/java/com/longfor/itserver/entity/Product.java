@@ -1,9 +1,14 @@
 package com.longfor.itserver.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import net.mayee.commons.CustomFullDateSerializer;
+
 import java.util.Date;
 import javax.persistence.*;
-
+@Table(name = "product")
 public class Product {
+    private static final long serialVersionUID = -6776870685616143799L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -45,8 +50,8 @@ public class Product {
     /**
      * 关联产品id字符串，e.g. xx,xx,xx,...
      */
-    @Column(name = "like_product")
-    private String likeProduct;
+    @Column(name = "like_program")
+    private String likeProgram;
 
     /**
      * 公开类型：0=私有，1=公开
@@ -71,9 +76,11 @@ public class Product {
     private String modifiedName;
 
     @Column(name = "create_time")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date createTime;
 
     @Column(name = "modified_time")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date modifiedTime;
 
     /**
@@ -199,21 +206,21 @@ public class Product {
     }
 
     /**
-     * 获取关联产品id字符串，e.g. xx,xx,xx,...
+     * 获取关联项目id字符串，e.g. xx,xx,xx,...
      *
-     * @return like_product - 关联产品id字符串，e.g. xx,xx,xx,...
+     * @return like_program - 关联项目id字符串，e.g. xx,xx,xx,...
      */
-    public String getLikeProduct() {
-        return likeProduct;
+    public String getLikeProgram() {
+        return likeProgram;
     }
 
     /**
-     * 设置关联产品id字符串，e.g. xx,xx,xx,...
+     * 设置关联项目id字符串，e.g. xx,xx,xx,...
      *
-     * @param likeProduct 关联产品id字符串，e.g. xx,xx,xx,...
+     * @param likeProgram 关联项目id字符串，e.g. xx,xx,xx,...
      */
-    public void setLikeProduct(String likeProduct) {
-        this.likeProduct = likeProduct == null ? null : likeProduct.trim();
+    public void setLikeProgram(String likeProgram) {
+        this.likeProgram = likeProgram == null ? null : likeProgram.trim();
     }
 
     /**

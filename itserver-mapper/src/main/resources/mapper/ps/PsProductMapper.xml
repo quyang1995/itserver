@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.longfor.itserver.mapper.ProductMapper" >
+<mapper namespace="com.longfor.itserver.mapper.ps.PsProductMapper" >
   <resultMap id="BaseResultMap" type="com.longfor.itserver.entity.Product" >
     <!--
       WARNING - @mbggenerated
@@ -30,7 +30,7 @@
     contact_full_dept_path, like_program, type, status, modified_account_id, modified_name,
     create_time, modified_time
   </sql>
-  <select id="selectList" resultMap="BaseResultMap">
+  <select id="selectList" resultMap="ApiBaseResultMap">
     SELECT DISTINCT ta.*
     FROM product ta LEFT JOIN product_employee tb ON ta.id = tb.product_id
     WHERE
@@ -51,7 +51,7 @@
     </if>
   </select>
 
-  <select id="selectLikeList" resultMap="BaseResultMap">
+  <select id="selectLikeList" resultMap="ApiBaseResultMap">
     SELECT
     <include refid="Base_Column_List"/>
     FROM product
@@ -61,6 +61,9 @@
     </if>
     limit 0,20
   </select>
-
-
+  <select id="getById" resultMap="ApiBaseResultMap" >
+    SELECT ta.*,tb.id,tb.employee_name,tb.employee_type
+    FROM product ta LEFT JOIN product_employee tb ON ta.id = tb.product_id
+    WHERE ta.id=#{id}
+  </select>
 </mapper>
