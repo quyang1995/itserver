@@ -140,18 +140,10 @@ public class APIProductController extends BaseController {
         //psProduct.setProductEmployees(productEmployees);
         /*产品关联项目*/
         String likeProgram = psProduct.getLikeProgram();
-        String[] strings = likeProgram.split(",");
+        String substring = likeProgram.substring(0, likeProgram.length() - 1);
 
         ArrayList<Program> list = new ArrayList();
-        Program program = new Program();
-        String str = "";
-        for (int i=1;i<strings.length-1;i++){
-            str=strings[i];
-            if (str != null && str != ""){
-                program = this.getProgramService().selectById(Long.parseLong(str));
-                list.add(program);
-            }
-        }
+        list = this
         psProduct.setPrograms(list);
         /*返回数据*/
         Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);

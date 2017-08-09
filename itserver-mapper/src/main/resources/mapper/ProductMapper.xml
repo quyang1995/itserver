@@ -20,7 +20,7 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
   </resultMap>
-  <resultMap id="IdBaseResultMap" type="com.longfor.itserver.entity.Product" >
+  <resultMap id="LikeBaseResultMap" type="com.longfor.itserver.entity.Product" >
     <!--
       WARNING - @mbggenerated
     -->
@@ -68,7 +68,7 @@
     </if>
     limit 0,20
   </select>
-  <select id="selectIdList" resultMap="IdBaseResultMap">
+  <select id="selectIdList" resultMap="LikeBaseResultMap">
     SELECT ID,NAME
     FROM product
     WHERE ID IN(#{likeProduct})
