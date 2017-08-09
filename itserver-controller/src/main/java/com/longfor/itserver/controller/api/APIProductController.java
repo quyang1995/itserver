@@ -140,8 +140,9 @@ public class APIProductController extends BaseController {
         //psProduct.setProductEmployees(productEmployees);
         /*产品关联项目*/
         String likeProgram = psProduct.getLikeProgram();
-        String substring = likeProgram.substring(0, likeProgram.length() - 1);
-
+        String substring = likeProgram.substring(1, likeProgram.length());
+        String ss="1,2,3";
+        List<Product> products = this.getProductService().searchIdList(ss);
         List<Program> list = new ArrayList();
         list = this.getProgramService().inProgramId(substring);
         psProduct.setPrograms(list);
