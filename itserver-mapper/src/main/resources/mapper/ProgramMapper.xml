@@ -22,6 +22,12 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
+
+  <resultMap id="ProgramResultMap" type="com.longfor.itserver.entity.Program">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+
   <sql id="Base_Column_List">
     <!--
       WARNING - @mbggenerated
@@ -60,5 +66,11 @@
     SELECT * FROM program
       WHERE name LIKE CONCAT('%', #{name, jdbcType=VARCHAR}, '%')
       LIMIT 0, 20
+  </select>
+
+  <!-- 查询关联项目 -->
+  <select id="likeProductList" parameterType="string" resultMap="ProgramResultMap">
+    SELECT id,name FROM program
+    WHERE id IN (#{likeProgram, jdbcType=VARCHAR})
   </select>
 </mapper>

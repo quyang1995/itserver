@@ -142,8 +142,8 @@ public class APIProductController extends BaseController {
         String likeProgram = psProduct.getLikeProgram();
         String substring = likeProgram.substring(0, likeProgram.length() - 1);
 
-        ArrayList<Program> list = new ArrayList();
-        list = this
+        List<Program> list = new ArrayList();
+        list = this.getProgramService().inProgramId(substring);
         psProduct.setPrograms(list);
         /*返回数据*/
         Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);

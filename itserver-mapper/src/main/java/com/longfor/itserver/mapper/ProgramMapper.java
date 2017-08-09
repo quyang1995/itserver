@@ -13,4 +13,6 @@ public interface ProgramMapper extends BeeMapper<Program> {
 
     List<Program>  programLimitList(Map map);
 
+    List<Program> inProgramId(String likeProgram);
+
 }
