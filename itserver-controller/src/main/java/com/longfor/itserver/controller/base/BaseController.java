@@ -3,6 +3,7 @@ package com.longfor.itserver.controller.base;
 
 import com.longfor.itserver.common.helper.JoddHelper;
 import com.longfor.itserver.service.*;
+import com.longfor.itserver.service.ps.IPsProductService;
 import net.mayee.redis.RedisCache;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -65,6 +66,13 @@ public class BaseController {
     @Autowired
     private IProgramService programService;
 
+
+    @Autowired
+    private IPsProductService psProductService;
+
+    public IPsProductService getPsProductService() {
+        return psProductService;
+    }
     public IBugChangeLogService getBugChangeLogService() {
         return bugChangeLogService;
     }

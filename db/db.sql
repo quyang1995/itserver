@@ -23,8 +23,8 @@ CREATE TABLE IF NOT EXISTS `itplus`.`product` (
   COMMENT '接口人员工姓名',
   `contact_full_dept_path` VARCHAR(100)    NOT NULL
   COMMENT '接口人部门完整路径',
-  `like_product`           VARCHAR(500)    NULL
-  COMMENT '关联产品id字符串，e.g. xx,xx,xx,...',
+  `like_program`           VARCHAR(500)    NULL
+  COMMENT '关联项目id字符串，e.g. xx,xx,xx,...',
   `type`                   INT             NOT NULL
   COMMENT '公开类型：0=私有，1=公开',
   `status`                 INT             NOT NULL
@@ -40,13 +40,13 @@ CREATE TABLE IF NOT EXISTS `itplus`.`product` (
   ENGINE = InnoDB;
 
 
-INSERT INTO itplus.product (name, descp, contact_account_id, contact_employee_code, contact_employee_name, contact_full_dept_path, like_product, type, status, modified_account_id, modified_name, create_time, modified_time)
+INSERT INTO itplus.product (name, descp, contact_account_id, contact_employee_code, contact_employee_name, contact_full_dept_path, like_program, type, status, modified_account_id, modified_name, create_time, modified_time)
 VALUES ('productName', '描述', 'zhangchi4', 1000000111, '小白', 'j集团总部-流程与信息中心', ',11，22', 1, 1, 'zhangchi4', '小黑',
         '2017-08-05 16:54:07', '2017-08-05 16:54:24');
-INSERT INTO itplus.product (name, descp, contact_account_id, contact_employee_code, contact_employee_name, contact_full_dept_path, like_product, type, status, modified_account_id, modified_name, create_time, modified_time)
+INSERT INTO itplus.product (name, descp, contact_account_id, contact_employee_code, contact_employee_name, contact_full_dept_path, like_program, type, status, modified_account_id, modified_name, create_time, modified_time)
 VALUES ('产品222', NULL, 'jojo', 1000000111, '小白', 'j集团总部-流程与信息中心', ',11，22', 0, 1, 'jojo', '小黑', '2017-08-05 16:55:12',
         '2017-08-05 17:04:32');
-INSERT INTO itplus.product (name, descp, contact_account_id, contact_employee_code, contact_employee_name, contact_full_dept_path, like_product, type, status, modified_account_id, modified_name, create_time, modified_time)
+INSERT INTO itplus.product (name, descp, contact_account_id, contact_employee_code, contact_employee_name, contact_full_dept_path, like_program, type, status, modified_account_id, modified_name, create_time, modified_time)
 VALUES ('产品AAA', NULL, 'zhangchi4', 1000000111, '小白', 'j集团总部-流程与信息中心', ',11，22', 0, 1, 'zhangchi4', '小黑',
         '2017-08-05 16:55:44', '2017-08-05 16:55:44');
 
