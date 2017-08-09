@@ -14,4 +14,16 @@
         <property name="fileEncoding" value="UTF-8"/>
     </bean>
 
+    <bean id="edsHelper" class="com.longfor.eds.helper.EDSHelper">
+        <!--EDS服务器地址-->
+        <property name="serverUrl" value="${eds.url}"/>
+        <!--在EDS注册后分配给你的TOKEN-->
+        <property name="token" value="${eds.token}"/>
+    </bean>
+    <bean id="adsHelper" class="com.longfor.ads.helper.ADSHelper">
+        <!--ADS服务器地址-->
+        <property name="serverUrl" value="${ads.url}"/>
+        <!--在ADS注册后分配给你的TOKEN-->
+        <property name="token" value="${ads.token}"/>
+    </bean>
 </beans>

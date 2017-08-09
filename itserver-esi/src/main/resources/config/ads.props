@@ -1,0 +1,22 @@
+#
+#  ADS配置文件
+#
+
+[ads<development>]
+#发送地址#
+url=http://ads.longhu.net
+token=eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTAwMjgyODczLCJzdWIiOiJwZWFybCIsImlzcyI6InBlYXJsIn0.K_CjFzkMEDMFkDn6dE6tITszO_nDMD-j2MVejKABhw8
+
+[ads<uat>]
+#发送地址#
+url=http://ads.longhu.net
+token=eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTAwMjgyODczLCJzdWIiOiJwZWFybCIsImlzcyI6InBlYXJsIn0.K_CjFzkMEDMFkDn6dE6tITszO_nDMD-j2MVejKABhw8
+
+[ads<production>]
+#发送地址#
+url=http://ads.longhu.net
+token=eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNTAwMjgyODczLCJzdWIiOiJwZWFybCIsImlzcyI6InBlYXJsIn0.K_CjFzkMEDMFkDn6dE6tITszO_nDMD-j2MVejKABhw8
+
+##———————————————————————————————————————————
+
+

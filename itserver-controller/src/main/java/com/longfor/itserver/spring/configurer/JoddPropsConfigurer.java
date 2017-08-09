@@ -84,8 +84,11 @@ public final class JoddPropsConfigurer extends PropertyPlaceholderConfigurer {
         properties.setProperty("mq.ONSAddr", joddProps.getValue("mq.ONSAddr"));
         properties.setProperty("mq.accessKey", joddProps.getValue("mq.accessKey"));
         properties.setProperty("mq.secretKey", joddProps.getValue("mq.secretKey"));
-//        properties.setProperty("system.home.url", joddProps.getValue(system_home_url));
-//        properties.setProperty("system.login.url", joddProps.getValue(system_login_url));
+
+        properties.setProperty("eds.url", joddProps.getValue("eds.url"));
+        properties.setProperty("eds.token", joddProps.getValue("eds.token"));
+        properties.setProperty("ads.url", joddProps.getValue("ads.url"));
+        properties.setProperty("ads.token", joddProps.getValue("ads.token"));
 
 
         JoddHelper.getInstance().setJoddProps(joddProps);

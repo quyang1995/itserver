@@ -10,7 +10,16 @@ public enum AvaStatusEnum {
 
     /* 状态 */
     AVA(1, "正常", "label label-sm label-info"),
-    UNAVA(0, "不可用", "label label-sm label-danger");
+    UNAVA(0, "不可用", "label label-sm label-danger"),
+
+    /*人员类型*/
+    LIABLEAVA(1, "责任人", ""),
+    MEMBERAVA(2, "成员", ""),
+    /*人员类型角色*/
+    PRODAVA(1, "产品经理", ""),
+    PROGAVA(2, "项目经理", ""),
+    DEVEAVA(3, "开发人员", ""),
+    UEDAVA(4, "UED人员", "");
 
     /* 枚举码 */
     private int code;
