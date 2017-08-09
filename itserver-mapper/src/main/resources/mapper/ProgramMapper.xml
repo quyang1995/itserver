@@ -23,7 +23,7 @@
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
 
-  <resultMap id="ProgramResultMap" type="com.longfor.itserver.entity.Program">
+  <resultMap id="ProgramResultMap" type="com.longfor.itserver.entity.ps.PsProgram">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
   </resultMap>
@@ -69,8 +69,8 @@
   </select>
 
   <!-- 查询关联项目 -->
-  <select id="inProgramId" parameterType="string" resultMap="ProgramResultMap">
+  <select id="inProgramId" parameterType="java.lang.String" resultMap="ProgramResultMap">
     SELECT id,name FROM program
-    WHERE id IN (#{likeProgram, jdbcType=VARCHAR})
+    WHERE id IN (${_parameter})
   </select>
 </mapper>
