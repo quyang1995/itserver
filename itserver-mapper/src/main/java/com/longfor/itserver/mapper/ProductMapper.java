@@ -9,4 +9,5 @@ import java.util.Map;
 public interface ProductMapper extends BeeMapper<Product> {
     List<Product> selectList(Map map);
     List<Product> selectLikeList(Map map);
+    List<Product>  selectIdList(String likeProduct);
 }

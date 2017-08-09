@@ -11,4 +11,5 @@ public interface IProductService extends IAdminService<Product> {
     List<Product> searchList(Map map);
     List<Product> searchLikeList(Map map);
     boolean addProduct(Map map);
+    List<Product> searchIdList(String likeProduct);
 }

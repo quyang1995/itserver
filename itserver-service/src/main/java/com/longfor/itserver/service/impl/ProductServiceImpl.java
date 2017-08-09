@@ -77,6 +77,11 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
         return true;
     }
 
+    @Override
+    public List<Product> searchIdList(String likeProduct) {
+        return productMapper.selectIdList(likeProduct);
+    }
+
     public void getAccountInfo(int num,Product product,JSONArray array){
         if (num == 0){
             AccountLongfor accountInfo = adsHelp.getAccountLongforByLoginName(product.getContactAccountId());
