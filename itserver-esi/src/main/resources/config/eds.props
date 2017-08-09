@@ -1,0 +1,22 @@
+#
+#  EDS配置文件
+#
+
+[eds<development>]
+#发送地址#
+url=http://eds.longhu.net
+token=eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNDk3NTEwMDA4LCJzdWIiOiJwZWFybCIsImlzcyI6InBlYXJsIn0.5k5IOsv3rel07CtuepSVaHPM_8y4FM6liGrqoo63X_M
+
+[eds<uat>]
+#发送地址#
+url=http://eds.longhu.net
+token=eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNDk3NTEwMDA4LCJzdWIiOiJwZWFybCIsImlzcyI6InBlYXJsIn0.5k5IOsv3rel07CtuepSVaHPM_8y4FM6liGrqoo63X_M
+
+[eds<production>]
+#发送地址#
+url=http://eds.longhu.net
+token=eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNDk3NTEwMDA4LCJzdWIiOiJwZWFybCIsImlzcyI6InBlYXJsIn0.5k5IOsv3rel07CtuepSVaHPM_8y4FM6liGrqoo63X_M
+
+##———————————————————————————————————————————
+
+

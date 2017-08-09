@@ -23,5 +23,14 @@
             <artifactId>itserver-mapper</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.longfor</groupId>
+            <artifactId>eds-helper</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.longfor</groupId>
+            <artifactId>ads-helper</artifactId>
+        </dependency>
     </dependencies>
 </project>
