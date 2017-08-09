@@ -156,8 +156,8 @@
             <property name="likeProgram" type="string" required="false"/>
             <property name="type" type="int" required="true"/>
             <property name="programStatus" type="int" required="true"/>
-            <property name="modifiedAccountId" type="string" required="false"/>
-            <property name="modifiedName" type="string" required="false"/>
+            <property name="modifiedAccountId" type="string" required="true"/>
+            <property name="modifiedName" type="string" required="true"/>
             <property name="personLiableList" type="string" required="true"/>
             <property name="programManagerList" type="string" required="false"/>
             <property name="productManagerList" type="string" required="false"/>
