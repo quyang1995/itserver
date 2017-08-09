@@ -71,6 +71,6 @@
   <!-- 查询关联项目 -->
   <select id="likeProductList" parameterType="string" resultMap="ProgramResultMap">
     SELECT id,name FROM program
-    WHERE id IN (#{likeProgram, jdbcType=VARCHAR})
+    WHERE id IN (#{likeProgram})
   </select>
 </mapper>

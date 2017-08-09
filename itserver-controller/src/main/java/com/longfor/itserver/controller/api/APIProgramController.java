@@ -8,6 +8,7 @@ import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
+import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.Program;
 import net.mayee.commons.helper.APIHelper;
 import org.json.JSONException;
@@ -106,6 +107,8 @@ public class APIProgramController extends BaseController {
         long id = Long.parseLong(paramsMap.get("id").toString());
 
         Program program = this.getProgramService().selectById(id);
+        String likeProduct = program.getLikeProduct().substring(1,program.getLikeProduct().length());
+        List<Product> product = this.getProductService().searchIdList(likeProduct);
 
         /* 返回报文 */
         Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
