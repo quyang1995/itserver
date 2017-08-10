@@ -7,6 +7,7 @@ import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.ProductEmployee;
+import com.longfor.itserver.entity.ps.PsProduct;
 import com.longfor.itserver.mapper.ProductEmployeeMapper;
 import com.longfor.itserver.mapper.ProductMapper;
 import com.longfor.itserver.service.IProductService;
@@ -82,7 +83,14 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
         return productMapper.selectIdList(likeProduct);
     }
 
-    public void getAccountInfo(int num,Product product,JSONArray array){
+    @Override
+    public boolean updateProduct(Map map) {
+
+
+        return true;
+    }
+
+    public boolean getAccountInfo(int num,Product product,JSONArray array){
         if (num == 0){
             AccountLongfor accountInfo = adsHelp.getAccountLongforByLoginName(product.getContactAccountId());
             if(accountInfo != null) {
@@ -125,5 +133,6 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
                 }
             }
         }
+        return true;
     }
 }

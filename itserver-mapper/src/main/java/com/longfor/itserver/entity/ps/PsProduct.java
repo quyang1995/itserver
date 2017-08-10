@@ -1,50 +1,32 @@
 package com.longfor.itserver.entity.ps;
 
-import com.longfor.itserver.entity.Product;
-import com.longfor.itserver.entity.ProductEmployee;
-import com.longfor.itserver.entity.Program;
-
 import javax.persistence.Transient;
-import java.io.Serializable;
-import java.util.List;
-
 
 /**
  * @version 1.0
  * @Auther Long.Li
  * @Description
- * @Created 2017/8/7
+ * @Created 2017/8/9
  */
-public class PsProduct extends Product implements Serializable {
+public class PsProduct {
     @Transient
-    private String employeeName;
+    private Long id;
     @Transient
-    private List<Program> programs;
-    @Transient
-    private List<ProductEmployee> productEmployees;
+    private String name;
 
-    public List<Program> getPrograms() {
-        return programs;
+    public Long getId() {
+        return id;
     }
 
-    public void setPrograms(List<Program> programs) {
-        this.programs = programs;
+    public String getName() {
+        return name;
     }
 
-    public void setEmployeeName(String employeeName) {
-        this.employeeName = employeeName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getEmployeeName() {
-
-        return employeeName;
-    }
-
-    public List<ProductEmployee> getProductEmployees() {
-        return productEmployees;
-    }
-
-    public void setProductEmployees(List<ProductEmployee> productEmployees) {
-        this.productEmployees = productEmployees;
+    public void setId(Long id) {
+        this.id = id;
     }
 }

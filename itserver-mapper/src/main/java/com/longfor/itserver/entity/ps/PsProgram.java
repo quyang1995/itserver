@@ -15,37 +15,26 @@ import java.util.List;
  * @Description
  * @Created 2017/8/9
  */
-public class PsProgram extends Program implements Serializable {
+public class PsProgram {
 
     @Transient
-    private String employeeName;
+    private Long id;
     @Transient
-    private List<Program> programs;
-    @Transient
-    private List<ProductEmployee> productEmployees;
+    private String name;
 
-    public List<Program> getPrograms() {
-        return programs;
+    public Long getId() {
+        return id;
     }
 
-    public void setPrograms(List<Program> programs) {
-        this.programs = programs;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setEmployeeName(String employeeName) {
-        this.employeeName = employeeName;
+    public String getName() {
+        return name;
     }
 
-    public String getEmployeeName() {
-
-        return employeeName;
-    }
-
-    public List<ProductEmployee> getProductEmployees() {
-        return productEmployees;
-    }
-
-    public void setProductEmployees(List<ProductEmployee> productEmployees) {
-        this.productEmployees = productEmployees;
+    public void setName(String name) {
+        this.name = name;
     }
 }

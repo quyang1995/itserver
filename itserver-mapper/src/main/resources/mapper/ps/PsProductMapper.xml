@@ -20,21 +20,7 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
   </resultMap>
-  <resultMap id="ApiBaseResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsProduct">
-    <collection property="productEmployees" javaType="List" ofType="com.longfor.itserver.entity.ProductEmployee">
-      <id column="bid" property="id" jdbcType="BIGINT" />
-      <result column="product_id" property="productId" jdbcType="BIGINT" />
-      <result column="account_id" property="accountId" jdbcType="VARCHAR" />
-      <result column="employee_code" property="employeeCode" jdbcType="BIGINT" />
-      <result column="employee_name" property="employeeName" jdbcType="VARCHAR" />
-      <result column="full_dept_path" property="fullDeptPath" jdbcType="VARCHAR" />
-      <result column="employee_type" property="employeeType" jdbcType="INTEGER" />
-      <result column="employee_type_id" property="employeeTypeId" jdbcType="BIGINT" />
-      <result column="employee_type_text" property="employeeTypeText" jdbcType="VARCHAR" />
-      <result column="status" property="status" jdbcType="INTEGER" />
-      <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-      <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
-    </collection>
+  <resultMap id="ApiBaseResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsProductAll">
   </resultMap>
   <sql id="Base_Column_List" >
     <!--
@@ -44,26 +30,6 @@
     contact_full_dept_path, like_program, type, status, modified_account_id, modified_name,
     create_time, modified_time
   </sql>
-  <select id="selectList" resultMap="ApiBaseResultMap">
-    SELECT DISTINCT ta.*
-    FROM product ta LEFT JOIN product_employee tb ON ta.id = tb.product_id
-    WHERE
-    <if test="mySelf != null and mySelf != '' and mySelf == 0">
-      (tb.account_id = #{accountId}
-      OR ta.contact_account_id = #{accountId}
-      OR ta.type=1)
-    </if>
-    <if test="mySelf != null and mySelf != '' and mySelf == 1">
-      (tb.account_id = #{accountId}
-      OR ta.contact_account_id = #{accountId})
-    </if>
-    <if test="productStatus != null and productStatus != '' ">
-      AND ta.status= #{productStatus}
-    </if>
-    <if test="searchText != null and searchText != ''">
-      AND (tb.employee_name LIKE concat('%',#{searchText},'%') OR ta.name LIKE concat('%',#{searchText},'%') OR ta.contact_employee_name LIKE concat('%',#{searchText},'%'))
-    </if>
-  </select>
 
   <select id="selectLikeList" resultMap="ApiBaseResultMap">
     SELECT
@@ -76,9 +42,9 @@
     limit 0,20
   </select>
   <select id="getById" resultMap="ApiBaseResultMap" >
-    SELECT ta.*,
-            tb.id AS bid,tb.account_id,tb.employee_name,tb.employee_type
-    FROM product ta LEFT JOIN product_employee tb ON ta.id = tb.product_id
-    WHERE ta.id=#{id}
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM product
+    WHERE id=#{id}
   </select>
 </mapper>

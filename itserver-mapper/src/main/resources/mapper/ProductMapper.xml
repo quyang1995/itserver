@@ -20,14 +20,14 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
   </resultMap>
-  <resultMap id="LikeBaseResultMap" type="com.longfor.itserver.entity.Product" >
+  <resultMap id="LikeBaseResultMap" type="com.longfor.itserver.entity.ps.PsProduct" >
     <!--
       WARNING - @mbggenerated
     -->
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="ApiBaseResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsProduct">
+  <resultMap id="ApiBaseResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsProductAll">
   </resultMap>
   <sql id="Base_Column_List" >
     <!--
@@ -71,7 +71,7 @@
   <select id="selectIdList" resultMap="LikeBaseResultMap">
     SELECT ID,NAME
     FROM product
-    WHERE ID IN(#{likeProduct})
+    WHERE ID IN(${_parameter})
   </select>
 
 </mapper>
