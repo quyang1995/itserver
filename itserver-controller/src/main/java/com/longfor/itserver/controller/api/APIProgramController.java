@@ -10,6 +10,7 @@ import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.Program;
+import com.longfor.itserver.entity.ps.PsProgramDetail;
 import net.mayee.commons.helper.APIHelper;
 import org.json.JSONException;
 import org.springframework.stereotype.Controller;
@@ -106,8 +107,9 @@ public class APIProgramController extends BaseController {
 
         long id = Long.parseLong(paramsMap.get("id").toString());
 
-        Program program = this.getProgramService().selectById(id);
+        PsProgramDetail program = (PsProgramDetail) this.getProgramService().getProgramId(id);
         String likeProduct = program.getLikeProduct().substring(1,program.getLikeProduct().length());
+//        List<Program> aa = this.getProgramService().inProgramId(likeProduct);
         List<Product> product = this.getProductService().searchIdList(likeProduct);
 
         /* 返回报文 */

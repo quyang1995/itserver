@@ -118,4 +118,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     public List<Program> inProgramId(String likeProgram){
         return programMapper.inProgramId(likeProgram);
     }
+
+    @Override
+    public Program getProgramId(long id){
+        return programMapper.getProgramId(id);
+    }
 }
