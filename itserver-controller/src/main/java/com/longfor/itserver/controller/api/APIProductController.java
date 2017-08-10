@@ -3,6 +3,7 @@ package com.longfor.itserver.controller.api;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.longfor.itserver.common.constant.ConfigConsts;
+import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
@@ -10,11 +11,11 @@ import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.ProductEmployee;
 import com.longfor.itserver.entity.Program;
-import com.longfor.itserver.entity.ps.PsProduct;
+import com.longfor.itserver.entity.ps.PsProductAll;
+import com.longfor.itserver.entity.ps.PsProgram;
 import net.mayee.commons.helper.APIHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -55,24 +56,6 @@ public class APIProductController extends BaseController {
         /*查询数据*/
         PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
         List<Product> products = this.getProductService().searchList(paramsMap);
-        /*List<PsProduct> psProducts = this.getProductService().searchList(paramsMap);
-        for (PsProduct psProduct:psProducts){
-            String str="";
-            Long id = psProduct.getId();
-            ProductEmployee productEmployee = new ProductEmployee();
-            productEmployee.setProductId(id);
-            productEmployee.setEmployeeType(1);
-            List<ProductEmployee> productEmployeeList = this.getProductEmployeeService().select(productEmployee);
-            for(ProductEmployee productEmployee1:productEmployeeList){
-                if (!"".equals(productEmployee1.getEmployeeName())) {
-                    str += productEmployee1.getEmployeeName() + ", ";
-                }
-            }
-            if(!"".equals(str)){
-                str=str.substring(0,str.length()-2);
-            }
-            psProduct.setEmployeeName(str);
-        }*/
         /*返回数据*/
         Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         map.put("productList",products);
@@ -95,24 +78,6 @@ public class APIProductController extends BaseController {
         Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         /*查询数据*/
         List<Product> products = this.getProductService().searchLikeList(paramsMap);
-        /*List<PsProduct> psProducts = this.getProductService().searchLikeList(paramsMap);
-        for (PsProduct psProduct:psProducts){
-            String str="";
-            Long id = psProduct.getId();
-            ProductEmployee productEmployee = new ProductEmployee();
-            productEmployee.setProductId(id);
-            productEmployee.setEmployeeType(1);
-            List<ProductEmployee> productEmployeeList = this.getProductEmployeeService().select(productEmployee);
-            for(ProductEmployee productEmployee1:productEmployeeList){
-                if (!"".equals(productEmployee1.getEmployeeName())) {
-                    str += productEmployee1.getEmployeeName() + ", ";
-                }
-            }
-            if(!"".equals(str)){
-                str=str.substring(0,str.length()-2);
-            }
-            psProduct.setEmployeeName(str);
-        }*/
         /*返回数据*/
         Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         map.put("productList",products);
@@ -134,16 +99,34 @@ public class APIProductController extends BaseController {
         ProductEmployee productEmployee = new ProductEmployee();
         productEmployee.setProductId(Long.parseLong(id));
         /*查询数据*/
-        PsProduct psProduct = this.getPsProductService().getById(Integer.parseInt(id));
+        PsProductAll psProduct = this.getPsProductService().getById(Integer.parseInt(id));
         /*产品相关人员*/
-        //List<ProductEmployee> productEmployees = this.getProductEmployeeService().select(productEmployee);
-        //psProduct.setProductEmployees(productEmployees);
+        /*责任人*/
+        List<ProductEmployee> personLiableList = this.getProductEmployeeService()
+                    .searchTypeList(new Long(id), AvaStatusEnum.LIABLEAVA.getCode(), null);
+        /*产品经理*/
+        List<ProductEmployee> programManagerList = this.getProductEmployeeService()
+                    .searchTypeList(new Long(id), AvaStatusEnum.MEMBERAVA.getCode(), new Long(AvaStatusEnum.PRODAVA.getCode()));
+        /*项目经理*/
+        List<ProductEmployee> productManagerList = this.getProductEmployeeService()
+                    .searchTypeList(new Long(id), AvaStatusEnum.MEMBERAVA.getCode(), new Long(AvaStatusEnum.PROGAVA.getCode()));
+        /*开发人员*/
+        List<ProductEmployee> developerList = this.getProductEmployeeService()
+                    .searchTypeList(new Long(id), AvaStatusEnum.MEMBERAVA.getCode(), new Long(AvaStatusEnum.DEVEAVA.getCode()));
+        /*UED人员*/
+        List<ProductEmployee> uedList = this.getProductEmployeeService()
+                    .searchTypeList(new Long(id), AvaStatusEnum.MEMBERAVA.getCode(), new Long(AvaStatusEnum.UEDAVA.getCode()));
+
         /*产品关联项目*/
         String likeProgram = psProduct.getLikeProgram();
-        String substring = likeProgram.substring(0, likeProgram.length() - 1);
-
+        String substring = likeProgram.substring(1, likeProgram.length());
         List<Program> list = new ArrayList();
         list = this.getProgramService().inProgramId(substring);
+        psProduct.setPersonLiableList(personLiableList);
+        psProduct.setProductManagerList(productManagerList);
+        psProduct.setProgramManagerList(programManagerList);
+        psProduct.setDeveloperList(developerList);
+        psProduct.setUedList(uedList);
         psProduct.setPrograms(list);
         /*返回数据*/
         Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
@@ -175,9 +158,14 @@ public class APIProductController extends BaseController {
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public String updateProduct(HttpServletRequest request,HttpServletResponse response){
-        Map<String,String> map = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-        return null;
+    public Map updateProduct(HttpServletRequest request,HttpServletResponse response){
+        /* 获得已经验证过的参数map*/
+        Map<String,String> resultMap = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        /*更新操作*/
+
+        /*返回数据*/
+        Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
+        return map;
     }
 
 }

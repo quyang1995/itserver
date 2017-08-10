@@ -25,4 +25,17 @@
     id, product_id, account_id, employee_code, employee_name, full_dept_path, employee_type, 
     employee_type_id, employee_type_text, status, create_time, modified_time
   </sql>
+
+  <select id="selectTypeList" resultMap="BaseResultMap">
+      SELECT
+      <include refid="Base_Column_List"/>
+      FROM product_employee
+      WHERE product_id=#{productId}
+            <if test="employeeType == 1">
+              and employee_type = #{employeeType}
+            </if>
+            <if test="employeeType == 2" >
+              and employee_type_id = #{employeeTypeId}
+            </if>
+  </select>
 </mapper>
