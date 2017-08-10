@@ -4,12 +4,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.longfor.itserver.common.constant.ConfigConsts;
+import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.Product;
+import com.longfor.itserver.entity.ProductEmployee;
 import com.longfor.itserver.entity.Program;
+import com.longfor.itserver.entity.ProgramEmployee;
 import com.longfor.itserver.entity.ps.PsProgramDetail;
 import net.mayee.commons.helper.APIHelper;
 import org.json.JSONException;
@@ -23,6 +26,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -109,8 +113,34 @@ public class APIProgramController extends BaseController {
 
         PsProgramDetail program = (PsProgramDetail) this.getProgramService().getProgramId(id);
         String likeProduct = program.getLikeProduct().substring(1,program.getLikeProduct().length());
-//        List<Program> aa = this.getProgramService().inProgramId(likeProduct);
+        //关联产品
         List<Product> product = this.getProductService().searchIdList(likeProduct);
+        program.setProductList(product);
+
+        Map map = new HashMap();
+        map.put("programId",new Long(id));
+        /*产品相关人员*/
+        /*责任人*/
+        map.put("employeeType",AvaStatusEnum.LIABLEAVA.getCode());
+        List<ProgramEmployee> personLiableList = this.getProgramEmployeeService().selectTypeList(map);
+        program.setPersonLiableList(personLiableList);
+        /*产品经理*/
+        map.put("employeeType",AvaStatusEnum.MEMBERAVA.getCode());
+        map.put("employeeTypeId",new Long(AvaStatusEnum.PRODAVA.getCode()));
+        List<ProgramEmployee> programManagerList = this.getProgramEmployeeService().selectTypeList(map);
+        program.setProgramManagerList(programManagerList);
+        /*项目经理*/
+        map.put("employeeTypeId",new Long(AvaStatusEnum.PROGAVA.getCode()));
+        List<ProgramEmployee> productManagerList = this.getProgramEmployeeService().selectTypeList(map);
+        program.setProductManagerList(productManagerList);
+        /*开发人员*/
+        map.put("employeeTypeId",new Long(AvaStatusEnum.DEVEAVA.getCode()));
+        List<ProgramEmployee> developerList = this.getProgramEmployeeService().selectTypeList(map);
+        program.setDeveloperList(developerList);
+        /*UED人员*/
+        map.put("employeeTypeId",new Long(AvaStatusEnum.UEDAVA.getCode()));
+        List<ProgramEmployee> uedList = this.getProgramEmployeeService().selectTypeList(map);
+        program.setUedList(uedList);
 
         /* 返回报文 */
         Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);

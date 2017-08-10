@@ -25,4 +25,16 @@
     id, program_id, account_id, employee_code, employee_name, full_dept_path, employee_type, 
     employee_type_id, employee_type_text, status, create_time, modified_time
   </sql>
+  <select id="selectTypeList" parameterType="map" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM program_employee
+    WHERE program_id=#{programId}
+    <if test="employeeType == 1">
+      and employee_type = #{employeeType}
+    </if>
+    <if test="employeeType == 2">
+      and employee_type_id = #{employeeTypeId}
+    </if>
+  </select>
 </mapper>
