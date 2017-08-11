@@ -65,19 +65,19 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
         }
         int insert = productMapper.insert(product);
         /*产品责任人*/
-        JSONArray personLiableList = (JSONArray)JSONArray.parse(jsonObject.getString("personLiableList"));
+        String  personLiableList = (String)map.get("personLiableList");
         getAccountInfo(1,product,personLiableList);
         /*产品经理*/
-        JSONArray programManagerList = (JSONArray)JSONArray.parse(jsonObject.getString("programManagerList"));
+        String  programManagerList = (String)map.get("programManagerList");
         getAccountInfo(2,product,programManagerList);
         /*项目经理*/
-        JSONArray productManagerList = (JSONArray)JSONArray.parse(jsonObject.getString("productManagerList"));
+        String  productManagerList = (String)map.get("productManagerList");
         getAccountInfo(3,product,productManagerList);
         /*开发人员*/
-        JSONArray developerList = (JSONArray)JSONArray.parse(jsonObject.getString("developerList"));
+        String  developerList = (String)map.get("developerList");
         getAccountInfo(4,product,developerList);
         /*UED人员*/
-        JSONArray uedList = (JSONArray)JSONArray.parse(jsonObject.getString("uedList"));
+        String  uedList = (String)map.get("uedList");
         getAccountInfo(5,product,uedList);
 
         return true;
@@ -90,12 +90,10 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 
     @Override
     public boolean updateProduct(Map map) {
-
-
         return true;
     }
 
-    public boolean getAccountInfo(int num,Product product,JSONArray array){
+    public boolean getAccountInfo(int num,Product product,String str){
         if (num == 0){
             AccountLongfor accountInfo = adsHelp.getAccountLongforByLoginName(product.getContactAccountId());
             if(accountInfo != null) {
@@ -104,38 +102,41 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
                 product.setContactFullDeptPath(accountInfo.getPsDeptFullName());
             }
         }else {
-            if (array != null){
-                for(int i=0;i<array.size();i++){
-                    String loginName = array.get(i).toString();
-                    AccountLongfor accountInfo = adsHelp.getAccountLongforByLoginName(loginName);
-                    if(accountInfo != null){
-                        ProductEmployee productEmployee = new ProductEmployee();
-                        productEmployee.setProductId(product.getId());
-                        productEmployee.setAccountId(loginName);
-                        productEmployee.setEmployeeCode(Long.parseLong(accountInfo.getPsEmployeeCode()));
-                        productEmployee.setEmployeeName(accountInfo.getName());
-                        productEmployee.setFullDeptPath(accountInfo.getPsDeptFullName());
-                        productEmployee.setStatus(AvaStatusEnum.AVA.getCode());
-                        if (num == 1){
-                            productEmployee.setEmployeeType(AvaStatusEnum.LIABLEAVA.getCode());
-                        }else if(num == 2){
-                            productEmployee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
-                            productEmployee.setEmployeeTypeId(new Long(AvaStatusEnum.PRODAVA.getCode()));
-                            productEmployee.setEmployeeTypeText(AvaStatusEnum.PRODAVA.getText());
-                        }else if(num == 3){
-                            productEmployee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
-                            productEmployee.setEmployeeTypeId(new Long(AvaStatusEnum.PROGAVA.getCode()));
-                            productEmployee.setEmployeeTypeText(AvaStatusEnum.PROGAVA.getText());
-                        }else if (num == 4){
-                            productEmployee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
-                            productEmployee.setEmployeeTypeId(new Long(AvaStatusEnum.DEVEAVA.getCode()));
-                            productEmployee.setEmployeeTypeText(AvaStatusEnum.DEVEAVA.getText());
-                        }else if (num == 5){
-                            productEmployee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
-                            productEmployee.setEmployeeTypeId(new Long(AvaStatusEnum.UEDAVA.getCode()));
-                            productEmployee.setEmployeeTypeText(AvaStatusEnum.UEDAVA.getText());
+            if (str != null && str != ""){
+                String[] split = str.split(",");
+                if (split != null) {
+                    for (int i = 1; i < split.length; i++) {
+                        String loginName = split[i];
+                        AccountLongfor accountInfo = adsHelp.getAccountLongforByLoginName(loginName);
+                        if (accountInfo != null) {
+                            ProductEmployee productEmployee = new ProductEmployee();
+                            productEmployee.setProductId(product.getId());
+                            productEmployee.setAccountId(loginName);
+                            productEmployee.setEmployeeCode(Long.parseLong(accountInfo.getPsEmployeeCode()));
+                            productEmployee.setEmployeeName(accountInfo.getName());
+                            productEmployee.setFullDeptPath(accountInfo.getPsDeptFullName());
+                            productEmployee.setStatus(AvaStatusEnum.AVA.getCode());
+                            if (num == 1) {
+                                productEmployee.setEmployeeType(AvaStatusEnum.LIABLEAVA.getCode());
+                            } else if (num == 2) {
+                                productEmployee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
+                                productEmployee.setEmployeeTypeId(new Long(AvaStatusEnum.PRODAVA.getCode()));
+                                productEmployee.setEmployeeTypeText(AvaStatusEnum.PRODAVA.getText());
+                            } else if (num == 3) {
+                                productEmployee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
+                                productEmployee.setEmployeeTypeId(new Long(AvaStatusEnum.PROGAVA.getCode()));
+                                productEmployee.setEmployeeTypeText(AvaStatusEnum.PROGAVA.getText());
+                            } else if (num == 4) {
+                                productEmployee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
+                                productEmployee.setEmployeeTypeId(new Long(AvaStatusEnum.DEVEAVA.getCode()));
+                                productEmployee.setEmployeeTypeText(AvaStatusEnum.DEVEAVA.getText());
+                            } else if (num == 5) {
+                                productEmployee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
+                                productEmployee.setEmployeeTypeId(new Long(AvaStatusEnum.UEDAVA.getCode()));
+                                productEmployee.setEmployeeTypeText(AvaStatusEnum.UEDAVA.getText());
+                            }
+                            productEmployeeMapper.insert(productEmployee);
                         }
-                        productEmployeeMapper.insert(productEmployee);
                     }
                 }
             }
