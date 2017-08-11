@@ -49,20 +49,10 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
         Product product = JSONObject.toJavaObject(jsonObject, Product.class);
         product.setStatus(Integer.parseInt(jsonObject.getString("productStatus")));
         product.setContactAccountId(jsonObject.getString("contactAccountId"));
+        product.setLikeProgram(jsonObject.getString("likeProgram"));
         /*接口人相关信息*/
         getAccountInfo(0,product,null);
-        /*关联项目*/
-        String ss=product.getLikeProgram();
-        if (ss!=null && ss != ""){
-            JSONArray parse = (JSONArray)JSONObject.parse(ss);
-            if(parse.size()!=0 && parse != null){
-                String str="";
-                for(Object o:parse){
-                    str += "," + o;
-                }
-                product.setLikeProgram(str);
-            }
-        }
+        /*添加产品*/
         int insert = productMapper.insert(product);
         /*产品责任人*/
         String  personLiableList = (String)map.get("personLiableList");
