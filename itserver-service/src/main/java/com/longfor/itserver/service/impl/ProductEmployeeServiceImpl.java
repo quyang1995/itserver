@@ -12,6 +12,7 @@ import com.longfor.itserver.service.base.AdminBaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,4 +29,5 @@ public class ProductEmployeeServiceImpl extends AdminBaseService<ProductEmployee
     public List<ProductEmployee> searchTypeList(Long productId, Integer employeeType, Long employeeTypeId) {
         return productEmployeeMapper.selectTypeList(productId,employeeType,employeeTypeId);
     }
+
 }
