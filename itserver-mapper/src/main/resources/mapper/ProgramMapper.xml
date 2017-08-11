@@ -28,6 +28,10 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
   </resultMap>
 
+  <resultMap id="ProgramDetailResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsProgramDetail">
+
+  </resultMap>
+
   <sql id="Base_Column_List">
     <!--
       WARNING - @mbggenerated
@@ -72,5 +76,10 @@
   <select id="inProgramId" parameterType="java.lang.String" resultMap="ProgramResultMap">
     SELECT id,name FROM program
     WHERE id IN (${_parameter})
+  </select>
+
+  <!-- 通过ID查询项目 -->
+  <select id="getProgramId" parameterType="java.lang.Long" resultMap="ProgramDetailResultMap">
+    SELECT * FROM program WHERE id = #{id}
   </select>
 </mapper>

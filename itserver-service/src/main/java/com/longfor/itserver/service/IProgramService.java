@@ -15,4 +15,6 @@ public interface IProgramService extends IAdminService<Program> {
     boolean addProgram(Map map);
 
     List<Program> inProgramId(String likeProgram);
+
+    Program getProgramId(long id);
 }
