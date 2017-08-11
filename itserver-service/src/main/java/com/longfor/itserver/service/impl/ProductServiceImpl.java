@@ -47,6 +47,10 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
     public boolean addProduct(Map map) {
         JSONObject jsonObject = (JSONObject)JSONObject.toJSON(map);
         Product product = JSONObject.toJavaObject(jsonObject, Product.class);
+        String descp = product.getDescp();
+        if(descp != null && descp.length()>3000){
+            product.setDescp(descp.substring(0,3000));
+        }
         product.setStatus(Integer.parseInt(jsonObject.getString("productStatus")));
         product.setContactAccountId(jsonObject.getString("contactAccountId"));
         product.setLikeProgram(jsonObject.getString("likeProgram"));
