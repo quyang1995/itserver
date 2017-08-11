@@ -50,36 +50,40 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     public boolean addProgram(Map map){
         JSONObject json = (JSONObject) JSONObject.toJSON(map);
         Program program = JSONObject.toJavaObject(json,Program.class);
-        //关联产品
-        JSONArray jsonArrProduct = (JSONArray) JSONArray.parse(program.getLikeProduct());
-        String likeProduct = "";
-        for (int i = 0; i < jsonArrProduct.size(); i++){
-            likeProduct += "," + jsonArrProduct.get(i);
-        }
-        program.setLikeProduct(likeProduct);
         programMapper.insert(program);
 
         //项目责任人
-        JSONArray jsonArrPl = (JSONArray) JSONArray.parse(json.get("personLiableList").toString());
-        getAccountLongfor(program,jsonArrPl,"0");
+        String jsonArrPl = json.get("personLiableList").toString();
+        if(!"".equals(jsonArrPl)){
+            getAccountLongfor(program,jsonArrPl,"0");
+        }
         //产品经理
-        JSONArray jsonArrPm = (JSONArray) JSONArray.parse(json.get("productManagerList").toString());
-        getAccountLongfor(program,jsonArrPm,"1");
+        String jsonArrPm = json.get("productManagerList").toString();
+        if(!"".equals(jsonArrPm)) {
+            getAccountLongfor(program, jsonArrPm, "1");
+        }
         //项目经理
-        JSONArray jsonArrPMl = (JSONArray) JSONArray.parse(json.get("programManagerList").toString());
-        getAccountLongfor(program,jsonArrPMl,"2");
+        String jsonArrPMl = json.get("programManagerList").toString();
+        if(!"".equals(jsonArrPMl)) {
+            getAccountLongfor(program, jsonArrPMl, "2");
+        }
         //开发人员
-        JSONArray jsonArrDe = (JSONArray) JSONArray.parse(json.get("developerList").toString());
-        getAccountLongfor(program,jsonArrDe,"3");
+        String jsonArrDe = json.get("developerList").toString();
+        if(!"".equals(jsonArrDe)) {
+            getAccountLongfor(program, jsonArrDe, "3");
+        }
         //UED人员
-        JSONArray jsonArrUed = (JSONArray) JSONArray.parse(json.get("uedList").toString());
-        getAccountLongfor(program,jsonArrUed,"4");
+        String jsonArrUed = json.get("uedList").toString();
+        if(!"".equals(jsonArrUed)) {
+            getAccountLongfor(program, jsonArrUed, "4");
+        }
         return true;
     }
 
-    public boolean getAccountLongfor(Program program,JSONArray jsonArr,String id){
-        for(int i = 0; i < jsonArr.size(); i++){
-            String loginName = jsonArr.get(i).toString();
+    public boolean getAccountLongfor(Program program,String str,String id){
+        String[] strArr = str.split(",");
+        for(int i = 0; i < strArr.length; i++){
+            String loginName = strArr[i].toString();
             AccountLongfor accountLongfor = adsHelper.getAccountLongforByLoginName(loginName);
             if(accountLongfor != null){
                 ProgramEmployee pe = new ProgramEmployee();
