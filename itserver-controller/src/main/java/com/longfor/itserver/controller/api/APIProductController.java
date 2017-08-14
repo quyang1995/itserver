@@ -160,9 +160,9 @@ public class APIProductController extends BaseController {
     @ResponseBody
     public Map updateProduct(HttpServletRequest request,HttpServletResponse response){
         /* 获得已经验证过的参数map*/
-        Map<String,String> resultMap = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        Map<String,String> paramsMap = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         /*更新操作*/
-
+        this.getProductService().updateProduct(paramsMap);
         /*返回数据*/
         Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
         return map;
