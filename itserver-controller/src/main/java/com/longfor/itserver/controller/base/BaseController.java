@@ -65,9 +65,14 @@ public class BaseController {
     private IProgramEmployeeService programEmployeeService;
     @Autowired
     private IProgramService programService;
-
+    @Autowired
+    private IFeedBackService feedBackService;
     @Autowired
     private IPsProductService psProductService;
+
+    public IFeedBackService getFeedBackService() {
+        return feedBackService;
+    }
 
     public IPsProductService getPsProductService() {
         return psProductService;

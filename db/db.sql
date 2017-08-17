@@ -524,6 +524,47 @@ CREATE TABLE IF NOT EXISTS `itplus`.`bug_comment` (
 
 
 
+-- -----------------------------------------------------
+-- Table `itplus`.`feed_back` 反馈
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `itplus`.`feed_back` (
+  `id`                     BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `product_id`          BIGINT          NOT NULL
+  COMMENT '归属产品',
+  `name`                   VARCHAR(100)    NOT NULL
+  COMMENT '产品名称',
+  `problem_title`                  VARCHAR(100)    NULL
+  COMMENT '问题标题',
+  `problem_descp`                  VARCHAR(1000)    NULL
+  COMMENT '问题描述',
+  `reproduction_step`                  VARCHAR(1000)    NULL
+  COMMENT '复现步骤',
+  `sys_environment`                  VARCHAR(100)    NULL
+  COMMENT '系统环境',
+  `contact_account_id`     VARCHAR(50)     NOT NULL
+  COMMENT '接口人账户id',
+  `contact_employee_code`  BIGINT          NOT NULL
+  COMMENT '接口人员工号',
+  `contact_employee_name`  VARCHAR(50)     NOT NULL
+  COMMENT '接口人员工姓名',
+  `contact_full_dept_path` VARCHAR(100)    NOT NULL
+  COMMENT '接口人部门完整路径',
+  `type`                   INT             NOT NULL
+  COMMENT '反馈类型：0=功能异常，1=功能建议',
+  `modified_account_id`    VARCHAR(50)     NULL
+  COMMENT '最后修改人账户id',
+  `modified_employee_code`  BIGINT          NULL
+  COMMENT '最后修改人员工号',
+  `modified_name`          VARCHAR(50)     NULL
+  COMMENT '最后修改人名称',
+  `modified_full_dept_path` VARCHAR(100)    NULL
+  COMMENT '最后修改人部门完整路径',
+  `create_time`            TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
+  `modified_time`          TIMESTAMP                DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = InnoDB;
+
 
 
 

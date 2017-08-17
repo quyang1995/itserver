@@ -41,7 +41,7 @@
         <javaClientGenerator targetPackage="${MBG.config.client.targetPackage}"
                              targetProject="${MBG.config.client.targetProject}"
                              type="XMLMAPPER"/>
-
+<!--
         <table tableName="product" domainObjectName="Product">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
@@ -92,6 +92,10 @@
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
 
+        <table tableName="feed_back" domainObjectName="FeedBack">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
+-->
     </context>
 
 </generatorConfiguration>

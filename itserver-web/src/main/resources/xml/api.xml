@@ -239,4 +239,23 @@
         </request>
     </item>
 
+
+    <!--
+        URL:
+        /api/feedBack/add
+
+        说明:新增反馈基本信息
+
+    -->
+    <item id="api_feedBack_add" description="新增反馈基本信息">
+        <request>
+            <property name="productId" type="int" required="true"/>
+            <property name="problemTitle" type="string" required="false"/>
+            <property name="problemDescp" type="string" required="false"/>
+            <property name="reproductionStep" type="string" required="false"/>
+            <property name="sysEnvironment" type="string" required="false"/>
+            <property name="type" type="int" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true"/>
+        </request>
+    </item>
 </api>
