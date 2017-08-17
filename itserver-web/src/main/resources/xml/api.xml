@@ -122,7 +122,31 @@
         </request>
     </item>
 
+  <!--
+        URL:
+        /api/product/update
 
+        说明:修改产品基本信息
+
+    -->
+    <item id="api_product_update" description="修改产品基本信息">
+        <request>
+            <property name="id" type="int" required="true" />
+            <property name="name" type="string" required="true" />
+            <property name="descp" type="string" required="false" />
+            <property name="contactAccountId" type="string" required="true" />
+            <property name="likeProgram" type="string" required="false" />
+            <property name="type" type="int" required="true" />
+            <property name="productStatus" type="int" required="true" />
+            <property name="personLiableList" type="string" required="true"/>
+            <property name="programManagerList" type="string" required="false"/>
+            <property name="productManagerList" type="string" required="false"/>
+            <property name="developerList" type="string" required="false"/>
+            <property name="uedList" type="string" required="false"/>
+            <property name="modifiedAccountId" type="string" required="true" />
+            <property name="modifiedName" type="string" required="true" />
+        </request>
+    </item>
 
 
 
