@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `itplus`.`product` (
   `id`                     BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name`                   VARCHAR(100)    NOT NULL
   COMMENT '产品名称',
-  `descp`                  VARCHAR(500)    NULL
+  `descp`                  VARCHAR(3000)    NULL
   COMMENT '产品描述',
   `contact_account_id`     VARCHAR(50)     NOT NULL
   COMMENT '接口人账户id',
@@ -179,7 +179,7 @@ CREATE TABLE IF NOT EXISTS `itplus`.`program` (
   COMMENT '归属产品',
   `name`                VARCHAR(100)    NOT NULL
   COMMENT '项目名称',
-  `descp`               VARCHAR(500)    NULL
+  `descp`               VARCHAR(3000)    NULL
   COMMENT '项目描述',
   `commit_date`         DATETIME        NOT NULL
   COMMENT '立项日期',

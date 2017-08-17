@@ -14,6 +14,7 @@ import com.longfor.itserver.service.base.AdminBaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     public boolean addProgram(Map map){
         JSONObject json = (JSONObject) JSONObject.toJSON(map);
         Program program = JSONObject.toJavaObject(json,Program.class);
+        if(program.getDescp().length() > 3000){
+            program.setDescp(program.getDescp().substring(0,3000));
+        }
         programMapper.insert(program);
 
         //项目责任人
