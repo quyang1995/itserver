@@ -168,5 +168,25 @@ public class APIProgramController extends BaseController {
         //返回报文
         return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
     }
+     /**
+      * 
+      * @param response
+      * @param request
+      * @return
+      * @throws IOException
+      * @throws JSONException
+      */
+    @RequestMapping(value = "/update", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Map programUpdate(HttpServletResponse response, HttpServletRequest request) throws IOException, JSONException {
+
+        /* 获得已经验证过的参数map */
+        @SuppressWarnings("unchecked")
+        Map paramsMap = (Map) request
+                .getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        this.getProgramService().updateProgram(paramsMap);
+        //返回报文
+        return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
+    }
 
 }
