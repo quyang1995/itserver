@@ -135,6 +135,13 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 
 	}
 
+	/**
+	 * 查询所有数据A-Z排序
+	 */
+	public List<Product> getListSort(){
+		return productMapper.getListSort();
+	}
+
 	public boolean getAccountInfo(int num, Product product, String str) {
 		if (num == 0) {
 			AccountLongfor accountInfo = adsHelp.getAccountLongforByLoginName(product.getContactAccountId());

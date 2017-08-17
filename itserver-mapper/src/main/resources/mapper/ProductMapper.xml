@@ -68,6 +68,15 @@
     </if>
     limit 0,20
   </select>
+
+  <!-- 产品列表A-Z排序 -->
+  <select id="getListSort" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM product
+    ORDER by convert(substr(name,1,1) using 'GBK')
+  </select>
+
   <select id="selectIdList" resultMap="LikeBaseResultMap">
     SELECT ID,NAME
     FROM product

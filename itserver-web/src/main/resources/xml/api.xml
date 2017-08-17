@@ -86,6 +86,17 @@
 
     <!--
         URL:
+        /api/product/getListSort
+
+        说明:根据产品名字返回产品信息
+
+    -->
+    <item id="api_product_getListSort" description="根据产品名字查询产品信息A-Z排序">
+        <request>
+        </request>
+    </item>
+    <!--
+        URL:
         /api/product/get
 
         说明:根据产品id返回产品信息

@@ -86,8 +86,25 @@ public class APIProductController extends BaseController {
     }
 
     /**
+     * 根据产品名称获得产品信息A-Z排序
+     * @param response
+     * @param request
+     * @return Map
+     */
+    @RequestMapping(value = "/getListSort", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Map sortList(HttpServletRequest request,HttpServletResponse response){
+        /*查询数据*/
+        List<Product> products = this.getProductService().getListSort();
+        /*返回数据*/
+        Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        map.put("productList",products);
+        map.put(APIHelper.TOTAL, new PageInfo(products).getTotal());
+        return map;
+    }
+
+    /**
      * 根据id获取产品信息
-     * @param id
      * @return
      */
     @RequestMapping(value = "/get", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
