@@ -238,6 +238,30 @@
             <property name="uedList" type="string" required="false"/>
         </request>
     </item>
+    
+      <item id="api_program_update" description="更新项目基本信息">
+        <request>
+            <property name="id" type="int" required="true"/>
+            <property name="productId" type="int" required="true"/>
+            <property name="name" type="string" required="true"/>
+            <property name="descp" type="string" required="false"/>
+            <property name="commitDate" type="string" required="true"/>
+            <property name="startDate" type="string" required="true"/>
+            <property name="grayReleaseDate" type="string" required="true"/>
+            <property name="releaseDate" type="string" required="true"/>
+            <property name="likeProduct" type="string" required="false"/>
+            <property name="likeProgram" type="string" required="false"/>
+            <property name="type" type="int" required="true"/>
+            <property name="programStatus" type="int" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true"/>
+            <property name="modifiedName" type="string" required="true"/>
+            <property name="personLiableList" type="string" required="true"/>
+            <property name="programManagerList" type="string" required="false"/>
+            <property name="productManagerList" type="string" required="false"/>
+            <property name="developerList" type="string" required="false"/>
+            <property name="uedList" type="string" required="false"/>
+        </request>
+    </item>
 
 
     <!--

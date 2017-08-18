@@ -87,7 +87,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 	public boolean updateProduct(Map map) {
 		JSONObject jsonObject = (JSONObject) JSONObject.toJSON(map);
 		Product product = JSONObject.toJavaObject(jsonObject, Product.class);
-		Product selectOne = productMapper.selectByPrimaryKey(product);
+		Product selectOne = productMapper.selectByPrimaryKey(product.getId());
 		selectOne.setName(jsonObject.getString("name"));
 		selectOne.setDescp(jsonObject.getString("descp"));
 		selectOne.setStatus(Integer.parseInt(jsonObject.getString("productStatus")));

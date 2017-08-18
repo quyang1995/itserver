@@ -186,7 +186,7 @@ public class APIProgramController extends BaseController {
                 .getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         this.getProgramService().updateProgram(paramsMap);
         //返回报文
-        return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
+        return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
     }
 
 }

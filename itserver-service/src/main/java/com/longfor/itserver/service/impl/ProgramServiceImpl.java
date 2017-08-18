@@ -36,6 +36,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 	@Autowired
 	private ADSHelper adsHelper;
+	
 
 	@Override
 	public List<Program> programList(Map map) {
@@ -146,7 +147,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	public boolean updateProgram(Map map) {
 		JSONObject json = (JSONObject) JSONObject.toJSON(map);
 		Program program = JSONObject.toJavaObject(json, Program.class);
-		Program selectOneProgram =programMapper.selectOne(program);
+		Program selectOneProgram =programMapper.selectByPrimaryKey(program.getId());
 		if(null==selectOneProgram) {
 			return false;
 		}
