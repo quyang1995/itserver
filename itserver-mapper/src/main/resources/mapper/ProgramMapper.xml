@@ -46,7 +46,7 @@
     SELECT DISTINCT
     p.id, p.product_id, p.name, p.descp, p.commit_date, p.start_date, p.gray_release_date, p.release_date,
     p.like_product, p.like_program, p.type, p.program_status, p.modified_account_id, p.modified_name,
-    p.create_time, p.modified_time,pe.account_id,pe.employee_name
+    p.create_time, p.modified_time,pe.account_id
     FROM program p LEFT JOIN program_employee pe ON p.id = pe.program_id
     WHERE
     <if test='isPart == 0'>
