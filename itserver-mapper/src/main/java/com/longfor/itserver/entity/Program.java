@@ -101,6 +101,9 @@ public class Program implements Serializable {
     @Column(name = "modified_time")
     @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date modifiedTime;
+    
+    @Transient
+    private String productName;
 
     /**
      * @return id
@@ -377,6 +380,14 @@ public class Program implements Serializable {
     public void setModifiedTime(Date modifiedTime) {
         this.modifiedTime = modifiedTime;
     }
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
 
 
 }

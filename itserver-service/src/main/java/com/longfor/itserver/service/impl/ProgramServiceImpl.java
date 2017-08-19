@@ -2,6 +2,7 @@ package com.longfor.itserver.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
@@ -9,12 +10,14 @@ import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.ProductEmployee;
 import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ProgramEmployee;
+import com.longfor.itserver.mapper.ProductMapper;
 import com.longfor.itserver.mapper.ProgramEmployeeMapper;
 import com.longfor.itserver.mapper.ProgramMapper;
 import com.longfor.itserver.service.IProgramService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,15 +35,25 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	private ProgramMapper programMapper;
 
 	@Autowired
+	private ProductMapper productMapper;
+
+	@Autowired
 	private ProgramEmployeeMapper programEmployeeMapper;
 
 	@Autowired
 	private ADSHelper adsHelper;
-	
 
 	@Override
 	public List<Program> programList(Map map) {
-		return programMapper.programList(map);
+		List<Program> programList = Lists.newArrayList();
+		for (Program program : programMapper.programList(map)) {
+			Product product = productMapper.selectByPrimaryKey(program.getProductId());
+			if (null != product) {
+				program.setProductName(product.getName());
+			}
+			programList.add(program);
+		}
+		return programList;
 	}
 
 	@Override
@@ -63,7 +76,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		String jsonArrPm = json.get("productManagerList").toString();
 		if (!"".equals(jsonArrPm)) {
 			getAccountLongfor(program, jsonArrPm, "1");
-			
+
 		}
 		// 项目经理
 		String jsonArrPMl = json.get("programManagerList").toString();
@@ -128,68 +141,83 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 	@Override
 	public Program getProgramId(long id) {
-		return programMapper.getProgramId(id);
+		Program program = programMapper.getProgramId(id);
+		if (null != program) {
+			Product product = productMapper.selectByPrimaryKey(program.getProductId());
+			program.setProductName(product.getName());
+		}
+
+		return program;
 	}
-	
+
 	/**
-	* 删除操作
-	* @param type
-	* @param program
-	*/
-	private void deleteByParam(int type, Program program) {
+	 * 删除操作
+	 * 
+	 * @param type
+	 * @param program
+	 * @param program
+	 */
+	private void deleteByParam(int type, long typeId, Program program) {
 		ProgramEmployee programEmployee = new ProgramEmployee();
 		programEmployee.setEmployeeType(type);
+		if (0 != typeId) {
+			programEmployee.setEmployeeTypeId(typeId);
+		}
 		programEmployee.setProgramId(program.getId());
 		programEmployeeMapper.delete(programEmployee);
 	}
 
 	@Override
+	@Transactional
 	public boolean updateProgram(Map map) {
 		JSONObject json = (JSONObject) JSONObject.toJSON(map);
 		Program program = JSONObject.toJavaObject(json, Program.class);
-		Program selectOneProgram =programMapper.selectByPrimaryKey(program.getId());
-		if(null==selectOneProgram) {
+		Program selectOneProgram = programMapper.selectByPrimaryKey(program.getId());
+		if (null == selectOneProgram) {
 			return false;
 		}
 		selectOneProgram.setName(program.getName());
+		selectOneProgram.setProductId(program.getProductId());
 		selectOneProgram.setDescp(program.getDescp());
+		selectOneProgram.setCommitDate(program.getCommitDate());
+		selectOneProgram.setStartDate(program.getStartDate());
 		selectOneProgram.setGrayReleaseDate(program.getGrayReleaseDate());
 		selectOneProgram.setReleaseDate(program.getReleaseDate());
 		selectOneProgram.setLikeProduct(program.getLikeProduct());
 		selectOneProgram.setLikeProgram(program.getLikeProgram());
 		selectOneProgram.setType(program.getType());
 		selectOneProgram.setProgramStatus(selectOneProgram.getProgramStatus());
-		
+
 		programMapper.updateByPrimaryKey(selectOneProgram);
 
 		// 项目责任人
 		String jsonArrPl = json.get("personLiableList").toString();
 		if (!"".equals(jsonArrPl)) {
-			deleteByParam(0,program);
+			deleteByParam(1, 0, program);
 			getAccountLongfor(program, jsonArrPl, "0");
 		}
 		// 产品经理
 		String jsonArrPm = json.get("productManagerList").toString();
 		if (!"".equals(jsonArrPm)) {
-			deleteByParam(1,program);
+			deleteByParam(2, 1, program);
 			getAccountLongfor(program, jsonArrPm, "1");
 		}
 		// 项目经理
 		String jsonArrPMl = json.get("programManagerList").toString();
 		if (!"".equals(jsonArrPMl)) {
-			deleteByParam(2,program);
+			deleteByParam(2, 2, program);
 			getAccountLongfor(program, jsonArrPMl, "2");
 		}
 		// 开发人员
 		String jsonArrDe = json.get("developerList").toString();
 		if (!"".equals(jsonArrDe)) {
-			deleteByParam(3,program);
+			deleteByParam(2, 3, program);
 			getAccountLongfor(program, jsonArrDe, "3");
 		}
 		// UED人员
 		String jsonArrUed = json.get("uedList").toString();
 		if (!"".equals(jsonArrUed)) {
-			deleteByParam(4,program);
+			deleteByParam(2, 4, program);
 			getAccountLongfor(program, jsonArrUed, "4");
 		}
 		return true;
