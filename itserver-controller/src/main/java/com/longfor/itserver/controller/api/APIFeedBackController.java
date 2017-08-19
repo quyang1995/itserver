@@ -38,24 +38,23 @@ import java.util.Map;
 @Controller
 public class APIFeedBackController extends BaseController {
 
-    /**
-     * 新增反馈信息
-     *
-     * @param response
-     * @param request
-     * @return
-     * @throws IOException
-     */
-    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-    @ResponseBody
-    public Map feedBackAdd(HttpServletResponse response, HttpServletRequest request) throws IOException, JSONException {
+	/**
+	 * 新增反馈信息
+	 *
+	 * @param response
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/add", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public Map feedBackAdd(HttpServletResponse response, HttpServletRequest request) throws IOException, JSONException {
 
-        /* 获得已经验证过的参数map */
-        @SuppressWarnings("unchecked")
-        Map paramsMap = (Map) request
-                .getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-        this.getFeedBackService().addFeedBack(paramsMap);
-        //返回报文
-        return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
-    }
+		/* 获得已经验证过的参数map */
+		@SuppressWarnings("unchecked")
+		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		this.getFeedBackService().addFeedBack(paramsMap);
+		// 返回报文
+		return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
+	}
 }
