@@ -6,7 +6,6 @@ import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.entity.Demand;
-import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.mapper.DemandMapper;
 import com.longfor.itserver.service.IDemandService;
 import com.longfor.itserver.service.base.AdminBaseService;
