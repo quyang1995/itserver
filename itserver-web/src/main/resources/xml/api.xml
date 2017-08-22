@@ -282,6 +282,7 @@
             <property name="modifiedAccountId" type="string" required="true"/>
         </request>
     </item>
+
     <!--
         URL:
        api/demand/list
@@ -298,9 +299,17 @@
             <property name="searchText" type="string" required="true" maxLength="30" description="搜索内容"/>
         </request>
     </item>
+    <!--
+       URL:
+       /api/demandComment/list
 
+       说明:通过demandID获取评论基本信息
 
-
-
+   -->
+    <item id="api_demandComment_list" description="通过demandID获取评论基本信息">
+        <request>
+            <property name="demandId" type="int" required="true"/>
+        </request>
+    </item>
 
 </api>
