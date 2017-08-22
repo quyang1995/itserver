@@ -282,4 +282,25 @@
             <property name="modifiedAccountId" type="string" required="true"/>
         </request>
     </item>
+    <!--
+        URL:
+       api/demand/list
+
+        说明:需求列表
+
+    -->
+    <item id="api_demand_list" description="需求列表">
+        <request>
+            <property ref="pageNum"/>
+            <property ref="pageSize"/>
+            <property name="accountId" type="string" required="true"/>
+            <property name="status" type="string" required="true"/>
+            <property name="searchText" type="string" required="true" maxLength="30" description="搜索内容"/>
+        </request>
+    </item>
+
+
+
+
+
 </api>

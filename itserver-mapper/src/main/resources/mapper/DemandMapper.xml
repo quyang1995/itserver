@@ -38,4 +38,17 @@
     drafted_employee_name, drafted_full_dept_path, cc_account, like_product, like_program, 
     level, status, modified_account_id, modified_name, create_time, modified_time
   </sql>
+  <select id="searchList" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"></include>
+    FROM demand
+    WHERE  1=1
+    <if test='status != "" and status != null'>
+     and status = #{status}
+    </if>
+    <if test='searchText != "" and searchText != null'>
+      and (name like concat(concat('%',#{searchText}),'%') OR callon_employee_name like concat(concat('%',#{searchText}),'%'))
+    </if>
+
+  </select>
 </mapper>

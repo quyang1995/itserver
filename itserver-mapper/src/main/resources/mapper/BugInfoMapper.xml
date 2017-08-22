@@ -41,4 +41,5 @@
     like_product, like_program, level, status, modified_account_id, modified_name, create_time, 
     modified_time
   </sql>
+
 </mapper>
