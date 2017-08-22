@@ -24,7 +24,9 @@
     <!--
       WARNING - @mbggenerated
     -->
-    id, demand_id, parent_id, content, account_id, employee_code, employee_name, full_dept_path, 
+    id, demand_id, parent_id, content, account_id, employee_code, employee_name, full_dept_path,
     level_num, ip, reply_type, status, create_time, modified_time
   </sql>
+
+
 </mapper>
