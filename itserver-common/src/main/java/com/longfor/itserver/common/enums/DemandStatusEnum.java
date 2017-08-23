@@ -2,28 +2,17 @@ package com.longfor.itserver.common.enums;
 
 /**
  * @author mayee
- * Created on 2017/2/9 下午7:49
- *
+ *         Created on 2017/2/9 下午7:49
  * @version v1.0
  */
-public enum AvaStatusEnum {
+public enum DemandStatusEnum {
 
     /* 状态 */
-    AVA(1, "正常", "label label-sm label-info"),
-    UNAVA(0, "不可用", "label label-sm label-danger"),
-
-    /*人员类型*/
-    LIABLEAVA(1, "责任人", ""),
-    MEMBERAVA(2, "成员", ""),
-    /*人员类型角色*/
-    PRODAVA(1, "产品经理", ""),
-    PROGAVA(2, "项目经理", ""),
-    DEVEAVA(3, "开发人员", ""),
-    UEDAVA(4, "UED人员", ""),
-    /*评论回复类型*/
-    REPLY_ZERO(0, "未回复", ""),
-    REPLY_ONE(1, "已回复", ""),
-    ;
+    CANCEL(0, "已取消", "label label-sm label-danger"),
+    CLOSE(1, "已关闭", "label label-sm label-info"),
+    PENDING(2, "待处理", "label label-sm label-success"),
+    WORKING(3, "处理中", "label label-sm label-success"),
+    COMPLETED(4, "已完成", "label label-sm label-success");
 
     /* 枚举码 */
     private int code;
@@ -32,7 +21,7 @@ public enum AvaStatusEnum {
     /* 前端渲染时的class字符串 */
     private String classStr;
 
-    AvaStatusEnum(int code, String text, String classStr) {
+    DemandStatusEnum(int code, String text, String classStr) {
         this.code = code;
         this.text = text;
         this.classStr = classStr;
@@ -52,16 +41,18 @@ public enum AvaStatusEnum {
 
     /**
      * 根据枚举码获取枚举
+     *
      * @param code 枚举码
      * @return 枚举
      */
-    public static AvaStatusEnum getByCode(int code) {
-        for (AvaStatusEnum status : values()) {
+    public static DemandStatusEnum getByCode(int code) {
+        for (DemandStatusEnum status : values()) {
             if (status.getCode() == code) {
                 return status;
             }
         }
         return null;
     }
+
 
 }
