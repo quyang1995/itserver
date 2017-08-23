@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `itplus`.`product` (
   `type`                   INT             NOT NULL
   COMMENT '公开类型：0=私有，1=公开',
   `status`                 INT             NOT NULL
-  COMMENT '状态：0=已下线，1=正常',
+  COMMENT '状态：0=已下线，1=正常，-1=全部',
   `modified_account_id`    VARCHAR(50)     NULL
   COMMENT '最后修改人账户id',
   `modified_name`          VARCHAR(50)     NULL
@@ -303,6 +303,8 @@ CREATE TABLE IF NOT EXISTS `itplus`.`program_comment` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `itplus`.`demand` (
   `id`                     BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `feed_back_id`            BIGINT          NULL
+  COMMENT '归属反馈id',
   `relation_id`            BIGINT          NOT NULL
   COMMENT '归属产品/项目id',
   `relation_type`          INT             NOT NULL
@@ -321,13 +323,13 @@ CREATE TABLE IF NOT EXISTS `itplus`.`demand` (
   COMMENT '指派人员工姓名',
   `callon_full_dept_path`  VARCHAR(100)    NOT NULL
   COMMENT '指派人部门完整路径',
-  `drafted_account_id`     VARCHAR(50)     NOT NULL
+  `drafted_account_id`     VARCHAR(50)     NULL
   COMMENT '发起人用户名',
-  `drafted_employee_code`  BIGINT          NOT NULL
+  `drafted_employee_code`  BIGINT          NULL
   COMMENT '发起人员工号',
-  `drafted_employee_name`  VARCHAR(50)     NOT NULL
+  `drafted_employee_name`  VARCHAR(50)     NULL
   COMMENT '发起人员工姓名',
-  `drafted_full_dept_path` VARCHAR(100)    NOT NULL
+  `drafted_full_dept_path` VARCHAR(100)    NULL
   COMMENT '发起人部门完整路径',
   `cc_account`             VARCHAR(500)    NULL
   COMMENT '抄送人账号字符串，e.g. xx,xx,',
@@ -416,6 +418,8 @@ CREATE TABLE IF NOT EXISTS `itplus`.`demand_comment` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `itplus`.`bug_info` (
   `id`                     BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `feed_back_id`            BIGINT          NULL
+  COMMENT '归属反馈id',
   `relation_id`            BIGINT          NOT NULL
   COMMENT '归属产品/项目id',
   `relation_type`          INT             NOT NULL
@@ -424,6 +428,8 @@ CREATE TABLE IF NOT EXISTS `itplus`.`bug_info` (
   COMMENT 'BUG名称',
   `descp`                  VARCHAR(5000)   NULL
   COMMENT 'BUG描述',
+  `reproduction_step`      VARCHAR(1000)    NULL
+  COMMENT '复现步骤',
   `brower`                 VARCHAR(50)     NULL
   COMMENT '浏览器',
   `hope_date`              DATETIME        NOT NULL
@@ -551,14 +557,18 @@ CREATE TABLE IF NOT EXISTS `itplus`.`feed_back` (
   COMMENT '接口人部门完整路径',
   `type`                   INT             NOT NULL
   COMMENT '反馈类型：0=功能异常，1=功能建议',
+  `status`                 INT             NOT NULL
+  COMMENT '状态：0=已取消，1=已关闭，2=待处理，3=处理中，4=已完成',
+  `channel`                INT    NOT NULL
+  COMMENT '渠道: 0=OA，1=龙客',
   `modified_account_id`    VARCHAR(50)     NULL
-  COMMENT '最后修改人账户id',
-  `modified_employee_code`  BIGINT          NULL
-  COMMENT '最后修改人员工号',
+  COMMENT '提交人账户id',
+  `modified_employee_code`  BIGINT         NULL
+  COMMENT '提交人员工号',
   `modified_name`          VARCHAR(50)     NULL
-  COMMENT '最后修改人名称',
-  `modified_full_dept_path` VARCHAR(100)    NULL
-  COMMENT '最后修改人部门完整路径',
+  COMMENT '提交人名称',
+  `modified_full_dept_path` VARCHAR(100)   NULL
+  COMMENT '提交人部门完整路径',
   `create_time`            TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
   `modified_time`          TIMESTAMP                DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)

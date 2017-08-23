@@ -50,7 +50,7 @@
       (tb.account_id = #{accountId}
       OR ta.contact_account_id = #{accountId})
     </if>
-    <if test="productStatus != null and productStatus != '' ">
+    <if test="productStatus != null and productStatus != '' and productStatus != -1 ">
       AND ta.status= #{productStatus}
     </if>
     <if test="searchText != null and searchText != ''">

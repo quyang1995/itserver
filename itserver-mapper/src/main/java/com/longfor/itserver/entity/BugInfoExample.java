@@ -165,6 +165,66 @@ public class BugInfoExample {
             return (Criteria) this;
         }
 
+        public Criteria andFeedBackIdIsNull() {
+            addCriterion("feed_back_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedBackIdIsNotNull() {
+            addCriterion("feed_back_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedBackIdEqualTo(Long value) {
+            addCriterion("feed_back_id =", value, "feedBackId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedBackIdNotEqualTo(Long value) {
+            addCriterion("feed_back_id <>", value, "feedBackId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedBackIdGreaterThan(Long value) {
+            addCriterion("feed_back_id >", value, "feedBackId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedBackIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("feed_back_id >=", value, "feedBackId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedBackIdLessThan(Long value) {
+            addCriterion("feed_back_id <", value, "feedBackId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedBackIdLessThanOrEqualTo(Long value) {
+            addCriterion("feed_back_id <=", value, "feedBackId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedBackIdIn(List<Long> values) {
+            addCriterion("feed_back_id in", values, "feedBackId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedBackIdNotIn(List<Long> values) {
+            addCriterion("feed_back_id not in", values, "feedBackId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedBackIdBetween(Long value1, Long value2) {
+            addCriterion("feed_back_id between", value1, value2, "feedBackId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedBackIdNotBetween(Long value1, Long value2) {
+            addCriterion("feed_back_id not between", value1, value2, "feedBackId");
+            return (Criteria) this;
+        }
+
         public Criteria andRelationIdIsNull() {
             addCriterion("relation_id is null");
             return (Criteria) this;
@@ -422,6 +482,76 @@ public class BugInfoExample {
 
         public Criteria andDescpNotBetween(String value1, String value2) {
             addCriterion("descp not between", value1, value2, "descp");
+            return (Criteria) this;
+        }
+
+        public Criteria andReproductionStepIsNull() {
+            addCriterion("reproduction_step is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReproductionStepIsNotNull() {
+            addCriterion("reproduction_step is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReproductionStepEqualTo(String value) {
+            addCriterion("reproduction_step =", value, "reproductionStep");
+            return (Criteria) this;
+        }
+
+        public Criteria andReproductionStepNotEqualTo(String value) {
+            addCriterion("reproduction_step <>", value, "reproductionStep");
+            return (Criteria) this;
+        }
+
+        public Criteria andReproductionStepGreaterThan(String value) {
+            addCriterion("reproduction_step >", value, "reproductionStep");
+            return (Criteria) this;
+        }
+
+        public Criteria andReproductionStepGreaterThanOrEqualTo(String value) {
+            addCriterion("reproduction_step >=", value, "reproductionStep");
+            return (Criteria) this;
+        }
+
+        public Criteria andReproductionStepLessThan(String value) {
+            addCriterion("reproduction_step <", value, "reproductionStep");
+            return (Criteria) this;
+        }
+
+        public Criteria andReproductionStepLessThanOrEqualTo(String value) {
+            addCriterion("reproduction_step <=", value, "reproductionStep");
+            return (Criteria) this;
+        }
+
+        public Criteria andReproductionStepLike(String value) {
+            addCriterion("reproduction_step like", value, "reproductionStep");
+            return (Criteria) this;
+        }
+
+        public Criteria andReproductionStepNotLike(String value) {
+            addCriterion("reproduction_step not like", value, "reproductionStep");
+            return (Criteria) this;
+        }
+
+        public Criteria andReproductionStepIn(List<String> values) {
+            addCriterion("reproduction_step in", values, "reproductionStep");
+            return (Criteria) this;
+        }
+
+        public Criteria andReproductionStepNotIn(List<String> values) {
+            addCriterion("reproduction_step not in", values, "reproductionStep");
+            return (Criteria) this;
+        }
+
+        public Criteria andReproductionStepBetween(String value1, String value2) {
+            addCriterion("reproduction_step between", value1, value2, "reproductionStep");
+            return (Criteria) this;
+        }
+
+        public Criteria andReproductionStepNotBetween(String value1, String value2) {
+            addCriterion("reproduction_step not between", value1, value2, "reproductionStep");
             return (Criteria) this;
         }
 

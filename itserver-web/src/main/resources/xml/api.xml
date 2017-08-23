@@ -322,7 +322,7 @@
         URL:
         /api/bug/list
 
-        说明:获取项目列表信息
+        说明:获取BUG列表信息
 
     -->
     <item id="api_bug_list" description="获取BUG列表信息">
@@ -340,7 +340,7 @@
         URL:
         /api/bug/get
 
-        说明:通过ID获取项目基本信息
+        说明:通过ID获取BUG基本信息
 
     -->
     <item id="api_bug_get" description="通过ID获取BUG基本信息">
@@ -353,7 +353,7 @@
         URL:
         /api/bug/add
 
-        说明:新增项目基本信息
+        说明:新增BUG基本信息
 
     -->
     <item id="api_bug_add" description="新增BUG基本信息">
@@ -379,7 +379,7 @@
         URL:
         /api/bug/update
 
-        说明:新增项目基本信息
+        说明:更新BUG基本信息
 
     -->
     <item id="api_bug_update" description="更新BUG基本信息">
