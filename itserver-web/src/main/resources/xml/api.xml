@@ -292,9 +292,10 @@
        说明:通过demandID获取评论基本信息
 
    -->
-    <item id="api_demandComment_list" description="通过demandID获取评论基本信息">
+    <item id="api_demandComment_list" description="通过需求ID获取评论基本信息">
         <request>
             <property name="demandId" type="int" required="true"/>
         </request>
     </item>
+
 </api>
