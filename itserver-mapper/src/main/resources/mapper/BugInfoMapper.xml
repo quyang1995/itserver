@@ -32,6 +32,9 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
   </resultMap>
+  <resultMap id="BugInfoDetailResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsBugInfoDetail">
+
+  </resultMap>
 
   <sql id="Base_Column_List" >
     <!--
@@ -44,4 +47,22 @@
     create_time, modified_time
   </sql>
 
+  <!-- BUG列表 -->
+  <select id="bugList" parameterType="map" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM bug_info
+    WHERE 1=1
+    <if test='status != "" and status != null  and status != -1'>
+      and status = #{status}
+    </if>
+    <if test='searchText != "" and searchText != null'>
+      and (name like concat(concat('%',#{searchText}),'%') OR callon_employee_name like concat(concat('%',#{searchText}),'%'))
+    </if>
+  </select>
+
+  <!-- 通过ID查询BUG -->
+  <select id="getBugId" parameterType="java.lang.Long" resultMap="BugInfoDetailResultMap">
+    SELECT * FROM bug_info WHERE id = #{id}
+  </select>
 </mapper>

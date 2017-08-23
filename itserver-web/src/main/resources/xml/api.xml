@@ -362,6 +362,7 @@
             <property name="relationType" type="int" required="true"/>
             <property name="name" type="string" required="true"/>
             <property name="descp" type="string" required="false"/>
+            <property name="reproductionStep" type="string" required="false"/>
             <property name="brower" type="string" required="false"/>
             <property name="hopeDate" type="string" required="true"/>
             <property name="callonAccountId" type="string" required="true"/>
@@ -389,6 +390,7 @@
             <property name="relationType" type="int" required="true"/>
             <property name="name" type="string" required="true"/>
             <property name="descp" type="string" required="false"/>
+            <property name="reproductionStep" type="string" required="false"/>
             <property name="brower" type="string" required="false"/>
             <property name="hopeDate" type="string" required="true"/>
             <property name="callonAccountId" type="string" required="true"/>
@@ -397,8 +399,8 @@
             <property name="likeProduct" type="string" required="false"/>
             <property name="likeProgram" type="string" required="false"/>
             <property name="level" type="int" required="true"/>
-            <property name="modifiedAccountId" type="string" required="true"/>
-            <property name="modifiedName" type="string" required="true"/>
+            <property name="modifiedAccountId" type="string" required="false"/>
+            <property name="modifiedName" type="string" required="false"/>
         </request>
     </item>
 </api>

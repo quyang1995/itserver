@@ -12,6 +12,7 @@ import com.longfor.itserver.entity.BugInfo;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ProgramEmployee;
+import com.longfor.itserver.entity.ps.PsBugInfoDetail;
 import com.longfor.itserver.entity.ps.PsProgramDetail;
 import net.mayee.commons.helper.APIHelper;
 import org.json.JSONException;
@@ -85,7 +86,25 @@ public class APIBugInfoController extends BaseController {
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
 		long id = Long.parseLong(paramsMap.get("id").toString());
-		BugInfo bugInfo = (BugInfo) this.getBugInfoService().getBugId(id);
+		PsBugInfoDetail bugInfo = (PsBugInfoDetail) this.getBugInfoService().getBugId(id);
+		// 关联产品
+		String likeProduct = bugInfo.getLikeProduct().substring(1, bugInfo.getLikeProduct().length());
+		List<Product> product = this.getProductService().searchIdList(likeProduct);
+		bugInfo.setProductList(product);
+		// 关联项目
+		String likeProgram = bugInfo.getLikeProgram().substring(1, bugInfo.getLikeProgram().length());
+		List<Program> program = this.getProgramService().inProgramId(likeProgram);
+		bugInfo.setProgramList(program);
+		//归属项目/产品
+		String relationName = "";
+		if(bugInfo.getRelationType().equals("1")){
+			Product prod = this.getProductService().selectById(bugInfo.getRelationId());
+			relationName = prod.getName();
+		}else if(bugInfo.getRelationType().equals("2")){
+			Program prog = this.getProgramService().selectById(bugInfo.getRelationId());
+			relationName = prog.getName();
+		}
+		bugInfo.setRelationName(relationName);
 
 		/* 返回报文 */
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
