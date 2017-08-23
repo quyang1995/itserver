@@ -3,7 +3,10 @@ package com.longfor.itserver.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.longfor.ads.entity.AccountLongfor;
+import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.BizEnum;
+import com.longfor.itserver.common.enums.BugStatusEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.entity.Demand;
@@ -29,19 +32,28 @@ import org.springframework.transaction.annotation.Transactional;
 public class DemandServiceImpl extends AdminBaseService<Demand> implements IDemandService {
 	@Autowired
 	private DemandMapper demandMapper;
-
+	@Autowired
+	private ADSHelper adsHelper;
+	@Transactional
 	@Override
 	public boolean addDemand(Map map) {
 		JSONObject jsonObject = (JSONObject) JSONObject.toJSON(map);
 		Demand demand = JSONObject.toJavaObject(jsonObject, Demand.class);
-		String descp = demand.getDescp();
-		if (descp != null && descp.length() > 5000) {
-			demand.setDescp(descp.substring(0, 5000));
-
-		demand.getRelationType();
+		//获取状态信息(默认处理中)
+		demand.setStatus(BugStatusEnum.WORKING.getCode());
+		//获取发起人信息
+		AccountLongfor callonAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getCallonAccountId());
+		if (callonAccountLongfor!=null){
+			demand.setCallonEmployeeName(callonAccountLongfor.getName());
+			demand.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
+			demand.setDraftedFullDeptPath(callonAccountLongfor.getPsDeptFullName());
 		}
-
-		return false;
+		//获取指派人信息
+		AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getDraftedAccountId());
+		if(draftedAccountLongfor!=null){
+			
+		}
+		return true;
 	}
 
 	@Override
