@@ -28,5 +28,10 @@
     level_num, ip, reply_type, status, create_time, modified_time
   </sql>
 
-
+  <insert id="add"  parameterType="com.longfor.itserver.entity.DemandComment">
+    INSERT INTO demand_comment (demand_id, parent_id, content, account_id, employee_code, employee_name, full_dept_path,
+    level_num, ip, reply_type, status) VALUES
+    (#{demandId},#{parentId},#{content},#{accountId},#{employeeCode},#{employeeName},#{fullDeptPath},
+    #{levelNum},#{ip},#{replyType},#{status})
+  </insert>
 </mapper>

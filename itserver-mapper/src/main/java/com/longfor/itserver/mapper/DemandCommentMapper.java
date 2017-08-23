@@ -8,4 +8,6 @@ import java.util.List;
 public interface DemandCommentMapper extends BeeMapper<DemandComment> {
 
     List <DemandComment> selectListById(DemandComment demandComment);
+
+    int add (DemandComment demandComment);
 }
