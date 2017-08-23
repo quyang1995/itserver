@@ -133,13 +133,13 @@
         </request>
     </item>
 
-  <!--
-        URL:
-        /api/product/update
+    <!--
+          URL:
+          /api/product/update
 
-        说明:修改产品基本信息
+          说明:修改产品基本信息
 
-    -->
+      -->
     <item id="api_product_update" description="修改产品基本信息">
         <request>
             <property name="id" type="int" required="true" />
@@ -238,8 +238,8 @@
             <property name="uedList" type="string" required="false"/>
         </request>
     </item>
-    
-      <item id="api_program_update" description="更新项目基本信息">
+
+    <item id="api_program_update" description="更新项目基本信息">
         <request>
             <property name="id" type="int" required="true"/>
             <property name="productId" type="int" required="true"/>

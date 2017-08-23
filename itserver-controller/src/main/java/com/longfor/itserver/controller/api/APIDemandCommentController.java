@@ -3,12 +3,8 @@ package com.longfor.itserver.controller.api;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
-import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.DemandComment;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import net.mayee.commons.helper.APIHelper;
 import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,9 +33,6 @@ public class APIDemandCommentController extends BaseController{
     public Map list(HttpServletRequest request,HttpServletResponse response)  throws IOException, JSONException {
 
         Map paramMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-
-        logger.info(paramMap.toString());
-
         DemandComment demandComment = new DemandComment();
         String demandId=(String)paramMap.get("demandId");
         demandComment.setDemandId(Long.parseLong(demandId));
@@ -51,17 +44,17 @@ public class APIDemandCommentController extends BaseController{
         return map;
     }
 
-//    @RequestMapping(value="/add",method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
-//    @ResponseBody
-//    public Map add(HttpServletRequest request,HttpServletResponse response){
-//        Map paramMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-//        String accountId = (String)paramMap.get("accountId");
-//        DemandComment demandComment = new DemandComment();
-//        demandComment.setAccountId(accountId);
-//
-//
-//        Map<String,Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
-//        return map;
-//    }
+    @RequestMapping(value="/add",method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Map add(HttpServletRequest request,HttpServletResponse response) throws IOException, JSONException{
+        Map paramMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        boolean flag = this.getDemandCommentService().add(paramMap);
+        Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
+        if(!flag) {
+            map = CommonUtils.getResultMapByBizEnum(BizEnum.E1001);
+        }
+
+        return map;
+    }
 
 }
