@@ -10,6 +10,12 @@ public class BugInfo {
     private Long id;
 
     /**
+     * 归属反馈id
+     */
+    @Column(name = "feed_back_id")
+    private Long feedBackId;
+
+    /**
      * 归属产品/项目id
      */
     @Column(name = "relation_id")
@@ -30,6 +36,12 @@ public class BugInfo {
      * BUG描述
      */
     private String descp;
+
+    /**
+     * 复现步骤
+     */
+    @Column(name = "reproduction_step")
+    private String reproductionStep;
 
     /**
      * 浏览器
@@ -151,6 +163,24 @@ public class BugInfo {
     }
 
     /**
+     * 获取归属反馈id
+     *
+     * @return feed_back_id - 归属反馈id
+     */
+    public Long getFeedBackId() {
+        return feedBackId;
+    }
+
+    /**
+     * 设置归属反馈id
+     *
+     * @param feedBackId 归属反馈id
+     */
+    public void setFeedBackId(Long feedBackId) {
+        this.feedBackId = feedBackId;
+    }
+
+    /**
      * 获取归属产品/项目id
      *
      * @return relation_id - 归属产品/项目id
@@ -220,6 +250,24 @@ public class BugInfo {
      */
     public void setDescp(String descp) {
         this.descp = descp == null ? null : descp.trim();
+    }
+
+    /**
+     * 获取复现步骤
+     *
+     * @return reproduction_step - 复现步骤
+     */
+    public String getReproductionStep() {
+        return reproductionStep;
+    }
+
+    /**
+     * 设置复现步骤
+     *
+     * @param reproductionStep 复现步骤
+     */
+    public void setReproductionStep(String reproductionStep) {
+        this.reproductionStep = reproductionStep == null ? null : reproductionStep.trim();
     }
 
     /**

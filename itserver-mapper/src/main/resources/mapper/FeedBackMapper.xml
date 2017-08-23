@@ -17,6 +17,8 @@
     <result column="contact_employee_name" property="contactEmployeeName" jdbcType="VARCHAR" />
     <result column="contact_full_dept_path" property="contactFullDeptPath" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="channel" property="channel" jdbcType="INTEGER" />
     <result column="modified_account_id" property="modifiedAccountId" jdbcType="VARCHAR" />
     <result column="modified_employee_code" property="modifiedEmployeeCode" jdbcType="BIGINT" />
     <result column="modified_name" property="modifiedName" jdbcType="VARCHAR" />
@@ -29,10 +31,10 @@
     <!--
       WARNING - @mbggenerated
     -->
-    id, product_id, name, problem_title, problem_descp, reproduction_step, sys_environment, 
-    contact_account_id, contact_employee_code, contact_employee_name, contact_full_dept_path, 
-    type, modified_account_id, modified_employee_code, modified_name, modified_full_dept_path, 
-    create_time, modified_time
+    id, product_id, name, problem_title, problem_descp, reproduction_step, sys_environment,
+    contact_account_id, contact_employee_code, contact_employee_name, contact_full_dept_path,
+    type, status, channel, modified_account_id, modified_employee_code, modified_name,
+    modified_full_dept_path, create_time, modified_time
   </sql>
 
 </mapper>
