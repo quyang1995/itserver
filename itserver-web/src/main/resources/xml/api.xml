@@ -325,13 +325,40 @@
             <property name="demandId" type="int" required="true" />
             <property name="parentId" type="int" required="true" />
             <property name="content" type="string" required="false" />
-            <property name="employeeCode" type="int" required="true" />
-            <property name="employeeName" type="string" required="true" />
-            <property name="fullDeptPath" type="string" required="true" />
             <property name="levelNum" type="int" required="true" />
             <property name="ip" type="string" required="false" />
-            <property name="replyType" type="int" required="true" />
-            <property name="status" type="int" required="true" />
+        </request>
+    </item>
+
+
+
+    <!--
+      URL:
+      /api/bugComment/list
+
+      说明:通过demandID获取评论基本信息
+
+  -->
+    <item id="api_bugComment_list" description="通过需求ID获取评论基本信息">
+        <request>
+            <property name="bugId" type="int" required="true"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
+        /api/bugComment/add
+
+        说明：通过account添加评论用户信息
+    -->
+    <item id="api_bugComment_add" description="通过用户名查询用户信息添加至评论表">
+        <request>
+            <property name="accountId" type="string" required="true" />
+            <property name="bugId" type="int" required="true" />
+            <property name="parentId" type="int" required="true" />
+            <property name="content" type="string" required="false" />
+            <property name="levelNum" type="int" required="true" />
+            <property name="ip" type="string" required="false" />
         </request>
     </item>
 </api>

@@ -10,5 +10,5 @@ public interface IDemandCommentService extends IAdminService<DemandComment> {
 
     List<DemandComment> getListById(DemandComment demandComment);
 
-    boolean add (DemandComment demandComment);
+    boolean add (Map paramsMap);
 }
