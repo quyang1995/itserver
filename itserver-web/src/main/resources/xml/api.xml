@@ -312,4 +312,93 @@
         </request>
     </item>
 
+
+
+
+    <!--
+        ******** BUG ********
+        -->
+    <!--
+        URL:
+        /api/bug/list
+
+        说明:获取项目列表信息
+
+    -->
+    <item id="api_bug_list" description="获取BUG列表信息">
+        <request>
+            <property ref="pageNum"/>
+            <property ref="pageSize"/>
+            <property name="accountId" type="string" required="true"/>
+            <property name="status" type="int" required="true"/>
+            <property name="searchText" type="string" required="true" maxLength="30" description="搜索内容"/>
+        </request>
+    </item>
+
+
+    <!--
+        URL:
+        /api/bug/get
+
+        说明:通过ID获取项目基本信息
+
+    -->
+    <item id="api_bug_get" description="通过ID获取BUG基本信息">
+        <request>
+            <property name="id" type="int" required="true"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
+        /api/bug/add
+
+        说明:新增项目基本信息
+
+    -->
+    <item id="api_bug_add" description="新增BUG基本信息">
+        <request>
+            <property name="relationId" type="int" required="true"/>
+            <property name="relationType" type="int" required="true"/>
+            <property name="name" type="string" required="true"/>
+            <property name="descp" type="string" required="false"/>
+            <property name="brower" type="string" required="false"/>
+            <property name="hopeDate" type="string" required="true"/>
+            <property name="callonAccountId" type="string" required="true"/>
+            <property name="draftedAccountId" type="string" required="true"/>
+            <property name="ccAccount" type="string" required="false"/>
+            <property name="likeProduct" type="string" required="false"/>
+            <property name="likeProgram" type="string" required="false"/>
+            <property name="level" type="int" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true"/>
+            <property name="modifiedName" type="string" required="true"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
+        /api/bug/update
+
+        说明:新增项目基本信息
+
+    -->
+    <item id="api_bug_update" description="更新BUG基本信息">
+        <request>
+            <property name="id" type="int" required="true"/>
+            <property name="relationId" type="int" required="true"/>
+            <property name="relationType" type="int" required="true"/>
+            <property name="name" type="string" required="true"/>
+            <property name="descp" type="string" required="false"/>
+            <property name="brower" type="string" required="false"/>
+            <property name="hopeDate" type="string" required="true"/>
+            <property name="callonAccountId" type="string" required="true"/>
+            <property name="draftedAccountId" type="string" required="true"/>
+            <property name="ccAccount" type="string" required="false"/>
+            <property name="likeProduct" type="string" required="false"/>
+            <property name="likeProgram" type="string" required="false"/>
+            <property name="level" type="int" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true"/>
+            <property name="modifiedName" type="string" required="true"/>
+        </request>
+    </item>
 </api>
