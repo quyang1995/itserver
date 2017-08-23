@@ -19,7 +19,11 @@ public enum AvaStatusEnum {
     PRODAVA(1, "产品经理", ""),
     PROGAVA(2, "项目经理", ""),
     DEVEAVA(3, "开发人员", ""),
-    UEDAVA(4, "UED人员", "");
+    UEDAVA(4, "UED人员", ""),
+    /*评论回复类型*/
+    REPLY_ZERO(0, "未回复", ""),
+    REPLY_ONE(1, "已回复", ""),
+    ;
 
     /* 枚举码 */
     private int code;

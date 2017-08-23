@@ -21,7 +21,7 @@ public class Demand {
     private Integer relationType;
 
     /**
-     * 需求名称
+     * 需求标题
      */
     private String name;
 

@@ -15,4 +15,5 @@ public interface IDemandService extends IAdminService<Demand> {
 	 */
 	public Map<String, Object> getPageDemandList(Map<String, Object>paramsMap,ELExample example);
 
+
 }
