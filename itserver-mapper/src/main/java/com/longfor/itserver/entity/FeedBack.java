@@ -74,25 +74,35 @@ public class FeedBack {
     private Integer type;
 
     /**
-     * 最后修改人账户id
+     * 状态：0=已取消，1=已关闭，2=待处理，3=处理中，4=已完成
+     */
+    private Integer status;
+
+    /**
+     * 渠道: 0=OA，1=龙客
+     */
+    private Integer channel;
+
+    /**
+     * 提交人账户id
      */
     @Column(name = "modified_account_id")
     private String modifiedAccountId;
 
     /**
-     * 最后修改人员工号
+     * 提交人员工号
      */
     @Column(name = "modified_employee_code")
     private Long modifiedEmployeeCode;
 
     /**
-     * 最后修改人名称
+     * 提交人名称
      */
     @Column(name = "modified_name")
     private String modifiedName;
 
     /**
-     * 最后修改人部门完整路径
+     * 提交人部门完整路径
      */
     @Column(name = "modified_full_dept_path")
     private String modifiedFullDeptPath;
@@ -316,72 +326,108 @@ public class FeedBack {
     }
 
     /**
-     * 获取最后修改人账户id
+     * 获取状态：0=已取消，1=已关闭，2=待处理，3=处理中，4=已完成
      *
-     * @return modified_account_id - 最后修改人账户id
+     * @return status - 状态：0=已取消，1=已关闭，2=待处理，3=处理中，4=已完成
+     */
+    public Integer getStatus() {
+        return status;
+    }
+
+    /**
+     * 设置状态：0=已取消，1=已关闭，2=待处理，3=处理中，4=已完成
+     *
+     * @param status 状态：0=已取消，1=已关闭，2=待处理，3=处理中，4=已完成
+     */
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    /**
+     * 获取渠道: 0=OA，1=龙客
+     *
+     * @return channel - 渠道: 0=OA，1=龙客
+     */
+    public Integer getChannel() {
+        return channel;
+    }
+
+    /**
+     * 设置渠道: 0=OA，1=龙客
+     *
+     * @param channel 渠道: 0=OA，1=龙客
+     */
+    public void setChannel(Integer channel) {
+        this.channel = channel;
+    }
+
+    /**
+     * 获取提交人账户id
+     *
+     * @return modified_account_id - 提交人账户id
      */
     public String getModifiedAccountId() {
         return modifiedAccountId;
     }
 
     /**
-     * 设置最后修改人账户id
+     * 设置提交人账户id
      *
-     * @param modifiedAccountId 最后修改人账户id
+     * @param modifiedAccountId 提交人账户id
      */
     public void setModifiedAccountId(String modifiedAccountId) {
         this.modifiedAccountId = modifiedAccountId == null ? null : modifiedAccountId.trim();
     }
 
     /**
-     * 获取最后修改人员工号
+     * 获取提交人员工号
      *
-     * @return modified_employee_code - 最后修改人员工号
+     * @return modified_employee_code - 提交人员工号
      */
     public Long getModifiedEmployeeCode() {
         return modifiedEmployeeCode;
     }
 
     /**
-     * 设置最后修改人员工号
+     * 设置提交人员工号
      *
-     * @param modifiedEmployeeCode 最后修改人员工号
+     * @param modifiedEmployeeCode 提交人员工号
      */
     public void setModifiedEmployeeCode(Long modifiedEmployeeCode) {
         this.modifiedEmployeeCode = modifiedEmployeeCode;
     }
 
     /**
-     * 获取最后修改人名称
+     * 获取提交人名称
      *
-     * @return modified_name - 最后修改人名称
+     * @return modified_name - 提交人名称
      */
     public String getModifiedName() {
         return modifiedName;
     }
 
     /**
-     * 设置最后修改人名称
+     * 设置提交人名称
      *
-     * @param modifiedName 最后修改人名称
+     * @param modifiedName 提交人名称
      */
     public void setModifiedName(String modifiedName) {
         this.modifiedName = modifiedName == null ? null : modifiedName.trim();
     }
 
     /**
-     * 获取最后修改人部门完整路径
+     * 获取提交人部门完整路径
      *
-     * @return modified_full_dept_path - 最后修改人部门完整路径
+     * @return modified_full_dept_path - 提交人部门完整路径
      */
     public String getModifiedFullDeptPath() {
         return modifiedFullDeptPath;
     }
 
     /**
-     * 设置最后修改人部门完整路径
+     * 设置提交人部门完整路径
      *
-     * @param modifiedFullDeptPath 最后修改人部门完整路径
+     * @param modifiedFullDeptPath 提交人部门完整路径
      */
     public void setModifiedFullDeptPath(String modifiedFullDeptPath) {
         this.modifiedFullDeptPath = modifiedFullDeptPath == null ? null : modifiedFullDeptPath.trim();

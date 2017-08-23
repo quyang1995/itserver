@@ -6,10 +6,12 @@
       WARNING - @mbggenerated
     -->
     <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="feed_back_id" property="feedBackId" jdbcType="BIGINT" />
     <result column="relation_id" property="relationId" jdbcType="BIGINT" />
     <result column="relation_type" property="relationType" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="descp" property="descp" jdbcType="VARCHAR" />
+    <result column="reproduction_step" property="reproductionStep" jdbcType="VARCHAR" />
     <result column="brower" property="brower" jdbcType="VARCHAR" />
     <result column="hope_date" property="hopeDate" jdbcType="TIMESTAMP" />
     <result column="callon_account_id" property="callonAccountId" jdbcType="VARCHAR" />
@@ -35,11 +37,11 @@
     <!--
       WARNING - @mbggenerated
     -->
-    id, relation_id, relation_type, name, descp, brower, hope_date, callon_account_id, 
-    callon_employee_code, callon_employee_name, callon_full_dept_path, drafted_account_id, 
-    drafted_employee_code, drafted_employee_name, drafted_full_dept_path, cc_account, 
-    like_product, like_program, level, status, modified_account_id, modified_name, create_time, 
-    modified_time
+    id, feed_back_id, relation_id, relation_type, name, descp, reproduction_step, brower,
+    hope_date, callon_account_id, callon_employee_code, callon_employee_name, callon_full_dept_path,
+    drafted_account_id, drafted_employee_code, drafted_employee_name, drafted_full_dept_path,
+    cc_account, like_product, like_program, level, status, modified_account_id, modified_name,
+    create_time, modified_time
   </sql>
 
 </mapper>

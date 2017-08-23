@@ -9,6 +9,12 @@ public class Demand {
     private Long id;
 
     /**
+     * 归属反馈id
+     */
+    @Column(name = "feed_back_id")
+    private Long feedBackId;
+
+    /**
      * 归属产品/项目id
      */
     @Column(name = "relation_id")
@@ -21,7 +27,7 @@ public class Demand {
     private Integer relationType;
 
     /**
-     * 需求标题
+     * 需求名称
      */
     private String name;
 
@@ -142,6 +148,24 @@ public class Demand {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+
+    /**
+     * 获取归属反馈id
+     *
+     * @return feed_back_id - 归属反馈id
+     */
+    public Long getFeedBackId() {
+        return feedBackId;
+    }
+
+    /**
+     * 设置归属反馈id
+     *
+     * @param feedBackId 归属反馈id
+     */
+    public void setFeedBackId(Long feedBackId) {
+        this.feedBackId = feedBackId;
     }
 
     /**

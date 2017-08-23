@@ -55,7 +55,7 @@
     <if test='isPart == 1'>
       pe.account_id = #{accountId, jdbcType=VARCHAR}
     </if>
-    <if test='programStatus != "" and programStatus != null'>
+    <if test='programStatus != "" and programStatus != null  and programStatus != -1'>
       and p.program_status = #{programStatus}
     </if>
     <if test='searchText != "" and searchText != null'>
