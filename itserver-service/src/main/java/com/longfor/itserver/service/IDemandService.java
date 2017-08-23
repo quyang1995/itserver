@@ -28,4 +28,11 @@ public interface IDemandService extends IAdminService<Demand> {
 	 * @return
 	 */
 	Boolean updateDemand(Map map);
+
+	/**
+	 *  通过ID获取需求信息
+	 * @param
+	 * @return
+	 */
+	public Demand getDemandById(Long id);
 }

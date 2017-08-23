@@ -401,4 +401,65 @@
             <property name="modifiedName" type="string" required="true"/>
         </request>
     </item>
+    <!--
+    URL:
+    /api/demand/update
+
+    说明:修改需求信息
+
+    -->
+    <item id="api_demand_update" description="修改需求信息">
+        <request>
+            <property name="id" type="int" required="true"/>
+            <property name="relationId" type="int" required="true"/>
+            <property name="relationType" type="int" required="true"/>
+            <property name="name" type="string" required="true"/>
+            <property name="descp" type="string" required="false"/>
+            <property name="hopeDate" type="string" required="true"/>
+            <property name="callonAccountId" type="string" required="true"/>
+            <property name="draftedAccountId" type="string" required="true"/>
+            <property name="ccAccount" type="string" required="false"/>
+            <property name="likeProduct" type="string" required="false"/>
+            <property name="likeProgram" type="string" required="false"/>
+            <property name="level" type="int" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true"/>
+            <property name="modifiedName" type="string" required="true"/>
+        </request>
+    </item>
+    <!--
+  URL:
+  /api/demand/add
+
+  说明:添加需求信息
+
+  -->
+    <item id="api_demand_add" description="添加需求信息">
+        <request>
+            <property name="relationId" type="int" required="true"/>
+            <property name="relationType" type="int" required="true"/>
+            <property name="name" type="string" required="true"/>
+            <property name="descp" type="string" required="false"/>
+            <property name="hopeDate" type="string" required="true"/>
+            <property name="callonAccountId" type="string" required="true"/>
+            <property name="draftedAccountId" type="string" required="true"/>
+            <property name="ccAccount" type="string" required="false"/>
+            <property name="likeProduct" type="string" required="false"/>
+            <property name="likeProgram" type="string" required="false"/>
+            <property name="level" type="int" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true"/>
+            <property name="modifiedName" type="string" required="true"/>
+        </request>
+    </item>
+    <!--
+        URL:
+        /api/demand/get
+
+        说明:通过ID获取Demand基本信息
+
+    -->
+    <item id="api_demand_get" description="通过ID获取Demand基本信息">
+        <request>
+            <property name="id" type="int" required="true"/>
+        </request>
+    </item>
 </api>

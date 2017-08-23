@@ -49,4 +49,56 @@ public class APIDemandController extends BaseController {
         return map;
     }
 
+    /**
+     *  添加需求
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+    @ResponseBody
+    public Map demandAdd(HttpServletRequest request,HttpServletResponse response){
+        //获取已经验证的参数map
+        Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        this.getDemandService().addDemand(paramsMap);
+        //返回成功信息
+        return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
+    }
+
+    /**
+     *  修改需求
+     * @param response
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+    @ResponseBody
+    public Map demandUpdate(HttpServletResponse response, HttpServletRequest request) {
+
+		//获取已经验证的参数map
+        Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        this.getDemandService().updateDemand(paramsMap);
+        // 返回成功信息
+        return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
+    }
+
+    /**
+     *  通过ID获取需求信息
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/get", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+    @ResponseBody
+    public Map demandGet(HttpServletRequest request, HttpServletResponse response){
+		//获得已经验证过的参数map
+        Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+
+        long id = Long.parseLong(paramsMap.get("id").toString());
+        Demand demand = (Demand)this.getDemandService().getDemandById(id);
+        //返回成功信息
+        Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        resultMap.put("data", demand);
+        return resultMap;
+    }
 }

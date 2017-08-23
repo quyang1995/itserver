@@ -9,6 +9,7 @@ import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.enums.BugStatusEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
+import com.longfor.itserver.entity.BugInfo;
 import com.longfor.itserver.entity.Demand;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.mapper.DemandMapper;
@@ -34,6 +35,12 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 	private DemandMapper demandMapper;
 	@Autowired
 	private ADSHelper adsHelper;
+
+	/**
+	 * 	新增需求信息
+	 * @param map
+	 * @return
+	 */
 	@Transactional
 	@Override
 	public boolean addDemand(Map map) {
@@ -51,14 +58,48 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		//获取指派人信息
 		AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getDraftedAccountId());
 		if(draftedAccountLongfor!=null){
-			
+			demand.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
+			demand.setDraftedEmployeeName(draftedAccountLongfor.getName());
+			demand.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
 		}
+		demandMapper.insert(demand);
+		return true;
+	}
+
+	/**
+	 *  修改需求
+	 * @param map
+	 * @return
+	 */
+	@Transactional
+	@Override
+	public Boolean updateDemand(Map map) {
+		JSONObject jsonObject = (JSONObject) JSONObject.toJSON(map);
+		Demand demand = JSONObject.toJavaObject(jsonObject, Demand.class);
+		//获取状态信息(默认处理中)
+		demand.setStatus(BugStatusEnum.WORKING.getCode());
+		//获取发起人信息
+		AccountLongfor callonAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getCallonAccountId());
+		if (callonAccountLongfor!=null){
+			demand.setCallonEmployeeName(callonAccountLongfor.getName());
+			demand.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
+			demand.setDraftedFullDeptPath(callonAccountLongfor.getPsDeptFullName());
+		}
+		//获取指派人信息
+		AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getDraftedAccountId());
+		if(draftedAccountLongfor!=null){
+			demand.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
+			demand.setDraftedEmployeeName(draftedAccountLongfor.getName());
+			demand.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
+		}
+		demandMapper.updateByPrimaryKey(demand);
 		return true;
 	}
 
 	@Override
-	public Boolean updateDemand(Map map) {
-		return null;
+	public Demand getDemandById(Long id) {
+			Demand demand = demandMapper.getDemandById(id);
+		return demand;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -75,8 +116,5 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		resultMap.put(APIHelper.TOTAL, new PageInfo(demands).getTotal());
 		return resultMap;
 	}
-
-
-
 
 }

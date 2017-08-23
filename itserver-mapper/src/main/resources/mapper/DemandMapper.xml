@@ -45,7 +45,7 @@
     <include refid="Base_Column_List"></include>
     FROM demand
     WHERE  1=1
-    <if test='status != "" and status != null'>
+    <if test='status != "" and status != null and status !=-1'>
      and status = #{status}
     </if>
     <if test='searchText != "" and searchText != null'>
