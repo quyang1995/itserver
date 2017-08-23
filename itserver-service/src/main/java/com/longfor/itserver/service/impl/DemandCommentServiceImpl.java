@@ -63,11 +63,11 @@ public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> im
             demandComment.setEmployeeName(accountLongfor.getName());
             demandComment.setFullDeptPath(accountLongfor.getPsDeptFullName());
 
-            synchronized (this){
+          //  synchronized (this){
                 int count =  demandCommentMapper.add(demandComment);
                 if(count==1)
                     flag = true;
-            }
+           // }
         }
         return flag;
     };
