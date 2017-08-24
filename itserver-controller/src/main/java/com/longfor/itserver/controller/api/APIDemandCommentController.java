@@ -1,7 +1,6 @@
 package com.longfor.itserver.controller.api;
 
 import com.longfor.itserver.common.constant.ConfigConsts;
-import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.controller.base.BaseController;
@@ -73,7 +72,7 @@ public class APIDemandCommentController extends BaseController{
         if(feedBack != null && feedBack.getType().equals(1)){
             Demand demand = new Demand();
             demand.setFeedBackId(feedBackId);
-            demand = this.getDemandService().select(demand).get(0);
+            demand = this.getDemandService().selectOne(demand);
             if(demand != null){
                 demandComment.setDemandId(demand.getId());
                 List<DemandComment> demandCommentList = this.getDemandCommentService().select(demandComment);

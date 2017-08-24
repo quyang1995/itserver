@@ -11,10 +11,11 @@ import com.longfor.itserver.entity.DemandComment;
 import com.longfor.itserver.mapper.DemandCommentMapper;
 import com.longfor.itserver.service.IDemandCommentService;
 import com.longfor.itserver.service.base.AdminBaseService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,6 +25,8 @@ import java.util.Map;
  */
 @Service("DemandCommentService")
 public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> implements IDemandCommentService {
+    public  final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 
     @Autowired
     DemandCommentMapper demandCommentMapper;
@@ -31,16 +34,6 @@ public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> im
     @Autowired
     private ADSHelper adsHelper;
 
-    @Autowired
-    FeedBackServiceImpl feedBackService;
-
-    @Override
-    public List<DemandComment> getListById(DemandComment demandComment) {
-
-        List<DemandComment> demandCommentList= demandCommentMapper.selectListById(demandComment);
-
-        return demandCommentList;
-    }
 
     @Override
     public Map<String, Object> add(Map paramMap){
@@ -61,8 +54,9 @@ public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> im
         demandComment.setEmployeeName(accountLongfor.getName());
         demandComment.setFullDeptPath(accountLongfor.getPsDeptFullName());
 
-        int count =  demandCommentMapper.add(demandComment);
+        int count =  demandCommentMapper.insert(demandComment);
         if(count !=1 ){
+            logger.info("需求评论表新增评论异常");
             map = CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
         }
         return map;
