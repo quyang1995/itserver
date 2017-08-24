@@ -278,8 +278,9 @@
             <property name="problemDescp" type="string" required="false"/>
             <property name="reproductionStep" type="string" required="false"/>
             <property name="sysEnvironment" type="string" required="false"/>
-            <property name="type" type="int" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
+            <property name="type" type="int" required="true"/>
+            <property name="channel" type="int" required="true"/>
         </request>
     </item>
 
