@@ -133,13 +133,13 @@
         </request>
     </item>
 
-  <!--
-        URL:
-        /api/product/update
+    <!--
+          URL:
+          /api/product/update
 
-        说明:修改产品基本信息
+          说明:修改产品基本信息
 
-    -->
+      -->
     <item id="api_product_update" description="修改产品基本信息">
         <request>
             <property name="id" type="int" required="true" />
@@ -238,8 +238,8 @@
             <property name="uedList" type="string" required="false"/>
         </request>
     </item>
-    
-      <item id="api_program_update" description="更新项目基本信息">
+
+    <item id="api_program_update" description="更新项目基本信息">
         <request>
             <property name="id" type="int" required="true"/>
             <property name="productId" type="int" required="true"/>
@@ -284,22 +284,7 @@
         </request>
     </item>
 
-    <!--
-        URL:
-       api/demand/list
 
-        说明:需求列表
-
-    -->
-    <item id="api_demand_list" description="需求列表">
-        <request>
-            <property ref="pageNum"/>
-            <property ref="pageSize"/>
-            <property name="accountId" type="string" required="true"/>
-            <property name="status" type="string" required="true"/>
-            <property name="searchText" type="string" required="true" maxLength="30" description="搜索内容"/>
-        </request>
-    </item>
     <!--
        URL:
        /api/demandComment/list
@@ -307,7 +292,7 @@
        说明:通过demandID获取评论基本信息
 
    -->
-    <item id="api_demandComment_list" description="通过需求ID获取评论基本信息">
+    <item id="api_demandComment_list" description="通过demandID获取评论基本信息">
         <request>
             <property name="demandId" type="int" required="true"/>
         </request>
@@ -315,22 +300,7 @@
 
 
 
-    <!--
-        URL:
-        /api/demandComment/add
 
-        说明：通过account添加评论用户信息
-    -->
-    <item id="api_demandComment_add" description="通过用户名查询用户信息添加至评论表">
-        <request>
-            <property name="accountId" type="string" required="true" />
-            <property name="demandId" type="int" required="true" />
-            <property name="parentId" type="int" required="true" />
-            <property name="content" type="string" required="false" />
-            <property name="levelNum" type="int" required="true" />
-            <property name="ip" type="string" required="false" />
-        </request>
-    </item>
     <!--
         ******** BUG ********
         -->
@@ -350,6 +320,7 @@
             <property name="searchText" type="string" required="true" maxLength="30" description="搜索内容"/>
         </request>
     </item>
+
 
     <!--
         URL:
@@ -386,13 +357,12 @@
             <property name="likeProduct" type="string" required="false"/>
             <property name="likeProgram" type="string" required="false"/>
             <property name="level" type="int" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true"/>
+            <property name="modifiedName" type="string" required="true"/>
             <property name="modifiedAccountId" type="string" required="false"/>
             <property name="modifiedName" type="string" required="false"/>
         </request>
     </item>
-
-
-
 
 
       <!--
@@ -401,7 +371,6 @@
 
           说明:更新BUG基本信息
       -->
-
     <item id="api_bug_update" description="更新BUG基本信息">
         <request>
             <property name="id" type="int" required="true"/>
@@ -418,6 +387,8 @@
             <property name="likeProduct" type="string" required="false"/>
             <property name="likeProgram" type="string" required="false"/>
             <property name="level" type="int" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true"/>
+            <property name="modifiedName" type="string" required="true"/>
             <property name="modifiedAccountId" type="string" required="false"/>
             <property name="modifiedName" type="string" required="false"/>
         </request>
@@ -425,12 +396,91 @@
 
 
     <!--
-    URL:
-    /api/bugComment/list
+        URL:
+       api/demand/list
 
-    说明:通过demandID获取评论基本信息
+        说明:需求列表
 
     -->
+    <item id="api_demand_list" description="需求列表">
+        <request>
+            <property ref="pageNum"/>
+            <property ref="pageSize"/>
+            <property name="accountId" type="string" required="true"/>
+            <property name="status" type="string" required="true"/>
+            <property name="searchText" type="string" required="true" maxLength="30" description="搜索内容"/>
+        </request>
+    </item>
+    <!--
+    URL:
+    /api/demand/update
+
+    说明:修改需求信息
+
+    -->
+    <item id="api_demand_update" description="修改需求信息">
+        <request>
+            <property name="id" type="int" required="true"/>
+            <property name="relationId" type="int" required="true"/>
+            <property name="relationType" type="int" required="true"/>
+            <property name="name" type="string" required="true"/>
+            <property name="descp" type="string" required="false"/>
+            <property name="hopeDate" type="string" required="true"/>
+            <property name="callonAccountId" type="string" required="true"/>
+            <property name="draftedAccountId" type="string" required="true"/>
+            <property name="ccAccount" type="string" required="false"/>
+            <property name="likeProduct" type="string" required="false"/>
+            <property name="likeProgram" type="string" required="false"/>
+            <property name="level" type="int" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true"/>
+            <property name="modifiedName" type="string" required="true"/>
+        </request>
+    </item>
+    <!--
+  URL:
+  /api/demand/add
+
+  说明:添加需求信息
+
+  -->
+    <item id="api_demand_add" description="添加需求信息">
+        <request>
+            <property name="relationId" type="int" required="true"/>
+            <property name="relationType" type="int" required="true"/>
+            <property name="name" type="string" required="true"/>
+            <property name="descp" type="string" required="false"/>
+            <property name="hopeDate" type="string" required="true"/>
+            <property name="callonAccountId" type="string" required="true"/>
+            <property name="draftedAccountId" type="string" required="true"/>
+            <property name="ccAccount" type="string" required="false"/>
+            <property name="likeProduct" type="string" required="false"/>
+            <property name="likeProgram" type="string" required="false"/>
+            <property name="level" type="int" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true"/>
+            <property name="modifiedName" type="string" required="true"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
+        /api/demand/get
+
+        说明:通过ID获取Demand基本信息
+
+    -->
+    <item id="api_demand_get" description="通过ID获取Demand基本信息">
+        <request>
+            <property name="id" type="int" required="true"/>
+        </request>
+    </item>
+
+    <!--
+URL:
+/api/bugComment/list
+
+说明:通过demandID获取评论基本信息
+
+-->
     <item id="api_bugComment_list" description="通过需求ID获取评论基本信息">
         <request>
             <property name="bugId" type="int" required="true"/>

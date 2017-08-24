@@ -15,5 +15,24 @@ public interface IDemandService extends IAdminService<Demand> {
 	 */
 	public Map<String, Object> getPageDemandList(Map<String, Object>paramsMap,ELExample example);
 
+	/**
+	 *  新增需求信息
+	 * @param map
+	 * @return
+	 */
+	boolean addDemand(Map map);
 
+	/**
+	 *  修改需求信息
+	 * @param map
+	 * @return
+	 */
+	Boolean updateDemand(Map map);
+
+	/**
+	 *  通过ID获取需求信息
+	 * @param
+	 * @return
+	 */
+	public Demand getDemandById(Long id);
 }

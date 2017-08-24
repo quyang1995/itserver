@@ -2,7 +2,7 @@ package com.longfor.itserver.entity;
 
 import java.util.Date;
 import javax.persistence.*;
-
+@Table(name = "demand")
 public class Demand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
