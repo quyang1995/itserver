@@ -66,8 +66,9 @@ public class BugCommentServiceImpl extends AdminBaseService<BugComment> implemen
         bugComment.setReplyType(replyType);
         bugComment.setStatus(status);
 
-        boolean flag = bugCommentMapper.add(bugComment);
-        if(!flag) {
+        int i = bugCommentMapper.insert(bugComment);
+        if(i != 1) {
+            logger.info("BUG评论表新增评论异常");
             return  CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
         }
 

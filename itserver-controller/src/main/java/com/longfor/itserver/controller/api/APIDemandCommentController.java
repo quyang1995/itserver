@@ -1,10 +1,10 @@
 package com.longfor.itserver.controller.api;
 
 import com.longfor.itserver.common.constant.ConfigConsts;
-import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.controller.base.BaseController;
+import com.longfor.itserver.entity.Demand;
 import com.longfor.itserver.entity.DemandComment;
 import com.longfor.itserver.entity.FeedBack;
 import org.json.JSONException;
@@ -64,21 +64,28 @@ public class APIDemandCommentController extends BaseController{
 
         Map paramMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         DemandComment demandComment = new DemandComment();
-        Long demandId=Long.parseLong((String)paramMap.get("demandId"));
         Long feedBackId=Long.parseLong((String)paramMap.get("feedBackId"));
+
         Map <String,Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 
         FeedBack feedBack =  this.getFeedBackService().selectById(feedBackId);
         if(feedBack != null && feedBack.getType().equals(1)){
-            demandComment.setDemandId(demandId);
-            List<DemandComment> demandCommentList = this.getDemandCommentService().select(demandComment);
-            map.put("demandCommentList",demandCommentList);
-            return  map;
+            Demand demand = new Demand();
+            demand.setFeedBackId(feedBackId);
+            demand = this.getDemandService().selectOne(demand);
+            if(demand != null){
+                demandComment.setDemandId(demand.getId());
+                List<DemandComment> demandCommentList = this.getDemandCommentService().select(demandComment);
+                map.put("demandCommentList",demandCommentList);
+                return  map;
+            }else{
+                map = CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+                logger.info("通过反馈ID查询功能建议评论时从需求表中获取数据失败");
+            }
         }else{
             map = CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
             logger.info("通过反馈ID查询功能建议评论时从feedBack表中获取数据失败");
         }
-
         return map;
     }
 

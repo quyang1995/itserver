@@ -545,7 +545,6 @@ URL:
     <item id="api_demandComment_appList" description="通过需求ID和反馈ID获取评论基本信息">
         <request>
             <property name="feedBackId" type="int" required="true"/>
-            <property name="demandId" type="int" required="true"/>
         </request>
     </item>
 
@@ -561,7 +560,6 @@ URL:
     <item id="api_bugComment_appList" description="通过BUGID和反馈ID获取评论基本信息">
         <request>
             <property name="feedBackId" type="int" required="true"/>
-            <property name="bugId" type="int" required="true"/>
         </request>
     </item>
 
