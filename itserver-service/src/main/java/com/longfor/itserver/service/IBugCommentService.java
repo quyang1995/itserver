@@ -11,5 +11,5 @@ public interface IBugCommentService extends IAdminService<BugComment> {
 
     List<BugComment> list(BugComment bugComment);
 
-    boolean add(Map paramsMap);
+    Map<String,Object>  add(Map paramsMap);
 }

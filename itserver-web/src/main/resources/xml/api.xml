@@ -480,7 +480,7 @@ URL:
 说明:通过demandID获取评论基本信息
 
 -->
-    <item id="api_bugComment_list" description="通过需求ID获取评论基本信息">
+    <item id="api_bugComment_list" description="通过BUGID获取评论基本信息">
         <request>
             <property name="bugId" type="int" required="true"/>
         </request>
@@ -493,7 +493,7 @@ URL:
 
         说明：通过account添加评论用户信息
     -->
-    <item id="api_bugComment_add" description="通过用户名查询用户信息添加至评论表">
+    <item id="api_bugComment_add" description="通过用户名查询用户信息添加至bug评论表">
         <request>
             <property name="accountId" type="string" required="true" />
             <property name="bugId" type="int" required="true" />
@@ -503,4 +503,55 @@ URL:
             <property name="ip" type="string" required="false" />
         </request>
     </item >
+
+
+
+    <!--
+        URL:
+        /api/demandComment/appList
+
+        说明:通过demandID获取评论基本信息
+
+        -->
+    <item id="api_demandComment_appList" description="通过需求ID和反馈ID获取评论基本信息">
+        <request>
+            <property name="feedBackId" type="int" required="true"/>
+            <property name="demandId" type="int" required="true"/>
+        </request>
+    </item>
+
+
+
+    <!--
+        URL:
+        /api/bugComment/appList
+
+        说明:通过demandID获取评论基本信息
+
+        -->
+    <item id="api_bugComment_appList" description="通过BUGID和反馈ID获取评论基本信息">
+        <request>
+            <property name="feedBackId" type="int" required="true"/>
+            <property name="bugId" type="int" required="true"/>
+        </request>
+    </item>
+
+    <!--
+    URL:
+
+    /api/demandComment/add
+
+    说明：通过account添加评论用户信息
+-->
+    <item id="api_demandComment_add" description="通过用户名查询用户信息添加至需求评论表">
+        <request>
+            <property name="accountId" type="string" required="true" />
+            <property name="demandId" type="int" required="true" />
+            <property name="parentId" type="int" required="true" />
+            <property name="content" type="string" required="false" />
+            <property name="levelNum" type="int" required="true" />
+            <property name="ip" type="string" required="false" />
+        </request>
+    </item >
+
 </api>
