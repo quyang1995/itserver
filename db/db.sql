@@ -501,7 +501,7 @@ ALTER TABLE `itplus`.`bug_change_log`
 CREATE TABLE IF NOT EXISTS `itplus`.`bug_comment` (
   `id`             BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `bug_id`         BIGINT          NOT NULL
-  COMMENT '需求id',
+  COMMENT 'BUGid',
   `parent_id`      BIGINT          NOT NULL
   COMMENT '父评论id',
   `content`        VARCHAR(1500)   NULL
