@@ -7,6 +7,7 @@ import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.enums.BugStatusEnum;
+import com.longfor.itserver.common.enums.DemandStatusEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.entity.BugInfo;
@@ -47,7 +48,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		JSONObject json = (JSONObject) JSONObject.toJSON(map);
 		Demand demand = JSONObject.toJavaObject(json, Demand.class);
 		//获取状态信息(默认待处理)
-		demand.setStatus(BugStatusEnum.PENDING.getCode());
+		demand.setStatus(DemandStatusEnum.PENDING.getCode());
 		//获取指派人信息
 		AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getDraftedAccountId());
 		if(draftedAccountLongfor!=null){
@@ -82,7 +83,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			return false;
 		}
 		//获取状态信息(默认处理中)
-		demand.setStatus(BugStatusEnum.WORKING.getCode());
+		demand.setStatus(DemandStatusEnum.PENDING.getCode());
 		//获取指派人信息
 		AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getDraftedAccountId());
 		if(draftedAccountLongfor!=null){
