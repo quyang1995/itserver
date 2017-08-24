@@ -65,7 +65,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
     public boolean addBug(Map map) {
         JSONObject json = (JSONObject) JSONObject.toJSON(map);
         BugInfo bugInfo = JSONObject.toJavaObject(json, BugInfo.class);
-        bugInfo.setStatus(BugStatusEnum.WORKING.getCode());
+        bugInfo.setStatus(BugStatusEnum.PENDING.getCode());
         //获取指派人信息
         AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(bugInfo.getDraftedAccountId());
         if(draftedAccountLongfor != null){
@@ -98,7 +98,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         if (null == selectOneBugInfo) {
             return false;
         }
-        bugInfo.setStatus(BugStatusEnum.WORKING.getCode());
+        bugInfo.setStatus(BugStatusEnum.PENDING.getCode());
         //获取指派人信息
         AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(bugInfo.getDraftedAccountId());
         if(draftedAccountLongfor != null){

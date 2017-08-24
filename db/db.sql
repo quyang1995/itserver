@@ -442,13 +442,13 @@ CREATE TABLE IF NOT EXISTS `itplus`.`bug_info` (
   COMMENT '指派人员工姓名',
   `callon_full_dept_path`  VARCHAR(100)    NOT NULL
   COMMENT '指派人部门完整路径',
-  `drafted_account_id`     VARCHAR(50)     NOT NULL
+  `drafted_account_id`     VARCHAR(50)     NULL
   COMMENT '发起人用户名',
-  `drafted_employee_code`  BIGINT          NOT NULL
+  `drafted_employee_code`  BIGINT          NULL
   COMMENT '发起人员工号',
-  `drafted_employee_name`  VARCHAR(50)     NOT NULL
+  `drafted_employee_name`  VARCHAR(50)     NULL
   COMMENT '发起人员工姓名',
-  `drafted_full_dept_path` VARCHAR(100)    NOT NULL
+  `drafted_full_dept_path` VARCHAR(100)    NULL
   COMMENT '发起人部门完整路径',
   `cc_account`             VARCHAR(500)    NULL
   COMMENT '抄送人账号字符串，e.g. xx,xx,',
@@ -560,7 +560,7 @@ CREATE TABLE IF NOT EXISTS `itplus`.`feed_back` (
   `status`                 INT             NOT NULL
   COMMENT '状态：0=已取消，1=已关闭，2=待处理，3=处理中，4=已完成',
   `channel`                INT    NOT NULL
-  COMMENT '渠道: 0=OA，1=龙客',
+  COMMENT '渠道: 0=PC，1=OA，2=龙信，3=龙客',
   `modified_account_id`    VARCHAR(50)     NULL
   COMMENT '提交人账户id',
   `modified_employee_code`  BIGINT         NULL
