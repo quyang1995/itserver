@@ -44,6 +44,7 @@ public class APIDemandController extends BaseController {
     @ResponseBody
     public Map demandList(HttpServletRequest request, HttpServletResponse response) {
           /*  获得已经验证过的参数map */
+        @SuppressWarnings("unchecked")
           Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
            /*获取查询用例*/
         ELExample elExample = new ELExample(request, Demand.class);
@@ -62,6 +63,7 @@ public class APIDemandController extends BaseController {
     @ResponseBody
     public Map demandAdd(HttpServletRequest request,HttpServletResponse response){
         //获取已经验证的参数map
+        @SuppressWarnings("unchecked")
         Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         this.getDemandService().addDemand(paramsMap);
         //返回成功信息
@@ -79,6 +81,7 @@ public class APIDemandController extends BaseController {
     public Map demandUpdate(HttpServletResponse response, HttpServletRequest request) {
 
 		//获取已经验证的参数map
+        @SuppressWarnings("unchecked")
         Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         this.getDemandService().updateDemand(paramsMap);
         // 返回成功信息
@@ -95,8 +98,9 @@ public class APIDemandController extends BaseController {
     @ResponseBody
     public Map demandGet(HttpServletRequest request, HttpServletResponse response){
 		//获得已经验证过的参数map
+        @SuppressWarnings("unchecked")
         Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-        
+
         long id = Long.parseLong(paramsMap.get("id").toString());
         PsDemandDetail demand = (PsDemandDetail)this.getDemandService().getDemandById(id);
         //关联产品
