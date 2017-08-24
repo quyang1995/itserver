@@ -13,9 +13,12 @@ import com.longfor.itserver.mapper.FeedBackMapper;
 import com.longfor.itserver.mapper.ProductMapper;
 import com.longfor.itserver.service.IFeedBackService;
 import com.longfor.itserver.service.base.AdminBaseService;
+import net.mayee.commons.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Transient;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +52,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 		return feedBackList;
 	}
 
+    @Transactional
 	@Override
 	public boolean addFeedBack(Map map) {
 		JSONObject json = (JSONObject) JSONObject.toJSON(map);
@@ -59,7 +63,10 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 			feedBack.setModifiedEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
 			feedBack.setModifiedName(accountLongfor.getName());
 			feedBack.setModifiedFullDeptPath(accountLongfor.getPsDeptFullName());
-		}
+		}else{
+		    //账户不存在
+		    return false;
+        }
 		//查询产品信息得到接口人信息和产品名称
 		Product obj = new Product();
 		obj.setId(feedBack.getProductId());
@@ -69,8 +76,10 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 		feedBack.setContactEmployeeCode(product.getContactEmployeeCode());
 		feedBack.setContactEmployeeName(product.getContactEmployeeName());
 		feedBack.setContactFullDeptPath(product.getContactFullDeptPath());
+        feedBack.setCreateTime(TimeUtils.getTodayByDateTime());
+        feedBack.setModifiedTime(TimeUtils.getTodayByDateTime());
 		//状态
-		feedBack.setStatus(FeedBackStatusEnum.WORKING.getCode());
+		feedBack.setStatus(FeedBackStatusEnum.PENDING.getCode());
 		feedBackMapper.insert(feedBack);
 		//0:新增BUG   1:新增需求
 		if(feedBack.getType().equals(0)){
@@ -91,6 +100,8 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 			bugInfo.setStatus(feedBack.getStatus());
 			bugInfo.setModifiedAccountId(feedBack.getModifiedAccountId());
 			bugInfo.setModifiedName(feedBack.getModifiedName());
+            bugInfo.setCreateTime(TimeUtils.getTodayByDateTime());
+            bugInfo.setModifiedTime(TimeUtils.getTodayByDateTime());
 			bugInfoMapper.insert(bugInfo);
 		}else if(feedBack.getType().equals(1)){
 			Demand demand = new Demand();
@@ -108,6 +119,8 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 			demand.setStatus(feedBack.getStatus());
 			demand.setModifiedAccountId(feedBack.getModifiedAccountId());
 			demand.setModifiedName(feedBack.getModifiedName());
+            demand.setCreateTime(TimeUtils.getTodayByDateTime());
+            demand.setModifiedTime(TimeUtils.getTodayByDateTime());
 			demandMapper.insert(demand);
 		}
 		return true;
