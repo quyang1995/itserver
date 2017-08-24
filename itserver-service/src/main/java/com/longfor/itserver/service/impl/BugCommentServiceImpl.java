@@ -35,11 +35,6 @@ public class BugCommentServiceImpl extends AdminBaseService<BugComment> implemen
     @Autowired
     private ADSHelper adsHelper;
 
-    @Override
-    public List<BugComment> list(BugComment bugComment) {
-        List<BugComment> list = this.select(bugComment);
-        return list;
-    }
 
     @Override
     public Map<String,Object> add(Map paramsMap) {

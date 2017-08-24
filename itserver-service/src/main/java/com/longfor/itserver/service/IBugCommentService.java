@@ -9,7 +9,6 @@ import java.util.Map;
 
 public interface IBugCommentService extends IAdminService<BugComment> {
 
-    List<BugComment> list(BugComment bugComment);
 
     Map<String,Object>  add(Map paramsMap);
 }

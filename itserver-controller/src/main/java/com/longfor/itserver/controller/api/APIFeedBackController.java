@@ -8,10 +8,8 @@ import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
-import com.longfor.itserver.entity.FeedBack;
-import com.longfor.itserver.entity.Product;
-import com.longfor.itserver.entity.Program;
-import com.longfor.itserver.entity.ProgramEmployee;
+import com.longfor.itserver.entity.*;
+import com.longfor.itserver.entity.ps.PsFeedBackDetail;
 import com.longfor.itserver.entity.ps.PsProgramDetail;
 import net.mayee.commons.helper.APIHelper;
 import org.json.JSONException;
@@ -91,7 +89,7 @@ public class APIFeedBackController extends BaseController {
 	}
 
 	/**
-	 * 通过ID获取项目基本信息
+	 * 通过ID获取反馈基本信息
 	 *
 	 * @author lovex
 	 * @create 2017/8/5 下午2:25
@@ -107,7 +105,28 @@ public class APIFeedBackController extends BaseController {
 
 		long id = Long.parseLong(paramsMap.get("id").toString());
 
-		FeedBack feedBack = (FeedBack) this.getFeedBackService().getFeedBackId(id);
+		PsFeedBackDetail feedBack = (PsFeedBackDetail) this.getFeedBackService().getFeedBackId(id);
+		if(feedBack.getType().equals(1)){
+			Demand demand = new Demand();
+			demand.setFeedBackId(feedBack.getId());
+			demand = this.getDemandService().selectOne(demand);
+			if(demand != null){
+				DemandComment demandComment = new DemandComment();
+				demandComment.setDemandId(demand.getId());
+				List<DemandComment> demandCommentList = this.getDemandCommentService().select(demandComment);
+				feedBack.setDemandCommentList(demandCommentList);
+			}
+		}else if(feedBack.getType().equals(0)){
+			BugInfo bugInfo = new BugInfo();
+			bugInfo.setFeedBackId(feedBack.getId());
+			List<BugInfo> bugInfoList = this.getBugInfoService().select(bugInfo);
+			if(bugInfoList.size() > 0){
+				BugComment bugComment = new BugComment();
+				bugComment.setBugId(bugInfoList.get(0).getId());
+				List<BugComment> bugCommentList = this.getBugCommentService().select(bugComment);
+				feedBack.setBugCommentList(bugCommentList);
+			}
+		}
 
 		/* 返回报文 */
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);

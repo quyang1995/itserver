@@ -1,9 +1,6 @@
 package com.longfor.itserver.entity.ps;
 
-import com.longfor.itserver.entity.BugInfo;
-import com.longfor.itserver.entity.FeedBack;
-import com.longfor.itserver.entity.Product;
-import com.longfor.itserver.entity.Program;
+import com.longfor.itserver.entity.*;
 
 import javax.persistence.Transient;
 import java.io.Serializable;
@@ -18,5 +15,24 @@ import java.util.List;
  */
 public class PsFeedBackDetail extends FeedBack implements Serializable {
 
+    @Transient
+    private List<DemandComment> demandCommentList;
+    @Transient
+    private List<BugComment> bugCommentList;
 
+    public List<DemandComment> getDemandCommentList() {
+        return demandCommentList;
+    }
+
+    public void setDemandCommentList(List<DemandComment> demandCommentList) {
+        this.demandCommentList = demandCommentList;
+    }
+
+    public List<BugComment> getBugCommentList() {
+        return bugCommentList;
+    }
+
+    public void setBugCommentList(List<BugComment> bugCommentList) {
+        this.bugCommentList = bugCommentList;
+    }
 }
