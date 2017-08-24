@@ -4,6 +4,8 @@ package com.longfor.itserver.service.impl;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
+import com.longfor.itserver.common.enums.BizEnum;
+import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.entity.DemandComment;
 import com.longfor.itserver.mapper.DemandCommentMapper;
 import com.longfor.itserver.service.IDemandCommentService;
@@ -28,6 +30,9 @@ public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> im
     @Autowired
     private ADSHelper adsHelper;
 
+    @Autowired
+    FeedBackServiceImpl feedBackService;
+
     @Override
     public List<DemandComment> getListById(DemandComment demandComment) {
 
@@ -37,7 +42,7 @@ public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> im
     }
 
     @Override
-    public boolean add(Map paramMap)throws NullPointerException{
+    public Map<String, Object> add(Map paramMap){
         String accountId = (String)paramMap.get("accountId");
         String demandId = (String)paramMap.get("demandId");
         String parentId = (String)paramMap.get("parentId");
@@ -46,6 +51,7 @@ public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> im
         String ip = (String)paramMap.get("ip");
         int replyType = AvaStatusEnum.REPLY_ONE.getCode();
         int status = AvaStatusEnum.AVA.getCode();
+
 
         DemandComment demandComment = new DemandComment();
         demandComment.setDemandId(Long.parseLong(demandId));
@@ -57,18 +63,21 @@ public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> im
         demandComment.setReplyType(replyType);
         demandComment.setStatus(status);
         AccountLongfor accountLongfor =  adsHelper.getAccountLongforByLoginName(demandComment.getAccountId());
-        boolean flag = false;
-        if(accountLongfor!= null) {
-            demandComment.setEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
-            demandComment.setEmployeeName(accountLongfor.getName());
-            demandComment.setFullDeptPath(accountLongfor.getPsDeptFullName());
 
-          //  synchronized (this){
-                int count =  demandCommentMapper.add(demandComment);
-                if(count==1)
-                    flag = true;
-           // }
+        Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
+        if(accountLongfor == null) {
+            map = CommonUtils.getResultMapByBizEnum(BizEnum.E1001);
+            return map;
         }
-        return flag;
+
+        demandComment.setEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
+        demandComment.setEmployeeName(accountLongfor.getName());
+        demandComment.setFullDeptPath(accountLongfor.getPsDeptFullName());
+
+        int count =  demandCommentMapper.add(demandComment);
+        if(count !=1 ){
+            map = CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+        }
+        return map;
     };
 }
