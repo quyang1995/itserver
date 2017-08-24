@@ -63,11 +63,10 @@ public class APIBugCommentController extends BaseController{
         Map paramMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         Long bugId = Long.valueOf((String)paramMap.get("bugId"));
         Long feedBackId = Long.valueOf((String)paramMap.get("feedBackId"));
-        Integer feedBackType = Integer.valueOf((String)paramMap.get("feedBackType"));
 
         FeedBack feedBack = this.getFeedBackService().selectById(feedBackId);
         Map map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-        if(feedBack != null && feedBack.getType().equals(feedBackType)){
+        if(feedBack != null && feedBack.getType().equals(0)){
             BugComment bugComment = new BugComment();
             bugComment.setBugId(bugId);
             List bugCommentList = this.getBugCommentService().select(bugComment);
@@ -80,23 +79,4 @@ public class APIBugCommentController extends BaseController{
         return  map;
     }
 
-    @RequestMapping(value = "/appAdd",method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
-    @ResponseBody
-    public Map appAdd(HttpServletRequest request , HttpServletResponse response){
-        Map paramsMap =   (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-        Long feedBackId = Long.valueOf((String)paramsMap.get("feedBackId"));
-        Integer feedBackType = Integer.valueOf((String)paramsMap.get("feedBackType"));
-        FeedBack feedBack = this.getFeedBackService().selectById(feedBackId);
-
-        Map map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
-
-        if(feedBack !=null && feedBack.getType().equals(feedBackType)){
-            map = this.getBugCommentService().add(paramsMap);
-        }else{
-            map = CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
-            logger.info("通过反馈ID添加功能异常评论时从feedBack表中查询对象失败！");
-        }
-
-        return map;
-    }
 }

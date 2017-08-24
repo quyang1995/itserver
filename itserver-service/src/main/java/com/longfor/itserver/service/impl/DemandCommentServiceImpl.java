@@ -1,6 +1,7 @@
 package com.longfor.itserver.service.impl;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
@@ -43,25 +44,9 @@ public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> im
 
     @Override
     public Map<String, Object> add(Map paramMap){
-        String accountId = (String)paramMap.get("accountId");
-        String demandId = (String)paramMap.get("demandId");
-        String parentId = (String)paramMap.get("parentId");
-        String content = (String)paramMap.get("content");
-        String levelNum =(String)paramMap.get("levelNum");
-        String ip = (String)paramMap.get("ip");
-        int replyType = AvaStatusEnum.REPLY_ONE.getCode();
-        int status = AvaStatusEnum.AVA.getCode();
+        JSONObject jsonObject = (JSONObject) JSONObject.toJSON(paramMap);
+        DemandComment demandComment = JSONObject.toJavaObject(jsonObject,DemandComment.class);
 
-
-        DemandComment demandComment = new DemandComment();
-        demandComment.setDemandId(Long.parseLong(demandId));
-        demandComment.setAccountId(accountId);
-        demandComment.setParentId(Long.parseLong(parentId));
-        demandComment.setContent(content);
-        demandComment.setLevelNum(Integer.parseInt(levelNum));
-        demandComment.setIp(ip);
-        demandComment.setReplyType(replyType);
-        demandComment.setStatus(status);
         AccountLongfor accountLongfor =  adsHelper.getAccountLongforByLoginName(demandComment.getAccountId());
 
         Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
@@ -70,6 +55,8 @@ public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> im
             return map;
         }
 
+        demandComment.setReplyType(AvaStatusEnum.REPLY_ONE.getCode());
+        demandComment.setStatus(AvaStatusEnum.AVA.getCode());
         demandComment.setEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
         demandComment.setEmployeeName(accountLongfor.getName());
         demandComment.setFullDeptPath(accountLongfor.getPsDeptFullName());

@@ -66,11 +66,10 @@ public class APIDemandCommentController extends BaseController{
         DemandComment demandComment = new DemandComment();
         Long demandId=Long.parseLong((String)paramMap.get("demandId"));
         Long feedBackId=Long.parseLong((String)paramMap.get("feedBackId"));
-        Integer feedBackType = Integer.parseInt((String)paramMap.get("feedBackType"));
         Map <String,Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 
         FeedBack feedBack =  this.getFeedBackService().selectById(feedBackId);
-        if(feedBack != null && feedBack.getType().equals(feedBackType)){
+        if(feedBack != null && feedBack.getType().equals(1)){
             demandComment.setDemandId(demandId);
             List<DemandComment> demandCommentList = this.getDemandCommentService().select(demandComment);
             map.put("demandCommentList",demandCommentList);
@@ -79,25 +78,6 @@ public class APIDemandCommentController extends BaseController{
             map = CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
             logger.info("通过反馈ID查询功能建议评论时从feedBack表中获取数据失败");
         }
-
-        return map;
-    }
-
-    @RequestMapping(value="/appAdd",method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
-    @ResponseBody
-    public Map appAdd(HttpServletRequest request,HttpServletResponse response) throws IOException, JSONException{
-        Map paramMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-
-        Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C); ;
-        Long feedBackId = Long.parseLong((String)paramMap.get("feedBackId"));
-        Integer feedBackType = Integer.parseInt((String)paramMap.get("feedBackType"));
-            FeedBack   feedBack = this.getFeedBackService().selectById(feedBackId);
-            if (feedBack != null && feedBack.getType().equals(feedBackType)){
-                map = this.getDemandCommentService().add(paramMap);
-            }else{
-                map = CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
-                logger.info("通过反馈ID添加功能建议评论时从feedBack表中获取数据失败");
-            }
 
         return map;
     }

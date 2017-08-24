@@ -1,5 +1,6 @@
 package com.longfor.itserver.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
@@ -42,38 +43,26 @@ public class BugCommentServiceImpl extends AdminBaseService<BugComment> implemen
 
     @Override
     public Map<String,Object> add(Map paramsMap) {
-        String accountId = (String)paramsMap.get("accountId");
+        JSONObject jsonObject = (JSONObject) JSONObject.toJSON(paramsMap);
+        BugComment bugComment = JSONObject.toJavaObject(jsonObject,BugComment.class);
+
         Map map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
-        AccountLongfor accountLongfor =  adsHelper.getAccountLongforByLoginName(accountId);
+        AccountLongfor accountLongfor =  adsHelper.getAccountLongforByLoginName(bugComment.getAccountId());
 
         if(accountLongfor == null) {
             map = CommonUtils.getResultMapByBizEnum(BizEnum.E1001);
             return map;
         }
 
-        Long bugId =Long.valueOf((String)paramsMap.get("bugId"));
-        Long parentId=Long.parseLong((String)paramsMap.get("parentId"));
-        String content =(String)paramsMap.get("content");
         Long employeeCode = Long.parseLong(accountLongfor.getPsEmployeeCode());
         String employeeName = accountLongfor.getName();
         String fullDeptPath = accountLongfor.getPsDeptFullName();
-
-        Integer levelNum = Integer.parseInt((String) paramsMap.get("levelNum"));
-        String ip = (String) paramsMap.get("ip");
         Integer replyType = AvaStatusEnum.REPLY_ONE.getCode();
         Integer status = AvaStatusEnum.AVA.getCode();
 
-        BugComment bugComment = new BugComment();
-
-        bugComment.setBugId(bugId);
-        bugComment.setParentId(parentId);
-        bugComment.setContent(content);
-        bugComment.setAccountId(accountId);
         bugComment.setEmployeeCode(employeeCode);
         bugComment.setEmployeeName(employeeName);
         bugComment.setFullDeptPath(fullDeptPath);
-        bugComment.setLevelNum(levelNum);
-        bugComment.setIp(ip);
         bugComment.setReplyType(replyType);
         bugComment.setStatus(status);
 
