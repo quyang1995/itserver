@@ -30,6 +30,9 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
   </resultMap>
+  <resultMap id="DemandDetailResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsDemandDetail">
+
+  </resultMap>
   <sql id="Base_Column_List" >
     <!--
       WARNING - @mbggenerated
@@ -51,6 +54,8 @@
     <if test='searchText != "" and searchText != null'>
       and (name like concat(concat('%',#{searchText}),'%') OR callon_employee_name like concat(concat('%',#{searchText}),'%'))
     </if>
-
+  </select>
+  <select id="getDemandById" parameterType="java.lang.Long" resultMap="DemandDetailResultMap">
+    SELECT * FROM demand WHERE id = #{id}
   </select>
 </mapper>

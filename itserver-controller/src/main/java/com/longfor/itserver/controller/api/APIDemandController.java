@@ -9,6 +9,9 @@ import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.Demand;
 import com.longfor.itserver.entity.Product;
+import com.longfor.itserver.entity.Program;
+import com.longfor.itserver.entity.ps.PsBugInfoDetail;
+import com.longfor.itserver.entity.ps.PsDemandDetail;
 import net.mayee.commons.helper.APIHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -93,9 +96,27 @@ public class APIDemandController extends BaseController {
     public Map demandGet(HttpServletRequest request, HttpServletResponse response){
 		//获得已经验证过的参数map
         Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-
+        
         long id = Long.parseLong(paramsMap.get("id").toString());
-        Demand demand = (Demand)this.getDemandService().getDemandById(id);
+        PsDemandDetail demand = (PsDemandDetail)this.getDemandService().getDemandById(id);
+        //关联产品
+        String likeProduct = demand.getLikeProduct().substring(1,demand.getLikeProduct().length());
+        List<Product> product = this.getProductService().searchIdList(likeProduct);
+        demand.setProductList(product);
+        //关联项目
+        String likeProgram = demand.getLikeProgram().substring(1,demand.getLikeProgram().length());
+        List<Program> program = this.getProgramService().inProgramId(likeProgram);
+        demand.setProgramList(program);
+        //归属产品/项目
+        String relationName = "";
+        if(demand.getRelationType().equals("1")){
+            Product prod = this.getProductService().selectById(demand.getRelationId());
+            relationName = prod.getName();
+        }else if(demand.getRelationType().equals("2")){
+            Program prom = this.getProgramService().selectById(demand.getRelationId());
+            relationName = prom.getName();
+        }
+        demand.setRelationName(relationName);
         //返回成功信息
         Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         resultMap.put("data", demand);

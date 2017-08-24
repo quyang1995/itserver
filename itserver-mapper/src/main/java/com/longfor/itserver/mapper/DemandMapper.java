@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.longfor.itserver.entity.Demand;
-import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.mapper.base.BeeMapper;
 
 /**

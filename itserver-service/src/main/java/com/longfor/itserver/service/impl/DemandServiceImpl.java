@@ -48,13 +48,6 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		Demand demand = JSONObject.toJavaObject(jsonObject, Demand.class);
 		//获取状态信息(默认处理中)
 		demand.setStatus(BugStatusEnum.WORKING.getCode());
-		//获取发起人信息
-		AccountLongfor callonAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getCallonAccountId());
-		if (callonAccountLongfor!=null){
-			demand.setCallonEmployeeName(callonAccountLongfor.getName());
-			demand.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
-			demand.setDraftedFullDeptPath(callonAccountLongfor.getPsDeptFullName());
-		}
 		//获取指派人信息
 		AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getDraftedAccountId());
 		if(draftedAccountLongfor!=null){
@@ -62,6 +55,14 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			demand.setDraftedEmployeeName(draftedAccountLongfor.getName());
 			demand.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
 		}
+		//获取发起人信息
+		AccountLongfor callonAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getCallonAccountId());
+		if (callonAccountLongfor!=null){
+			demand.setCallonEmployeeName(callonAccountLongfor.getName());
+			demand.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
+			demand.setDraftedFullDeptPath(callonAccountLongfor.getPsDeptFullName());
+		}
+
 		demandMapper.insert(demand);
 		return true;
 	}
@@ -76,15 +77,12 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 	public Boolean updateDemand(Map map) {
 		JSONObject jsonObject = (JSONObject) JSONObject.toJSON(map);
 		Demand demand = JSONObject.toJavaObject(jsonObject, Demand.class);
+		Demand selectDemandOne = demandMapper.selectByPrimaryKey(demand.getId());
+		if (selectDemandOne==null){
+			return false;
+		}
 		//获取状态信息(默认处理中)
 		demand.setStatus(BugStatusEnum.WORKING.getCode());
-		//获取发起人信息
-		AccountLongfor callonAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getCallonAccountId());
-		if (callonAccountLongfor!=null){
-			demand.setCallonEmployeeName(callonAccountLongfor.getName());
-			demand.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
-			demand.setDraftedFullDeptPath(callonAccountLongfor.getPsDeptFullName());
-		}
 		//获取指派人信息
 		AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getDraftedAccountId());
 		if(draftedAccountLongfor!=null){
@@ -92,6 +90,14 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			demand.setDraftedEmployeeName(draftedAccountLongfor.getName());
 			demand.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
 		}
+		//获取发起人信息
+		AccountLongfor callonAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getCallonAccountId());
+		if (callonAccountLongfor!=null){
+			demand.setCallonEmployeeName(callonAccountLongfor.getName());
+			demand.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
+			demand.setDraftedFullDeptPath(callonAccountLongfor.getPsDeptFullName());
+		}
+
 		demandMapper.updateByPrimaryKey(demand);
 		return true;
 	}
