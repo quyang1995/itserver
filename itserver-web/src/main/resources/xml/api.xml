@@ -284,7 +284,35 @@
         </request>
     </item>
 
+    <!--
+            URL:
+            /api/feedBack/list
 
+            说明:获取反馈列表信息
+
+        -->
+    <item id="api_feedBack_list" description="获取反馈列表信息">
+        <request>
+            <property ref="pageNum"/>
+            <property ref="pageSize"/>
+            <property name="accountId" type="string" required="true"/>
+            <property name="status" type="int" required="true"/>
+            <property name="searchText" type="string" required="true" maxLength="30" description="搜索内容"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
+        /api/feedBack/get
+
+        说明:通过ID获取反馈基本信息
+
+    -->
+    <item id="api_feedBack_get" description="通过ID获取反馈基本信息">
+        <request>
+            <property name="id" type="int" required="true"/>
+        </request>
+    </item>
     <!--
        URL:
        /api/demandComment/list

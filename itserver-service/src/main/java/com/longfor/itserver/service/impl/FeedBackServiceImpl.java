@@ -1,6 +1,7 @@
 package com.longfor.itserver.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
@@ -40,6 +41,13 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 
 	@Autowired
 	private ADSHelper adsHelper;
+
+
+	@Override
+	public List<FeedBack> feedBackList(Map map) {
+		List<FeedBack> feedBackList = feedBackMapper.feedBackList(map);
+		return feedBackList;
+	}
 
 	@Override
 	public boolean addFeedBack(Map map) {
@@ -105,4 +113,10 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 		return true;
 	}
 
+
+	@Override
+	public FeedBack getFeedBackId(long id) {
+		FeedBack feedBack = feedBackMapper.getFeedBackId(id);
+		return feedBack;
+	}
 }

@@ -27,6 +27,11 @@
     <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
   </resultMap>
 
+
+  <resultMap id="FeedBackDetailResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsFeedBackDetail">
+
+  </resultMap>
+
   <sql id="Base_Column_List" >
     <!--
       WARNING - @mbggenerated
@@ -36,5 +41,24 @@
     type, status, channel, modified_account_id, modified_employee_code, modified_name,
     modified_full_dept_path, create_time, modified_time
   </sql>
+
+  <!-- BUG列表 -->
+  <select id="feedBackList" parameterType="map" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM feed_back
+    WHERE 1=1
+    <if test='status != "" and status != null  and status != -1'>
+      and status = #{status}
+    </if>
+    <if test='searchText != "" and searchText != null'>
+      and (name like concat(concat('%',#{searchText}),'%'))
+    </if>
+  </select>
+
+  <!-- 通过ID查询BUG -->
+  <select id="getFeedBackId" parameterType="java.lang.Long" resultMap="FeedBackDetailResultMap">
+    SELECT * FROM feed_back WHERE id = #{id}
+  </select>
 
 </mapper>
