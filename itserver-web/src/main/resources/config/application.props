@@ -16,7 +16,7 @@ product.code=IT+
 
 [system]
 #是否开启token检查 [true:开启/false:关闭]#
-token.use=false
+token.use=true
 ##———————————————————————————————————————————
 
 
