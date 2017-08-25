@@ -98,34 +98,40 @@ public class APIDemandController extends BaseController {
      */
     @RequestMapping(value = "/get", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
     @ResponseBody
-    public Map demandGet(HttpServletRequest request, HttpServletResponse response)throws IOException{
+    public Map demandGet(HttpServletRequest request, HttpServletResponse response)throws IOException {
         //获得已经验证过的参数map
         @SuppressWarnings("unchecked")
         Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
         long id = Long.parseLong(paramsMap.get("id").toString());
-        PsDemandDetail demand = (PsDemandDetail)this.getDemandService().getDemandById(id);
-        //关联产品
-        String likeProduct = demand.getLikeProduct().substring(1,demand.getLikeProduct().length());
-        List<Product> product = this.getProductService().searchIdList(likeProduct);
-        demand.setProductList(product);
-        //关联项目
-        String likeProgram = demand.getLikeProgram().substring(1,demand.getLikeProgram().length());
-        List<Program> program = this.getProgramService().inProgramId(likeProgram);
-        demand.setProgramList(program);
-        //归属产品/项目
-        String relationName = "";
-        if(demand.getRelationType().equals("1")){
-            Product prod = this.getProductService().selectById(demand.getRelationId());
-            relationName = prod.getName();
-        }else if(demand.getRelationType().equals("2")){
-            Program prom = this.getProgramService().selectById(demand.getRelationId());
-            relationName = prom.getName();
+        PsDemandDetail demand = (PsDemandDetail) this.getDemandService().getDemandById(id);
+        if (demand != null){
+                //关联产品
+                String likeProduct = demand.getLikeProduct().substring(1, demand.getLikeProduct().length());
+            List<Product> product = this.getProductService().searchIdList(likeProduct);
+            demand.setProductList(product);
+            //关联项目
+            String likeProgram = demand.getLikeProgram().substring(1, demand.getLikeProgram().length());
+            List<Program> program = this.getProgramService().inProgramId(likeProgram);
+            demand.setProgramList(program);
+            //归属产品/项目
+            String relationName = "";
+            if (demand.getRelationType().equals("1")) {
+                Product prod = this.getProductService().selectById(demand.getRelationId());
+                relationName = prod.getName();
+            } else if (demand.getRelationType().equals("2")) {
+                Program prom = this.getProgramService().selectById(demand.getRelationId());
+                relationName = prom.getName();
+            }
+            demand.setRelationName(relationName);
+            //返回成功信息
+            Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+            resultMap.put("data", demand);
+            return resultMap;
         }
-        demand.setRelationName(relationName);
-        //返回成功信息
-        Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-        resultMap.put("data", demand);
+            //返回成功信息
+            Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+            resultMap.put("data", demand);
         return resultMap;
     }
 }

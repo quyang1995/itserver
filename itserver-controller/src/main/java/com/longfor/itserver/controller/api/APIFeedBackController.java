@@ -3,14 +3,12 @@ package com.longfor.itserver.controller.api;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.longfor.itserver.common.constant.ConfigConsts;
-import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.*;
 import com.longfor.itserver.entity.ps.PsFeedBackDetail;
-import com.longfor.itserver.entity.ps.PsProgramDetail;
 import net.mayee.commons.helper.APIHelper;
 import org.json.JSONException;
 import org.springframework.stereotype.Controller;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -132,5 +129,60 @@ public class APIFeedBackController extends BaseController {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		resultMap.put("data", feedBack);
 		return resultMap;
+	}
+
+
+
+	@RequestMapping(value = "/addComment" ,method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public Map addComment(HttpServletRequest request , HttpServletResponse response){
+		Map<String,Object> paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+
+		Long feedBackId = Long.valueOf((String)paramsMap.get("feedBackId"));
+
+		FeedBack feedBack =	this.getFeedBackService().selectById(feedBackId);
+		if(feedBack != null){
+			/*功能异常*/
+			if(feedBack.getType().equals(0)){
+				BugInfo bugInfo = new BugInfo();
+				bugInfo.setFeedBackId(feedBackId);
+				bugInfo = this.getBugInfoService().selectOne(bugInfo);
+				if(bugInfo == null) return  CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+
+				paramsMap.put("bugId",bugInfo.getId());
+				return this.getBugCommentService().add(paramsMap);
+			/*功能建议*/
+			}else if(feedBack.getType().equals(1)){
+				Demand demand = new Demand();
+				demand.setFeedBackId(feedBackId);
+				demand = this.getDemandService().selectOne(demand);
+				if(demand == null ) return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+
+				paramsMap.put("demandId",demand.getId());
+				return this.getDemandCommentService().add(paramsMap);
+			}
+
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+		}
+
+		return  CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+	}
+
+
+	@RequestMapping(value = "/commentList" ,method =  RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public Map commentList(HttpServletRequest request,HttpServletResponse response){
+		Map<String,Object> paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		Long feedBackId = Long.valueOf((String)paramsMap.get("feedBackId"));
+
+		FeedBack feedBack = this.getFeedBackService().selectById(feedBackId);
+		if(feedBack == null) return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+		if(feedBack.getType().equals(0)){
+
+		}else if(feedBack.getType().equals(1)){
+
+		}
+
+		return  null;
 	}
 }

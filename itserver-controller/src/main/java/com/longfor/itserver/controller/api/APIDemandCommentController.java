@@ -60,9 +60,7 @@ public class APIDemandCommentController extends BaseController{
     public Map add(HttpServletRequest request,HttpServletResponse response) {
         Map paramMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
-        Map<String,Object> map = this.getDemandCommentService().add(paramMap);
-
-        return map;
+        return this.getDemandCommentService().add(paramMap);
     }
 
     /**
