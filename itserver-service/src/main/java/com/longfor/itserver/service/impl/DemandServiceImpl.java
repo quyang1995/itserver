@@ -15,6 +15,7 @@ import com.longfor.itserver.entity.BugInfo;
 import com.longfor.itserver.entity.Demand;
 import com.longfor.itserver.entity.DemandChangeLog;
 import com.longfor.itserver.entity.Product;
+import com.longfor.itserver.entity.ps.PsIndex;
 import com.longfor.itserver.mapper.DemandChangeLogMapper;
 import com.longfor.itserver.mapper.DemandMapper;
 import com.longfor.itserver.service.IDemandService;
@@ -131,6 +132,12 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		return resultMap;
 	}
 
+
+	@Override
+	public List<PsIndex> countPending(String id) {
+		List<PsIndex> pendingList = demandMapper.countPending(id);
+		return pendingList;
+	}
 
 	public boolean addLog(Map paramsMap) {
 		JSONObject jsonObject = (JSONObject)JSONObject.toJSON(paramsMap);

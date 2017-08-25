@@ -34,6 +34,12 @@
   <resultMap id="DemandDetailResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsDemandDetail">
 
   </resultMap>
+
+  <resultMap id="IndexResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsIndex">
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="value" property="value" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Base_Column_List" >
     <!--
       WARNING - @mbggenerated
@@ -61,5 +67,20 @@
   </select>
   <select id="getDemandById" parameterType="java.lang.Long" resultMap="DemandDetailResultMap">
     SELECT * FROM demand WHERE id = #{id}
+  </select>
+
+  <!--统计待处理信息的个数-->
+  <select id="countPending" parameterType="string" resultMap="IndexResultMap">
+    SELECT 'pending' AS name,'1' as id,'0' as value
+    UNION ALL
+    SELECT 'pending' AS name,'2' as id,COUNT(*) as value FROM bug_info WHERE `status`=2  AND callon_account_id = #{accountId, jdbcType=VARCHAR}
+    UNION ALL
+    SELECT 'pending' AS name,'3' as id,COUNT(*) as value FROM demand WHERE `status`=2 AND callon_account_id = #{accountId, jdbcType=VARCHAR}
+    UNION ALL
+    SELECT 'working' AS name,'1' as id,'0' as value
+    UNION ALL
+    SELECT 'working' AS name,'2' as id,COUNT(*) as value FROM bug_info WHERE `status`=3  AND callon_account_id = #{accountId, jdbcType=VARCHAR}
+    UNION ALL
+    SELECT 'working' AS name,'3' as id,COUNT(*) as value FROM demand WHERE `status`=3 AND callon_account_id = #{accountId, jdbcType=VARCHAR}
   </select>
 </mapper>

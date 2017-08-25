@@ -1,10 +1,12 @@
 package com.longfor.itserver.service;
 
 
+import java.util.List;
 import java.util.Map;
 
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.entity.Demand;
+import com.longfor.itserver.entity.ps.PsIndex;
 import com.longfor.itserver.service.base.IAdminService;
 
 public interface IDemandService extends IAdminService<Demand> {
@@ -35,4 +37,7 @@ public interface IDemandService extends IAdminService<Demand> {
 	 * @return
 	 */
 	public Demand getDemandById(Long id);
+
+	List<PsIndex> countPending(String id);
+
 }
