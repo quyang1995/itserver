@@ -13,6 +13,7 @@ import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ps.PsBugInfoDetail;
 import com.longfor.itserver.entity.ps.PsDemandDetail;
 import net.mayee.commons.helper.APIHelper;
+import org.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +44,7 @@ public class APIDemandController extends BaseController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map demandList(HttpServletRequest request, HttpServletResponse response) {
+    public Map demandList(HttpServletRequest request, HttpServletResponse response) throws IOException {
           /*  获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
         Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -61,7 +63,8 @@ public class APIDemandController extends BaseController {
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
     @ResponseBody
-    public Map demandAdd(HttpServletRequest request,HttpServletResponse response){
+    public Map demandAdd(HttpServletRequest request,HttpServletResponse response)
+            throws IOException, JSONException {
         //获取已经验证的参数map
         @SuppressWarnings("unchecked")
         Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -78,7 +81,8 @@ public class APIDemandController extends BaseController {
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
     @ResponseBody
-    public Map demandUpdate(HttpServletResponse response, HttpServletRequest request) {
+    public Map demandUpdate(HttpServletResponse response, HttpServletRequest request)
+            throws IOException, JSONException {
 
 		//获取已经验证的参数map
         @SuppressWarnings("unchecked")
@@ -96,7 +100,7 @@ public class APIDemandController extends BaseController {
      */
     @RequestMapping(value = "/get", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
     @ResponseBody
-    public Map demandGet(HttpServletRequest request, HttpServletResponse response){
+    public Map demandGet(HttpServletRequest request, HttpServletResponse response)throws IOException{
 		//获得已经验证过的参数map
         @SuppressWarnings("unchecked")
         Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
