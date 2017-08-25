@@ -346,6 +346,7 @@
             <property name="accountId" type="string" required="true"/>
             <property name="status" type="int" required="true"/>
             <property name="searchText" type="string" required="true" maxLength="30" description="搜索内容"/>
+            <property name="channel" type="int" required="true" />
         </request>
     </item>
 
@@ -389,6 +390,7 @@
             <property name="modifiedName" type="string" required="true"/>
             <property name="modifiedAccountId" type="string" required="false"/>
             <property name="modifiedName" type="string" required="false"/>
+            <property name="channel" type="int" required="true" />
         </request>
     </item>
 
@@ -419,6 +421,7 @@
             <property name="modifiedName" type="string" required="true"/>
             <property name="modifiedAccountId" type="string" required="false"/>
             <property name="modifiedName" type="string" required="false"/>
+            <property name="channel" type="int" required="true" />
         </request>
     </item>
 
@@ -513,6 +516,7 @@
             <property name="accountId" type="string" required="true"/>
             <property name="status" type="int" required="true"/>
             <property name="searchText" type="string" required="true" maxLength="30" description="搜索内容"/>
+            <property name="channel" type="int" required="true" />
         </request>
     </item >
 
@@ -537,6 +541,7 @@
             <property name="level" type="int" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
+            <property name="channel" type="int" required="true" />
         </request>
     </item>
 
@@ -562,6 +567,7 @@
             <property name="level" type="int" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
+            <property name="channel" type="int" required="true" />
         </request>
     </item>
 
