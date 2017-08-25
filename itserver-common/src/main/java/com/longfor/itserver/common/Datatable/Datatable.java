@@ -24,9 +24,7 @@ public class Datatable {
         propertyMap = new HashMap<String, String>();
     }
 
-    public Map<String, String> getPropertyMap() {
-        return propertyMap;
-    }
+    public Map<String, String> getPropertyMap() {return propertyMap;}
 
     public String getPropertyValue(String key){
         return propertyMap.get(key);

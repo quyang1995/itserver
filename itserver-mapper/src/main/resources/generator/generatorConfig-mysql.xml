@@ -68,7 +68,7 @@
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
         <table tableName="demand" domainObjectName="Demand">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
         <table tableName="demand_change_log" domainObjectName="DemandChangeLog">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
