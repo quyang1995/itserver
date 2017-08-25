@@ -168,21 +168,4 @@ public class APIFeedBackController extends BaseController {
 		return  CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
 	}
 
-
-	@RequestMapping(value = "/commentList" ,method =  RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
-	@ResponseBody
-	public Map commentList(HttpServletRequest request,HttpServletResponse response){
-		Map<String,Object> paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-		Long feedBackId = Long.valueOf((String)paramsMap.get("feedBackId"));
-
-		FeedBack feedBack = this.getFeedBackService().selectById(feedBackId);
-		if(feedBack == null) return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
-		if(feedBack.getType().equals(0)){
-
-		}else if(feedBack.getType().equals(1)){
-
-		}
-
-		return  null;
-	}
 }
