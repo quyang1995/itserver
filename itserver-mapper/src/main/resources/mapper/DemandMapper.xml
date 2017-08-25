@@ -25,6 +25,7 @@
     <result column="like_program" property="likeProgram" jdbcType="VARCHAR" />
     <result column="level" property="level" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="channel" property="channel" jdbcType="INTEGER" />
     <result column="modified_account_id" property="modifiedAccountId" jdbcType="VARCHAR" />
     <result column="modified_name" property="modifiedName" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -40,8 +41,8 @@
     id, feed_back_id, relation_id, relation_type, name, descp, hope_date, callon_account_id,
     callon_employee_code, callon_employee_name, callon_full_dept_path, drafted_account_id,
     drafted_employee_code, drafted_employee_name, drafted_full_dept_path, cc_account,
-    like_product, like_program, level, status, modified_account_id, modified_name, create_time,
-    modified_time
+    like_product, like_program, level, status, channel, modified_account_id, modified_name,
+    create_time, modified_time
   </sql>
   <select id="searchList" resultMap="BaseResultMap">
     SELECT

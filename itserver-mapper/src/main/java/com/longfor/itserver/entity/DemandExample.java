@@ -1415,6 +1415,66 @@ public class DemandExample {
             return (Criteria) this;
         }
 
+        public Criteria andChannelIsNull() {
+            addCriterion("channel is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelIsNotNull() {
+            addCriterion("channel is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelEqualTo(Integer value) {
+            addCriterion("channel =", value, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNotEqualTo(Integer value) {
+            addCriterion("channel <>", value, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelGreaterThan(Integer value) {
+            addCriterion("channel >", value, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelGreaterThanOrEqualTo(Integer value) {
+            addCriterion("channel >=", value, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelLessThan(Integer value) {
+            addCriterion("channel <", value, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelLessThanOrEqualTo(Integer value) {
+            addCriterion("channel <=", value, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelIn(List<Integer> values) {
+            addCriterion("channel in", values, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNotIn(List<Integer> values) {
+            addCriterion("channel not in", values, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelBetween(Integer value1, Integer value2) {
+            addCriterion("channel between", value1, value2, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNotBetween(Integer value1, Integer value2) {
+            addCriterion("channel not between", value1, value2, "channel");
+            return (Criteria) this;
+        }
+
         public Criteria andModifiedAccountIdIsNull() {
             addCriterion("modified_account_id is null");
             return (Criteria) this;

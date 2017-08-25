@@ -1,5 +1,8 @@
 package com.longfor.itserver.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import net.mayee.commons.CustomFullDateSerializer;
+
 import java.util.Date;
 import javax.persistence.*;
 
@@ -52,6 +55,7 @@ public class BugInfo {
      * 期望完成日期
      */
     @Column(name = "hope_date")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date hopeDate;
 
     /**
@@ -129,6 +133,8 @@ public class BugInfo {
      * 状态：0=已取消，1=已关闭，2=待处理，3=处理中，4=已完成
      */
     private Integer status;
+
+    private Integer channel;
 
     /**
      * 最后修改人账户id
@@ -538,6 +544,20 @@ public class BugInfo {
      */
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    /**
+     * @return channel
+     */
+    public Integer getChannel() {
+        return channel;
+    }
+
+    /**
+     * @param channel
+     */
+    public void setChannel(Integer channel) {
+        this.channel = channel;
     }
 
     /**
