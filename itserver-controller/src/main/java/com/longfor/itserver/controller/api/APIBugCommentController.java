@@ -28,7 +28,12 @@ public class APIBugCommentController extends BaseController{
 
     public final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-
+    /**
+     * 通过BUGID获取评论基本信息
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping(value="/list" ,method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
     @ResponseBody
     public Map list(HttpServletRequest request, HttpServletResponse response){
@@ -45,6 +50,12 @@ public class APIBugCommentController extends BaseController{
         return  map;
     }
 
+    /**
+     * 添加BUG评论
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping(value = "/add",method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
     @ResponseBody
     public Map add(HttpServletRequest request , HttpServletResponse response){
@@ -54,10 +65,12 @@ public class APIBugCommentController extends BaseController{
         return map;
     }
 
-
-
-
-
+    /**
+     *  通过反馈ID 获取评论列表
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping(value="/appList" ,method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
     @ResponseBody
     public Map appList(HttpServletRequest request, HttpServletResponse response){

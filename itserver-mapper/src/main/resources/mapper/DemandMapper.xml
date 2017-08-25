@@ -58,6 +58,9 @@
     <if test='status != "" and status != null and status !=-1'>
      and status = #{status}
     </if>
+    <if test='channel != "" and channel != null' >
+      and channel = #{channel}
+    </if>
     <if test='searchText != "" and searchText != null'>
       and (name like concat(concat('%',#{searchText}),'%') OR callon_employee_name like concat(concat('%',#{searchText}),'%'))
     </if>

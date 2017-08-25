@@ -85,6 +85,7 @@ public class APIDemandController extends BaseController {
         @SuppressWarnings("unchecked")
         Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         this.getDemandService().updateDemand(paramsMap);
+
         // 返回成功信息
         return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
     }
