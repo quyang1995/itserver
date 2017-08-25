@@ -84,9 +84,6 @@ public class APIDemandController extends BaseController {
         //获取已经验证的参数map
         @SuppressWarnings("unchecked")
         Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-                /*添加需求更新日志*/
-//        this.getDemandChangeLogService().add(paramsMap);
-
         this.getDemandService().updateDemand(paramsMap);
 
         // 返回成功信息

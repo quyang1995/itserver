@@ -145,9 +145,6 @@ public class APIBugInfoController extends BaseController {
 		@SuppressWarnings("unchecked")
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
-//		/*更新日志*/
-//		this.getBugChangeLogService().add(paramsMap);
-
 		this.getBugInfoService().updateBug(paramsMap);
 
 		// 返回报文
