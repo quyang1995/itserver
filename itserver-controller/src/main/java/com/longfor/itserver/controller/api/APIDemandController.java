@@ -1,7 +1,5 @@
 package com.longfor.itserver.controller.api;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
@@ -10,9 +8,7 @@ import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.Demand;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.Program;
-import com.longfor.itserver.entity.ps.PsBugInfoDetail;
 import com.longfor.itserver.entity.ps.PsDemandDetail;
-import net.mayee.commons.helper.APIHelper;
 import org.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +41,7 @@ public class APIDemandController extends BaseController {
     @RequestMapping(value = "/list", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
     public Map demandList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
           /*  获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
         Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -84,7 +81,7 @@ public class APIDemandController extends BaseController {
     public Map demandUpdate(HttpServletResponse response, HttpServletRequest request)
             throws IOException, JSONException {
 
-		//获取已经验证的参数map
+        //获取已经验证的参数map
         @SuppressWarnings("unchecked")
         Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         this.getDemandService().updateDemand(paramsMap);
@@ -101,7 +98,7 @@ public class APIDemandController extends BaseController {
     @RequestMapping(value = "/get", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
     @ResponseBody
     public Map demandGet(HttpServletRequest request, HttpServletResponse response)throws IOException{
-		//获得已经验证过的参数map
+        //获得已经验证过的参数map
         @SuppressWarnings("unchecked")
         Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
