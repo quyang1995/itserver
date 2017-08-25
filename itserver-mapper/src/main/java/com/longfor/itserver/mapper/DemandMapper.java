@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.longfor.itserver.entity.Demand;
+import com.longfor.itserver.entity.ps.PsIndex;
 import com.longfor.itserver.mapper.base.BeeMapper;
 
 /**
@@ -19,4 +20,6 @@ public interface DemandMapper extends BeeMapper<Demand> {
 	Demand getDemandById(long id);
 
 	boolean updateDemand(Map map);
+
+	List<PsIndex> countPending(String id);
 }

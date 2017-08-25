@@ -575,4 +575,15 @@
             <property name="id" type="int" required="true"/>
         </request>
     </item>
+
+    <!--
+        URL:
+        /api/index/analysis
+        说明:PC首页统计
+    -->
+    <item id="api_index_analysis" description="PC首页统计">
+        <request>
+            <property name="accountId" type="string" required="true"/>
+        </request>
+    </item>
 </api>
