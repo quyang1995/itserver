@@ -4,8 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
-import com.longfor.itserver.common.enums.AvaStatusEnum;
-import com.longfor.itserver.common.enums.FeedBackStatusEnum;
+import com.longfor.itserver.common.enums.*;
 import com.longfor.itserver.entity.*;
 import com.longfor.itserver.mapper.BugInfoMapper;
 import com.longfor.itserver.mapper.DemandMapper;
@@ -48,8 +47,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 
 	@Override
 	public List<FeedBack> feedBackList(Map map) {
-		List<FeedBack> feedBackList = feedBackMapper.feedBackList(map);
-		return feedBackList;
+		return feedBackMapper.feedBackList(map);
 	}
 
     @Transactional
@@ -92,11 +90,20 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 			bugInfo.setReproductionStep(feedBack.getReproductionStep());
 			bugInfo.setBrower(feedBack.getSysEnvironment());
 			bugInfo.setHopeDate(new Date());
+
+            //指派人
 			bugInfo.setCallonAccountId(product.getContactAccountId());
 			bugInfo.setCallonEmployeeCode(product.getContactEmployeeCode());
 			bugInfo.setCallonEmployeeName(product.getContactEmployeeName());
 			bugInfo.setCallonFullDeptPath(product.getContactFullDeptPath());
-			bugInfo.setLevel(0);
+
+			//起草人
+            bugInfo.setDraftedAccountId(accountLongfor.getUcAccountId());
+            bugInfo.setDraftedEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
+            bugInfo.setDraftedEmployeeName(accountLongfor.getName());
+            bugInfo.setDraftedFullDeptPath(accountLongfor.getPsDeptFullName());
+
+			bugInfo.setLevel(BugLevelEnum.HIGH_LEVEL.getCode());
 			bugInfo.setStatus(feedBack.getStatus());
 			bugInfo.setModifiedAccountId(feedBack.getModifiedAccountId());
 			bugInfo.setModifiedName(feedBack.getModifiedName());
@@ -111,11 +118,20 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 			demand.setName(feedBack.getProblemTitle());
 			demand.setDescp(feedBack.getProblemDescp());
 			demand.setHopeDate(new Date());
+
+			//指派人
 			demand.setCallonAccountId(product.getContactAccountId());
 			demand.setCallonEmployeeCode(product.getContactEmployeeCode());
 			demand.setCallonEmployeeName(product.getContactEmployeeName());
 			demand.setCallonFullDeptPath(product.getContactFullDeptPath());
-			demand.setLevel(0);
+
+            //起草人
+            demand.setDraftedAccountId(accountLongfor.getUcAccountId());
+            demand.setDraftedEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
+            demand.setDraftedEmployeeName(accountLongfor.getName());
+            demand.setDraftedFullDeptPath(accountLongfor.getPsDeptFullName());
+
+			demand.setLevel(DemandLevelEnum.HIGH_LEVEL.getCode());
 			demand.setStatus(feedBack.getStatus());
 			demand.setModifiedAccountId(feedBack.getModifiedAccountId());
 			demand.setModifiedName(feedBack.getModifiedName());
@@ -129,7 +145,6 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 
 	@Override
 	public FeedBack getFeedBackId(long id) {
-		FeedBack feedBack = feedBackMapper.getFeedBackId(id);
-		return feedBack;
+		return feedBackMapper.getFeedBackId(id);
 	}
 }

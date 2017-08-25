@@ -33,12 +33,12 @@
         <mybatis-ehcache.version>1.0.3</mybatis-ehcache.version>
         <persistence-api.version>1.0</persistence-api.version>
 
-        <eds-helper.version>1.4.5-SNAPSHOT</eds-helper.version>
-        <ads-helper.version>1.0.2-SNAPSHOT</ads-helper.version>
+        <eds-helper.version>1.5.13-SNAPSHOT</eds-helper.version>
+        <ads-helper.version>1.0.3-SNAPSHOT</ads-helper.version>
 
         <judi-encrypt.version>1.12</judi-encrypt.version>
-        <judi-commons.version>1.12-SNAPSHOT</judi-commons.version>
-        <judi-mysql.version>1.02-SNAPSHOT</judi-mysql.version>
+        <judi-commons.version>1.13-SNAPSHOT</judi-commons.version>
+        <judi-mysql.version>1.07-SNAPSHOT</judi-mysql.version>
         <judi-redis.version>1.01-SNAPSHOT</judi-redis.version>
 
         <!--JWT-->
