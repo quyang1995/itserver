@@ -8,11 +8,11 @@ package com.longfor.itserver.common.enums;
 public enum BugStatusEnum {
 
     /* 状态 */
-    CANCEL(0, "已取消", "label label-sm label-danger"),
-    CLOSE(1, "已关闭", "label label-sm label-info"),
-    PENDING(2, "待处理", "label label-sm label-success"),
-    WORKING(3, "处理中", "label label-sm label-success"),
-    COMPLETED(4, "已完成", "label label-sm label-success");
+    CANCEL(0, "已取消", "label label-sm label-default"),
+    CLOSE(1, "已关闭", "label label-sm label-default"),
+    PENDING(2, "待处理", "label label-sm label-danger"),
+    WORKING(3, "处理中", "label label-sm label-info"),
+    COMPLETED(4, "已完成", "label label-sm label-primary");
 
     /* 枚举码 */
     private int code;

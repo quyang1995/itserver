@@ -5,14 +5,13 @@ package com.longfor.itserver.common.enums;
  *         Created on 2017/2/9 下午7:49
  * @version v1.0
  */
-public enum DemandStatusEnum {
+public enum DemandLevelEnum {
 
-    /* 状态 */
-    CANCEL(0, "已取消", "label label-sm label-default"),
-    CLOSE(1, "已关闭", "label label-sm label-default"),
-    PENDING(2, "待处理", "label label-sm label-danger"),
-    WORKING(3, "处理中", "label label-sm label-info"),
-    COMPLETED(4, "已完成", "label label-sm label-primary");
+    /*优先级*/
+    BOT_LEVEL(0, "低", "label label-sm label-default"),
+    MID_LEVEL(1, "中", "label label-sm label-info"),
+    HIGH_LEVEL(2, "高", "label label-sm label-warning"),
+    VERY_HIGH_LEVEL(3, "非常高", "label label-sm label-danger");
 
     /* 枚举码 */
     private int code;
@@ -21,7 +20,7 @@ public enum DemandStatusEnum {
     /* 前端渲染时的class字符串 */
     private String classStr;
 
-    DemandStatusEnum(int code, String text, String classStr) {
+    DemandLevelEnum(int code, String text, String classStr) {
         this.code = code;
         this.text = text;
         this.classStr = classStr;
@@ -45,8 +44,8 @@ public enum DemandStatusEnum {
      * @param code 枚举码
      * @return 枚举
      */
-    public static DemandStatusEnum getByCode(int code) {
-        for (DemandStatusEnum status : values()) {
+    public static DemandLevelEnum getByCode(int code) {
+        for (DemandLevelEnum status : values()) {
             if (status.getCode() == code) {
                 return status;
             }
