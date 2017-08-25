@@ -583,4 +583,34 @@
     </item>
 
 
+
+    <!--
+        URL:
+
+        /api/feedBack/addComment
+
+        说明：通过account添加评论用户信息
+    -->
+    <item id="api_feedBack_addComment" description="通过用户名查询用户信息添加至评论表">
+        <request>
+            <property name="accountId" type="string" required="true" />
+            <property name="feedBackId" type="int" required="true" />
+            <property name="parentId" type="int" required="true" />
+            <property name="content" type="string" required="false" />
+            <property name="levelNum" type="int" required="true" />
+            <property name="ip" type="string" required="false" />
+        </request>
+    </item >
+
+    <!--
+        URL:
+        /api/index/analysis
+        说明:PC首页统计
+    -->
+    <item id="api_index_analysis" description="PC首页统计">
+        <request>
+            <property name="accountId" type="string" required="true"/>
+        </request>
+    </item>
+
 </api>
