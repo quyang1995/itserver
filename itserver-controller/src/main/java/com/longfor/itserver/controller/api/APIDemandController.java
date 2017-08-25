@@ -45,7 +45,7 @@ public class APIDemandController extends BaseController {
     public Map demandList(HttpServletRequest request, HttpServletResponse response) {
           /*  获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
-          Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
            /*获取查询用例*/
         ELExample elExample = new ELExample(request, Demand.class);
         /*查询数据*/
