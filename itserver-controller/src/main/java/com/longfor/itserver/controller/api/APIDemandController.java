@@ -1,7 +1,5 @@
 package com.longfor.itserver.controller.api;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
@@ -10,9 +8,7 @@ import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.Demand;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.Program;
-import com.longfor.itserver.entity.ps.PsBugInfoDetail;
 import com.longfor.itserver.entity.ps.PsDemandDetail;
-import net.mayee.commons.helper.APIHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -83,7 +79,11 @@ public class APIDemandController extends BaseController {
 		//获取已经验证的参数map
         @SuppressWarnings("unchecked")
         Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+                /*添加需求更新日志*/
+//        this.getDemandChangeLogService().add(paramsMap);
+
         this.getDemandService().updateDemand(paramsMap);
+
         // 返回成功信息
         return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
     }

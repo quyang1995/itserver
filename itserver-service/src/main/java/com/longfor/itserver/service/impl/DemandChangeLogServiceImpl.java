@@ -13,5 +13,5 @@ import org.springframework.stereotype.Service;
  */
 @Service("DemandChangeLogService")
 public class DemandChangeLogServiceImpl extends AdminBaseService<DemandChangeLog> implements IDemandChangeLogService {
-
+    
 }

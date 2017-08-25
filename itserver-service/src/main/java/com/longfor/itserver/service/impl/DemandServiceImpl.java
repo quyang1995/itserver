@@ -9,16 +9,20 @@ import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.enums.BugStatusEnum;
 import com.longfor.itserver.common.enums.DemandStatusEnum;
 import com.longfor.itserver.common.util.CommonUtils;
+import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.entity.BugInfo;
 import com.longfor.itserver.entity.Demand;
+import com.longfor.itserver.entity.DemandChangeLog;
 import com.longfor.itserver.entity.Product;
+import com.longfor.itserver.mapper.DemandChangeLogMapper;
 import com.longfor.itserver.mapper.DemandMapper;
 import com.longfor.itserver.service.IDemandService;
 import com.longfor.itserver.service.base.AdminBaseService;
 
 import net.mayee.commons.helper.APIHelper;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +40,8 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 	private DemandMapper demandMapper;
 	@Autowired
 	private ADSHelper adsHelper;
-
+	@Autowired
+	private DemandChangeLogMapper demandChangeLogMapper;
 	/**
 	 * 	新增需求信息
 	 * @param map
@@ -99,6 +104,8 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			demand.setCallonFullDeptPath(callonAccountLongfor.getPsDeptFullName());
 		}
 
+		/*新增需求更新日志*/
+		addLog(map);
 		demandMapper.updateByPrimaryKey(demand);
 		return true;
 	}
@@ -124,4 +131,20 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		return resultMap;
 	}
 
+
+	public boolean addLog(Map paramsMap) {
+		JSONObject jsonObject = (JSONObject)JSONObject.toJSON(paramsMap);
+		DemandChangeLog demandChangeLog = JSONObject.toJavaObject(jsonObject,DemandChangeLog.class);
+		Long demandId = Long.valueOf(jsonObject.getString("id"));
+		demandChangeLog.setBefDescp(jsonObject.getString("descp"));
+		Demand demand = demandMapper.selectByPrimaryKey(demandId);
+		demandChangeLog.setType(demand.getDescp().equals(jsonObject.getString("descp")) ? 2 : 1 );
+
+		String changeInfo = demandChangeLog.getModifiedName() + " 在 " + DateUtil.getCurrentTime(new Date()) +" 修改了需求信息";
+		demandChangeLog.setActionChangeInfo(changeInfo);
+		demandChangeLog.setDemandId(demandId);
+		demandChangeLog.setCreateTime(new Date());
+		demandChangeLogMapper.insertUseGeneratedKeys(demandChangeLog);
+		return true;
+	}
 }

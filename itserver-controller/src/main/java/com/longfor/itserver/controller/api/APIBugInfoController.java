@@ -3,7 +3,6 @@ package com.longfor.itserver.controller.api;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.longfor.itserver.common.constant.ConfigConsts;
-import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
@@ -11,9 +10,7 @@ import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.BugInfo;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.Program;
-import com.longfor.itserver.entity.ProgramEmployee;
 import com.longfor.itserver.entity.ps.PsBugInfoDetail;
-import com.longfor.itserver.entity.ps.PsProgramDetail;
 import net.mayee.commons.helper.APIHelper;
 import org.json.JSONException;
 import org.springframework.stereotype.Controller;
@@ -24,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -148,7 +144,12 @@ public class APIBugInfoController extends BaseController {
 		/* 获得已经验证过的参数map */
 		@SuppressWarnings("unchecked")
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+
+//		/*更新日志*/
+//		this.getBugChangeLogService().add(paramsMap);
+
 		this.getBugInfoService().updateBug(paramsMap);
+
 		// 返回报文
 		return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
 	}
