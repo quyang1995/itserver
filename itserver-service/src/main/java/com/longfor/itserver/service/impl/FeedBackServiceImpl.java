@@ -90,6 +90,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 			bugInfo.setReproductionStep(feedBack.getReproductionStep());
 			bugInfo.setBrower(feedBack.getSysEnvironment());
 			bugInfo.setHopeDate(new Date());
+			bugInfo.setChannel(feedBack.getChannel());
 
             //指派人
 			bugInfo.setCallonAccountId(product.getContactAccountId());
@@ -118,6 +119,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 			demand.setName(feedBack.getProblemTitle());
 			demand.setDescp(feedBack.getProblemDescp());
 			demand.setHopeDate(new Date());
+			demand.setChannel(feedBack.getChannel());
 
 			//指派人
 			demand.setCallonAccountId(product.getContactAccountId());

@@ -134,7 +134,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         bugChangeLog.setType(2);
         if(!bugInfo.getDescp().equals(jsonObject.getString("descp"))) bugChangeLog.setType(1);
         bugChangeLog.setBefDescp(jsonObject.getString("descp"));
-        String logInfo = jsonObject.getString("modifiedName")+ " 在 "+ DateUtil.getCurrentTime(new Date()) +" 更新BUG信息" ;
+        String logInfo = jsonObject.getString("modifiedName")+ " 在 "+ DateUtil.getCurrentTime(new Date()) +" 更新了"+ bugInfo.getName() +" 的信息" ;
         bugChangeLog.setActionChangeInfo(logInfo);
         bugChangeLog.setCreateTime(new Date());
         bugChangeLogMapper.insertUseGeneratedKeys(bugChangeLog);

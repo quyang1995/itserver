@@ -6,11 +6,9 @@ import com.google.common.collect.Lists;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
-import com.longfor.itserver.entity.Product;
-import com.longfor.itserver.entity.ProductEmployee;
-import com.longfor.itserver.entity.Program;
-import com.longfor.itserver.entity.ProgramEmployee;
+import com.longfor.itserver.entity.*;
 import com.longfor.itserver.mapper.ProductMapper;
+import com.longfor.itserver.mapper.ProgramEmployeeChangeLogMapper;
 import com.longfor.itserver.mapper.ProgramEmployeeMapper;
 import com.longfor.itserver.mapper.ProgramMapper;
 import com.longfor.itserver.service.IProgramService;
@@ -42,6 +40,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 	@Autowired
 	private ADSHelper adsHelper;
+
+	@Autowired
+	private ProgramEmployeeChangeLogMapper programEmployeeChangeLogMapper;
 
 	@Override
 	public List<Program> programList(Map map) {
@@ -220,6 +221,30 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			deleteByParam(2, 4, program);
 			getAccountLongfor(program, jsonArrUed, "4");
 		}
+
+		/*添加日志*/
+		this.addLog(map);
 		return true;
 	}
+
+	public boolean addLog(Map paramsMap){
+		JSONObject jsonObject = (JSONObject)JSONObject.toJSON(paramsMap);
+		ProgramEmployeeChangeLog employeeChangeLog = JSONObject.toJavaObject(jsonObject , ProgramEmployeeChangeLog.class);
+
+		employeeChangeLog.setCreateTime(new Date());
+		StringBuffer info = new StringBuffer();
+		info.append(employeeChangeLog.getModifiedName());
+		info.append("于");
+		info.append(employeeChangeLog.getCreateTime());
+		info.append("更新了");
+		info.append(jsonObject.getString("name"));
+		info.append("的信息。");
+//		String info =  + "在 " +employeeChangeLog.getCreateTime() +" 更新了 " + jsonObject.getString("name") +"的信息";
+		employeeChangeLog.setActionChangeInfo(info.toString());
+		employeeChangeLog.setProgramId(employeeChangeLog.getId());
+		programEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
+
+		return true ;
+	}
+
 }

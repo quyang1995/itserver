@@ -1,13 +1,14 @@
 package com.longfor.itserver.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
+import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.ProductEmployee;
-import com.longfor.itserver.entity.ps.PsProduct;
+import com.longfor.itserver.entity.ProductEmployeeChangeLog;
+import com.longfor.itserver.mapper.ProductEmployeeChangeLogMapper;
 import com.longfor.itserver.mapper.ProductEmployeeMapper;
 import com.longfor.itserver.mapper.ProductMapper;
 import com.longfor.itserver.service.IProductService;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +33,8 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 	private ProductEmployeeMapper productEmployeeMapper;
 	@Autowired
 	private ADSHelper adsHelp;
+	@Autowired
+	private ProductEmployeeChangeLogMapper productEmployeeChangeLogMapper;
 
 	@Override
 	public List<Product> searchList(Map map) {
@@ -120,6 +124,8 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		deleteByParam(5, product);
 		getAccountInfo(5, product, uedList);
 
+		/*添加日志*/
+		this.addLog(map);
 		return true;
 	}
    /**
@@ -192,4 +198,29 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		}
 		return true;
 	}
+
+	public boolean addLog(Map paramsMap){
+		JSONObject jsonObject = (JSONObject)JSONObject.toJSON(paramsMap);
+		ProductEmployeeChangeLog employeeChangeLog = JSONObject.toJavaObject(jsonObject,ProductEmployeeChangeLog.class);
+
+
+		employeeChangeLog.setProductId(Long.valueOf(jsonObject.getString("id")));
+		employeeChangeLog.setCreateTime(new Date());
+
+		StringBuffer info = new StringBuffer();
+		info.append(employeeChangeLog.getModifiedName());
+		info.append("于");
+		info.append(DateUtil.getCurrentTime(new Date()));
+		info.append("更新了");
+		info.append(jsonObject.getString("name"));
+		info.append("的信息。");
+
+//		String info = employeeChangeLog.getModifiedName() +" 在 " +employeeChangeLog.getCreateTime() +" 更新了" +jsonObject.getString("name")+ "的信息";
+		employeeChangeLog.setActionChangeInfo(info.toString());
+		productEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
+
+		return true;
+	}
+
+
 }

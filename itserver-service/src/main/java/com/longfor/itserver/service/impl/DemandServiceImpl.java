@@ -147,7 +147,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		Demand demand = demandMapper.selectByPrimaryKey(demandId);
 		demandChangeLog.setType(demand.getDescp().equals(jsonObject.getString("descp")) ? 2 : 1 );
 
-		String changeInfo = demandChangeLog.getModifiedName() + " 在 " + DateUtil.getCurrentTime(new Date()) +" 修改了需求信息";
+		String changeInfo = demandChangeLog.getModifiedName() + " 在 " + DateUtil.getCurrentTime(new Date()) +" 更新了 "+ demand.getName() +" 的信息";
 		demandChangeLog.setActionChangeInfo(changeInfo);
 		demandChangeLog.setDemandId(demandId);
 		demandChangeLog.setCreateTime(new Date());
