@@ -189,6 +189,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		selectOneProgram.setType(program.getType());
 		selectOneProgram.setProgramStatus(selectOneProgram.getProgramStatus());
 
+		/*添加日志*/
+		this.addLog(map);
 		programMapper.updateByPrimaryKey(selectOneProgram);
 
 		// 项目责任人
@@ -222,8 +224,6 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			getAccountLongfor(program, jsonArrUed, "4");
 		}
 
-		/*添加日志*/
-		this.addLog(map);
 		return true;
 	}
 
@@ -239,7 +239,6 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		info.append("更新了");
 		info.append(jsonObject.getString("name"));
 		info.append("的信息。");
-//		String info =  + "在 " +employeeChangeLog.getCreateTime() +" 更新了 " + jsonObject.getString("name") +"的信息";
 		employeeChangeLog.setActionChangeInfo(info.toString());
 		employeeChangeLog.setProgramId(employeeChangeLog.getId());
 		programEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);

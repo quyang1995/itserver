@@ -101,6 +101,8 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		getAccountInfo(0, selectOne, null);
 		/* 关联项目 */
 		selectOne.setLikeProgram(product.getLikeProgram());
+				/*添加日志*/
+		this.addLog(map);
 		int update = productMapper.updateByPrimaryKey(selectOne);// 更新产品
 
 		/* 产品责任人 */
@@ -124,8 +126,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		deleteByParam(5, product);
 		getAccountInfo(5, product, uedList);
 
-		/*添加日志*/
-		this.addLog(map);
+
 		return true;
 	}
    /**
@@ -214,8 +215,6 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		info.append("更新了");
 		info.append(jsonObject.getString("name"));
 		info.append("的信息。");
-
-//		String info = employeeChangeLog.getModifiedName() +" 在 " +employeeChangeLog.getCreateTime() +" 更新了" +jsonObject.getString("name")+ "的信息";
 		employeeChangeLog.setActionChangeInfo(info.toString());
 		productEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
 
