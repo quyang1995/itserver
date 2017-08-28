@@ -13,6 +13,7 @@ import com.longfor.itserver.mapper.ProductEmployeeMapper;
 import com.longfor.itserver.mapper.ProductMapper;
 import com.longfor.itserver.service.IProductService;
 import com.longfor.itserver.service.base.AdminBaseService;
+import net.mayee.commons.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,6 +67,8 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		/* 接口人相关信息 */
 		getAccountInfo(0, product, null);
 		/* 添加产品 */
+		product.setCreateTime(TimeUtils.getTodayByDateTime());
+		product.setModifiedTime(TimeUtils.getTodayByDateTime());
 		int insert = productMapper.insert(product);
 		/* 产品责任人 */
 		String personLiableList = (String) map.get("personLiableList");
@@ -108,6 +111,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		selectOne.setLikeProgram(product.getLikeProgram());
 				/*添加日志*/
 		this.addLog(map);
+		product.setModifiedTime(TimeUtils.getTodayByDateTime());
 		int update = productMapper.updateByPrimaryKey(selectOne);// 更新产品
 
 		/* 产品责任人 */
@@ -196,6 +200,8 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 								productEmployee.setEmployeeTypeId(new Long(AvaStatusEnum.UEDAVA.getCode()));
 								productEmployee.setEmployeeTypeText(AvaStatusEnum.UEDAVA.getText());
 							}
+							productEmployee.setCreateTime(TimeUtils.getTodayByDateTime());
+							productEmployee.setModifiedTime(TimeUtils.getTodayByDateTime());
 							productEmployeeMapper.insert(productEmployee);
 						}
 					}
@@ -221,6 +227,8 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		info.append(jsonObject.getString("name"));
 		info.append("的信息。");
 		employeeChangeLog.setActionChangeInfo(info.toString());
+		employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+		employeeChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
 		productEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
 
 		return true;

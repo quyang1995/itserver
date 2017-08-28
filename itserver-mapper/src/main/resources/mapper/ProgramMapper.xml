@@ -95,12 +95,14 @@
     <if test='productId != "" and productId != null'>
       and p.product_id = #{productId}
     </if>
+    ORDER BY p.modified_time DESC
   </select>
 
   <!-- 项目列表模糊搜索返回20条 -->
   <select id="programLimitList" parameterType="map" resultMap="BaseResultMap">
     SELECT * FROM program
       WHERE name LIKE CONCAT('%', #{name, jdbcType=VARCHAR}, '%')
+      ORDER BY modified_time DESC
       LIMIT 0, 20
   </select>
 

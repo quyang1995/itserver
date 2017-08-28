@@ -13,6 +13,7 @@ import com.longfor.itserver.mapper.ProgramEmployeeMapper;
 import com.longfor.itserver.mapper.ProgramMapper;
 import com.longfor.itserver.service.IProgramService;
 import com.longfor.itserver.service.base.AdminBaseService;
+import net.mayee.commons.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,6 +72,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	public boolean addProgram(Map map) {
 		JSONObject json = (JSONObject) JSONObject.toJSON(map);
 		Program program = JSONObject.toJavaObject(json, Program.class);
+		program.setCreateTime(TimeUtils.getTodayByDateTime());
+		program.setModifiedTime(TimeUtils.getTodayByDateTime());
 		programMapper.insert(program);
 
 		// 项目责任人
@@ -134,6 +137,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 					pe.setEmployeeTypeText(AvaStatusEnum.UEDAVA.getText());
 				}
 				pe.setStatus(AvaStatusEnum.AVA.getCode());
+				pe.setCreateTime(TimeUtils.getTodayByDateTime());
+				pe.setModifiedTime(TimeUtils.getTodayByDateTime());
 				programEmployeeMapper.insert(pe);
 			}
 		}
@@ -196,6 +201,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 		/*添加日志*/
 		this.addLog(map);
+		selectOneProgram.setModifiedTime(TimeUtils.getTodayByDateTime());
 		programMapper.updateByPrimaryKey(selectOneProgram);
 
 		// 项目责任人
@@ -246,6 +252,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		info.append("的信息。");
 		employeeChangeLog.setActionChangeInfo(info.toString());
 		employeeChangeLog.setProgramId(employeeChangeLog.getId());
+		employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+		employeeChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
 		programEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
 
 		return true ;

@@ -16,6 +16,7 @@ import com.longfor.itserver.mapper.BugInfoMapper;
 import com.longfor.itserver.mapper.ProgramMapper;
 import com.longfor.itserver.service.IBugInfoService;
 import com.longfor.itserver.service.base.AdminBaseService;
+import net.mayee.commons.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -86,6 +87,8 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
             bugInfo.setCallonEmployeeName(callonAccountLongfor.getName());
             bugInfo.setCallonFullDeptPath(callonAccountLongfor.getPsDeptFullName());
         }
+        bugInfo.setCreateTime(TimeUtils.getTodayByDateTime());
+        bugInfo.setModifiedTime(TimeUtils.getTodayByDateTime());
         bugInfoMapper.insert(bugInfo);
         return true;
     }
@@ -121,6 +124,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         }
         /*添加BUG修改日志*/
         addLog(map);
+        bugInfo.setModifiedTime(TimeUtils.getTodayByDateTime());
         bugInfoMapper.updateByPrimaryKey(bugInfo);
         return true;
     }
@@ -136,7 +140,8 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         bugChangeLog.setBefDescp(jsonObject.getString("descp"));
         String logInfo = jsonObject.getString("modifiedName")+ " 在 "+ DateUtil.getCurrentTime(new Date()) +" 更新了"+ bugInfo.getName() +" 的信息" ;
         bugChangeLog.setActionChangeInfo(logInfo);
-        bugChangeLog.setCreateTime(new Date());
+        bugChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+        bugChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
         bugChangeLogMapper.insertUseGeneratedKeys(bugChangeLog);
         return true;
     }

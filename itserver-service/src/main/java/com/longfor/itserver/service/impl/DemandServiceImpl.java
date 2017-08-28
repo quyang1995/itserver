@@ -21,6 +21,7 @@ import com.longfor.itserver.mapper.DemandMapper;
 import com.longfor.itserver.service.IDemandService;
 import com.longfor.itserver.service.base.AdminBaseService;
 
+import net.mayee.commons.TimeUtils;
 import net.mayee.commons.helper.APIHelper;
 
 import java.util.Date;
@@ -70,6 +71,8 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			demand.setCallonFullDeptPath(callonAccountLongfor.getPsDeptFullName());
 		}
 
+		demand.setCreateTime(TimeUtils.getTodayByDateTime());
+		demand.setModifiedTime(TimeUtils.getTodayByDateTime());
 		demandMapper.insert(demand);
 		return true;
 	}
@@ -106,7 +109,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		}
 
 		/*新增需求更新日志*/
-		addLog(map);
+		demand.setModifiedTime(TimeUtils.getTodayByDateTime());
 		demandMapper.updateByPrimaryKey(demand);
 		return true;
 	}
@@ -150,7 +153,8 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		String changeInfo = demandChangeLog.getModifiedName() + " 在 " + DateUtil.getCurrentTime(new Date()) +" 更新了 "+ demand.getName() +" 的信息";
 		demandChangeLog.setActionChangeInfo(changeInfo);
 		demandChangeLog.setDemandId(demandId);
-		demandChangeLog.setCreateTime(new Date());
+		demandChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+		demandChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
 		demandChangeLogMapper.insertUseGeneratedKeys(demandChangeLog);
 		return true;
 	}

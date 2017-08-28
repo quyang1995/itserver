@@ -85,13 +85,21 @@ public class APIBugInfoController extends BaseController {
 		PsBugInfoDetail bugInfo = (PsBugInfoDetail) this.getBugInfoService().getBugId(id);
 		if(bugInfo != null) {
 			// 关联产品
-			String likeProduct = bugInfo.getLikeProduct().substring(1, bugInfo.getLikeProduct().length());
-			List<Product> product = this.getProductService().searchIdList(likeProduct);
-			bugInfo.setProductList(product);
+			if(bugInfo.getLikeProduct() != null && !"".equals(bugInfo.getLikeProduct())){
+				String likeProduct = bugInfo.getLikeProduct().substring(1, bugInfo.getLikeProduct().length());
+				List<Product> product = this.getProductService().searchIdList(likeProduct);
+				if(product != null){
+					bugInfo.setProductList(product);
+				}
+			}
 			// 关联项目
-			String likeProgram = bugInfo.getLikeProgram().substring(1, bugInfo.getLikeProgram().length());
-			List<Program> program = this.getProgramService().inProgramId(likeProgram);
-			bugInfo.setProgramList(program);
+			if(bugInfo.getLikeProgram() != null && !"".equals(bugInfo.getLikeProgram())) {
+				String likeProgram = bugInfo.getLikeProgram().substring(1, bugInfo.getLikeProgram().length());
+				List<Program> program = this.getProgramService().inProgramId(likeProgram);
+				if(program != null){
+					bugInfo.setProgramList(program);
+				}
+			}
 			//归属项目/产品
 			String relationName = "";
 			if (bugInfo.getRelationType().equals("1")) {

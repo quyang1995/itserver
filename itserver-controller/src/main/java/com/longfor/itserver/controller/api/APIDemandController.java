@@ -107,13 +107,21 @@ public class APIDemandController extends BaseController {
         PsDemandDetail demand = (PsDemandDetail) this.getDemandService().getDemandById(id);
         if (demand != null){
                 //关联产品
+            if(demand.getLikeProduct() != null && !"".equals(demand.getLikeProduct())) {
                 String likeProduct = demand.getLikeProduct().substring(1, demand.getLikeProduct().length());
-            List<Product> product = this.getProductService().searchIdList(likeProduct);
-            demand.setProductList(product);
+                List<Product> product = this.getProductService().searchIdList(likeProduct);
+                if(product != null) {
+                    demand.setProductList(product);
+                }
+            }
             //关联项目
-            String likeProgram = demand.getLikeProgram().substring(1, demand.getLikeProgram().length());
-            List<Program> program = this.getProgramService().inProgramId(likeProgram);
-            demand.setProgramList(program);
+            if(demand.getLikeProgram() != null && !"".equals(demand.getLikeProgram())) {
+                String likeProgram = demand.getLikeProgram().substring(1, demand.getLikeProgram().length());
+                List<Program> program = this.getProgramService().inProgramId(likeProgram);
+                if(program != null) {
+                    demand.setProgramList(program);
+                }
+            }
             //归属产品/项目
             String relationName = "";
             if (demand.getRelationType().equals("1")) {

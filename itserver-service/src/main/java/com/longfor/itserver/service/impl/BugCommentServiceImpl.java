@@ -10,6 +10,7 @@ import com.longfor.itserver.entity.BugComment;
 import com.longfor.itserver.mapper.BugCommentMapper;
 import com.longfor.itserver.service.IBugCommentService;
 import com.longfor.itserver.service.base.AdminBaseService;
+import net.mayee.commons.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -60,7 +62,8 @@ public class BugCommentServiceImpl extends AdminBaseService<BugComment> implemen
         bugComment.setFullDeptPath(fullDeptPath);
         bugComment.setReplyType(replyType);
         bugComment.setStatus(status);
-
+        bugComment.setCreateTime(TimeUtils.getTodayByDateTime());
+        bugComment.setModifiedTime(TimeUtils.getTodayByDateTime());
         int i = bugCommentMapper.insert(bugComment);
         if(i != 1) {
             logger.info("BUG评论表新增评论异常");

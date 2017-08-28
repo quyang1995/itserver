@@ -58,6 +58,7 @@
     <if test='searchText != "" and searchText != null'>
       and (name like concat(concat('%',#{searchText}),'%'))
     </if>
+    ORDER BY modified_time DESC
   </select>
 
   <!-- 通过ID查询BUG -->

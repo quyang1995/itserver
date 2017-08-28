@@ -64,6 +64,7 @@
     <if test='searchText != "" and searchText != null'>
       and (name like concat(concat('%',#{searchText}),'%') OR callon_employee_name like concat(concat('%',#{searchText}),'%'))
     </if>
+    ORDER BY modified_time DESC
   </select>
   <select id="getDemandById" parameterType="java.lang.Long" resultMap="DemandDetailResultMap">
     SELECT * FROM demand WHERE id = #{id}

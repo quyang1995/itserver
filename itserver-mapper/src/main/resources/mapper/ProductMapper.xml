@@ -63,6 +63,7 @@
     <if test="searchText != null and searchText != ''">
       AND (tb.employee_name LIKE concat('%',#{searchText},'%') OR ta.name LIKE concat('%',#{searchText},'%') OR ta.contact_employee_name LIKE concat('%',#{searchText},'%'))
     </if>
+    ORDER BY ta.modified_time DESC
   </select>
 
 <!--获取产品列表带各状态统计-->
@@ -101,6 +102,7 @@
     <if test="productStatus != null and productStatus != '' and productStatus != -1 ">
       AND ta.status= #{productStatus}
     </if>
+    ORDER BY ta.modified_time DESC
   </select>
 
   <select id="selectLikeList" resultMap="BaseResultMap">
@@ -111,6 +113,7 @@
     <if test="name != null and name != ''">
       and name LIKE concat('%',#{name},'%')
     </if>
+    ORDER BY modified_time DESC
     limit 0,20
   </select>
 
