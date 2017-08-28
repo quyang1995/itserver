@@ -138,9 +138,11 @@ public class Demand {
     private String modifiedName;
 
     @Column(name = "create_time")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date createTime;
 
     @Column(name = "modified_time")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date modifiedTime;
 
     /**

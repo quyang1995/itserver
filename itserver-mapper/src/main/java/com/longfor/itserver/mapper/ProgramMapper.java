@@ -17,4 +17,6 @@ public interface ProgramMapper extends BeeMapper<Program> {
 
     Program getProgramId(long id);
 
+    List<Program> productIdList(Map map);
+
 }

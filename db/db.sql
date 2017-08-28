@@ -573,6 +573,8 @@ CREATE TABLE IF NOT EXISTS `itplus`.`feed_back` (
   COMMENT '提交人名称',
   `modified_full_dept_path` VARCHAR(100)   NULL
   COMMENT '提交人部门完整路径',
+  `file_path` VARCHAR(3000)   NULL
+  COMMENT '上传文件路径',
   `create_time`            TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
   `modified_time`          TIMESTAMP                DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)

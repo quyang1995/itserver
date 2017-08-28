@@ -62,7 +62,37 @@ public class APIProgramController extends BaseController {
 		ELExample elExample = new ELExample(request, Program.class);
 		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
 		List<Program> programList = this.getProgramService().programList(paramsMap);
-		
+
+
+		/* 返回报文 */
+		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		resultMap.put("list", programList);
+		resultMap.put(APIHelper.PAGE_NUM, elExample.getPageNum());
+		resultMap.put(APIHelper.PAGE_SIZE, elExample.getPageSize());
+		resultMap.put(APIHelper.TOTAL, new PageInfo(programList).getTotal());
+		return resultMap;
+	}
+
+	/**
+	 * 通过产品ID获取项目列表
+	 *
+	 * @author lovex
+	 * @create 2017/8/5 下午2:25
+	 *
+	 * @version v1.0
+	 */
+	@RequestMapping(value = "/productIdList", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public Map productIdList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		/* 获得已经验证过的参数map */
+		@SuppressWarnings("unchecked")
+		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+
+		/* 生成查询用Example */
+		ELExample elExample = new ELExample(request, Program.class);
+		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
+		List<Program> programList = this.getProgramService().productIdList(paramsMap);
+
 
 		/* 返回报文 */
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);

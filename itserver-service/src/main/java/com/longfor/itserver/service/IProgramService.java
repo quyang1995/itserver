@@ -19,4 +19,6 @@ public interface IProgramService extends IAdminService<Program> {
     Program getProgramId(long id);
     
     boolean updateProgram(Map map);
+
+    List<Program> productIdList(Map map);
 }

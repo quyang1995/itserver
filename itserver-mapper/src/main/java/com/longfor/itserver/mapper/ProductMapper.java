@@ -12,4 +12,5 @@ public interface ProductMapper extends BeeMapper<Product> {
     List<Product> selectLikeList(Map map);
     List<Product>  selectIdList(String likeProduct);
     List<Product> getListSort();
+    List<Product> productCountList(Map map);
 }

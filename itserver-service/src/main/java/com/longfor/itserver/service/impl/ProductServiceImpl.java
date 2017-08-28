@@ -42,6 +42,11 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 	}
 
 	@Override
+	public List<Product> productCountList(Map map){
+		return productMapper.productCountList(map);
+	}
+
+	@Override
 	public List<Product> searchLikeList(Map map) {
 		return productMapper.selectLikeList(map);
 	}

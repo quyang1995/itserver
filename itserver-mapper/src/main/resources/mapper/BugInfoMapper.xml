@@ -57,7 +57,7 @@
     <if test='status != "" and status != null  and status != -1'>
       and status = #{status}
     </if>
-    <if test='channel !="" and channel != null '>
+    <if test='channel !="" and channel != null and channel != -1'>
       and channel = #{channel}
     </if>
     <if test='searchText != "" and searchText != null'>

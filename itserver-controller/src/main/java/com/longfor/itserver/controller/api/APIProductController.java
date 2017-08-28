@@ -11,6 +11,7 @@ import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.ProductEmployee;
 import com.longfor.itserver.entity.Program;
+import com.longfor.itserver.entity.ps.PsAPIProduct;
 import com.longfor.itserver.entity.ps.PsProductAll;
 import com.longfor.itserver.entity.ps.PsProgram;
 import net.mayee.commons.helper.APIHelper;
@@ -56,6 +57,31 @@ public class APIProductController extends BaseController {
         /*查询数据*/
         PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
         List<Product> products = this.getProductService().searchList(paramsMap);
+        /*返回数据*/
+        Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        map.put("productList",products);
+        map.put(APIHelper.PAGE_NUM, elExample.getPageNum());
+        map.put(APIHelper.PAGE_SIZE, elExample.getPageSize());
+        map.put(APIHelper.TOTAL, new PageInfo(products).getTotal());
+        return map;
+    }
+
+    /**
+     * 产品列表带各状态统计
+     * @param response
+     * @param request
+     * @return Map
+     */
+    @RequestMapping(value = "/productList", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Map productList(HttpServletRequest request,HttpServletResponse response){
+        /* 获得已经验证过的参数map */
+        Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        /*获取查询用例*/
+        ELExample elExample = new ELExample(request, Product.class);
+        /*查询数据*/
+        PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
+        List<Product> products = this.getProductService().productCountList(paramsMap);
         /*返回数据*/
         Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         map.put("productList",products);

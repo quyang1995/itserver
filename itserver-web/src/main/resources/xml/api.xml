@@ -71,6 +71,23 @@
             <property name="searchText" type="string" required="true" maxLength="30" description="搜索内容"/>
         </request>
     </item>
+
+    <!--
+        URL:
+        /api/product/productList
+
+        说明:获取产品列表信息
+
+    -->
+    <item id="api_product_productList" description="获取产品列表信息">
+        <request>
+            <property ref="pageNum"/>
+            <property ref="pageSize"/>
+            <property name="accountId" type="string" required="true"/>
+            <property name="productStatus" type="string" required="true"/>
+            <property name="mySelf" type="string" required="true"/>
+        </request>
+    </item>
     <!--
         URL:
         /api/product/nameList
@@ -197,6 +214,24 @@
     </item>
 
     <!--
+    URL:
+    /api/program/productIdList
+
+    说明:通过产品ID获取项目列表信息
+
+-->
+    <item id="api_program_productIdList" description="通过产品ID获取项目列表信息">
+        <request>
+            <property ref="pageNum"/>
+            <property ref="pageSize"/>
+            <property name="accountId" type="string" required="true"/>
+            <property name="programStatus" type="int" required="true"/>
+            <property name="isPart" type="int" required="true"/>
+            <property name="productId" type="int" required="true"/>
+        </request>
+    </item>
+
+    <!--
         URL:
         /api/program/get
 
@@ -297,6 +332,7 @@
             <property ref="pageSize"/>
             <property name="accountId" type="string" required="true"/>
             <property name="status" type="int" required="true"/>
+            <property name="channel" type="int" required="true"/>
             <property name="searchText" type="string" required="true" maxLength="30" description="搜索内容"/>
         </request>
     </item>

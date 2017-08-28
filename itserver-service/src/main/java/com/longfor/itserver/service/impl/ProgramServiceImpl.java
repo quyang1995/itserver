@@ -58,6 +58,11 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	}
 
 	@Override
+	public List<Program> productIdList(Map map) {
+		return programMapper.productIdList(map);
+	}
+
+	@Override
 	public List<Program> programLimitList(Map map) {
 		return programMapper.programLimitList(map);
 	}

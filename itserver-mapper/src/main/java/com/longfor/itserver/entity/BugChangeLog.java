@@ -1,5 +1,8 @@
 package com.longfor.itserver.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import net.mayee.commons.CustomFullDateSerializer;
+
 import java.util.Date;
 import javax.persistence.*;
 
@@ -45,9 +48,11 @@ public class BugChangeLog {
     private String modifiedName;
 
     @Column(name = "create_time")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date createTime;
 
     @Column(name = "modified_time")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date modifiedTime;
 
     /**

@@ -1,5 +1,8 @@
 package com.longfor.itserver.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import net.mayee.commons.CustomFullDateSerializer;
+
 import java.util.Date;
 import javax.persistence.*;
 
@@ -107,10 +110,15 @@ public class FeedBack {
     @Column(name = "modified_full_dept_path")
     private String modifiedFullDeptPath;
 
+    @Column(name = "file_path")
+    private String filePath;
+
     @Column(name = "create_time")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date createTime;
 
     @Column(name = "modified_time")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date modifiedTime;
 
     /**
@@ -431,6 +439,20 @@ public class FeedBack {
      */
     public void setModifiedFullDeptPath(String modifiedFullDeptPath) {
         this.modifiedFullDeptPath = modifiedFullDeptPath == null ? null : modifiedFullDeptPath.trim();
+    }
+
+    /**
+     * @return file_path
+     */
+    public String getFilePath() {
+        return filePath;
+    }
+
+    /**
+     * @param filePath
+     */
+    public void setFilePath(String filePath) {
+        this.filePath = filePath == null ? null : filePath.trim();
     }
 
     /**

@@ -32,6 +32,14 @@
 
   </resultMap>
 
+  <resultMap id="ApiBaseResultMap" type="com.longfor.itserver.entity.ps.PsAPIProgram" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="pending" property="pending" jdbcType="BIGINT" />
+    <result column="working" property="working" jdbcType="BIGINT" />
+    <result column="complete" property="complete" jdbcType="BIGINT" />
+  </resultMap>
+
   <sql id="Base_Column_List">
     <!--
       WARNING - @mbggenerated
@@ -60,6 +68,32 @@
     </if>
     <if test='searchText != "" and searchText != null'>
       and (p.name like concat(concat('%',#{searchText}),'%') OR pe.employee_name like concat(concat('%',#{searchText}),'%'))
+    </if>
+  </select>
+
+
+  <!-- 通过产品ID查询项目列表 -->
+  <select id="productIdList" parameterType="map" resultMap="ApiBaseResultMap">
+    SELECT DISTINCT p.id,p.`name`,
+    (select IFNULL(sum(CASE WHEN d.relation_id =p.id THEN  1 ELSE 0 END),0) from demand d where d.relation_type=2 and `status`=2)+
+    (select IFNULL(sum(CASE WHEN b.relation_id =p.id THEN  1 ELSE 0 END),0) from bug_info b where b.relation_type=2 and `status`=2) as pending,
+    (select IFNULL(sum(CASE WHEN d.relation_id =p.id THEN  1 ELSE 0 END),0) from demand d where d.relation_type=2 and `status`=3)+
+    (select IFNULL(sum(CASE WHEN b.relation_id =p.id THEN  1 ELSE 0 END),0) from bug_info b where b.relation_type=2 and `status`=3) as working,
+    (select IFNULL(sum(CASE WHEN d.relation_id =p.id THEN  1 ELSE 0 END),0) from demand d where d.relation_type=2 and `status`=4)+
+    (select IFNULL(sum(CASE WHEN b.relation_id =p.id THEN  1 ELSE 0 END),0) from bug_info b where b.relation_type=2 and `status`=4) as complete
+    FROM program p JOIN program_employee pe ON p.id = pe.program_id
+    WHERE
+    <if test='isPart == 0'>
+      (pe.account_id = #{accountId, jdbcType=VARCHAR} OR p.type = 1)
+    </if>
+    <if test='isPart == 1'>
+      pe.account_id = #{accountId, jdbcType=VARCHAR}
+    </if>
+    <if test='programStatus != "" and programStatus != null  and programStatus != -1'>
+      and p.program_status = #{programStatus}
+    </if>
+    <if test='productId != "" and productId != null'>
+      and p.product_id = #{productId}
     </if>
   </select>
 
