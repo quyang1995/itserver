@@ -162,15 +162,17 @@ public class APIProductController extends BaseController {
 
         /*产品关联项目*/
         String likeProgram = psProduct.getLikeProgram();
-        String substring = likeProgram.substring(1, likeProgram.length());
         List<Program> list = new ArrayList();
-        list = this.getProgramService().inProgramId(substring);
+        if(likeProgram != null && !"".equals(likeProgram)){
+            String substring = likeProgram.substring(1, likeProgram.length());
+            list = this.getProgramService().inProgramId(substring);
+            psProduct.setPrograms(list);
+        }
         psProduct.setPersonLiableList(personLiableList);
         psProduct.setProductManagerList(productManagerList);
         psProduct.setProgramManagerList(programManagerList);
         psProduct.setDeveloperList(developerList);
         psProduct.setUedList(uedList);
-        psProduct.setPrograms(list);
         /*返回数据*/
         Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         resultMap.put("pro",psProduct);

@@ -110,17 +110,13 @@ public class APIDemandController extends BaseController {
             if(demand.getLikeProduct() != null && !"".equals(demand.getLikeProduct())) {
                 String likeProduct = demand.getLikeProduct().substring(1, demand.getLikeProduct().length());
                 List<Product> product = this.getProductService().searchIdList(likeProduct);
-                if(product != null) {
-                    demand.setProductList(product);
-                }
+                demand.setProductList(product);
             }
             //关联项目
             if(demand.getLikeProgram() != null && !"".equals(demand.getLikeProgram())) {
                 String likeProgram = demand.getLikeProgram().substring(1, demand.getLikeProgram().length());
                 List<Program> program = this.getProgramService().inProgramId(likeProgram);
-                if(program != null) {
-                    demand.setProgramList(program);
-                }
+                demand.setProgramList(program);
             }
             //归属产品/项目
             String relationName = "";

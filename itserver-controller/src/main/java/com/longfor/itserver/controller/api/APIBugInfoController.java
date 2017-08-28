@@ -88,17 +88,13 @@ public class APIBugInfoController extends BaseController {
 			if(bugInfo.getLikeProduct() != null && !"".equals(bugInfo.getLikeProduct())){
 				String likeProduct = bugInfo.getLikeProduct().substring(1, bugInfo.getLikeProduct().length());
 				List<Product> product = this.getProductService().searchIdList(likeProduct);
-				if(product != null){
-					bugInfo.setProductList(product);
-				}
+				bugInfo.setProductList(product);
 			}
 			// 关联项目
 			if(bugInfo.getLikeProgram() != null && !"".equals(bugInfo.getLikeProgram())) {
 				String likeProgram = bugInfo.getLikeProgram().substring(1, bugInfo.getLikeProgram().length());
 				List<Program> program = this.getProgramService().inProgramId(likeProgram);
-				if(program != null){
-					bugInfo.setProgramList(program);
-				}
+				bugInfo.setProgramList(program);
 			}
 			//归属项目/产品
 			String relationName = "";

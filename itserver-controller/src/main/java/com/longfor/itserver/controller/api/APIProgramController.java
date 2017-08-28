@@ -142,10 +142,12 @@ public class APIProgramController extends BaseController {
 		long id = Long.parseLong(paramsMap.get("id").toString());
 
 		PsProgramDetail program = (PsProgramDetail) this.getProgramService().getProgramId(id);
-		String likeProduct = program.getLikeProduct().substring(1, program.getLikeProduct().length());
-		// 关联产品
-		List<Product> product = this.getProductService().searchIdList(likeProduct);
-		program.setProductList(product);
+		if(program.getLikeProduct() != null && !"".equals(program.getLikeProduct())){
+			String likeProduct = program.getLikeProduct().substring(1, program.getLikeProduct().length());
+			// 关联产品
+			List<Product> product = this.getProductService().searchIdList(likeProduct);
+			program.setProductList(product);
+		}
 
 		Map map = new HashMap();
 		map.put("programId", new Long(id));
