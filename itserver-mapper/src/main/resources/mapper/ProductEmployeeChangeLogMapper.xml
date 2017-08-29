@@ -13,6 +13,7 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
   </resultMap>
+
   <sql id="Base_Column_List" >
     <!--
       WARNING - @mbggenerated
@@ -20,4 +21,10 @@
     id, product_id, action_change_info, modified_account_id, modified_name, create_time, 
     modified_time
   </sql>
+
+    <select id="orderList" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" /> FROM product_employee_change_log
+        WHERE product_id =#{productId} ORDER BY create_time DESC limit 0,50;
+    </select>
+
 </mapper>

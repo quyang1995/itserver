@@ -22,4 +22,11 @@
     id, demand_id, bef_descp, action_change_info, type, modified_account_id, modified_name, 
     create_time, modified_time
   </sql>
+
+
+
+  <select id="orderLimitList"  resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" /> from demand_change_log WHERE
+    demand_id =#{demandId} ORDER BY create_time DESC limit 0,50;
+  </select>
 </mapper>

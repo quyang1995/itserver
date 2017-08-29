@@ -174,4 +174,12 @@ public class APIBugInfoController extends BaseController {
 		}
 	}
 
+
+	@RequestMapping(value = "/changeLog/list",method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+	@ResponseBody
+	public Map changeLoglist(HttpServletRequest request,HttpServletResponse response){
+
+		Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		return this.getBugChangeLogService().orderLimitList(paramsMap);
+	}
 }

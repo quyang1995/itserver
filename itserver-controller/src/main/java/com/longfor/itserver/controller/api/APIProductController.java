@@ -11,9 +11,7 @@ import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.ProductEmployee;
 import com.longfor.itserver.entity.Program;
-import com.longfor.itserver.entity.ps.PsAPIProduct;
 import com.longfor.itserver.entity.ps.PsProductAll;
-import com.longfor.itserver.entity.ps.PsProgram;
 import net.mayee.commons.helper.APIHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -233,4 +231,15 @@ public class APIProductController extends BaseController {
         return map;
     }
 
+
+
+    @RequestMapping(value = "/changeLog/list" ,method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Map changeLogList(HttpServletRequest request,HttpServletResponse response){
+
+        Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        Map map = this.getProductEmployeeChangeLogService().orderList(paramsMap);
+
+        return  map;
+    }
 }

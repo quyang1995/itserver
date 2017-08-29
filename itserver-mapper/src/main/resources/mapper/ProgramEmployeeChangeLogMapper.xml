@@ -20,4 +20,9 @@
     id, program_id, action_change_info, modified_account_id, modified_name, create_time, 
     modified_time
   </sql>
+  
+  <select id="orderLimitList" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" /> from program_employee_change_log WHERE
+    program_id =#{programId} ORDER BY create_time DESC limit 0,50;
+  </select>
 </mapper>
