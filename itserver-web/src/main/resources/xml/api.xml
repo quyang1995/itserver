@@ -620,4 +620,49 @@
         </request>
     </item>
 
+
+
+    <!--
+        URL:
+        /api/product/changeLog/list
+        说明:产品变更日志列表
+    -->
+    <item id="api_product_changeLog_list" description="产品变更日志列表">
+        <request>
+            <property name="productId" type="int" required="true"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
+        /api/program/changeLog/list
+        说明:项目变更日志列表
+    -->
+    <item id="api_program_changeLog_list" description="项目变更日志列表">
+        <request>
+            <property name="programId" type="int" required="true"/>
+        </request>
+    </item>
+
+    <!--
+    URL:
+    /api/demand/changeLog/list
+    说明:需求变更日志列表
+-->
+    <item id="api_demand_changeLog_list" description="需求变更日志列表">
+        <request>
+            <property name="demandId" type="int" required="true"/>
+        </request>
+    </item>
+
+    <!--
+   URL:
+   /api/bug/changeLog/list
+   说明:BUG变更日志列表
+-->
+    <item id="api_bug_changeLog_list" description="BUG变更日志列表">
+        <request>
+            <property name="bugId" type="int" required="true"/>
+        </request>
+    </item>
 </api>

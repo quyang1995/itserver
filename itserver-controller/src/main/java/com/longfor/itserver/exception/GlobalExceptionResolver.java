@@ -30,6 +30,8 @@ public class GlobalExceptionResolver implements HandlerExceptionResolver {
 		//返回json格式的错误信息
 //		try {
 //			PrintWriter writer = response.getWriter();
+
+
 //			BaseResult<String> result = new BaseResult(false, ex.getMessage());
 //			writer.write(JSON.toJSONString(result));
 //			writer.flush();
