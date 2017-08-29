@@ -206,10 +206,30 @@ public class APIProductController extends BaseController {
     public Map updateProduct(HttpServletRequest request,HttpServletResponse response){
         /* 获得已经验证过的参数map*/
         Map<String,String> paramsMap = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-        /*更新操作*/
-        this.getProductService().updateProduct(paramsMap);
-        /*返回数据*/
+        String id = paramsMap.get("id");
+        /*责任人*/
+        boolean isAllow = false;
+        List<ProductEmployee> personLiableList = this.getProductEmployeeService()
+                .searchTypeList(new Long(id), AvaStatusEnum.LIABLEAVA.getCode(), null);
+        if(!"".equals(paramsMap.get("modifiedAccountId"))){
+            for(ProductEmployee productEmployee : personLiableList){
+                if(productEmployee.getAccountId().equals(paramsMap.get("modifiedAccountId"))){
+                    isAllow = true;
+                    break;
+                }
+            }
+        }else {
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E9993,"modifiedAccountId");
+        }
+
         Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
+        if(isAllow){
+            /*更新操作*/
+            this.getProductService().updateProduct(paramsMap);
+        }else{
+            map = CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+        }
+        /*返回数据*/
         return map;
     }
 
