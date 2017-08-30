@@ -126,8 +126,6 @@ CREATE TABLE IF NOT EXISTS `itplus`.`product_employee_change_log` (
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB;
-ALTER TABLE `itplus`.`product_employee_change_log`
-  ENGINE = MyISAM;
 
 -- -----------------------------------------------------
 -- Table `itplus`.`product_comment` 产品评论
@@ -254,8 +252,6 @@ CREATE TABLE IF NOT EXISTS `itplus`.`program_employee_change_log` (
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB;
-ALTER TABLE `itplus`.`program_employee_change_log`
-  ENGINE = MyISAM;
 
 -- -----------------------------------------------------
 -- Table `itplus`.`program_comment` 项目评论
@@ -375,8 +371,6 @@ CREATE TABLE IF NOT EXISTS `itplus`.`demand_change_log` (
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB;
-ALTER TABLE `itplus`.`demand_change_log`
-  ENGINE = MyISAM;
 
 -- -----------------------------------------------------
 -- Table `itplus`.`demand_comment`
@@ -496,8 +490,6 @@ CREATE TABLE IF NOT EXISTS `itplus`.`bug_change_log` (
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB;
-ALTER TABLE `itplus`.`bug_change_log`
-  ENGINE = MyISAM;
 
 -- -----------------------------------------------------
 -- Table `itplus`.`bug_comment`

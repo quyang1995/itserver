@@ -66,4 +66,13 @@
     SELECT * FROM feed_back WHERE id = #{id}
   </select>
 
+
+  <!-- 反馈表状态统计 -->
+  <select id="countStatus"  resultType="com.longfor.itserver.entity.ps.PsFeedBackStatus" >
+    select sum( f.`status` = 0 )as "cancel", sum( f.`status` = 1) as "close" ,
+    sum( f.`status` = 2 ) as "pending", sum( f.`status` = 3 ) as "working",
+    sum( f.`status` = 4 ) as "completed" FROM feed_back f;
+
+  </select>
+
 </mapper>

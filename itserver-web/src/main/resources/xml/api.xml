@@ -66,7 +66,7 @@
             <property ref="pageNum"/>
             <property ref="pageSize"/>
             <property name="accountId" type="string" required="true"/>
-            <property name="productStatus" type="string" required="true"/>
+            <property name="status" type="string" required="true"/>
             <property name="mySelf" type="string" required="true"/>
             <property name="searchText" type="string" required="true" maxLength="30" description="搜索内容"/>
         </request>
@@ -84,7 +84,7 @@
             <property ref="pageNum"/>
             <property ref="pageSize"/>
             <property name="accountId" type="string" required="true"/>
-            <property name="productStatus" type="string" required="true"/>
+            <property name="status" type="string" required="true"/>
             <property name="mySelf" type="string" required="true"/>
         </request>
     </item>
@@ -139,7 +139,7 @@
             <property name="contactAccountId" type="string" required="true" />
             <property name="likeProgram" type="string" required="false" />
             <property name="type" type="int" required="true" />
-            <property name="productStatus" type="int" required="true" />
+            <property name="status" type="int" required="true" />
             <property name="personLiableList" type="string" required="true"/>
             <property name="programManagerList" type="string" required="false"/>
             <property name="productManagerList" type="string" required="false"/>
@@ -165,7 +165,7 @@
             <property name="contactAccountId" type="string" required="true" />
             <property name="likeProgram" type="string" required="false" />
             <property name="type" type="int" required="true" />
-            <property name="productStatus" type="int" required="true" />
+            <property name="status" type="int" required="true" />
             <property name="personLiableList" type="string" required="true"/>
             <property name="programManagerList" type="string" required="false"/>
             <property name="productManagerList" type="string" required="false"/>
@@ -665,4 +665,17 @@
             <property name="bugId" type="int" required="true"/>
         </request>
     </item>
+
+
+    <!--
+       URL:
+
+       /api/feedBack/countStatus
+
+       说明：查询反馈状态统计
+   -->
+    <item id="api_feedBack_countStatus" description="查询反馈状态统计">
+        <request>
+        </request>
+    </item >
 </api>

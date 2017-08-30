@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
+import com.longfor.itserver.common.enums.ProductStatusEnum;
+import com.longfor.itserver.common.enums.PublicTypeEnum;
 import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.ProductEmployee;
@@ -14,13 +16,12 @@ import com.longfor.itserver.mapper.ProductMapper;
 import com.longfor.itserver.service.IProductService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import net.mayee.commons.TimeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author wax Created on 2017/8/3 下午7:15
@@ -61,7 +62,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		if (descp != null && descp.length() > 3000) {
 			product.setDescp(descp.substring(0, 3000));
 		}
-		product.setStatus(Integer.parseInt(jsonObject.getString("productStatus")));
+		product.setStatus(Integer.parseInt(jsonObject.getString("status")));
 		product.setContactAccountId(jsonObject.getString("contactAccountId"));
 		product.setLikeProgram(jsonObject.getString("likeProgram"));
 		/* 接口人相关信息 */
@@ -98,43 +99,58 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 	@Override
 	public boolean updateProduct(Map map) {
 		JSONObject jsonObject = (JSONObject) JSONObject.toJSON(map);
-		Product product = JSONObject.toJavaObject(jsonObject, Product.class);
-		Product selectOne = productMapper.selectByPrimaryKey(product.getId());
-		selectOne.setName(jsonObject.getString("name"));
-		selectOne.setDescp(jsonObject.getString("descp"));
-		selectOne.setStatus(Integer.parseInt(jsonObject.getString("productStatus")));
-		selectOne.setContactAccountId(jsonObject.getString("contactAccountId"));
-		selectOne.setType(jsonObject.getInteger("type"));	
+		Product newProduct = JSONObject.toJavaObject(jsonObject, Product.class);
+		Product oldProduct = productMapper.selectByPrimaryKey(newProduct.getId());
+
+		//先生成变动日志
+        List<String> changeLogTextList = getChangeLogText(oldProduct, newProduct);
+
+        oldProduct.setName(jsonObject.getString("name"));
+        oldProduct.setDescp(jsonObject.getString("descp"));
+        oldProduct.setStatus(jsonObject.getInteger("status"));
+        oldProduct.setContactAccountId(jsonObject.getString("contactAccountId"));
+        oldProduct.setType(jsonObject.getInteger("type"));
 		/* 接口人相关信息 */
-		getAccountInfo(0, selectOne, null);
+		getAccountInfo(0, oldProduct, null);
 		/* 关联项目 */
-		selectOne.setLikeProgram(product.getLikeProgram());
-				/*添加日志*/
-		this.addLog(map);
-		product.setModifiedTime(TimeUtils.getTodayByDateTime());
-		int update = productMapper.updateByPrimaryKey(selectOne);// 更新产品
+        oldProduct.setLikeProgram(newProduct.getLikeProgram());
+		//this.addLog(map);
+        oldProduct.setModifiedTime(TimeUtils.getTodayByDateTime());
+		int update = productMapper.updateByPrimaryKey(oldProduct);// 更新产品
 
 		/* 产品责任人 */
 		String personLiableList = (String) map.get("personLiableList");
-		deleteByParam(1, product);
-		getAccountInfo(1, product, personLiableList);
+		deleteByParam(1, newProduct);
+		getAccountInfo(1, newProduct, personLiableList);
 		/* 产品经理 */
 		String programManagerList = (String) map.get("programManagerList");
-		deleteByParam(2, product);
-		getAccountInfo(2, product, programManagerList);
+		deleteByParam(2, newProduct);
+		getAccountInfo(2, newProduct, programManagerList);
 		/* 项目经理 */
 		String productManagerList = (String) map.get("productManagerList");
-		deleteByParam(3, product);
-		getAccountInfo(3, product, productManagerList);
+		deleteByParam(3, newProduct);
+		getAccountInfo(3, newProduct, productManagerList);
 		/* 开发人员 */
 		String developerList = (String) map.get("developerList");
-		deleteByParam(4, product);
-		getAccountInfo(4, product, developerList);
+		deleteByParam(4, newProduct);
+		getAccountInfo(4, newProduct, developerList);
 		/* UED人员 */
 		String uedList = (String) map.get("uedList");
-		deleteByParam(5, product);
-		getAccountInfo(5, product, uedList);
+		deleteByParam(5, newProduct);
+		getAccountInfo(5, newProduct, uedList);
 
+		/*添加日志*/
+        for(String text : changeLogTextList){
+            ProductEmployeeChangeLog employeeChangeLog = new ProductEmployeeChangeLog();
+            employeeChangeLog.setProductId(newProduct.getId());
+            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+            employeeChangeLog.setActionChangeInfo(text);
+            employeeChangeLog.setModifiedAccountId(newProduct.getModifiedAccountId());
+            employeeChangeLog.setModifiedName(newProduct.getModifiedName());
+            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+            employeeChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+            productEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
+        }
 
 		return true;
 	}
@@ -211,28 +227,47 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		return true;
 	}
 
-	public boolean addLog(Map paramsMap){
-		JSONObject jsonObject = (JSONObject)JSONObject.toJSON(paramsMap);
-		ProductEmployeeChangeLog employeeChangeLog = JSONObject.toJavaObject(jsonObject,ProductEmployeeChangeLog.class);
+	private List<String> getChangeLogText(Product oldProduct, Product newProduct){
+	    List<String> textList = new ArrayList<>();
 
+        if(!Objects.equals(oldProduct.getStatus(), newProduct.getStatus())
+                || !Objects.equals(oldProduct.getType(), newProduct.getType())){
+            StringBuilder sb = new StringBuilder();
+            if(!Objects.equals(oldProduct.getStatus(), newProduct.getStatus())){
+                sb.append(newProduct.getModifiedName())
+                        .append(" 将 产品状态 从 [")
+                        .append(ProductStatusEnum.getByCode(oldProduct.getStatus()).getText())
+                        .append("] 更新为 [")
+                        .append(ProductStatusEnum.getByCode(newProduct.getStatus()).getText())
+                        .append("] ");
+            }
+            if(!Objects.equals(oldProduct.getType(), newProduct.getType())){
+                if(StringUtils.isNotBlank(sb.toString())){
+                    sb.append(",");
+                } else {
+                    sb.append(newProduct.getModifiedName());
+                }
+                sb.append(" 将 公开性 从 [")
+                        .append(PublicTypeEnum.getByCode(oldProduct.getType()).getText())
+                        .append("] 更新为 [")
+                        .append(PublicTypeEnum.getByCode(newProduct.getType()).getText())
+                        .append("]");
+            }
 
-		employeeChangeLog.setProductId(Long.valueOf(jsonObject.getString("id")));
-		employeeChangeLog.setCreateTime(new Date());
+            textList.add(sb.toString());
+        }
 
-		StringBuffer info = new StringBuffer();
-		info.append(employeeChangeLog.getModifiedName());
-		info.append("于");
-		info.append(DateUtil.getCurrentTime(new Date()));
-		info.append("更新了");
-		info.append(jsonObject.getString("name"));
-		info.append("的信息。");
-		employeeChangeLog.setActionChangeInfo(info.toString());
-		employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
-		employeeChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
-		productEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
+        if(!Objects.equals(oldProduct.getName(), newProduct.getName())
+                || !Objects.equals(oldProduct.getContactAccountId(), newProduct.getContactAccountId())
+                || !Objects.equals(oldProduct.getLikeProgram(), newProduct.getLikeProgram())
+                || !Objects.equals(oldProduct.getDescp(), newProduct.getDescp())){
+            StringBuilder sb = new StringBuilder();
+            sb.append(newProduct.getModifiedName())
+                    .append(" 修改了产品基础信息");
+            textList.add(sb.toString());
+        }
 
-		return true;
-	}
-
+        return textList;
+    }
 
 }

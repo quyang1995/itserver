@@ -1,7 +1,6 @@
 package com.longfor.itserver.service;
 
 import com.longfor.itserver.entity.FeedBack;
-import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.service.base.IAdminService;
 
 import java.util.List;
@@ -14,4 +13,6 @@ public interface IFeedBackService extends IAdminService<FeedBack> {
     List<FeedBack> feedBackList(Map map);
 
     FeedBack getFeedBackId(long id);
+
+    Map countStatus();
 }
