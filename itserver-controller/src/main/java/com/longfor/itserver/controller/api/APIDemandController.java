@@ -134,10 +134,10 @@ public class APIDemandController extends BaseController {
             }
             //归属产品/项目
             String relationName = "";
-            if (demand.getRelationType().equals("1")) {
+            if (demand.getRelationType().equals(1)) {
                 Product prod = this.getProductService().selectById(demand.getRelationId());
                 relationName = prod.getName();
-            } else if (demand.getRelationType().equals("2")) {
+            } else if (demand.getRelationType().equals(2)) {
                 Program prom = this.getProgramService().selectById(demand.getRelationId());
                 relationName = prom.getName();
             }

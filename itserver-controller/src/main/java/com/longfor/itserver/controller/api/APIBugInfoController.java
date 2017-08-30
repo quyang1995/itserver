@@ -98,10 +98,10 @@ public class APIBugInfoController extends BaseController {
 			}
 			//归属项目/产品
 			String relationName = "";
-			if (bugInfo.getRelationType().equals("1")) {
+			if (bugInfo.getRelationType().equals(1)) {
 				Product prod = this.getProductService().selectById(bugInfo.getRelationId());
 				relationName = prod.getName();
-			} else if (bugInfo.getRelationType().equals("2")) {
+			} else if (bugInfo.getRelationType().equals(2)) {
 				Program prog = this.getProgramService().selectById(bugInfo.getRelationId());
 				relationName = prog.getName();
 			}
