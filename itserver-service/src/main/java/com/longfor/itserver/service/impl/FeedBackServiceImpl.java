@@ -63,10 +63,11 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 			feedBack.setModifiedEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
 			feedBack.setModifiedName(accountLongfor.getName());
 			feedBack.setModifiedFullDeptPath(accountLongfor.getPsDeptFullName());
-		}else{
-		    //账户不存在
-		    return false;
-        }
+		}
+//		else{
+//		    //账户不存在
+//		    return false;
+//        }
 		//查询产品信息得到接口人信息和产品名称
 		Product obj = new Product();
 		obj.setId(feedBack.getProductId());
@@ -101,10 +102,12 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 			bugInfo.setCallonFullDeptPath(product.getContactFullDeptPath());
 
 			//起草人
-            bugInfo.setDraftedAccountId(accountLongfor.getUcAccountId());
-            bugInfo.setDraftedEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
-            bugInfo.setDraftedEmployeeName(accountLongfor.getName());
-            bugInfo.setDraftedFullDeptPath(accountLongfor.getPsDeptFullName());
+			if(accountLongfor != null){
+				bugInfo.setDraftedAccountId(accountLongfor.getUcAccountId());
+				bugInfo.setDraftedEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
+				bugInfo.setDraftedEmployeeName(accountLongfor.getName());
+				bugInfo.setDraftedFullDeptPath(accountLongfor.getPsDeptFullName());
+			}
 
 			bugInfo.setLevel(BugLevelEnum.HIGH_LEVEL.getCode());
 			bugInfo.setStatus(feedBack.getStatus());
@@ -130,11 +133,12 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 			demand.setCallonFullDeptPath(product.getContactFullDeptPath());
 
             //起草人
-            demand.setDraftedAccountId(accountLongfor.getUcAccountId());
-            demand.setDraftedEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
-            demand.setDraftedEmployeeName(accountLongfor.getName());
-            demand.setDraftedFullDeptPath(accountLongfor.getPsDeptFullName());
-
+			if(accountLongfor != null) {
+				demand.setDraftedAccountId(accountLongfor.getUcAccountId());
+				demand.setDraftedEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
+				demand.setDraftedEmployeeName(accountLongfor.getName());
+				demand.setDraftedFullDeptPath(accountLongfor.getPsDeptFullName());
+			}
 			demand.setLevel(DemandLevelEnum.HIGH_LEVEL.getCode());
 			demand.setStatus(feedBack.getStatus());
 			demand.setModifiedAccountId(feedBack.getModifiedAccountId());

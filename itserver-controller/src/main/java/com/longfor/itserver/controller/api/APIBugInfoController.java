@@ -154,10 +154,24 @@ public class APIBugInfoController extends BaseController {
 		@SuppressWarnings("unchecked")
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
-		this.getBugInfoService().updateBug(paramsMap);
-
-		// 返回报文
-		return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
+		BugInfo bugInfo = this.getBugInfoService().getBugId(Long.parseLong(paramsMap.get("id").toString()));
+		boolean isAllow = false;
+		if(!"".equals(paramsMap.get("modifiedAccountId"))){
+			if(bugInfo.getModifiedAccountId().equals(paramsMap.get("modifiedAccountId"))){
+				isAllow = true;
+			}
+		}else {
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E9993,"modifiedAccountId");
+		}
+		if(isAllow){
+            /*更新操作*/
+			this.getBugInfoService().updateBug(paramsMap);
+			// 返回报文
+			return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
+		}else{
+			// 返回报文
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+		}
 	}
 
 

@@ -211,9 +211,31 @@ public class APIProgramController extends BaseController {
 		/* 获得已经验证过的参数map */
 		@SuppressWarnings("unchecked")
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-		this.getProgramService().updateProgram(paramsMap);
-		// 返回报文
-		return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
+		/* 责任人 */
+		Map map = new HashMap();
+		map.put("programId", paramsMap.get("id"));
+		boolean isAllow = false;
+		map.put("employeeType", AvaStatusEnum.LIABLEAVA.getCode());
+		List<ProgramEmployee> personLiableList = this.getProgramEmployeeService().selectTypeList(map);
+		if(!"".equals(paramsMap.get("modifiedAccountId"))){
+			for(ProgramEmployee programEmployee : personLiableList){
+				if(programEmployee.getAccountId().equals(paramsMap.get("modifiedAccountId"))){
+					isAllow = true;
+					break;
+				}
+			}
+		}else {
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E9993,"modifiedAccountId");
+		}
+		if(isAllow){
+            /*更新操作*/
+			this.getProgramService().updateProgram(paramsMap);
+			// 返回报文
+			return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
+		}else{
+			// 返回报文
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+		}
 	}
 
 	@RequestMapping(value = "/changeLog/list" ,method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
