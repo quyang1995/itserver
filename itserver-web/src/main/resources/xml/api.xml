@@ -665,4 +665,17 @@
             <property name="bugId" type="int" required="true"/>
         </request>
     </item>
+
+
+    <!--
+       URL:
+
+       /api/feedBack/countStatus
+
+       说明：查询反馈状态统计
+   -->
+    <item id="api_feedBack_countStatus" description="查询反馈状态统计">
+        <request>
+        </request>
+    </item >
 </api>

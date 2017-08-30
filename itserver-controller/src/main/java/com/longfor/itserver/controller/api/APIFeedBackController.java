@@ -168,4 +168,12 @@ public class APIFeedBackController extends BaseController {
 		return  CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
 	}
 
+
+	@RequestMapping(value = "/countStatus" ,method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public Map countStatus(HttpServletRequest request , HttpServletResponse response){
+
+		return this.getFeedBackService().countStatus();
+	}
+
 }

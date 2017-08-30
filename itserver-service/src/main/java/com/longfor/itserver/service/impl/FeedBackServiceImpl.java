@@ -5,7 +5,9 @@ import com.google.common.collect.Lists;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.*;
+import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.entity.*;
+import com.longfor.itserver.entity.ps.PsFeedBackStatus;
 import com.longfor.itserver.mapper.BugInfoMapper;
 import com.longfor.itserver.mapper.DemandMapper;
 import com.longfor.itserver.mapper.FeedBackMapper;
@@ -148,5 +150,13 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 	@Override
 	public FeedBack getFeedBackId(long id) {
 		return feedBackMapper.getFeedBackId(id);
+	}
+
+	@Override
+	public Map countStatus() {
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		PsFeedBackStatus  status = feedBackMapper.countStatus();
+		resultMap.put("status",status);
+		return resultMap;
 	}
 }
