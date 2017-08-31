@@ -69,6 +69,7 @@
     <if test='searchText != "" and searchText != null'>
       and (p.name like concat(concat('%',#{searchText}),'%') OR pe.employee_name like concat(concat('%',#{searchText}),'%'))
     </if>
+    ORDER BY p.modified_time DESC
   </select>
 
 
