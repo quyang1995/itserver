@@ -1,7 +1,7 @@
 package com.longfor.itserver.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import net.mayee.commons.CustomFullDateSerializer;
+import net.mayee.commons.CustomDateSerializer;
 
 import java.util.Date;
 import javax.persistence.*;
@@ -11,6 +11,12 @@ public class DemandFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    /**
+     * 需求id
+     */
+    @Column(name = "demand_id")
+    private Long demandId;
 
     /**
      * 文件名称
@@ -31,7 +37,7 @@ public class DemandFile {
     private String fileSize;
 
     @Column(name = "create_time")
-    @JsonSerialize(using = CustomFullDateSerializer.class)
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date createTime;
 
     /**
@@ -52,6 +58,24 @@ public class DemandFile {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+
+    /**
+     * 获取需求id
+     *
+     * @return demand_id - 需求id
+     */
+    public Long getDemandId() {
+        return demandId;
+    }
+
+    /**
+     * 设置需求id
+     *
+     * @param demandId 需求id
+     */
+    public void setDemandId(Long demandId) {
+        this.demandId = demandId;
     }
 
     /**
