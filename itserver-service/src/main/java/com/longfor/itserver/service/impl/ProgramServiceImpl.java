@@ -218,7 +218,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		selectOneProgram.setLikeProduct(program.getLikeProduct());
 		selectOneProgram.setLikeProgram(program.getLikeProgram());
 		selectOneProgram.setType(program.getType());
-		selectOneProgram.setProgramStatus(selectOneProgram.getProgramStatus());
+		selectOneProgram.setProgramStatus(program.getProgramStatus());
 
 		selectOneProgram.setModifiedTime(TimeUtils.getTodayByDateTime());
 		programMapper.updateByPrimaryKey(selectOneProgram);
