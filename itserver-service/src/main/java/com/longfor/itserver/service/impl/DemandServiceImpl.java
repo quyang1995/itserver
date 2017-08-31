@@ -17,6 +17,7 @@ import com.longfor.itserver.entity.DemandChangeLog;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.ps.PsIndex;
 import com.longfor.itserver.mapper.DemandChangeLogMapper;
+import com.longfor.itserver.mapper.DemandFileMapper;
 import com.longfor.itserver.mapper.DemandMapper;
 import com.longfor.itserver.service.IDemandService;
 import com.longfor.itserver.service.base.AdminBaseService;
@@ -44,6 +45,9 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 	private ADSHelper adsHelper;
 	@Autowired
 	private DemandChangeLogMapper demandChangeLogMapper;
+	@Autowired
+	private DemandFileMapper demandFileMapper;
+
 	/**
 	 * 	新增需求信息
 	 * @param map
