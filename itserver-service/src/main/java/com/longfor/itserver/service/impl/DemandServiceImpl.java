@@ -1,5 +1,6 @@
 package com.longfor.itserver.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -11,10 +12,7 @@ import com.longfor.itserver.common.enums.DemandStatusEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.common.util.ELExample;
-import com.longfor.itserver.entity.BugInfo;
-import com.longfor.itserver.entity.Demand;
-import com.longfor.itserver.entity.DemandChangeLog;
-import com.longfor.itserver.entity.Product;
+import com.longfor.itserver.entity.*;
 import com.longfor.itserver.entity.ps.PsIndex;
 import com.longfor.itserver.mapper.DemandChangeLogMapper;
 import com.longfor.itserver.mapper.DemandFileMapper;
@@ -77,7 +75,9 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 
 		demand.setCreateTime(TimeUtils.getTodayByDateTime());
 		demand.setModifiedTime(TimeUtils.getTodayByDateTime());
+
 		demandMapper.insert(demand);
+
 		return true;
 	}
 
@@ -114,6 +114,8 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 
 		/*新增需求更新日志*/
 		demand.setModifiedTime(TimeUtils.getTodayByDateTime());
+		addLog(map);
+
 		demandMapper.updateByPrimaryKey(demand);
 		return true;
 	}
@@ -154,7 +156,8 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		Demand demand = demandMapper.selectByPrimaryKey(demandId);
 		demandChangeLog.setType(demand.getDescp().equals(jsonObject.getString("descp")) ? 2 : 1 );
 
-		String changeInfo = demandChangeLog.getModifiedName() + " 在 " + DateUtil.getCurrentTime(new Date()) +" 更新了 "+ demand.getName() +" 的信息";
+		String changeInfo = demandChangeLog.getModifiedName() + " 在 " + TimeUtils.getTodayByDateTime() +" 更新了 "+ demand.getName() +" 的信息";
+
 		demandChangeLog.setActionChangeInfo(changeInfo);
 		demandChangeLog.setDemandId(demandId);
 		demandChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());

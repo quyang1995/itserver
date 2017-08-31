@@ -427,6 +427,7 @@
             <property name="modifiedAccountId" type="string" required="false"/>
             <property name="modifiedName" type="string" required="false"/>
             <property name="channel" type="int" required="true" />
+            <property name="fileList" type="string" required="false" />
         </request>
     </item>
 
@@ -458,6 +459,7 @@
             <property name="modifiedAccountId" type="string" required="false"/>
             <property name="modifiedName" type="string" required="false"/>
             <property name="channel" type="int" required="true" />
+            <property name="fileList" type="string" required="false" />
         </request>
     </item>
 
@@ -549,6 +551,7 @@
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="channel" type="int" required="true" />
+            <property name="fileList" type="string" required="false" />
         </request>
     </item>
 
@@ -575,6 +578,7 @@
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="channel" type="int" required="true" />
+            <property name="fileList" type="string" required="false" />
         </request>
     </item>
 

@@ -2,6 +2,7 @@ package com.longfor.itserver.entity.ps;
 
 
 import com.longfor.itserver.entity.Demand;
+import com.longfor.itserver.entity.DemandFile;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.Program;
 
@@ -24,6 +25,9 @@ public class PsDemandDetail extends Demand implements Serializable {
     private List<Program> programList;
     @Transient
     private String relationName;
+    @Transient
+    private List<DemandFile> demandFileList;
+
 
     public List<Product> getProductList() {
         return productList;
@@ -47,5 +51,13 @@ public class PsDemandDetail extends Demand implements Serializable {
 
     public void setRelationName(String relationName) {
         this.relationName = relationName;
+    }
+
+    public List<DemandFile> getDemandFileList() {
+        return demandFileList;
+    }
+
+    public void setDemandFileList(List<DemandFile> demandFileList) {
+        this.demandFileList = demandFileList;
     }
 }

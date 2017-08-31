@@ -1,9 +1,9 @@
 package com.longfor.itserver.entity.ps;
 
+import com.longfor.itserver.entity.BugFile;
 import com.longfor.itserver.entity.BugInfo;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.Program;
-import com.longfor.itserver.entity.ProgramEmployee;
 
 import javax.persistence.Transient;
 import java.io.Serializable;
@@ -24,6 +24,8 @@ public class PsBugInfoDetail extends BugInfo implements Serializable {
     private List<Program> programList;
     @Transient
     private String relationName;
+    @Transient
+    private List<BugFile> bugFileList;
 
     public List<Product> getProductList() {
         return productList;
@@ -47,5 +49,13 @@ public class PsBugInfoDetail extends BugInfo implements Serializable {
 
     public void setRelationName(String relationName) {
         this.relationName = relationName;
+    }
+
+    public List<BugFile> getBugFileList() {
+        return bugFileList;
+    }
+
+    public void setBugFileList(List<BugFile> bugFileList) {
+        this.bugFileList = bugFileList;
     }
 }

@@ -69,6 +69,12 @@ public class BaseController {
     private IFeedBackService feedBackService;
     @Autowired
     private IPsProductService psProductService;
+    @Autowired
+    private IDemandFileService demandFileService;
+    @Autowired
+    private IBugFileService bugFileService;
+
+
 
     public IFeedBackService getFeedBackService() {
         return feedBackService;
@@ -135,6 +141,22 @@ public class BaseController {
 
     public IProgramService getProgramService() {
         return programService;
+    }
+
+    public IDemandFileService getDemandFileService() {
+        return demandFileService;
+    }
+
+    public void setDemandFileService(IDemandFileService demandFileService) {
+        this.demandFileService = demandFileService;
+    }
+
+    public IBugFileService getBugFileService() {
+        return bugFileService;
+    }
+
+    public void setBugFileService(IBugFileService bugFileService) {
+        this.bugFileService = bugFileService;
     }
 
     public RedisCache getRedisCache() {

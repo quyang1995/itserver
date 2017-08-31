@@ -6,6 +6,7 @@ import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.Demand;
+import com.longfor.itserver.entity.DemandFile;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ps.PsDemandDetail;
@@ -66,6 +67,7 @@ public class APIDemandController extends BaseController {
         @SuppressWarnings("unchecked")
         Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         this.getDemandService().addDemand(paramsMap);
+        this.getDemandFileService().addDemandFile(paramsMap);
         //返回成功信息
         return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
     }
@@ -96,6 +98,7 @@ public class APIDemandController extends BaseController {
         if(isAllow){
             /*更新操作*/
             this.getDemandService().updateDemand(paramsMap);
+
             // 返回报文
             return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
         }else{
@@ -142,6 +145,13 @@ public class APIDemandController extends BaseController {
                 relationName = prom.getName();
             }
             demand.setRelationName(relationName);
+
+            //需求相关文件信息
+            DemandFile file = new DemandFile();
+            file.setDemandId(demand.getId());
+            List<DemandFile> fileList  = this.getDemandFileService().select(file);
+            demand.setDemandFileList(fileList);
+
             //返回成功信息
             Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
             resultMap.put("data", demand);
@@ -149,6 +159,8 @@ public class APIDemandController extends BaseController {
         }
             //返回成功信息
             Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+
+
             resultMap.put("data", demand);
         return resultMap;
     }
