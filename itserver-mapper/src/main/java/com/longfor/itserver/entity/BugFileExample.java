@@ -165,6 +165,66 @@ public class BugFileExample {
             return (Criteria) this;
         }
 
+        public Criteria andBugIdIsNull() {
+            addCriterion("bug_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBugIdIsNotNull() {
+            addCriterion("bug_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBugIdEqualTo(Long value) {
+            addCriterion("bug_id =", value, "bugId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBugIdNotEqualTo(Long value) {
+            addCriterion("bug_id <>", value, "bugId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBugIdGreaterThan(Long value) {
+            addCriterion("bug_id >", value, "bugId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBugIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("bug_id >=", value, "bugId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBugIdLessThan(Long value) {
+            addCriterion("bug_id <", value, "bugId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBugIdLessThanOrEqualTo(Long value) {
+            addCriterion("bug_id <=", value, "bugId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBugIdIn(List<Long> values) {
+            addCriterion("bug_id in", values, "bugId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBugIdNotIn(List<Long> values) {
+            addCriterion("bug_id not in", values, "bugId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBugIdBetween(Long value1, Long value2) {
+            addCriterion("bug_id between", value1, value2, "bugId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBugIdNotBetween(Long value1, Long value2) {
+            addCriterion("bug_id not between", value1, value2, "bugId");
+            return (Criteria) this;
+        }
+
         public Criteria andFileNameIsNull() {
             addCriterion("file_name is null");
             return (Criteria) this;

@@ -1,7 +1,7 @@
 package com.longfor.itserver.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import net.mayee.commons.CustomFullDateSerializer;
+import net.mayee.commons.CustomDateSerializer;
 
 import java.util.Date;
 import javax.persistence.*;
@@ -11,6 +11,12 @@ public class BugFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    /**
+     * BUGid
+     */
+    @Column(name = "bug_id")
+    private Long bugId;
 
     /**
      * 文件名称
@@ -31,7 +37,7 @@ public class BugFile {
     private String fileSize;
 
     @Column(name = "create_time")
-    @JsonSerialize(using = CustomFullDateSerializer.class)
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date createTime;
 
     /**
@@ -52,6 +58,24 @@ public class BugFile {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+
+    /**
+     * 获取BUGid
+     *
+     * @return bug_id - BUGid
+     */
+    public Long getBugId() {
+        return bugId;
+    }
+
+    /**
+     * 设置BUGid
+     *
+     * @param bugId BUGid
+     */
+    public void setBugId(Long bugId) {
+        this.bugId = bugId;
     }
 
     /**

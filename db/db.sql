@@ -355,6 +355,8 @@ CREATE TABLE IF NOT EXISTS `itplus`.`demand` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `itplus`.`demand_file` (
   `id`                  BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `demand_id`            BIGINT          NULL
+  COMMENT '需求id',
   `file_name`   VARCHAR(500)    NULL
   COMMENT '文件名称',
   `file_suffix`   VARCHAR(50)    NULL
@@ -495,6 +497,8 @@ CREATE TABLE IF NOT EXISTS `itplus`.`bug_info` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `itplus`.`bug_file` (
   `id`                  BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `bug_id`            BIGINT          NULL
+  COMMENT 'BUGid',
   `file_name`   VARCHAR(500)    NULL
   COMMENT '文件名称',
   `file_suffix`   VARCHAR(50)    NULL

@@ -165,6 +165,66 @@ public class DemandFileExample {
             return (Criteria) this;
         }
 
+        public Criteria andDemandIdIsNull() {
+            addCriterion("demand_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandIdIsNotNull() {
+            addCriterion("demand_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandIdEqualTo(Long value) {
+            addCriterion("demand_id =", value, "demandId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandIdNotEqualTo(Long value) {
+            addCriterion("demand_id <>", value, "demandId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandIdGreaterThan(Long value) {
+            addCriterion("demand_id >", value, "demandId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("demand_id >=", value, "demandId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandIdLessThan(Long value) {
+            addCriterion("demand_id <", value, "demandId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandIdLessThanOrEqualTo(Long value) {
+            addCriterion("demand_id <=", value, "demandId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandIdIn(List<Long> values) {
+            addCriterion("demand_id in", values, "demandId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandIdNotIn(List<Long> values) {
+            addCriterion("demand_id not in", values, "demandId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandIdBetween(Long value1, Long value2) {
+            addCriterion("demand_id between", value1, value2, "demandId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandIdNotBetween(Long value1, Long value2) {
+            addCriterion("demand_id not between", value1, value2, "demandId");
+            return (Criteria) this;
+        }
+
         public Criteria andFileNameIsNull() {
             addCriterion("file_name is null");
             return (Criteria) this;
