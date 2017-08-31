@@ -1,32 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.longfor.itserver.mapper.BugCommentMapper" >
-  <resultMap id="BaseResultMap" type="com.longfor.itserver.entity.BugComment" >
-    <!--
-      WARNING - @mbggenerated
-    -->
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="bug_id" property="bugId" jdbcType="BIGINT" />
-    <result column="parent_id" property="parentId" jdbcType="BIGINT" />
-    <result column="content" property="content" jdbcType="VARCHAR" />
-    <result column="account_id" property="accountId" jdbcType="VARCHAR" />
-    <result column="employee_code" property="employeeCode" jdbcType="BIGINT" />
-    <result column="employee_name" property="employeeName" jdbcType="VARCHAR" />
-    <result column="full_dept_path" property="fullDeptPath" jdbcType="VARCHAR" />
-    <result column="level_num" property="levelNum" jdbcType="INTEGER" />
-    <result column="ip" property="ip" jdbcType="VARCHAR" />
-    <result column="reply_type" property="replyType" jdbcType="INTEGER" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
-  </resultMap>
+<mapper namespace="com.longfor.itserver.mapper.BugCommentMapper">
+    <resultMap id="BaseResultMap" type="com.longfor.itserver.entity.BugComment">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="bug_id" property="bugId" jdbcType="BIGINT"/>
+        <result column="parent_id" property="parentId" jdbcType="BIGINT"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="account_id" property="accountId" jdbcType="VARCHAR"/>
+        <result column="employee_code" property="employeeCode" jdbcType="BIGINT"/>
+        <result column="employee_name" property="employeeName" jdbcType="VARCHAR"/>
+        <result column="full_dept_path" property="fullDeptPath" jdbcType="VARCHAR"/>
+        <result column="level_num" property="levelNum" jdbcType="INTEGER"/>
+        <result column="ip" property="ip" jdbcType="VARCHAR"/>
+        <result column="reply_type" property="replyType" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
 
-  <sql id="Base_Column_List" >
-    <!--
-      WARNING - @mbggenerated
-    -->
-    id, bug_id, parent_id, content, account_id, employee_code, employee_name, full_dept_path, 
-    level_num, ip, reply_type, status, create_time, modified_time
-  </sql>
+    <sql id="Base_Column_List">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        id, bug_id, parent_id, content, account_id, employee_code, employee_name, full_dept_path,
+        level_num, ip, reply_type, status, create_time, modified_time
+    </sql>
+
+
+    <select id="getMaxLevelNum" parameterType="Long" resultType="Integer">
+        select level_num + 1
+        from bug_comment
+        where bug_id = #{bugId,jdbcType=BIGINT}
+        order by level_num desc limit 0,1
+    </select>
 
 </mapper>
