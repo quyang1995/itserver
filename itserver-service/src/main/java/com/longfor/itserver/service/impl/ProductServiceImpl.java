@@ -87,6 +87,21 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		String uedList = (String) map.get("uedList");
 		getAccountInfo(5, product, uedList);
 
+        //先生成变动日志
+        List<String> changeLogTextList = getChangeLogText(null, product);
+        /*添加日志*/
+        for(String text : changeLogTextList){
+            ProductEmployeeChangeLog employeeChangeLog = new ProductEmployeeChangeLog();
+            employeeChangeLog.setProductId(product.getId());
+            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+            employeeChangeLog.setActionChangeInfo(text);
+            employeeChangeLog.setModifiedAccountId(product.getModifiedAccountId());
+            employeeChangeLog.setModifiedName(product.getModifiedName());
+            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+            employeeChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+            productEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
+        }
+
 		return true;
 	}
 
@@ -114,7 +129,6 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		getAccountInfo(0, oldProduct, null);
 		/* 关联项目 */
         oldProduct.setLikeProgram(newProduct.getLikeProgram());
-		//this.addLog(map);
         oldProduct.setModifiedTime(TimeUtils.getTodayByDateTime());
 		int update = productMapper.updateByPrimaryKey(oldProduct);// 更新产品
 
@@ -229,6 +243,14 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 
 	private List<String> getChangeLogText(Product oldProduct, Product newProduct){
 	    List<String> textList = new ArrayList<>();
+
+	    if(oldProduct == null && newProduct != null){
+            StringBuilder sb = new StringBuilder();
+            sb.append(newProduct.getModifiedName())
+                    .append(" 创建产品");
+            textList.add(sb.toString());
+            return textList;
+        }
 
         if(!Objects.equals(oldProduct.getStatus(), newProduct.getStatus())
                 || !Objects.equals(oldProduct.getType(), newProduct.getType())){

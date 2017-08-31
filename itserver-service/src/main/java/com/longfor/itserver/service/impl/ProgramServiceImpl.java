@@ -6,6 +6,9 @@ import com.google.common.collect.Lists;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
+import com.longfor.itserver.common.enums.ProductStatusEnum;
+import com.longfor.itserver.common.enums.ProgramStatusEnum;
+import com.longfor.itserver.common.enums.PublicTypeEnum;
 import com.longfor.itserver.entity.*;
 import com.longfor.itserver.mapper.ProductMapper;
 import com.longfor.itserver.mapper.ProgramEmployeeChangeLogMapper;
@@ -13,15 +16,14 @@ import com.longfor.itserver.mapper.ProgramEmployeeMapper;
 import com.longfor.itserver.mapper.ProgramMapper;
 import com.longfor.itserver.service.IProgramService;
 import com.longfor.itserver.service.base.AdminBaseService;
+import jodd.datetime.TimeUtil;
 import net.mayee.commons.TimeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author wax Created on 2017/8/3 下午7:15
@@ -102,6 +104,21 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		if (!"".equals(jsonArrUed)) {
 			getAccountLongfor(program, jsonArrUed, "4");
 		}
+
+        //先生成变动日志
+        List<String> changeLogTextList = getChangeLogText(null, program);
+        /*添加日志*/
+        for(String text : changeLogTextList){
+            ProgramEmployeeChangeLog employeeChangeLog = new ProgramEmployeeChangeLog();
+            employeeChangeLog.setProgramId(program.getId());
+            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+            employeeChangeLog.setActionChangeInfo(text);
+            employeeChangeLog.setModifiedAccountId(program.getModifiedAccountId());
+            employeeChangeLog.setModifiedName(program.getModifiedName());
+            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+            employeeChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+            programEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
+        }
 		return true;
 	}
 
@@ -184,6 +201,10 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		JSONObject json = (JSONObject) JSONObject.toJSON(map);
 		Program program = JSONObject.toJavaObject(json, Program.class);
 		Program selectOneProgram = programMapper.selectByPrimaryKey(program.getId());
+
+        //先生成变动日志
+        List<String> changeLogTextList = getChangeLogText(selectOneProgram, program);
+
 		if (null == selectOneProgram) {
 			return false;
 		}
@@ -199,8 +220,6 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		selectOneProgram.setType(program.getType());
 		selectOneProgram.setProgramStatus(selectOneProgram.getProgramStatus());
 
-		/*添加日志*/
-		this.addLog(map);
 		selectOneProgram.setModifiedTime(TimeUtils.getTodayByDateTime());
 		programMapper.updateByPrimaryKey(selectOneProgram);
 
@@ -235,28 +254,120 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			getAccountLongfor(program, jsonArrUed, "4");
 		}
 
+		/*添加日志*/
+        for(String text : changeLogTextList){
+            ProgramEmployeeChangeLog employeeChangeLog = new ProgramEmployeeChangeLog();
+            employeeChangeLog.setProgramId(program.getId());
+            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+            employeeChangeLog.setActionChangeInfo(text);
+            employeeChangeLog.setModifiedAccountId(program.getModifiedAccountId());
+            employeeChangeLog.setModifiedName(program.getModifiedName());
+            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+            employeeChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+            programEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
+        }
+
 		return true;
 	}
 
-	public boolean addLog(Map paramsMap){
-		JSONObject jsonObject = (JSONObject)JSONObject.toJSON(paramsMap);
-		ProgramEmployeeChangeLog employeeChangeLog = JSONObject.toJavaObject(jsonObject , ProgramEmployeeChangeLog.class);
+	private List<String> getChangeLogText(Program oldProgram, Program newProgram){
+		List<String> textList = new ArrayList<>();
 
-		employeeChangeLog.setCreateTime(new Date());
-		StringBuffer info = new StringBuffer();
-		info.append(employeeChangeLog.getModifiedName());
-		info.append("于");
-		info.append(employeeChangeLog.getCreateTime());
-		info.append("更新了");
-		info.append(jsonObject.getString("name"));
-		info.append("的信息。");
-		employeeChangeLog.setActionChangeInfo(info.toString());
-		employeeChangeLog.setProgramId(employeeChangeLog.getId());
-		employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
-		employeeChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
-		programEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
+		if(oldProgram == null && newProgram != null){
+			StringBuilder sb = new StringBuilder();
+			sb.append(newProgram.getModifiedName())
+					.append(" 创建项目");
+			textList.add(sb.toString());
+			return textList;
+		}
 
-		return true ;
+        if(newProgram == null){
+            return textList;
+        }
+
+		if(!Objects.equals(oldProgram.getProgramStatus(), newProgram.getProgramStatus())
+				|| !Objects.equals(oldProgram.getType(), newProgram.getType())){
+			StringBuilder sb = new StringBuilder();
+			if(!Objects.equals(oldProgram.getProgramStatus(), newProgram.getProgramStatus())){
+				sb.append(newProgram.getModifiedName())
+						.append(" 将 项目状态 从 [")
+						.append(ProgramStatusEnum.getByCode(oldProgram.getProgramStatus()).getText())
+						.append("] 更新为 [")
+						.append(ProgramStatusEnum.getByCode(newProgram.getProgramStatus()).getText())
+						.append("] ");
+			}
+			if(!Objects.equals(oldProgram.getType(), newProgram.getType())){
+				if(StringUtils.isNotBlank(sb.toString())){
+					sb.append(",");
+				} else {
+					sb.append(newProgram.getModifiedName());
+				}
+				sb.append(" 将 公开性 从 [")
+						.append(PublicTypeEnum.getByCode(oldProgram.getType()).getText())
+						.append("] 更新为 [")
+						.append(PublicTypeEnum.getByCode(newProgram.getType()).getText())
+						.append("]");
+			}
+
+			textList.add(sb.toString());
+		}
+
+		//立项时间
+        if(!TimeUtils.sameDate(oldProgram.getCommitDate(), newProgram.getCommitDate())){
+            StringBuilder sb = new StringBuilder();
+            sb.append(newProgram.getModifiedName());
+            sb.append(" 将 立项时间 从 [")
+                    .append(oldProgram.getCommitDate())
+                    .append("] 更新为 [")
+                    .append(newProgram.getCommitDate())
+                    .append("]");
+            textList.add(sb.toString());
+        }
+        //启动时间
+        if(!TimeUtils.sameDate(oldProgram.getStartDate(), newProgram.getStartDate())){
+            StringBuilder sb = new StringBuilder();
+            sb.append(newProgram.getModifiedName());
+            sb.append(" 将 启动时间 从 [")
+                    .append(oldProgram.getStartDate())
+                    .append("] 更新为 [")
+                    .append(newProgram.getStartDate())
+                    .append("]");
+            textList.add(sb.toString());
+        }
+        //灰度时间
+        if(!TimeUtils.sameDate(oldProgram.getGrayReleaseDate(), newProgram.getGrayReleaseDate())){
+            StringBuilder sb = new StringBuilder();
+            sb.append(newProgram.getModifiedName());
+            sb.append(" 将 灰度时间 从 [")
+                    .append(oldProgram.getGrayReleaseDate())
+                    .append("] 更新为 [")
+                    .append(newProgram.getGrayReleaseDate())
+                    .append("]");
+            textList.add(sb.toString());
+        }
+        //发布时间
+        if(!TimeUtils.sameDate(oldProgram.getReleaseDate(), newProgram.getReleaseDate())){
+            StringBuilder sb = new StringBuilder();
+            sb.append(newProgram.getModifiedName());
+            sb.append(" 将 发布时间 从 [")
+                    .append(oldProgram.getReleaseDate())
+                    .append("] 更新为 [")
+                    .append(newProgram.getReleaseDate())
+                    .append("]");
+            textList.add(sb.toString());
+        }
+
+		if(!Objects.equals(oldProgram.getName(), newProgram.getName())
+				|| !Objects.equals(oldProgram.getLikeProgram(), newProgram.getLikeProgram())
+				|| !Objects.equals(oldProgram.getLikeProduct(), newProgram.getLikeProduct())
+				|| !Objects.equals(oldProgram.getDescp(), newProgram.getDescp())){
+			StringBuilder sb = new StringBuilder();
+			sb.append(newProgram.getModifiedName())
+					.append(" 修改了项目基础信息");
+			textList.add(sb.toString());
+		}
+
+		return textList;
 	}
 
 }
