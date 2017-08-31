@@ -349,6 +349,26 @@ CREATE TABLE IF NOT EXISTS `itplus`.`demand` (
 )
   ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `itplus`.`demand_file` 需求附件
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `itplus`.`demand_file` (
+  `id`                  BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `file_name`   VARCHAR(500)    NULL
+  COMMENT '文件名称',
+  `file_suffix`   VARCHAR(50)    NULL
+  COMMENT '文件扩展名',
+  `file_size`   VARCHAR(50)    NULL
+  COMMENT '文件大小',
+  `file_path`   text          NULL
+  COMMENT '文件绝对路径',
+  `create_time`               TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = InnoDB;
+
+
 -- -----------------------------------------------------
 -- Table `itplus`.`demand_change_log` 需求-变更日志
 -- -----------------------------------------------------
@@ -468,6 +488,27 @@ CREATE TABLE IF NOT EXISTS `itplus`.`bug_info` (
 )
   ENGINE = InnoDB;
 
+
+
+-- -----------------------------------------------------
+-- Table `itplus`.`bug_file` BUG附件
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `itplus`.`bug_file` (
+  `id`                  BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `file_name`   VARCHAR(500)    NULL
+  COMMENT '文件名称',
+  `file_suffix`   VARCHAR(50)    NULL
+  COMMENT '文件扩展名',
+  `file_size`   VARCHAR(50)    NULL
+  COMMENT '文件大小',
+  `file_path`   text          NULL
+  COMMENT '文件绝对路径',
+  `create_time`               TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = InnoDB;
+
+
 -- -----------------------------------------------------
 -- Table `itplus`.`bug_change_log` bug-变更日志
 -- -----------------------------------------------------
@@ -572,6 +613,8 @@ CREATE TABLE IF NOT EXISTS `itplus`.`feed_back` (
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB;
+
+
 
 
 
