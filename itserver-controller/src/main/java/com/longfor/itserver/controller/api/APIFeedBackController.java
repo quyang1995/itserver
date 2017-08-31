@@ -136,10 +136,9 @@ public class APIFeedBackController extends BaseController {
 	@RequestMapping(value = "/addComment" ,method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public Map addComment(HttpServletRequest request , HttpServletResponse response){
-		Map<String,Object> paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		Map<String,String> paramsMap = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
 		Long feedBackId = Long.valueOf((String)paramsMap.get("feedBackId"));
-
 		FeedBack feedBack =	this.getFeedBackService().selectById(feedBackId);
 		if(feedBack != null){
 			/*功能异常*/
@@ -149,7 +148,7 @@ public class APIFeedBackController extends BaseController {
 				bugInfo = this.getBugInfoService().selectOne(bugInfo);
 				if(bugInfo == null) return  CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
 
-				paramsMap.put("bugId",bugInfo.getId());
+				paramsMap.put("bugId",bugInfo.getId().toString());
 				return this.getBugCommentService().add(paramsMap);
 			/*功能建议*/
 			}else if(feedBack.getType().equals(1)){
@@ -158,7 +157,7 @@ public class APIFeedBackController extends BaseController {
 				demand = this.getDemandService().selectOne(demand);
 				if(demand == null ) return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
 
-				paramsMap.put("demandId",demand.getId());
+				paramsMap.put("demandId",demand.getId().toString());
 				return this.getDemandCommentService().add(paramsMap);
 			}
 
