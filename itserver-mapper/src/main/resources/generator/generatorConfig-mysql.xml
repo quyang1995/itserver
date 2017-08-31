@@ -92,6 +92,12 @@
         <table tableName="feed_back" domainObjectName="FeedBack">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
+        <table tableName="demand_file" domainObjectName="DemandFile">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
+        <table tableName="bug_file" domainObjectName="BugFile">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
 -->
     </context>
 
