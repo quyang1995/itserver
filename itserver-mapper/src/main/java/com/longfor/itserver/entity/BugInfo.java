@@ -1,6 +1,7 @@
 package com.longfor.itserver.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import net.mayee.commons.CustomDateSerializer;
 import net.mayee.commons.CustomFullDateSerializer;
 
 import java.util.Date;
@@ -55,7 +56,7 @@ public class BugInfo {
      * 期望完成日期
      */
     @Column(name = "hope_date")
-    @JsonSerialize(using = CustomFullDateSerializer.class)
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date hopeDate;
 
     /**
