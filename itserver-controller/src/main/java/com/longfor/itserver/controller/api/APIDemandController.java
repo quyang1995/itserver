@@ -67,7 +67,6 @@ public class APIDemandController extends BaseController {
         @SuppressWarnings("unchecked")
         Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         this.getDemandService().addDemand(paramsMap);
-        this.getDemandFileService().addDemandFile(paramsMap);
         //返回成功信息
         return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
     }
@@ -98,7 +97,6 @@ public class APIDemandController extends BaseController {
         if(isAllow){
             /*更新操作*/
             this.getDemandService().updateDemand(paramsMap);
-
             // 返回报文
             return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
         }else{

@@ -142,7 +142,6 @@ public class APIBugInfoController extends BaseController {
 		@SuppressWarnings("unchecked")
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		this.getBugInfoService().addBug(paramsMap);
-		this.getBugFileService().addBugFile(paramsMap);
 		// 返回报文
 		return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
 	}
@@ -176,7 +175,6 @@ public class APIBugInfoController extends BaseController {
 		if(isAllow){
             /*更新操作*/
 			this.getBugInfoService().updateBug(paramsMap);
-			this.getBugFileService().updateBugFile(paramsMap);
 			// 返回报文
 			return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
 		}else{

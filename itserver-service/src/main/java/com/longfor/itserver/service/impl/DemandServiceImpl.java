@@ -7,10 +7,8 @@ import com.github.pagehelper.PageInfo;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.BizEnum;
-import com.longfor.itserver.common.enums.BugStatusEnum;
 import com.longfor.itserver.common.enums.DemandStatusEnum;
 import com.longfor.itserver.common.util.CommonUtils;
-import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.entity.*;
 import com.longfor.itserver.entity.ps.PsIndex;
@@ -23,7 +21,6 @@ import com.longfor.itserver.service.base.AdminBaseService;
 import net.mayee.commons.TimeUtils;
 import net.mayee.commons.helper.APIHelper;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -78,6 +75,17 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 
 		demandMapper.insert(demand);
 
+		//添加文件
+		List<DemandFile> fileList = JSONArray.parseArray(json.getString("fileList"), DemandFile.class);
+		if(fileList!= null && fileList.size()>0) {
+			for (DemandFile demandFile : fileList) {
+				demandFile.setDemandId(demand.getId());
+				demandFile.setCreateTime(TimeUtils.getTodayByDateTime());
+			}
+			demandFileMapper.insertList(fileList);
+		}
+
+
 		return true;
 	}
 
@@ -115,6 +123,21 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		/*新增需求更新日志*/
 		demand.setModifiedTime(TimeUtils.getTodayByDateTime());
 		addLog(map);
+
+		/*更新文件*/
+		DemandFile demandFile = new DemandFile();
+		demandFile.setDemandId(demand.getId());
+		demandFileMapper.delete(demandFile);
+
+		List<DemandFile> list = JSONArray.parseArray((String)map.get("fileList"),DemandFile.class);
+		if(list != null && list.size()>0) {
+			for (DemandFile file:list) {
+				file.setDemandId(demand.getId());
+				file.setCreateTime(TimeUtils.getTodayByDateTime());
+			}
+			demandFileMapper.insertList(list);
+		}
+		/*添加文件结束*/
 
 		demandMapper.updateByPrimaryKey(demand);
 		return true;

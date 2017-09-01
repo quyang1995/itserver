@@ -6,7 +6,6 @@ import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.ProductStatusEnum;
 import com.longfor.itserver.common.enums.PublicTypeEnum;
-import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.ProductEmployee;
 import com.longfor.itserver.entity.ProductEmployeeChangeLog;
