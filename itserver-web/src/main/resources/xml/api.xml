@@ -316,6 +316,7 @@
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="type" type="int" required="true"/>
             <property name="channel" type="int" required="true"/>
+            <property name="filePath" type="string" required="false"/>
         </request>
     </item>
 

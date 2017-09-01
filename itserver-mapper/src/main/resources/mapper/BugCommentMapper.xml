@@ -30,8 +30,8 @@
     </sql>
 
 
-    <select id="getMaxLevelNum" parameterType="Long" resultType="Integer">
-        select level_num + 1
+    <select id="getMaxLevelNum" parameterType="Long" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
         from bug_comment
         where bug_id = #{bugId,jdbcType=BIGINT}
         order by level_num desc limit 0,1
