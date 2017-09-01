@@ -58,6 +58,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		//获取发起人信息
 		AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getModifiedAccountId());
 		if(draftedAccountLongfor!=null){
+			demand.setDraftedAccountId(demand.getModifiedAccountId());
 			demand.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
 			demand.setDraftedEmployeeName(draftedAccountLongfor.getName());
 			demand.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
@@ -108,6 +109,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		// 获取发起人信息
 		AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getModifiedAccountId());
 		if(draftedAccountLongfor!=null){
+			demand.setDraftedAccountId(demand.getModifiedAccountId());
 			demand.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
 			demand.setDraftedEmployeeName(draftedAccountLongfor.getName());
 			demand.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
