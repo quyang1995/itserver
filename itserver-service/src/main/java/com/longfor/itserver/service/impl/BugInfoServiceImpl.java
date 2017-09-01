@@ -14,12 +14,12 @@ import com.longfor.itserver.mapper.BugInfoMapper;
 import com.longfor.itserver.service.IBugInfoService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import net.mayee.commons.TimeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author wax
@@ -71,14 +71,14 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         JSONObject json = (JSONObject) JSONObject.toJSON(map);
         BugInfo bugInfo = JSONObject.toJavaObject(json, BugInfo.class);
         bugInfo.setStatus(BugStatusEnum.PENDING.getCode());
-        //获取指派人信息
-        AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(bugInfo.getDraftedAccountId());
+        //获取发起人信息
+        AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(bugInfo.getModifiedAccountId());
         if(draftedAccountLongfor != null){
             bugInfo.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
             bugInfo.setDraftedEmployeeName(draftedAccountLongfor.getName());
             bugInfo.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
         }
-        //获取发起人信息
+        //获取指派人信息
         AccountLongfor callonAccountLongfor = adsHelper.getAccountLongforByLoginName(bugInfo.getCallonAccountId());
         if(callonAccountLongfor != null){
             bugInfo.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
@@ -117,14 +117,15 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
             return false;
         }
         bugInfo.setStatus(BugStatusEnum.PENDING.getCode());
-        //获取指派人信息
-        AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(bugInfo.getDraftedAccountId());
+
+        //获取发起人信息
+        AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(bugInfo.getModifiedAccountId());
         if(draftedAccountLongfor != null){
             bugInfo.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
             bugInfo.setDraftedEmployeeName(draftedAccountLongfor.getName());
             bugInfo.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
         }
-        //获取发起人信息
+        //获取指派人信息
         AccountLongfor callonAccountLongfor = adsHelper.getAccountLongforByLoginName(bugInfo.getCallonAccountId());
         if(callonAccountLongfor != null){
             bugInfo.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
@@ -146,29 +147,83 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         }
 
         /*添加BUG修改日志*/
-//        addLog(map);
 
-
+        Map<String,Object> logMap = getChangeLog(selectOneBugInfo,bugInfo);
+        List<String> textList = (List)logMap.get("logList");
+        List<BugChangeLog> logList = new ArrayList<>();
+        Integer type = (Integer)logMap.get("type");
+        for (String log:textList){
+            BugChangeLog bugChangeLog = new BugChangeLog();
+            bugChangeLog.setBugId(bugInfo.getId());
+            bugChangeLog.setBefDescp(selectOneBugInfo.getDescp());
+            bugChangeLog.setType(type);
+            bugChangeLog.setActionChangeInfo(log);
+            bugChangeLog.setModifiedName(draftedAccountLongfor.getName());
+            bugChangeLog.setModifiedAccountId(bugInfo.getModifiedAccountId());
+            bugChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+            bugChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+            logList.add(bugChangeLog);
+        }
+        bugChangeLogMapper.insertList(logList);
         bugInfo.setModifiedTime(TimeUtils.getTodayByDateTime());
 
         bugInfoMapper.updateByPrimaryKey(bugInfo);
         return true;
     }
 
+    public Map getChangeLog(BugInfo  oldBug , BugInfo newBug) {
+        Map<String,Object> map = new HashMap<>();
+        List<String> textList = new ArrayList<String>();
 
-    public boolean addLog(Map paramsMap) {
-        JSONObject jsonObject = (JSONObject)JSONObject.toJSON(paramsMap);
-        BugChangeLog bugChangeLog = JSONObject.toJavaObject(jsonObject ,BugChangeLog.class);
-        bugChangeLog.setBugId(Long.valueOf(jsonObject.getString("id")));
-        BugInfo bugInfo =  bugInfoMapper.selectByPrimaryKey(bugChangeLog.getBugId());
-        bugChangeLog.setType(2);
-        if(!bugInfo.getDescp().equals(jsonObject.getString("descp"))) bugChangeLog.setType(1);
-        bugChangeLog.setBefDescp(jsonObject.getString("descp"));
-        String logInfo = jsonObject.getString("modifiedName")+ " 在 "+ TimeUtils.getTodayByDateTime() +" 更新了"+ bugInfo.getName() +" 的信息" ;
-        bugChangeLog.setActionChangeInfo(logInfo);
-        bugChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
-        bugChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
-        bugChangeLogMapper.insertUseGeneratedKeys(bugChangeLog);
-        return true;
+        if(oldBug !=null && newBug != null){
+            if(!Objects.equals(oldBug.getDescp(),newBug.getDescp())){
+                StringBuilder log = new StringBuilder();
+                log.append(newBug.getModifiedName()).
+                        append("修改了bug描述信息");
+                textList.add(log.toString());
+                map.put("type",1);
+            }
+            if(!Objects.equals(oldBug.getStatus(),newBug.getStatus())||
+                    !Objects.equals(oldBug.getLevel(),newBug.getLevel())){
+                StringBuilder log = new StringBuilder();
+                if (!Objects.equals(oldBug.getStatus(),newBug.getStatus())){
+
+                    log.append(newBug.getModifiedName()).
+                            append("将 状态 由[").
+                            append(oldBug.getStatus()).
+                            append("]更改为[").
+                            append(newBug.getStatus()).
+                            append("]");
+                    textList.add(log.toString());
+                }
+                if(!Objects.equals(oldBug.getLevel(),newBug.getLevel())){
+                    if (StringUtils.isNotBlank(log)){
+                        log.append(",");
+                    }else{
+                        log.append(newBug.getModifiedName());
+                    }
+                    log.append("将 优先级 由[").
+                            append(oldBug.getLevel()).
+                            append("]更改为[").
+                            append(newBug.getLevel()).
+                            append("]");
+                    textList.add(log.toString());
+                }
+                map.put("type",2);
+            }
+
+            if(!(Objects.equals(oldBug.getBrower(),newBug.getBrower())&&Objects.equals(oldBug.getLikeProduct(),newBug.getLikeProduct())
+                    &&Objects.equals(oldBug.getLikeProgram(),newBug.getLikeProgram())&&Objects.equals(oldBug.getCcAccount(),newBug.getCcAccount())
+                    &&Objects.equals(oldBug.getName(),newBug.getName())&&Objects.equals(oldBug.getRelationId(),newBug.getRelationId())
+                    &&Objects.equals(oldBug.getRelationType(),oldBug.getRelationType())&&Objects.equals(oldBug.getReproductionStep(),newBug.getReproductionStep()))){
+                StringBuilder log = new StringBuilder();
+                log.append(newBug.getModifiedName()).
+                        append("修改了bug基础信息");
+                    textList.add(log.toString());
+                    map.put("type",2);
+            }
+            map.put("logList",textList);
+        }
+        return map;
     }
 }

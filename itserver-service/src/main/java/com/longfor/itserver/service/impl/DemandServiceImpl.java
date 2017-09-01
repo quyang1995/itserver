@@ -55,14 +55,14 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		Demand demand = JSONObject.toJavaObject(json, Demand.class);
 		//获取状态信息(默认待处理)
 		demand.setStatus(DemandStatusEnum.PENDING.getCode());
-		//获取指派人信息
-		AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getDraftedAccountId());
+		//获取发起人信息
+		AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getModifiedAccountId());
 		if(draftedAccountLongfor!=null){
 			demand.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
 			demand.setDraftedEmployeeName(draftedAccountLongfor.getName());
 			demand.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
 		}
-		//获取发起人信息
+		//获取指派人信息
 		AccountLongfor callonAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getCallonAccountId());
 		if (callonAccountLongfor!=null){
 			demand.setCallonEmployeeName(callonAccountLongfor.getName());
@@ -105,14 +105,14 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		}
 		//获取状态信息(默认处理中)
 		demand.setStatus(DemandStatusEnum.PENDING.getCode());
-		//获取指派人信息
-		AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getDraftedAccountId());
+		// 获取发起人信息
+		AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getModifiedAccountId());
 		if(draftedAccountLongfor!=null){
 			demand.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
 			demand.setDraftedEmployeeName(draftedAccountLongfor.getName());
 			demand.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
 		}
-		//获取发起人信息
+		//获取指派人信息
 		AccountLongfor callonAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getCallonAccountId());
 		if (callonAccountLongfor!=null){
 			demand.setCallonEmployeeName(callonAccountLongfor.getName());

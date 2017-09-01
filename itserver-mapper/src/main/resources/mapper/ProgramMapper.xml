@@ -66,9 +66,13 @@
     <if test='programStatus != "" and programStatus != null  and programStatus != -1'>
       and p.program_status = #{programStatus}
     </if>
+    <if test='productId != "" and productId != null and productId != -1'>
+      and (p.product_id =#{productId})
+    </if>
     <if test='searchText != "" and searchText != null'>
       and (p.name like concat(concat('%',#{searchText}),'%') OR pe.employee_name like concat(concat('%',#{searchText}),'%'))
     </if>
+
     ORDER BY p.modified_time DESC
   </select>
 

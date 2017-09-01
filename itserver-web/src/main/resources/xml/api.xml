@@ -197,6 +197,7 @@
             <property name="programStatus" type="int" required="true"/>
             <property name="isPart" type="int" required="true"/>
             <property name="searchText" type="string" required="true" maxLength="30" description="搜索内容"/>
+            <property name="productId" type="int" required="false" />
         </request>
     </item>
 
@@ -418,14 +419,11 @@
             <property name="brower" type="string" required="false"/>
             <property name="hopeDate" type="string" required="true"/>
             <property name="callonAccountId" type="string" required="true"/>
-            <property name="draftedAccountId" type="string" required="true"/>
             <property name="ccAccount" type="string" required="false"/>
             <property name="likeProduct" type="string" required="false"/>
             <property name="likeProgram" type="string" required="false"/>
             <property name="level" type="int" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
-            <property name="modifiedName" type="string" required="true"/>
-            <property name="modifiedAccountId" type="string" required="false"/>
             <property name="modifiedName" type="string" required="false"/>
             <property name="channel" type="int" required="true" />
             <property name="fileList" type="string" required="false" />
@@ -450,14 +448,11 @@
             <property name="brower" type="string" required="false"/>
             <property name="hopeDate" type="string" required="true"/>
             <property name="callonAccountId" type="string" required="true"/>
-            <property name="draftedAccountId" type="string" required="true"/>
             <property name="ccAccount" type="string" required="false"/>
             <property name="likeProduct" type="string" required="false"/>
             <property name="likeProgram" type="string" required="false"/>
             <property name="level" type="int" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
-            <property name="modifiedName" type="string" required="true"/>
-            <property name="modifiedAccountId" type="string" required="false"/>
             <property name="modifiedName" type="string" required="false"/>
             <property name="channel" type="int" required="true" />
             <property name="fileList" type="string" required="false" />
@@ -505,8 +500,7 @@
             <property name="accountId" type="string" required="true" />
             <property name="demandId" type="int" required="true" />
             <property name="parentId" type="int" required="true" />
-            <property name="content" type="string" required="false" />
-            <property name="levelNum" type="int" required="true" />
+            <property name="content" type="string" maxLength="500" required="false" />
             <property name="ip" type="string" required="false" />
         </request>
     </item >
@@ -543,13 +537,12 @@
             <property name="descp" type="string" required="false"/>
             <property name="hopeDate" type="string" required="true"/>
             <property name="callonAccountId" type="string" required="true"/>
-            <property name="draftedAccountId" type="string" required="true"/>
             <property name="ccAccount" type="string" required="false"/>
             <property name="likeProduct" type="string" required="false"/>
             <property name="likeProgram" type="string" required="false"/>
             <property name="level" type="int" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
-            <property name="modifiedName" type="string" required="true"/>
+            <property name="modifiedName" type="string" required="false"/>
             <property name="channel" type="int" required="true" />
             <property name="fileList" type="string" required="false" />
         </request>
@@ -570,13 +563,12 @@
             <property name="descp" type="string" required="false"/>
             <property name="hopeDate" type="string" required="true"/>
             <property name="callonAccountId" type="string" required="true"/>
-            <property name="draftedAccountId" type="string" required="true"/>
             <property name="ccAccount" type="string" required="false"/>
             <property name="likeProduct" type="string" required="false"/>
             <property name="likeProgram" type="string" required="false"/>
             <property name="level" type="int" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
-            <property name="modifiedName" type="string" required="true"/>
+            <property name="modifiedName" type="string" required="false"/>
             <property name="channel" type="int" required="true" />
             <property name="fileList" type="string" required="false" />
         </request>
@@ -607,8 +599,7 @@
             <property name="accountId" type="string" required="true" />
             <property name="feedBackId" type="int" required="true" />
             <property name="parentId" type="int" required="true" />
-            <property name="content" type="string" required="false" />
-            <property name="levelNum" type="int" required="true" />
+            <property name="content" type="string" maxLength="500" required="false" />
             <property name="ip" type="string" required="false" />
         </request>
     </item >
