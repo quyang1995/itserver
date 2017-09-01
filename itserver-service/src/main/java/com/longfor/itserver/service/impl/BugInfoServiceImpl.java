@@ -74,6 +74,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         //获取发起人信息
         AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(bugInfo.getModifiedAccountId());
         if(draftedAccountLongfor != null){
+            bugInfo.setDraftedAccountId(bugInfo.getModifiedAccountId());
             bugInfo.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
             bugInfo.setDraftedEmployeeName(draftedAccountLongfor.getName());
             bugInfo.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
@@ -138,6 +139,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         //获取发起人信息
         AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(bugInfo.getModifiedAccountId());
         if(draftedAccountLongfor != null){
+            bugInfo.setDraftedAccountId(bugInfo.getModifiedAccountId());
             bugInfo.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
             bugInfo.setDraftedEmployeeName(draftedAccountLongfor.getName());
             bugInfo.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
