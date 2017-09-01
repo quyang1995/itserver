@@ -252,6 +252,7 @@ public class CommonUtils {
         setResponseCross(resp);
         resp.setContentType("application/json");
         resp.setHeader("Cache-Control", "no-store");
+        resp.setHeader("Access-Control-Allow-Headers", ConfigConsts.TOKEN_NAME + ",content-type");
         PrintWriter out = resp.getWriter();
         out.write(JSON.toJSONString(getResultMapByBizEnum(bizEnum)));
     }
