@@ -20,4 +20,14 @@
     -->
     id, bug_id, file_name, file_suffix, file_size, file_path, create_time
   </sql>
+  
+  <!--<insert id="insertList" parameterType="java.util.List" useGeneratedKeys="true" >
+
+        INSERT  INTO bug_file (file_name ,file_suffix ,file_size ,file_path ,create_time,bug_id)
+        VALUES
+        <foreach collection="list" item="file"  index="index" separator=",">
+          (#{file.fileName ,#{file.fileSuffix},#{file.fileSize},#{file.filePath},#{file.fileCreatTime},#{file.bugId})
+        </foreach>
+
+  </insert>-->
 </mapper>

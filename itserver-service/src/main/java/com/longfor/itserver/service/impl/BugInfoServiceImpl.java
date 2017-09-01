@@ -1,5 +1,6 @@
 package com.longfor.itserver.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.longfor.ads.entity.AccountLongfor;
@@ -7,11 +8,9 @@ import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BugStatusEnum;
 import com.longfor.itserver.common.util.DateUtil;
-import com.longfor.itserver.entity.BugChangeLog;
-import com.longfor.itserver.entity.BugInfo;
-import com.longfor.itserver.entity.Product;
-import com.longfor.itserver.entity.Program;
+import com.longfor.itserver.entity.*;
 import com.longfor.itserver.mapper.BugChangeLogMapper;
+import com.longfor.itserver.mapper.BugFileMapper;
 import com.longfor.itserver.mapper.BugInfoMapper;
 import com.longfor.itserver.mapper.ProgramMapper;
 import com.longfor.itserver.service.IBugInfoService;
@@ -39,6 +38,8 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
     private ADSHelper adsHelper;
     @Autowired
     private BugChangeLogMapper bugChangeLogMapper;
+    @Autowired
+    private BugFileMapper bugFileMapper;
 
     /**
      * bug列表
@@ -90,6 +91,8 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         bugInfo.setCreateTime(TimeUtils.getTodayByDateTime());
         bugInfo.setModifiedTime(TimeUtils.getTodayByDateTime());
         bugInfoMapper.insert(bugInfo);
+
+
         return true;
     }
 

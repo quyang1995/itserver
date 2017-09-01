@@ -22,45 +22,52 @@ import java.util.Map;
  */
 @RequestMapping(value = "/api/bugComment")
 @Controller
-public class APIBugCommentController extends BaseController{
+public class APIBugCommentController extends BaseController {
 
     public final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * 通过BUGID获取评论基本信息
+     *
      * @param request
      * @param response
      * @return
      */
-    @RequestMapping(value="/list" ,method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
+    @RequestMapping(value = "/list", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map list(HttpServletRequest request, HttpServletResponse response){
-        Map paramMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-        Long bugId = Long.valueOf((String)paramMap.get("bugId"));
+    public Map list(HttpServletRequest request, HttpServletResponse response) {
+        Map paramMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        Long bugId = Long.valueOf((String) paramMap.get("bugId"));
         BugComment bugComment = new BugComment();
 
         bugComment.setBugId(bugId);
         List bugCommentList = this.getBugCommentService().select(bugComment);
 
         Map map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-        map.put("bugCommentList",bugCommentList);
+        map.put("bugCommentList", bugCommentList);
 
-        return  map;
+        return map;
     }
 
     /**
      * 添加BUG评论
+     *
      * @param request
      * @param response
      * @return
      */
-    @RequestMapping(value = "/add",method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
+    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map add(HttpServletRequest request , HttpServletResponse response){
-        Map paramsMap =   (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-
-        Map<String,Object> map= this.getBugCommentService().add(paramsMap);
-        return map;
+    public Map add(HttpServletRequest request, HttpServletResponse response) {
+        @SuppressWarnings("unchecked")
+        Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        try {
+            this.getBugCommentService().add(paramsMap);
+            return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+        }
     }
 
 }

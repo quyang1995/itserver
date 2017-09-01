@@ -7,7 +7,9 @@ import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.entity.BugComment;
+import com.longfor.itserver.entity.BugInfo;
 import com.longfor.itserver.mapper.BugCommentMapper;
+import com.longfor.itserver.mapper.BugInfoMapper;
 import com.longfor.itserver.service.IBugCommentService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import net.mayee.commons.TimeUtils;
@@ -33,43 +35,64 @@ public class BugCommentServiceImpl extends AdminBaseService<BugComment> implemen
 
     @Autowired
     private BugCommentMapper bugCommentMapper;
+    @Autowired
+    private BugInfoMapper bugInfoMapper;
 
     @Autowired
     private ADSHelper adsHelper;
 
 
+    @Transactional
     @Override
-    public Map<String,Object> add(Map paramsMap) {
+    public Map<String,Object> add(Map<String,String> paramsMap) {
         JSONObject jsonObject = (JSONObject) JSONObject.toJSON(paramsMap);
         BugComment bugComment = JSONObject.toJavaObject(jsonObject,BugComment.class);
 
-        Map map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
+        //回复人验证
         AccountLongfor accountLongfor =  adsHelper.getAccountLongforByLoginName(bugComment.getAccountId());
-
         if(accountLongfor == null) {
-            map = CommonUtils.getResultMapByBizEnum(BizEnum.E1001);
-            return map;
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E1001);
+        }
+        //bugId验证
+        Long bugId = Long.parseLong(paramsMap.get("bugId"));
+        BugInfo bugInfo = bugInfoMapper.selectByPrimaryKey(bugId);
+        if(bugInfo == null){
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
         }
 
-        Long employeeCode = Long.parseLong(accountLongfor.getPsEmployeeCode());
-        String employeeName = accountLongfor.getName();
-        String fullDeptPath = accountLongfor.getPsDeptFullName();
-        Integer replyType = AvaStatusEnum.REPLY_ONE.getCode();
-        Integer status = AvaStatusEnum.AVA.getCode();
+        //levelNum
+        int levelNum = 1;
+        BugComment lastBugComment = bugCommentMapper.getMaxLevelNum(bugId);
+        if(lastBugComment != null){
+            levelNum = lastBugComment.getLevelNum() + 1;
+        }
 
-        bugComment.setEmployeeCode(employeeCode);
-        bugComment.setEmployeeName(employeeName);
-        bugComment.setFullDeptPath(fullDeptPath);
-        bugComment.setReplyType(replyType);
-        bugComment.setStatus(status);
+        //parentId验证
+//        Long parentId = Long.parseLong(paramsMap.get("parentId"));
+//        if(parentId != 0){
+//            BugInfo parentBugInfo = bugInfoMapper.selectByPrimaryKey(parentId);
+//            if(parentBugInfo == null){
+//                return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+//            }
+//
+//            //更新回复状态
+//            BugComment bugCommentParent = new BugComment();
+//            bugCommentParent.setId(parentId);
+//            bugCommentParent.setReplyType(1);
+//            bugCommentMapper.updateByPrimaryKeySelective(bugCommentParent);
+//        }
+
+        bugComment.setEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
+        bugComment.setEmployeeName(accountLongfor.getName());
+        bugComment.setFullDeptPath(accountLongfor.getPsDeptFullName());
+        bugComment.setLevelNum(levelNum);
+        bugComment.setParentId(0L);
+        bugComment.setReplyType(0);
+        bugComment.setStatus(AvaStatusEnum.AVA.getCode());
         bugComment.setCreateTime(TimeUtils.getTodayByDateTime());
         bugComment.setModifiedTime(TimeUtils.getTodayByDateTime());
-        int i = bugCommentMapper.insert(bugComment);
-        if(i != 1) {
-            logger.info("BUG评论表新增评论异常");
-            return  CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
-        }
+        bugCommentMapper.insert(bugComment);
 
-        return map;
+        return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
     }
 }

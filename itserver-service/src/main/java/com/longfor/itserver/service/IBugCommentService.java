@@ -10,5 +10,5 @@ import java.util.Map;
 public interface IBugCommentService extends IAdminService<BugComment> {
 
 
-    Map<String,Object>  add(Map paramsMap);
+    Map<String,Object> add(Map<String,String> paramsMap);
 }

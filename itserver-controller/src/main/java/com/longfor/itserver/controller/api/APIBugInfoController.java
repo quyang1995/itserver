@@ -7,6 +7,7 @@ import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
+import com.longfor.itserver.entity.BugFile;
 import com.longfor.itserver.entity.BugInfo;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.Program;
@@ -106,6 +107,14 @@ public class APIBugInfoController extends BaseController {
 				relationName = prog.getName();
 			}
 			bugInfo.setRelationName(relationName);
+
+			//bug相关文件信息
+			BugFile file = new BugFile();
+			file.setBugId(bugInfo.getId());
+			List<BugFile> fileList  = this.getBugFileService().select(file);
+			bugInfo.setBugFileList(fileList);
+
+
 			/* 返回报文 */
 			Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 			resultMap.put("data", bugInfo);
@@ -133,6 +142,7 @@ public class APIBugInfoController extends BaseController {
 		@SuppressWarnings("unchecked")
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		this.getBugInfoService().addBug(paramsMap);
+		this.getBugFileService().addBugFile(paramsMap);
 		// 返回报文
 		return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
 	}
@@ -166,6 +176,7 @@ public class APIBugInfoController extends BaseController {
 		if(isAllow){
             /*更新操作*/
 			this.getBugInfoService().updateBug(paramsMap);
+			this.getBugFileService().updateBugFile(paramsMap);
 			// 返回报文
 			return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
 		}else{

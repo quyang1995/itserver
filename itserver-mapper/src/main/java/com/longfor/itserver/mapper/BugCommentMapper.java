@@ -6,4 +6,6 @@ import com.longfor.itserver.mapper.base.BeeMapper;
 
 public interface BugCommentMapper extends BeeMapper<BugComment> {
 
+    BugComment getMaxLevelNum(Long bugId);
+
 }
