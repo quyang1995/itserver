@@ -99,6 +99,23 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
             bugFileMapper.insertList(fileList);
         }
 
+        /*添加BUG修改日志*/
+
+        Map<String,Object> logMap = getChangeLog(null,bugInfo);
+        List<String> textList = (List)logMap.get("logList");
+        for (String log:textList){
+            BugChangeLog bugChangeLog = new BugChangeLog();
+            bugChangeLog.setBugId(bugInfo.getId());
+            bugChangeLog.setBefDescp(bugInfo.getDescp());
+            bugChangeLog.setType((Integer)logMap.get("type"));
+            bugChangeLog.setActionChangeInfo(log);
+            bugChangeLog.setModifiedName(draftedAccountLongfor.getName());
+            bugChangeLog.setModifiedAccountId(bugInfo.getModifiedAccountId());
+            bugChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+            bugChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+            bugChangeLogMapper.insert(bugChangeLog);
+        }
+
         return true;
     }
 
@@ -151,12 +168,11 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         Map<String,Object> logMap = getChangeLog(selectOneBugInfo,bugInfo);
         List<String> textList = (List)logMap.get("logList");
         List<BugChangeLog> logList = new ArrayList<>();
-        Integer type = (Integer)logMap.get("type");
         for (String log:textList){
             BugChangeLog bugChangeLog = new BugChangeLog();
             bugChangeLog.setBugId(bugInfo.getId());
             bugChangeLog.setBefDescp(selectOneBugInfo.getDescp());
-            bugChangeLog.setType(type);
+            bugChangeLog.setType((Integer)logMap.get("type"));
             bugChangeLog.setActionChangeInfo(log);
             bugChangeLog.setModifiedName(draftedAccountLongfor.getName());
             bugChangeLog.setModifiedAccountId(bugInfo.getModifiedAccountId());
@@ -174,6 +190,15 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
     public Map getChangeLog(BugInfo  oldBug , BugInfo newBug) {
         Map<String,Object> map = new HashMap<>();
         List<String> textList = new ArrayList<String>();
+        if(oldBug == null && newBug != null){
+            StringBuilder log = new StringBuilder();
+            log.append(newBug.getModifiedName()).
+                    append("新增了bug信息");
+            textList.add(log.toString());
+            map.put("type",2);
+            map.put("logList",textList);
+            return map;
+        }
 
         if(oldBug !=null && newBug != null){
             if(!Objects.equals(oldBug.getDescp(),newBug.getDescp())){
@@ -215,7 +240,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
             if(!(Objects.equals(oldBug.getBrower(),newBug.getBrower())&&Objects.equals(oldBug.getLikeProduct(),newBug.getLikeProduct())
                     &&Objects.equals(oldBug.getLikeProgram(),newBug.getLikeProgram())&&Objects.equals(oldBug.getCcAccount(),newBug.getCcAccount())
                     &&Objects.equals(oldBug.getName(),newBug.getName())&&Objects.equals(oldBug.getRelationId(),newBug.getRelationId())
-                    &&Objects.equals(oldBug.getRelationType(),oldBug.getRelationType())&&Objects.equals(oldBug.getReproductionStep(),newBug.getReproductionStep()))){
+                    &&Objects.equals(oldBug.getRelationType(),newBug.getRelationType())&&Objects.equals(oldBug.getReproductionStep(),newBug.getReproductionStep()))){
                 StringBuilder log = new StringBuilder();
                 log.append(newBug.getModifiedName()).
                         append("修改了bug基础信息");
