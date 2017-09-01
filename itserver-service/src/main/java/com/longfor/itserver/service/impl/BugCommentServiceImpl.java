@@ -59,26 +59,34 @@ public class BugCommentServiceImpl extends AdminBaseService<BugComment> implemen
         if(bugInfo == null){
             return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
         }
-        //parentId验证
-        Long parentId = Long.parseLong(paramsMap.get("parentId"));
-        if(parentId != 0){
-            BugInfo parentBugInfo = bugInfoMapper.selectByPrimaryKey(parentId);
-            if(parentBugInfo == null){
-                return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
-            }
 
-            //更新回复状态
-            BugComment bugCommentParent = new BugComment();
-            bugCommentParent.setId(parentId);
-            bugCommentParent.setReplyType(1);
-            bugCommentMapper.updateByPrimaryKeySelective(bugCommentParent);
+        //levelNum
+        int levelNum = 1;
+        BugComment lastBugComment = bugCommentMapper.getMaxLevelNum(bugId);
+        if(lastBugComment != null){
+            levelNum = lastBugComment.getLevelNum() + 1;
         }
+
+        //parentId验证
+//        Long parentId = Long.parseLong(paramsMap.get("parentId"));
+//        if(parentId != 0){
+//            BugInfo parentBugInfo = bugInfoMapper.selectByPrimaryKey(parentId);
+//            if(parentBugInfo == null){
+//                return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+//            }
+//
+//            //更新回复状态
+//            BugComment bugCommentParent = new BugComment();
+//            bugCommentParent.setId(parentId);
+//            bugCommentParent.setReplyType(1);
+//            bugCommentMapper.updateByPrimaryKeySelective(bugCommentParent);
+//        }
 
         bugComment.setEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
         bugComment.setEmployeeName(accountLongfor.getName());
         bugComment.setFullDeptPath(accountLongfor.getPsDeptFullName());
-        bugComment.setLevelNum(bugCommentMapper.getMaxLevelNum(bugId));
-        bugComment.setParentId(parentId);
+        bugComment.setLevelNum(levelNum);
+        bugComment.setParentId(0L);
         bugComment.setReplyType(0);
         bugComment.setStatus(AvaStatusEnum.AVA.getCode());
         bugComment.setCreateTime(TimeUtils.getTodayByDateTime());
