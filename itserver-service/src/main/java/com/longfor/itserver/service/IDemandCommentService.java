@@ -8,5 +8,5 @@ import java.util.Map;
 
 public interface IDemandCommentService extends IAdminService<DemandComment> {
 
-    Map<String, Object> add (Map paramsMap);
+    Map<String, Object> add (Map<String,String> paramsMap);
 }

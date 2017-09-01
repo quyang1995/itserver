@@ -28,4 +28,11 @@
     level_num, ip, reply_type, status, create_time, modified_time
   </sql>
 
+  <select id="getMaxLevelNum" parameterType="Long" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from demand_comment
+    where demand_id = #{demandId,jdbcType=BIGINT}
+    order by level_num desc limit 1
+  </select>
+
 </mapper>

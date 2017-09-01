@@ -7,10 +7,13 @@ import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
+import com.longfor.itserver.entity.Demand;
 import com.longfor.itserver.entity.DemandComment;
 import com.longfor.itserver.mapper.DemandCommentMapper;
+import com.longfor.itserver.mapper.DemandMapper;
 import com.longfor.itserver.service.IDemandCommentService;
 import com.longfor.itserver.service.base.AdminBaseService;
+import net.mayee.commons.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,36 +32,50 @@ public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> im
 
 
     @Autowired
-    DemandCommentMapper demandCommentMapper;
+    private DemandCommentMapper demandCommentMapper;
 
     @Autowired
     private ADSHelper adsHelper;
+    @Autowired
+    private DemandMapper demandMapper;
 
 
     @Override
-    public Map<String, Object> add(Map paramMap){
-        JSONObject jsonObject = (JSONObject) JSONObject.toJSON(paramMap);
+    public Map<String, Object> add(Map<String,String> paramsMap){
+        JSONObject jsonObject = (JSONObject) JSONObject.toJSON(paramsMap);
         DemandComment demandComment = JSONObject.toJavaObject(jsonObject,DemandComment.class);
 
+        //回复人验证
         AccountLongfor accountLongfor =  adsHelper.getAccountLongforByLoginName(demandComment.getAccountId());
-
-        Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
         if(accountLongfor == null) {
-            map = CommonUtils.getResultMapByBizEnum(BizEnum.E1001);
-            return map;
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E1001);
+        }
+        //bugId验证
+        Long demandId = Long.parseLong(paramsMap.get("demandId"));
+        Demand demand = demandMapper.selectByPrimaryKey(demandId);
+        if(demand == null){
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
         }
 
-        demandComment.setReplyType(AvaStatusEnum.REPLY_ONE.getCode());
-        demandComment.setStatus(AvaStatusEnum.AVA.getCode());
+        //levelNum
+        int levelNum = 1;
+        DemandComment lastBugComment = demandCommentMapper.getMaxLevelNum(demandId);
+        if(lastBugComment != null){
+            levelNum = lastBugComment.getLevelNum() + 1;
+        }
+
         demandComment.setEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
         demandComment.setEmployeeName(accountLongfor.getName());
         demandComment.setFullDeptPath(accountLongfor.getPsDeptFullName());
+        demandComment.setLevelNum(levelNum);
+        demandComment.setParentId(0L);
+        demandComment.setReplyType(0);
+        demandComment.setStatus(AvaStatusEnum.AVA.getCode());
+        demandComment.setCreateTime(TimeUtils.getTodayByDateTime());
+        demandComment.setModifiedTime(TimeUtils.getTodayByDateTime());
+        demandCommentMapper.insert(demandComment);
 
-        int count =  demandCommentMapper.insert(demandComment);
-        if(count !=1 ){
-            logger.info("需求评论表新增评论异常");
-            map = CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
-        }
-        return map;
+        return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
+
     };
 }
