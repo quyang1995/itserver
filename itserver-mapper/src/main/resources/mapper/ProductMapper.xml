@@ -99,7 +99,7 @@
       (tb.account_id = #{accountId}
       OR ta.contact_account_id = #{accountId})
     </if>
-    <if test="productStatus != null and productStatus != '' and productStatus != -1 ">
+    <if test="status != null and status != '' and status != -1 ">
       AND ta.status= #{productStatus}
     </if>
     ORDER BY ta.modified_time DESC
