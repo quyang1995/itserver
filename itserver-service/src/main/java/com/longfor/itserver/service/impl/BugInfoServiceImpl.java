@@ -170,19 +170,21 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         Map<String,Object> logMap = getChangeLog(selectOneBugInfo,bugInfo);
         List<String> textList = (List)logMap.get("logList");
         List<BugChangeLog> logList = new ArrayList<>();
-        for (String log:textList){
-            BugChangeLog bugChangeLog = new BugChangeLog();
-            bugChangeLog.setBugId(bugInfo.getId());
-            bugChangeLog.setBefDescp(selectOneBugInfo.getDescp());
-            bugChangeLog.setType((Integer)logMap.get("type"));
-            bugChangeLog.setActionChangeInfo(log);
-            bugChangeLog.setModifiedName(draftedAccountLongfor.getName());
-            bugChangeLog.setModifiedAccountId(bugInfo.getModifiedAccountId());
-            bugChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
-            bugChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
-            logList.add(bugChangeLog);
+        if(logList.size() > 0){
+            for (String log:textList){
+                BugChangeLog bugChangeLog = new BugChangeLog();
+                bugChangeLog.setBugId(bugInfo.getId());
+                bugChangeLog.setBefDescp(selectOneBugInfo.getDescp());
+                bugChangeLog.setType((Integer)logMap.get("type"));
+                bugChangeLog.setActionChangeInfo(log);
+                bugChangeLog.setModifiedName(draftedAccountLongfor.getName());
+                bugChangeLog.setModifiedAccountId(bugInfo.getModifiedAccountId());
+                bugChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+                bugChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+                logList.add(bugChangeLog);
+            }
+            bugChangeLogMapper.insertList(logList);
         }
-        bugChangeLogMapper.insertList(logList);
         bugInfo.setModifiedTime(TimeUtils.getTodayByDateTime());
 
         bugInfoMapper.updateByPrimaryKey(bugInfo);

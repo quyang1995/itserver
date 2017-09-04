@@ -145,19 +145,22 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		Map<String,Object> logMap = getChangeLog(selectDemandOne,demand);
 		List<String> textList = (List)logMap.get("logList");
 		List<DemandChangeLog> logList = new ArrayList<>();
-		for (String demandChangeLog:textList){
-			DemandChangeLog log = new DemandChangeLog();
-			log.setDemandId(demand.getId());
-			log.setBefDescp(selectDemandOne.getDescp());
-			log.setType((Integer)logMap.get("type"));
-			log.setActionChangeInfo(demandChangeLog);
-			log.setModifiedName(draftedAccountLongfor.getName());
-			log.setModifiedAccountId(demand.getModifiedAccountId());
-			log.setCreateTime(TimeUtils.getTodayByDateTime());
-			log.setModifiedTime(TimeUtils.getTodayByDateTime());
-			logList.add(log);
+		if(logList.size() > 0){
+			for (String demandChangeLog:textList){
+				DemandChangeLog log = new DemandChangeLog();
+				log.setDemandId(demand.getId());
+				log.setBefDescp(selectDemandOne.getDescp());
+				log.setType((Integer)logMap.get("type"));
+				log.setActionChangeInfo(demandChangeLog);
+				log.setModifiedName(draftedAccountLongfor.getName());
+				log.setModifiedAccountId(demand.getModifiedAccountId());
+				log.setCreateTime(TimeUtils.getTodayByDateTime());
+				log.setModifiedTime(TimeUtils.getTodayByDateTime());
+				logList.add(log);
+			}
+			demandChangeLogMapper.insertList(logList);
 		}
-		demandChangeLogMapper.insertList(logList);
+
 
 		/*更新文件*/
 		DemandFile demandFile = new DemandFile();

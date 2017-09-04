@@ -281,7 +281,7 @@ public class APIProductController extends BaseController {
                 //删除当前用户
                 this.getProductEmployeeService().delete(employee);
             } else {
-                return CommonUtils.getResultMapByBizEnum(BizEnum.E1027, " 唯一责任人！");
+                return CommonUtils.getResultMapByBizEnum(BizEnum.E1027, " 唯一责任人");
             }
         } else {
             //删除成员
@@ -289,7 +289,7 @@ public class APIProductController extends BaseController {
             this.getProductEmployeeService().delete(employee);
         }
 
-        return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_D);
+        return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
     }
 
 
