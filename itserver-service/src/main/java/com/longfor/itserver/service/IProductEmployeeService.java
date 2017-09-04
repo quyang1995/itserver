@@ -9,4 +9,7 @@ import java.util.Map;
 
 public interface IProductEmployeeService extends IAdminService<ProductEmployee> {
     List<ProductEmployee> searchTypeList(Long productId, Integer employeeType, Long employeeTypeId);
+
+    boolean delEmployee (Map paramsMap);
+//    boolean delEmployee (HttpServletRequest  request);
 }

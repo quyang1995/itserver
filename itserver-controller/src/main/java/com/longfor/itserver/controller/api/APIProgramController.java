@@ -246,4 +246,48 @@ public class APIProgramController extends BaseController {
 
 		return this.getProgramEmployeeChangeLogService().orderLimitList(paramsMap);
 	}
+
+
+
+
+	/**
+	 * 根据accountId productId 删除产品相关人员
+	 *
+	 * @param
+	 * @param
+	 * @return
+	 */
+	@RequestMapping(value = "/delEmployee", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public Map delEmp(HttpServletRequest request, HttpServletResponse response) {
+		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		String programId = (String) paramsMap.get("programId");
+		Program program = this.getProgramService().selectById(Long.valueOf(programId));
+		String accountId = (String) paramsMap.get("accountId");
+		ProgramEmployee employee = new ProgramEmployee();
+		employee.setAccountId(accountId);
+		employee.setProgramId(Long.valueOf(programId));
+		employee.setEmployeeType(AvaStatusEnum.LIABLEAVA.getCode());
+		ProgramEmployee persionaLiable = this.getProgramEmployeeService().selectOne(employee);
+		if (persionaLiable != null) {
+			//是责任人
+			ProgramEmployee programEmployee = new ProgramEmployee();
+			programEmployee.setProgramId(Long.valueOf(programId));
+			programEmployee.setEmployeeType(AvaStatusEnum.LIABLEAVA.getCode());
+			int persionaLiableCount =  this.getProgramEmployeeService().selectCount(programEmployee);
+			if (persionaLiableCount > 1) {
+				//删除当前用户
+				this.getProgramEmployeeService().delete(employee);
+			} else {
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1027, " 唯一责任人！");
+			}
+		} else {
+			//删除成员
+			employee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
+			this.getProgramEmployeeService().delete(employee);
+		}
+
+		return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_D);
+	}
+
 }
