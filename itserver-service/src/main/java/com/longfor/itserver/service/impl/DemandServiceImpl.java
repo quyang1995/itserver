@@ -7,6 +7,7 @@ import com.github.pagehelper.PageInfo;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.BizEnum;
+import com.longfor.itserver.common.enums.DemandLevelEnum;
 import com.longfor.itserver.common.enums.DemandStatusEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
@@ -178,6 +179,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		return true;
 	}
 
+
 	@Override
 	public Demand getDemandById(Long id) {
 			Demand demand = demandMapper.getDemandById(id);
@@ -229,15 +231,16 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 				map.put("type",1);
 			}
 			if(!Objects.equals(oldDemand.getStatus(),newDemand.getStatus())||
-					!Objects.equals(oldDemand.getLevel(),newDemand.getLevel())){
+					!Objects.equals(oldDemand.getLevel(),newDemand.getLevel())||
+					!Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())){
 				StringBuilder log = new StringBuilder();
 				if (!Objects.equals(oldDemand.getStatus(),newDemand.getStatus())){
 
 					log.append(newDemand.getModifiedName()).
 							append("将 状态 由[").
-							append(oldDemand.getStatus()).
+							append(DemandStatusEnum.getByCode(oldDemand.getStatus()).getText()).
 							append("]更改为[").
-							append(newDemand.getStatus()).
+							append(DemandStatusEnum.getByCode(newDemand.getStatus()).getText()).
 							append("]");
 					textList.add(log.toString());
 				}
@@ -248,9 +251,22 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 						log.append(newDemand.getModifiedName());
 					}
 					log.append("将 优先级 由[").
-							append(oldDemand.getLevel()).
+							append(DemandLevelEnum.getByCode(oldDemand.getLevel()).getText()).
 							append("]更改为[").
-							append(newDemand.getLevel()).
+							append(DemandLevelEnum.getByCode(newDemand.getLevel()).getText()).
+							append("]");
+					textList.add(log.toString());
+				}
+				if(!Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())){
+					if (StringUtils.isNotBlank(log)){
+						log.append(",");
+					}else{
+						log.append(newDemand.getModifiedName());
+					}
+					log.append("将 指派人 由[").
+							append(oldDemand.getCallonEmployeeName()).
+							append("]更改为[").
+							append(newDemand.getCallonEmployeeName()).
 							append("]");
 					textList.add(log.toString());
 				}
@@ -273,5 +289,78 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			map.put("logList",textList);
 		}
 		return map;
+	}
+
+
+
+	@Override
+	public boolean updateStatus(Map<String,String> paramsMap) {
+
+		JSONObject jsonObject   = (JSONObject)JSONObject.toJSON(paramsMap);
+		String modifiedAccountId =  jsonObject.getString("modifiedAccountId");
+		String modifiedName =  jsonObject.getString("modifiedName");
+		Long demandId = Long.valueOf(jsonObject.getString("demandId"));
+		Integer status = Integer.valueOf( jsonObject.getString("status"));
+		Demand oldDemand = demandMapper.selectByPrimaryKey(demandId);
+		Demand newDemand = demandMapper.selectByPrimaryKey(demandId);
+		newDemand.setStatus(status);
+		getChangeLog(oldDemand,newDemand);
+        /*添加BUG修改日志*/
+		Map<String,Object> logMap = getChangeLog(oldDemand,newDemand);
+		List<String> textList = (List)logMap.get("logList");
+		List<DemandChangeLog> logList = new ArrayList<>();
+		for (String log:textList){
+			DemandChangeLog demandChangeLog = new DemandChangeLog();
+			demandChangeLog.setDemandId(newDemand.getId());
+			demandChangeLog.setBefDescp(newDemand.getDescp());
+			demandChangeLog.setType(Integer.valueOf(String.valueOf(logMap.get("type"))));
+			demandChangeLog.setActionChangeInfo(log);
+			demandChangeLog.setModifiedName(modifiedName);
+			demandChangeLog.setModifiedAccountId(modifiedAccountId);
+			demandChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+			demandChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+			logList.add(demandChangeLog);
+		}
+		demandChangeLogMapper.insertList(logList);
+		demandMapper.updateByPrimaryKey(newDemand);
+		return true;
+	}
+
+
+	@Override
+	public boolean updateCallon(Map<String, String> paramsMap) {
+		JSONObject jsonObject   = (JSONObject)JSONObject.toJSON(paramsMap);
+		String modifiedAccountId =  jsonObject.getString("modifiedAccountId");
+		String modifiedName =  jsonObject.getString("modifiedName");
+		Long demandId = Long.valueOf(jsonObject.getString("demandId"));
+		String callonAccountId =  jsonObject.getString("callonAccountId");
+		Demand oldDemand = demandMapper.selectByPrimaryKey(demandId);
+		Demand newDemand = demandMapper.selectByPrimaryKey(demandId);
+		getChangeLog(oldDemand,newDemand);
+		AccountLongfor accountLongfor =  adsHelper.getAccountLongforByLoginName(callonAccountId);
+		newDemand.setCallonAccountId(accountLongfor.getUcAccountId());
+		newDemand.setCallonEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
+		newDemand.setCallonEmployeeName(accountLongfor.getName());
+		newDemand.setCallonFullDeptPath(accountLongfor.getPsDeptFullName());
+		getChangeLog(oldDemand,newDemand);
+        /*添加BUG修改日志*/
+		Map<String,Object> logMap = getChangeLog(oldDemand,newDemand);
+		List<String> textList = (List)logMap.get("logList");
+		List<DemandChangeLog> logList = new ArrayList<>();
+		for (String log:textList){
+			DemandChangeLog demandChangeLog = new DemandChangeLog();
+			demandChangeLog.setDemandId(newDemand.getId());
+			demandChangeLog.setBefDescp(newDemand.getDescp());
+			demandChangeLog.setType(Integer.valueOf(String.valueOf(logMap.get("type"))));
+			demandChangeLog.setActionChangeInfo(log);
+			demandChangeLog.setModifiedName(modifiedName);
+			demandChangeLog.setModifiedAccountId(modifiedAccountId);
+			demandChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+			demandChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+			logList.add(demandChangeLog);
+		}
+		demandChangeLogMapper.insertList(logList);
+		demandMapper.updateByPrimaryKey(newDemand);
+		return true;
 	}
 }

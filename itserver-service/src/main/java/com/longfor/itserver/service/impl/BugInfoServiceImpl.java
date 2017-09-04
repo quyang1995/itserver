@@ -4,6 +4,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
+import com.longfor.itserver.common.constant.ConfigConsts;
+import com.longfor.itserver.common.enums.AvaStatusEnum;
+import com.longfor.itserver.common.enums.BizEnum;
+import com.longfor.itserver.common.enums.BugLevelEnum;
 import com.longfor.itserver.common.enums.BugStatusEnum;
 import com.longfor.itserver.entity.BugChangeLog;
 import com.longfor.itserver.entity.BugFile;
@@ -173,7 +177,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         for (String log:textList){
             BugChangeLog bugChangeLog = new BugChangeLog();
             bugChangeLog.setBugId(bugInfo.getId());
-            bugChangeLog.setBefDescp(selectOneBugInfo.getDescp());
+            bugChangeLog.setBefDescp(bugInfo.getDescp());
             bugChangeLog.setType((Integer)logMap.get("type"));
             bugChangeLog.setActionChangeInfo(log);
             bugChangeLog.setModifiedName(draftedAccountLongfor.getName());
@@ -211,15 +215,16 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                 map.put("type",1);
             }
             if(!Objects.equals(oldBug.getStatus(),newBug.getStatus())||
-                    !Objects.equals(oldBug.getLevel(),newBug.getLevel())){
+                    !Objects.equals(oldBug.getLevel(),newBug.getLevel())||
+                    !Objects.equals(oldBug.getCallonAccountId(),newBug.getCallonAccountId())){
                 StringBuilder log = new StringBuilder();
                 if (!Objects.equals(oldBug.getStatus(),newBug.getStatus())){
 
                     log.append(newBug.getModifiedName()).
                             append("将 状态 由[").
-                            append(oldBug.getStatus()).
+                            append(BugStatusEnum.getByCode(oldBug.getStatus()).getText()).
                             append("]更改为[").
-                            append(newBug.getStatus()).
+                            append(BugStatusEnum.getByCode(newBug.getStatus()).getText()).
                             append("]");
                     textList.add(log.toString());
                 }
@@ -230,12 +235,26 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                         log.append(newBug.getModifiedName());
                     }
                     log.append("将 优先级 由[").
-                            append(oldBug.getLevel()).
+                            append(BugLevelEnum.getByCode(oldBug.getLevel()).getText()).
                             append("]更改为[").
-                            append(newBug.getLevel()).
+                            append(BugLevelEnum.getByCode(newBug.getLevel()).getText()).
                             append("]");
                     textList.add(log.toString());
                 }
+                if(!Objects.equals(oldBug.getCallonAccountId(),newBug.getCallonAccountId())){
+                    if (StringUtils.isNotBlank(log)){
+                        log.append(",");
+                    }else{
+                        log.append(newBug.getModifiedName());
+                    }
+                    log.append("将 指派人 由[").
+                            append(oldBug.getCallonEmployeeName()).
+                            append("]更改为[").
+                            append(newBug.getCallonEmployeeName()).
+                            append("]");
+                    textList.add(log.toString());
+                }
+
                 map.put("type",2);
             }
 
@@ -253,4 +272,78 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         }
         return map;
     }
+
+
+    @Override
+    public boolean updateStatus(Map<String,String> paramsMap) {
+
+        JSONObject jsonObject   = (JSONObject)JSONObject.toJSON(paramsMap);
+        String modifiedAccountId =  jsonObject.getString("modifiedAccountId");
+        String modifiedName =  jsonObject.getString("modifiedName");
+        Long bugId = Long.valueOf(jsonObject.getString("bugId"));
+        Integer status = Integer.valueOf( jsonObject.getString("status"));
+        BugInfo oldBug = bugInfoMapper.selectByPrimaryKey(bugId);
+        BugInfo newBug = bugInfoMapper.selectByPrimaryKey(bugId);
+        newBug.setStatus(status);
+        getChangeLog(oldBug,newBug);
+        /*添加BUG修改日志*/
+        Map<String,Object> logMap = getChangeLog(oldBug,newBug);
+        List<String> textList = (List)logMap.get("logList");
+        List<BugChangeLog> logList = new ArrayList<>();
+        for (String log:textList){
+            BugChangeLog bugChangeLog = new BugChangeLog();
+            bugChangeLog.setBugId(newBug.getId());
+            bugChangeLog.setBefDescp(newBug.getDescp());
+            bugChangeLog.setType(Integer.valueOf(String.valueOf(logMap.get("type"))));
+            bugChangeLog.setActionChangeInfo(log);
+            bugChangeLog.setModifiedName(modifiedName);
+            bugChangeLog.setModifiedAccountId(modifiedAccountId);
+            bugChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+            bugChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+            logList.add(bugChangeLog);
+        }
+        bugChangeLogMapper.insertList(logList);
+        bugInfoMapper.updateByPrimaryKey(newBug);
+        return true;
+    }
+
+
+    @Override
+    public boolean updateCallon(Map<String, String> paramsMap) {
+        JSONObject jsonObject   = (JSONObject)JSONObject.toJSON(paramsMap);
+        String modifiedAccountId =  jsonObject.getString("modifiedAccountId");
+        String modifiedName =  jsonObject.getString("modifiedName");
+        Long bugId = Long.valueOf(jsonObject.getString("bugId"));
+        String callonAccountId =  jsonObject.getString("callonAccountId");
+        //更新前对象
+        BugInfo oldBug = bugInfoMapper.selectByPrimaryKey(bugId);
+        //指派人更改后对象 用于更新
+        BugInfo newBug = bugInfoMapper.selectByPrimaryKey(bugId);
+        AccountLongfor accountLongfor =  adsHelper.getAccountLongforByLoginName(callonAccountId);
+        newBug.setCallonAccountId(accountLongfor.getUcAccountId());
+        newBug.setCallonEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
+        newBug.setCallonEmployeeName(accountLongfor.getName());
+        newBug.setCallonFullDeptPath(accountLongfor.getPsDeptFullName());
+        getChangeLog(oldBug,newBug);
+        /*添加BUG修改日志*/
+        Map<String,Object> logMap = getChangeLog(oldBug,newBug);
+        List<String> textList = (List)logMap.get("logList");
+        List<BugChangeLog> logList = new ArrayList<>();
+        for (String log:textList){
+            BugChangeLog bugChangeLog = new BugChangeLog();
+            bugChangeLog.setBugId(newBug.getId());
+            bugChangeLog.setBefDescp(newBug.getDescp());
+            bugChangeLog.setType((Integer)logMap.get("type"));
+            bugChangeLog.setActionChangeInfo(log);
+            bugChangeLog.setModifiedName(modifiedName);
+            bugChangeLog.setModifiedAccountId(modifiedAccountId);
+            bugChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+            bugChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+            logList.add(bugChangeLog);
+        }
+        bugChangeLogMapper.insertList(logList);
+        bugInfoMapper.updateByPrimaryKey(newBug);
+        return true;
+    }
+
 }
