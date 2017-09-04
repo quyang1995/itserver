@@ -723,9 +723,9 @@
     <!--
     URL:
     /api/bug/update/callon
-    说明:BUG状态变更
+    说明:BUG指派人变更
 -->
-    <item id="api_bug_update_callon" description="BUG状态变更">
+    <item id="api_bug_update_callon" description="BUG指派人变更">
         <request>
             <property name="bugId" type="int" required="true"/>
             <property name="callonAccountId" type="string" required="true"/>
@@ -738,9 +738,9 @@
     <!--
    URL:
    /api/demand/update/status
-   说明:BUG状态变更
+   说明:需求状态变更
 -->
-    <item id="api_demand_update_status" description="BUG状态变更">
+    <item id="api_demand_update_status" description="需求状态变更">
         <request>
             <property name="demandId" type="int" required="true"/>
             <property name="status" type="int" required="true"/>
@@ -752,10 +752,10 @@
 
     <!--
     URL:
-    /api/bug/update/callon
-    说明:BUG状态变更
+    /api/demand/update/callon
+    说明:需求指派人变更
 -->
-    <item id="api_demand_update_callon" description="BUG状态变更">
+    <item id="api_demand_update_callon" description="需求指派人变更">
         <request>
             <property name="demandId" type="int" required="true"/>
             <property name="callonAccountId" type="string" required="true"/>
