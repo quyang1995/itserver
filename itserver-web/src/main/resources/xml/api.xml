@@ -764,4 +764,17 @@
         </request>
     </item>
 
+
+    <!--
+        URL:
+        /api/program/productIdAllList
+
+        说明:根据产品ID获取相关项目列表信息
+
+    -->
+    <item id="api_program_productIdAllList" description="根据产品ID获取相关项目列表信息">
+        <request>
+            <property name="productId" type="int" required="true" />
+        </request>
+    </item>
 </api>

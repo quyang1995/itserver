@@ -132,7 +132,12 @@ public class APIFeedBackController extends BaseController {
 	}
 
 
-
+	/**
+	 * 新增反馈评论
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value = "/addComment" ,method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public Map addComment(HttpServletRequest request , HttpServletResponse response){
@@ -168,6 +173,12 @@ public class APIFeedBackController extends BaseController {
 	}
 
 
+	/**
+	 * 反馈状态统计
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value = "/countStatus" ,method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public Map countStatus(HttpServletRequest request , HttpServletResponse response){
