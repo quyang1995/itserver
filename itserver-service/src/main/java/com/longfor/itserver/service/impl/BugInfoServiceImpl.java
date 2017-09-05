@@ -143,17 +143,17 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         //获取发起人信息
         AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(bugInfo.getModifiedAccountId());
         if(draftedAccountLongfor != null){
-            selectOneBugInfo.setDraftedAccountId(bugInfo.getModifiedAccountId());
-            selectOneBugInfo.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
-            selectOneBugInfo.setDraftedEmployeeName(draftedAccountLongfor.getName());
-            selectOneBugInfo.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
+            bugInfo.setDraftedAccountId(bugInfo.getModifiedAccountId());
+            bugInfo.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
+            bugInfo.setDraftedEmployeeName(draftedAccountLongfor.getName());
+            bugInfo.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
         }
         //获取指派人信息
         AccountLongfor callonAccountLongfor = adsHelper.getAccountLongforByLoginName(bugInfo.getCallonAccountId());
         if(callonAccountLongfor != null){
-            selectOneBugInfo.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
-            selectOneBugInfo.setCallonEmployeeName(callonAccountLongfor.getName());
-            selectOneBugInfo.setCallonFullDeptPath(callonAccountLongfor.getPsDeptFullName());
+            bugInfo.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
+            bugInfo.setCallonEmployeeName(callonAccountLongfor.getName());
+            bugInfo.setCallonFullDeptPath(callonAccountLongfor.getPsDeptFullName());
         }
 
         /*修改文件*/
@@ -189,9 +189,9 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
             }
             bugChangeLogMapper.insertList(logList);
         }
-        selectOneBugInfo.setModifiedTime(TimeUtils.getTodayByDateTime());
-
-        bugInfoMapper.updateByPrimaryKey(selectOneBugInfo);
+        bugInfo.setModifiedTime(TimeUtils.getTodayByDateTime());
+        bugInfo.setCreateTime(selectOneBugInfo.getCreateTime());
+        bugInfoMapper.updateByPrimaryKey(bugInfo);
         return true;
     }
 

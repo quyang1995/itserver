@@ -128,21 +128,21 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		// 获取发起人信息
 		AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getModifiedAccountId());
 		if(draftedAccountLongfor!=null){
-			selectDemandOne.setDraftedAccountId(demand.getModifiedAccountId());
-			selectDemandOne.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
-			selectDemandOne.setDraftedEmployeeName(draftedAccountLongfor.getName());
-			selectDemandOne.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
+			demand.setDraftedAccountId(demand.getModifiedAccountId());
+			demand.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
+			demand.setDraftedEmployeeName(draftedAccountLongfor.getName());
+			demand.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
 		}
 		//获取指派人信息
 		AccountLongfor callonAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getCallonAccountId());
 		if (callonAccountLongfor!=null){
-			selectDemandOne.setCallonEmployeeName(callonAccountLongfor.getName());
-			selectDemandOne.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
-			selectDemandOne.setCallonFullDeptPath(callonAccountLongfor.getPsDeptFullName());
+			demand.setCallonEmployeeName(callonAccountLongfor.getName());
+			demand.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
+			demand.setCallonFullDeptPath(callonAccountLongfor.getPsDeptFullName());
 		}
 
 		/*新增需求更新日志*/
-		selectDemandOne.setModifiedTime(TimeUtils.getTodayByDateTime());
+		demand.setModifiedTime(TimeUtils.getTodayByDateTime());
 		Map<String,Object> logMap = getChangeLog(selectDemandOne,demand);
 		List<String> textList = (List)logMap.get("logList");
 		List<DemandChangeLog> logList = new ArrayList<>();
@@ -177,8 +177,8 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			demandFileMapper.insertList(list);
 		}
 		/*添加文件结束*/
-
-		demandMapper.updateByPrimaryKey(selectDemandOne);
+		demand.setCreateTime(selectDemandOne.getCreateTime());
+		demandMapper.updateByPrimaryKey(demand);
 		return true;
 	}
 

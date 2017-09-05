@@ -26,6 +26,8 @@
   <resultMap id="ProgramResultMap" type="com.longfor.itserver.entity.ps.PsProgram">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="program_status" jdbcType="VARCHAR" property="programStatus" />
   </resultMap>
 
   <resultMap id="ProgramDetailResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsProgramDetail">
@@ -113,7 +115,7 @@
 
   <!-- 查询关联项目 -->
   <select id="inProgramId" parameterType="java.lang.String" resultMap="ProgramResultMap">
-    SELECT id,name FROM program
+    SELECT id,name,type,program_status FROM program
     WHERE id IN (${_parameter})
   </select>
 
