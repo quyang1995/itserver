@@ -60,6 +60,12 @@
     <if test='channel !="" and channel != null and channel != -1'>
       and channel = #{channel}
     </if>
+    <if test='productId !="" and productId != null and productId != -1 and programId == -1'>
+      and relation_type = 1 AND relation_id = #{productId}
+    </if>
+    <if test='programId !="" and programId != null and programId != -1'>
+      and (relation_type = 1 AND relation_id = #{productId}) or (relation_type = 2 AND relation_id = #{programId})
+    </if>
     <if test='searchText != "" and searchText != null'>
       and (name like concat(concat('%',#{searchText}),'%') OR callon_employee_name like concat(concat('%',#{searchText}),'%'))
     </if>
