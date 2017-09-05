@@ -290,4 +290,20 @@ public class APIProgramController extends BaseController {
 		return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 	}
 
+
+	/**
+	 * 通过产品ID获取相关项目列表
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/productIdAllList",method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+	@ResponseBody
+	public Map productIdAllList(HttpServletRequest request,	HttpServletResponse response){
+		Map parsmsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		List list = this.getProgramService().productIdAllList(parsmsMap);
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		resultMap.put("list",list);
+		return resultMap;
+	}
 }
