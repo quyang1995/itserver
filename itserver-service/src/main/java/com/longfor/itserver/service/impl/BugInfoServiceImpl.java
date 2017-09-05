@@ -143,17 +143,17 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         //获取发起人信息
         AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(bugInfo.getModifiedAccountId());
         if(draftedAccountLongfor != null){
-            bugInfo.setDraftedAccountId(bugInfo.getModifiedAccountId());
-            bugInfo.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
-            bugInfo.setDraftedEmployeeName(draftedAccountLongfor.getName());
-            bugInfo.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
+            selectOneBugInfo.setDraftedAccountId(bugInfo.getModifiedAccountId());
+            selectOneBugInfo.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
+            selectOneBugInfo.setDraftedEmployeeName(draftedAccountLongfor.getName());
+            selectOneBugInfo.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
         }
         //获取指派人信息
         AccountLongfor callonAccountLongfor = adsHelper.getAccountLongforByLoginName(bugInfo.getCallonAccountId());
         if(callonAccountLongfor != null){
-            bugInfo.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
-            bugInfo.setCallonEmployeeName(callonAccountLongfor.getName());
-            bugInfo.setCallonFullDeptPath(callonAccountLongfor.getPsDeptFullName());
+            selectOneBugInfo.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
+            selectOneBugInfo.setCallonEmployeeName(callonAccountLongfor.getName());
+            selectOneBugInfo.setCallonFullDeptPath(callonAccountLongfor.getPsDeptFullName());
         }
 
         /*修改文件*/
@@ -189,9 +189,9 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
             }
             bugChangeLogMapper.insertList(logList);
         }
-        bugInfo.setModifiedTime(TimeUtils.getTodayByDateTime());
+        selectOneBugInfo.setModifiedTime(TimeUtils.getTodayByDateTime());
 
-        bugInfoMapper.updateByPrimaryKey(bugInfo);
+        bugInfoMapper.updateByPrimaryKey(selectOneBugInfo);
         return true;
     }
 
@@ -322,7 +322,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         //指派人更改后对象 用于更新
         BugInfo newBug = bugInfoMapper.selectByPrimaryKey(bugId);
         AccountLongfor accountLongfor =  adsHelper.getAccountLongforByLoginName(callonAccountId);
-        newBug.setCallonAccountId(accountLongfor.getUcAccountId());
+        newBug.setCallonAccountId(callonAccountId);
         newBug.setCallonEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
         newBug.setCallonEmployeeName(accountLongfor.getName());
         newBug.setCallonFullDeptPath(accountLongfor.getPsDeptFullName());
