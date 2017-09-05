@@ -100,7 +100,7 @@
       OR ta.contact_account_id = #{accountId})
     </if>
     <if test="status != null and status != '' and status != -1 ">
-      AND ta.status= #{productStatus}
+      AND ta.status= #{status}
     </if>
     ORDER BY ta.modified_time DESC
   </select>
