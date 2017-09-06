@@ -288,7 +288,7 @@ public class APIProductController extends BaseController {
             employee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
             this.getProductEmployeeService().delete(employee);
         }
-
+            
         return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
     }
 

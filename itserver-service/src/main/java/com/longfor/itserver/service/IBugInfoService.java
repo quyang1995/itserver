@@ -4,6 +4,7 @@ package com.longfor.itserver.service;
 import com.longfor.itserver.entity.BugInfo;
 import com.longfor.itserver.service.base.IAdminService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -26,4 +27,6 @@ public interface IBugInfoService extends IAdminService<BugInfo> {
      * 更新bug指派人
      */
     boolean updateCallon(Map<String,String> paramsMap);
+
+    Map statusList(HttpServletRequest request,Map<String, String> paramsMap);
 }

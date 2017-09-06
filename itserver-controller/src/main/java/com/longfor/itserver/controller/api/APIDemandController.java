@@ -202,4 +202,19 @@ public class APIDemandController extends BaseController {
 
         return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
     }
+
+
+    /**
+     * 根据产品/项目ID 获取 待处理/处理中的BUG
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/statusList" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+    @ResponseBody
+    public Map statusList(HttpServletRequest request ,HttpServletResponse response){
+        Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+
+        return this.getDemandService().statusList(request, paramsMap);
+    }
 }

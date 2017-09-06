@@ -6,6 +6,7 @@ import com.longfor.itserver.entity.Demand;
 import com.longfor.itserver.entity.ps.PsIndex;
 import com.longfor.itserver.service.base.IAdminService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -53,4 +54,6 @@ public interface IDemandService extends IAdminService<Demand> {
 	 * @return
 	 */
 	boolean updateCallon(Map<String,String> paramsMap);
+
+	Map statusList(HttpServletRequest request,Map<String, String> paramsMap);
 }

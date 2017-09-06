@@ -93,4 +93,22 @@
     UNION ALL
     SELECT 'working' AS name,'3' as id,COUNT(*) as value FROM demand WHERE `status`=3 AND callon_account_id = #{accountId, jdbcType=VARCHAR}
   </select>
+
+
+
+  <!-- 状态查询需求列表 -->
+  <select id="statusList"   resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM demand
+    WHERE 1=1
+    <if test='relationType !="" and relationType != null and relationType != -1'>
+      AND relation_type = #{relationType}
+    </if>
+    <if test='relationId != "" and relationId != null  and relationId != -1'>
+      and relation_id = #{relationId}
+    </if>
+      and status != 1
+    ORDER BY create_time DESC
+  </select>
 </mapper>
