@@ -11,7 +11,7 @@ public enum DemandLevelEnum {
     BOT_LEVEL(0, "低", "label label-sm label-default"),
     MID_LEVEL(1, "中", "label label-sm label-info"),
     HIGH_LEVEL(2, "高", "label label-sm label-warning"),
-    VERY_HIGH_LEVEL(3, "非常高", "label label-sm label-danger");
+    VERY_HIGH_LEVEL(3, "紧急", "label label-sm label-danger");
 
     /* 枚举码 */
     private int code;
