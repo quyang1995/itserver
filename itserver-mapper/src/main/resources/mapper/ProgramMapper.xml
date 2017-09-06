@@ -1,126 +1,144 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.longfor.itserver.mapper.ProgramMapper">
-  <resultMap id="BaseResultMap" type="com.longfor.itserver.entity.Program">
-    <!--
-      WARNING - @mbggenerated
-    -->
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="product_id" jdbcType="BIGINT" property="productId" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="descp" jdbcType="VARCHAR" property="descp" />
-    <result column="commit_date" jdbcType="TIMESTAMP" property="commitDate" />
-    <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
-    <result column="gray_release_date" jdbcType="TIMESTAMP" property="grayReleaseDate" />
-    <result column="release_date" jdbcType="TIMESTAMP" property="releaseDate" />
-    <result column="like_product" jdbcType="VARCHAR" property="likeProduct" />
-    <result column="like_program" jdbcType="VARCHAR" property="likeProgram" />
-    <result column="type" jdbcType="INTEGER" property="type" />
-    <result column="program_status" jdbcType="INTEGER" property="programStatus" />
-    <result column="modified_account_id" jdbcType="VARCHAR" property="modifiedAccountId" />
-    <result column="modified_name" jdbcType="VARCHAR" property="modifiedName" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.longfor.itserver.entity.Program">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="product_id" jdbcType="BIGINT" property="productId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="descp" jdbcType="VARCHAR" property="descp"/>
+        <result column="commit_date" jdbcType="TIMESTAMP" property="commitDate"/>
+        <result column="start_date" jdbcType="TIMESTAMP" property="startDate"/>
+        <result column="gray_release_date" jdbcType="TIMESTAMP" property="grayReleaseDate"/>
+        <result column="release_date" jdbcType="TIMESTAMP" property="releaseDate"/>
+        <result column="like_product" jdbcType="VARCHAR" property="likeProduct"/>
+        <result column="like_program" jdbcType="VARCHAR" property="likeProgram"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="program_status" jdbcType="INTEGER" property="programStatus"/>
+        <result column="modified_account_id" jdbcType="VARCHAR" property="modifiedAccountId"/>
+        <result column="modified_name" jdbcType="VARCHAR" property="modifiedName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="product_name" jdbcType="VARCHAR" property="productName"/>
+    </resultMap>
 
-  <resultMap id="ProgramResultMap" type="com.longfor.itserver.entity.ps.PsProgram">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="type" jdbcType="VARCHAR" property="type" />
-    <result column="program_status" jdbcType="VARCHAR" property="programStatus" />
-  </resultMap>
+    <resultMap id="ProgramResultMap" type="com.longfor.itserver.entity.ps.PsProgram">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="program_status" jdbcType="VARCHAR" property="programStatus"/>
+    </resultMap>
 
-  <resultMap id="ProgramDetailResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsProgramDetail">
+    <resultMap id="ProgramDetailResultMap" extends="BaseResultMap"
+               type="com.longfor.itserver.entity.ps.PsProgramDetail">
 
-  </resultMap>
+    </resultMap>
 
-  <resultMap id="ApiBaseResultMap" type="com.longfor.itserver.entity.ps.PsAPIProgram" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="pending" property="pending" jdbcType="BIGINT" />
-    <result column="working" property="working" jdbcType="BIGINT" />
-    <result column="complete" property="complete" jdbcType="BIGINT" />
-  </resultMap>
+    <resultMap id="ApiBaseResultMap" type="com.longfor.itserver.entity.ps.PsAPIProgram">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="pending" property="pending" jdbcType="BIGINT"/>
+        <result column="working" property="working" jdbcType="BIGINT"/>
+        <result column="complete" property="complete" jdbcType="BIGINT"/>
+    </resultMap>
 
-  <sql id="Base_Column_List">
-    <!--
-      WARNING - @mbggenerated
-    -->
-    id, product_id, name, descp, commit_date, start_date, gray_release_date, release_date, 
-    like_product, like_program, type, program_status, modified_account_id, modified_name, 
-    create_time, modified_time
-  </sql>
+    <sql id="Base_Column_List">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        id, product_id, product_name, name, descp, commit_date, start_date, gray_release_date, release_date,
+        like_product, like_program, type, program_status, modified_account_id, modified_name,
+        create_time, modified_time
+    </sql>
 
-  <!-- 项目列表 -->
-  <select id="programList" parameterType="map" resultMap="BaseResultMap">
-    SELECT DISTINCT
-    p.id, p.product_id, p.name, p.descp, p.commit_date, p.start_date, p.gray_release_date, p.release_date,
-    p.like_product, p.like_program, p.type, p.program_status, p.modified_account_id, p.modified_name,
-    p.create_time, p.modified_time
-    FROM program p JOIN program_employee pe ON p.id = pe.program_id
-    WHERE
-    <if test='isPart == 0'>
-      (pe.account_id = #{accountId, jdbcType=VARCHAR} OR p.type = 1)
-    </if>
-    <if test='isPart == 1'>
-      pe.account_id = #{accountId, jdbcType=VARCHAR}
-    </if>
-    <if test='programStatus != "" and programStatus != null  and programStatus != -1'>
-      and p.program_status = #{programStatus}
-    </if>
-    <if test='productId != "" and productId != null and productId != -1'>
-      and (p.product_id =#{productId})
-    </if>
-    <if test='searchText != "" and searchText != null'>
-      and (p.name like concat(concat('%',#{searchText}),'%') OR pe.employee_name like concat(concat('%',#{searchText}),'%'))
-    </if>
+    <!-- 项目列表 -->
+    <select id="programList" parameterType="map" resultMap="BaseResultMap">
+        SELECT DISTINCT
+        p.id, p.product_id, p.product_name, p.name, p.descp, p.commit_date, p.start_date, p.gray_release_date,
+        p.release_date,
+        p.like_product, p.like_program, p.type, p.program_status, p.modified_account_id, p.modified_name,
+        p.create_time, p.modified_time
+        FROM program p JOIN program_employee pe ON p.id = pe.program_id
+        WHERE
+        <if test='isPart == 0'>
+            (pe.account_id = #{accountId, jdbcType=VARCHAR} OR p.type = 1)
+        </if>
+        <if test='isPart == 1'>
+            pe.account_id = #{accountId, jdbcType=VARCHAR}
+        </if>
+        <if test='programStatus != "" and programStatus != null  and programStatus != -1'>
+            and p.program_status = #{programStatus}
+        </if>
+        <if test='productId != "" and productId != null and productId != -1'>
+            and (p.product_id =#{productId})
+        </if>
+        <if test='searchText != "" and searchText != null'>
+            and (p.name like concat(concat('%',#{searchText}),'%') OR pe.employee_name like
+            concat(concat('%',#{searchText}),'%'))
+        </if>
 
-    ORDER BY p.modified_time DESC
-  </select>
+        ORDER BY p.modified_time DESC
+    </select>
 
 
-  <!-- 通过产品ID查询项目列表 -->
-  <select id="productIdList" parameterType="map" resultMap="ApiBaseResultMap">
-    SELECT DISTINCT p.id,p.`name`,
-    (select IFNULL(sum(CASE WHEN d.relation_id =p.id THEN  1 ELSE 0 END),0) from demand d where d.relation_type=2 and `status`=2)+
-    (select IFNULL(sum(CASE WHEN b.relation_id =p.id THEN  1 ELSE 0 END),0) from bug_info b where b.relation_type=2 and `status`=2) as pending,
-    (select IFNULL(sum(CASE WHEN d.relation_id =p.id THEN  1 ELSE 0 END),0) from demand d where d.relation_type=2 and `status`=3)+
-    (select IFNULL(sum(CASE WHEN b.relation_id =p.id THEN  1 ELSE 0 END),0) from bug_info b where b.relation_type=2 and `status`=3) as working,
-    (select IFNULL(sum(CASE WHEN d.relation_id =p.id THEN  1 ELSE 0 END),0) from demand d where d.relation_type=2 and `status`=4)+
-    (select IFNULL(sum(CASE WHEN b.relation_id =p.id THEN  1 ELSE 0 END),0) from bug_info b where b.relation_type=2 and `status`=4) as complete
-    FROM program p JOIN program_employee pe ON p.id = pe.program_id
-    WHERE
-    <if test='isPart == 0'>
-      (pe.account_id = #{accountId, jdbcType=VARCHAR} OR p.type = 1)
-    </if>
-    <if test='isPart == 1'>
-      pe.account_id = #{accountId, jdbcType=VARCHAR}
-    </if>
-    <if test='programStatus != "" and programStatus != null  and programStatus != -1'>
-      and p.program_status = #{programStatus}
-    </if>
-    <if test='productId != "" and productId != null'>
-      and p.product_id = #{productId}
-    </if>
-    ORDER BY p.modified_time DESC
-  </select>
+    <!-- 通过产品ID查询项目列表 -->
+    <select id="productIdList" parameterType="map" resultMap="ApiBaseResultMap">
+        SELECT DISTINCT p.id,p.`name`,
+        (select IFNULL(sum(CASE WHEN d.relation_id =p.id THEN 1 ELSE 0 END),0) from demand d where d.relation_type=2 and
+        `status`=2)+
+        (select IFNULL(sum(CASE WHEN b.relation_id =p.id THEN 1 ELSE 0 END),0) from bug_info b where b.relation_type=2
+        and `status`=2) as pending,
+        (select IFNULL(sum(CASE WHEN d.relation_id =p.id THEN 1 ELSE 0 END),0) from demand d where d.relation_type=2 and
+        `status`=3)+
+        (select IFNULL(sum(CASE WHEN b.relation_id =p.id THEN 1 ELSE 0 END),0) from bug_info b where b.relation_type=2
+        and `status`=3) as working,
+        (select IFNULL(sum(CASE WHEN d.relation_id =p.id THEN 1 ELSE 0 END),0) from demand d where d.relation_type=2 and
+        `status`=4)+
+        (select IFNULL(sum(CASE WHEN b.relation_id =p.id THEN 1 ELSE 0 END),0) from bug_info b where b.relation_type=2
+        and `status`=4) as complete
+        FROM program p JOIN program_employee pe ON p.id = pe.program_id
+        WHERE
+        <if test='isPart == 0'>
+            (pe.account_id = #{accountId, jdbcType=VARCHAR} OR p.type = 1)
+        </if>
+        <if test='isPart == 1'>
+            pe.account_id = #{accountId, jdbcType=VARCHAR}
+        </if>
+        <if test='programStatus != "" and programStatus != null  and programStatus != -1'>
+            and p.program_status = #{programStatus}
+        </if>
+        <if test='productId != "" and productId != null'>
+            and p.product_id = #{productId}
+        </if>
+        ORDER BY p.modified_time DESC
+    </select>
 
-  <!-- 项目列表模糊搜索返回20条 -->
-  <select id="programLimitList" parameterType="map" resultMap="BaseResultMap">
-    SELECT * FROM program
-      WHERE name LIKE CONCAT('%', #{name, jdbcType=VARCHAR}, '%')
-      ORDER BY modified_time DESC
-      LIMIT 0, 20
-  </select>
+    <!-- 项目列表模糊搜索返回20条 -->
+    <select id="programLimitList" parameterType="map" resultMap="BaseResultMap">
+        SELECT *
+        FROM program
+        WHERE name LIKE CONCAT('%', #{name, jdbcType=VARCHAR}, '%')
+        ORDER BY modified_time DESC
+        LIMIT 0, 20
+    </select>
 
-  <!-- 查询关联项目 -->
-  <select id="inProgramId" parameterType="java.lang.String" resultMap="ProgramResultMap">
-    SELECT id,name,type,program_status FROM program
-    WHERE id IN (${_parameter})
-  </select>
+    <!-- 查询关联项目 -->
+    <select id="inProgramId" parameterType="java.lang.String" resultMap="ProgramResultMap">
+        SELECT
+            id,
+            name,
+            type,
+            program_status
+        FROM program
+        WHERE id IN (${_parameter})
+    </select>
 
-  <!-- 通过ID查询项目 -->
-  <select id="getProgramId" parameterType="java.lang.Long" resultMap="ProgramDetailResultMap">
-    SELECT * FROM program WHERE id = #{id}
-  </select>
+    <!-- 通过ID查询项目 -->
+    <select id="getProgramId" parameterType="java.lang.Long" resultMap="ProgramDetailResultMap">
+        SELECT *
+        FROM program
+        WHERE id = #{id}
+    </select>
 </mapper>

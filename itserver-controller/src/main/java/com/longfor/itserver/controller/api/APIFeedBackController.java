@@ -47,13 +47,12 @@ public class APIFeedBackController extends BaseController {
 	public Map feedBackList(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		/* 获得已经验证过的参数map */
 		@SuppressWarnings("unchecked")
-		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        Map<String,String> paramsMap = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
 		/* 生成查询用Example */
 		ELExample elExample = new ELExample(request, FeedBack.class);
 		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
 		List<FeedBack> feedBackList = this.getFeedBackService().feedBackList(paramsMap);
-
 
 		/* 返回报文 */
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
@@ -141,6 +140,8 @@ public class APIFeedBackController extends BaseController {
 	@RequestMapping(value = "/addComment" ,method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public Map addComment(HttpServletRequest request , HttpServletResponse response){
+	    /* 获得已经验证过的参数map */
+		@SuppressWarnings("unchecked")
 		Map<String,String> paramsMap = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
 		Long feedBackId = Long.valueOf((String)paramsMap.get("feedBackId"));
