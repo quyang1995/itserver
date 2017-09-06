@@ -151,7 +151,7 @@ public class APIFeedBackController extends BaseController {
 				BugInfo bugInfo = new BugInfo();
 				bugInfo.setFeedBackId(feedBackId);
 				bugInfo = this.getBugInfoService().selectOne(bugInfo);
-				if(bugInfo == null) return  CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+				if(bugInfo == null) return  CommonUtils.getResultMapByBizEnum(BizEnum.E1017,"该反馈对应的异常");
 
 				paramsMap.put("bugId",bugInfo.getId().toString());
 				return this.getBugCommentService().add(paramsMap);
@@ -160,16 +160,13 @@ public class APIFeedBackController extends BaseController {
 				Demand demand = new Demand();
 				demand.setFeedBackId(feedBackId);
 				demand = this.getDemandService().selectOne(demand);
-				if(demand == null ) return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+				if(demand == null ) return CommonUtils.getResultMapByBizEnum(BizEnum.E1017,"该反馈对应的建议");
 
 				paramsMap.put("demandId",demand.getId().toString());
 				return this.getDemandCommentService().add(paramsMap);
 			}
-
-			return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
 		}
-
-		return  CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+		return CommonUtils.getResultMapByBizEnum(BizEnum.E1017,"该反馈");
 	}
 
 

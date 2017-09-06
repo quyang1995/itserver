@@ -51,13 +51,13 @@ public class BugCommentServiceImpl extends AdminBaseService<BugComment> implemen
         //回复人验证
         AccountLongfor accountLongfor =  adsHelper.getAccountLongforByLoginName(bugComment.getAccountId());
         if(accountLongfor == null) {
-            return CommonUtils.getResultMapByBizEnum(BizEnum.E1001);
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E1017,"该回复人");
         }
         //bugId验证
         Long bugId = Long.parseLong(paramsMap.get("bugId"));
         BugInfo bugInfo = bugInfoMapper.selectByPrimaryKey(bugId);
         if(bugInfo == null){
-            return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E1017,"该BUG");
         }
 
         //levelNum
