@@ -102,8 +102,8 @@ public class Program implements Serializable {
     @Column(name = "modified_time")
     @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date modifiedTime;
-    
-    @Transient
+
+    @Column(name = "product_name")
     private String productName;
 
     /**

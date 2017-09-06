@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `itplus`.`product` (
   `id`                     BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name`                   VARCHAR(100)    NOT NULL
   COMMENT '产品名称',
-  `descp`                  VARCHAR(3000)    NULL
+  `descp`                  VARCHAR(3000)   NULL
   COMMENT '产品描述',
   `contact_account_id`     VARCHAR(50)     NOT NULL
   COMMENT '接口人账户id',
@@ -49,7 +49,6 @@ VALUES ('产品222', NULL, 'jojo', 1000000111, '小白', 'j集团总部-流程�
 INSERT INTO itplus.product (name, descp, contact_account_id, contact_employee_code, contact_employee_name, contact_full_dept_path, like_program, type, status, modified_account_id, modified_name, create_time, modified_time)
 VALUES ('产品AAA', NULL, 'zhangchi4', 1000000111, '小白', 'j集团总部-流程与信息中心', ',11，22', 0, 1, 'zhangchi4', '小黑',
         '2017-08-05 16:55:44', '2017-08-05 16:55:44');
-
 
 -- -----------------------------------------------------
 -- Table `itplus`.`employee_type` 人员类型
@@ -106,7 +105,6 @@ INSERT INTO itplus.product_employee (product_id, account_id, employee_code, empl
 VALUES (2, 'zhangchi4', 1000000111, 'x小白', '集团总部-流程', 1, 1, '2017-08-05 16:56:41', '2017-08-05 16:59:12');
 INSERT INTO itplus.product_employee (product_id, account_id, employee_code, employee_name, full_dept_path, employee_type, status, create_time, modified_time)
 VALUES (3, 'zhangchi4', 1000000111, 'x小白', '集团总部-流程', 2, 1, '2017-08-05 17:13:05', '2017-08-05 17:13:05');
-
 
 -- -----------------------------------------------------
 -- Table `itplus`.`product_employee_change_log` 产品-人员-变更日志
@@ -175,9 +173,11 @@ CREATE TABLE IF NOT EXISTS `itplus`.`program` (
   `id`                  BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `product_id`          BIGINT          NOT NULL
   COMMENT '归属产品',
+  `product_name`        VARCHAR(100)    NOT NULL
+  COMMENT '归属产品名称',
   `name`                VARCHAR(100)    NOT NULL
   COMMENT '项目名称',
-  `descp`               VARCHAR(3000)    NULL
+  `descp`               VARCHAR(3000)   NULL
   COMMENT '项目描述',
   `commit_date`         DATETIME        NOT NULL
   COMMENT '立项日期',
@@ -299,7 +299,7 @@ CREATE TABLE IF NOT EXISTS `itplus`.`program_comment` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `itplus`.`demand` (
   `id`                     BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `feed_back_id`            BIGINT          NULL
+  `feed_back_id`           BIGINT          NULL
   COMMENT '归属反馈id',
   `relation_id`            BIGINT          NOT NULL
   COMMENT '归属产品/项目id',
@@ -337,7 +337,7 @@ CREATE TABLE IF NOT EXISTS `itplus`.`demand` (
   COMMENT '优先级：0=低，1=中，2=高，3=非常高',
   `status`                 INT             NOT NULL
   COMMENT '状态：0=已取消，1=已关闭，2=待处理，3=处理中，4=已完成',
-  `channel`                INT    NOT NULL
+  `channel`                INT             NOT NULL
   COMMENT '渠道: 0=PC，1=OA，2=龙信，3=龙客',
   `modified_account_id`    VARCHAR(50)     NULL
   COMMENT '最后修改人账户id',
@@ -349,27 +349,25 @@ CREATE TABLE IF NOT EXISTS `itplus`.`demand` (
 )
   ENGINE = InnoDB;
 
-
 -- -----------------------------------------------------
 -- Table `itplus`.`demand_file` 需求附件
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `itplus`.`demand_file` (
-  `id`                  BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `demand_id`            BIGINT          NULL
+  `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `demand_id`   BIGINT          NULL
   COMMENT '需求id',
   `file_name`   VARCHAR(500)    NULL
   COMMENT '文件名称',
-  `file_suffix`   VARCHAR(50)    NULL
+  `file_suffix` VARCHAR(50)     NULL
   COMMENT '文件扩展名',
-  `file_size`   VARCHAR(50)    NULL
+  `file_size`   VARCHAR(50)     NULL
   COMMENT '文件大小',
-  `file_path`   text          NULL
+  `file_path`   TEXT            NULL
   COMMENT '文件绝对路径',
-  `create_time`               TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
+  `create_time` TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `itplus`.`demand_change_log` 需求-变更日志
@@ -436,7 +434,7 @@ CREATE TABLE IF NOT EXISTS `itplus`.`demand_comment` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `itplus`.`bug_info` (
   `id`                     BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `feed_back_id`            BIGINT          NULL
+  `feed_back_id`           BIGINT          NULL
   COMMENT '归属反馈id',
   `relation_id`            BIGINT          NOT NULL
   COMMENT '归属产品/项目id',
@@ -446,7 +444,7 @@ CREATE TABLE IF NOT EXISTS `itplus`.`bug_info` (
   COMMENT 'BUG名称',
   `descp`                  VARCHAR(5000)   NULL
   COMMENT 'BUG描述',
-  `reproduction_step`      VARCHAR(1000)    NULL
+  `reproduction_step`      VARCHAR(1000)   NULL
   COMMENT '复现步骤',
   `brower`                 VARCHAR(50)     NULL
   COMMENT '浏览器',
@@ -478,7 +476,7 @@ CREATE TABLE IF NOT EXISTS `itplus`.`bug_info` (
   COMMENT '优先级：0=低，1=中，2=高，3=非常高',
   `status`                 INT             NOT NULL
   COMMENT '状态：0=已取消，1=已关闭，2=待处理，3=处理中，4=已完成',
-  `channel`                INT    NOT NULL
+  `channel`                INT             NOT NULL
   COMMENT '渠道: 0=PC，1=OA，2=龙信，3=龙客',
   `modified_account_id`    VARCHAR(50)     NULL
   COMMENT '最后修改人账户id',
@@ -490,28 +488,25 @@ CREATE TABLE IF NOT EXISTS `itplus`.`bug_info` (
 )
   ENGINE = InnoDB;
 
-
-
 -- -----------------------------------------------------
 -- Table `itplus`.`bug_file` BUG附件
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `itplus`.`bug_file` (
-  `id`                  BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `bug_id`            BIGINT          NULL
+  `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `bug_id`      BIGINT          NULL
   COMMENT 'BUGid',
   `file_name`   VARCHAR(500)    NULL
   COMMENT '文件名称',
-  `file_suffix`   VARCHAR(50)    NULL
+  `file_suffix` VARCHAR(50)     NULL
   COMMENT '文件扩展名',
-  `file_size`   VARCHAR(50)    NULL
+  `file_size`   VARCHAR(50)     NULL
   COMMENT '文件大小',
-  `file_path`   text          NULL
+  `file_path`   TEXT            NULL
   COMMENT '文件绝对路径',
-  `create_time`               TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
+  `create_time` TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `itplus`.`bug_change_log` bug-变更日志
@@ -569,51 +564,49 @@ CREATE TABLE IF NOT EXISTS `itplus`.`bug_comment` (
 )
   ENGINE = InnoDB;
 
-
-
 -- -----------------------------------------------------
 -- Table `itplus`.`feed_back` 反馈
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `itplus`.`feed_back` (
-  `id`                     BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `product_id`          BIGINT          NOT NULL
+  `id`                      BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `product_id`              BIGINT          NOT NULL
   COMMENT '归属产品',
-  `name`                   VARCHAR(100)    NOT NULL
+  `name`                    VARCHAR(100)    NOT NULL
   COMMENT '产品名称',
-  `problem_title`                  VARCHAR(100)    NULL
+  `problem_title`           VARCHAR(100)    NULL
   COMMENT '问题标题',
-  `problem_descp`                  VARCHAR(1000)    NULL
+  `problem_descp`           VARCHAR(1000)   NULL
   COMMENT '问题描述',
-  `reproduction_step`                  VARCHAR(1000)    NULL
+  `reproduction_step`       VARCHAR(1000)   NULL
   COMMENT '复现步骤',
-  `sys_environment`                  VARCHAR(100)    NULL
+  `sys_environment`         VARCHAR(100)    NULL
   COMMENT '系统环境',
-  `contact_account_id`     VARCHAR(50)     NOT NULL
+  `contact_account_id`      VARCHAR(50)     NOT NULL
   COMMENT '接口人账户id',
-  `contact_employee_code`  BIGINT          NOT NULL
+  `contact_employee_code`   BIGINT          NOT NULL
   COMMENT '接口人员工号',
-  `contact_employee_name`  VARCHAR(50)     NOT NULL
+  `contact_employee_name`   VARCHAR(50)     NOT NULL
   COMMENT '接口人员工姓名',
-  `contact_full_dept_path` VARCHAR(100)    NOT NULL
+  `contact_full_dept_path`  VARCHAR(100)    NOT NULL
   COMMENT '接口人部门完整路径',
-  `type`                   INT             NOT NULL
+  `type`                    INT             NOT NULL
   COMMENT '反馈类型：0=功能异常，1=功能建议',
-  `status`                 INT             NOT NULL
+  `status`                  INT             NOT NULL
   COMMENT '状态：0=已取消，1=已关闭，2=待处理，3=处理中，4=已完成',
-  `channel`                INT    NOT NULL
+  `channel`                 INT             NOT NULL
   COMMENT '渠道: 0=PC，1=OA，2=龙信，3=龙客',
-  `modified_account_id`    VARCHAR(50)     NULL
+  `modified_account_id`     VARCHAR(50)     NULL
   COMMENT '提交人账户id',
-  `modified_employee_code`  BIGINT         NULL
+  `modified_employee_code`  BIGINT          NULL
   COMMENT '提交人员工号',
-  `modified_name`          VARCHAR(50)     NULL
+  `modified_name`           VARCHAR(50)     NULL
   COMMENT '提交人名称',
-  `modified_full_dept_path` VARCHAR(100)   NULL
+  `modified_full_dept_path` VARCHAR(100)    NULL
   COMMENT '提交人部门完整路径',
-  `file_path` VARCHAR(3000)   NULL
+  `file_path`               VARCHAR(3000)   NULL
   COMMENT '上传文件路径',
-  `create_time`            TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
-  `modified_time`          TIMESTAMP                DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `create_time`             TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
+  `modified_time`           TIMESTAMP                DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB;

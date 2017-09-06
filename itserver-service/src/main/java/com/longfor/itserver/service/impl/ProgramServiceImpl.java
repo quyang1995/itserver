@@ -50,15 +50,15 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 	@Override
 	public List<Program> programList(Map map) {
-		List<Program> programList = Lists.newArrayList();
-		for (Program program : programMapper.programList(map)) {
-			Product product = productMapper.selectByPrimaryKey(program.getProductId());
-			if (null != product) {
-				program.setProductName(product.getName());
-			}
-			programList.add(program);
-		}
-		return programList;
+//		List<Program> programList = Lists.newArrayList();
+//		for (Program program : programMapper.programList(map)) {
+//			Product product = productMapper.selectByPrimaryKey(program.getProductId());
+//			if (null != product) {
+//				program.setProductName(product.getName());
+//			}
+//			programList.add(program);
+//		}
+		return programMapper.programList(map);
 	}
 
 	@Override
@@ -75,6 +75,11 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	public boolean addProgram(Map map) {
 		JSONObject json = (JSONObject) JSONObject.toJSON(map);
 		Program program = JSONObject.toJavaObject(json, Program.class);
+		Product product = productMapper.selectByPrimaryKey(program.getProductId());
+		if(product == null){
+			return false;
+		}
+		program.setProductName(product.getName());
 		program.setCreateTime(TimeUtils.getTodayByDateTime());
 		program.setModifiedTime(TimeUtils.getTodayByDateTime());
 		programMapper.insert(program);
