@@ -234,9 +234,6 @@ public class APIBugInfoController extends BaseController {
 		Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
 
-////		/* 生成查询用Example */
-//		ELExample elExample = new ELExample(request, BugInfo.class);
-//		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
 		return this.getBugInfoService().statusList(request,paramsMap);
 	}
 
