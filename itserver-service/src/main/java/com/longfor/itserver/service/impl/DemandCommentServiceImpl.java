@@ -48,13 +48,13 @@ public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> im
         //回复人验证
         AccountLongfor accountLongfor =  adsHelper.getAccountLongforByLoginName(demandComment.getAccountId());
         if(accountLongfor == null) {
-            return CommonUtils.getResultMapByBizEnum(BizEnum.E1001);
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E1017,"该回复人");
         }
         //bugId验证
         Long demandId = Long.parseLong(paramsMap.get("demandId"));
         Demand demand = demandMapper.selectByPrimaryKey(demandId);
         if(demand == null){
-            return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E1017,"该需求");
         }
 
         //levelNum

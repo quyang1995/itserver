@@ -131,7 +131,12 @@ public class APIFeedBackController extends BaseController {
 	}
 
 
-
+	/**
+	 * 新增反馈评论
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value = "/addComment" ,method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public Map addComment(HttpServletRequest request , HttpServletResponse response){
@@ -147,7 +152,7 @@ public class APIFeedBackController extends BaseController {
 				BugInfo bugInfo = new BugInfo();
 				bugInfo.setFeedBackId(feedBackId);
 				bugInfo = this.getBugInfoService().selectOne(bugInfo);
-				if(bugInfo == null) return  CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+				if(bugInfo == null) return  CommonUtils.getResultMapByBizEnum(BizEnum.E1017,"该反馈对应的异常");
 
 				paramsMap.put("bugId",bugInfo.getId().toString());
 				return this.getBugCommentService().add(paramsMap);
@@ -156,19 +161,22 @@ public class APIFeedBackController extends BaseController {
 				Demand demand = new Demand();
 				demand.setFeedBackId(feedBackId);
 				demand = this.getDemandService().selectOne(demand);
-				if(demand == null ) return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+				if(demand == null ) return CommonUtils.getResultMapByBizEnum(BizEnum.E1017,"该反馈对应的建议");
 
 				paramsMap.put("demandId",demand.getId().toString());
 				return this.getDemandCommentService().add(paramsMap);
 			}
-
-			return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
 		}
-
-		return  CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+		return CommonUtils.getResultMapByBizEnum(BizEnum.E1017,"该反馈");
 	}
 
 
+	/**
+	 * 反馈状态统计
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value = "/countStatus" ,method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public Map countStatus(HttpServletRequest request , HttpServletResponse response){

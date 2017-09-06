@@ -60,6 +60,12 @@
     <if test='channel !="" and channel != null and channel != -1'>
       and channel = #{channel}
     </if>
+    <if test='productId !="" and productId != null and productId != -1 and programId == -1'>
+      and relation_type = 1 AND relation_id = #{productId}
+    </if>
+    <if test='programId !="" and programId != null and programId != -1'>
+      and (relation_type = 1 AND relation_id = #{productId}) or (relation_type = 2 AND relation_id = #{programId})
+    </if>
     <if test='searchText != "" and searchText != null'>
       and (name like concat(concat('%',#{searchText}),'%') OR callon_employee_name like concat(concat('%',#{searchText}),'%'))
     </if>
@@ -70,4 +76,21 @@
   <select id="getBugId" parameterType="java.lang.Long" resultMap="BugInfoDetailResultMap">
     SELECT * FROM bug_info WHERE id = #{id}
   </select>
+
+  <!-- 状态查询BUG列表 -->
+  <select id="statusList"   resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM bug_info
+    WHERE 1=1
+    <if test='relationType !="" and relationType != null and relationType != -1'>
+      AND relation_type = #{relationType}
+    </if>
+    <if test='relationId != "" and relationId != null  and relationId != -1'>
+      and relation_id = #{relationId}
+    </if>
+    and status != 1
+    ORDER BY create_time DESC
+  </select>
+
 </mapper>

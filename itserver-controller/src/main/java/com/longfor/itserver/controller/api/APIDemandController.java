@@ -170,4 +170,51 @@ public class APIDemandController extends BaseController {
         Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         return this.getDemandChangeLogService().orderLimitList(paramsMap);
     }
+
+
+
+    /**
+     * 变更状态
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/update/status" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+    @ResponseBody
+    public Map updateStatus(HttpServletRequest request ,HttpServletResponse response){
+        Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        this.getDemandService().updateStatus(paramsMap);
+
+        return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+    }
+
+    /**
+     * 变更指派人
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/update/callon" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+    @ResponseBody
+    public Map updateCallon(HttpServletRequest request ,HttpServletResponse response){
+        Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        this.getDemandService().updateCallon(paramsMap);
+
+        return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+    }
+
+
+    /**
+     * 根据产品/项目ID 获取 待处理/处理中的BUG
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/statusList" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+    @ResponseBody
+    public Map statusList(HttpServletRequest request ,HttpServletResponse response){
+        Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+
+        return this.getDemandService().statusList(request, paramsMap);
+    }
 }

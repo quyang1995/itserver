@@ -5,6 +5,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
+import com.longfor.itserver.common.enums.BizEnum;
+import com.longfor.itserver.common.util.CommonUtils;
+import com.longfor.itserver.common.util.ELExample;
+import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.ProductEmployee;
 import com.longfor.itserver.mapper.ProductEmployeeMapper;
 import com.longfor.itserver.service.IProductEmployeeService;
@@ -12,6 +16,7 @@ import com.longfor.itserver.service.base.AdminBaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

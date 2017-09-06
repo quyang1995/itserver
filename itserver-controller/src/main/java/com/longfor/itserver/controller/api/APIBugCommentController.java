@@ -61,13 +61,11 @@ public class APIBugCommentController extends BaseController {
     public Map add(HttpServletRequest request, HttpServletResponse response) {
         @SuppressWarnings("unchecked")
         Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-        try {
-            this.getBugCommentService().add(paramsMap);
-            return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
-        }
+
+        this.getBugCommentService().add(paramsMap);
+
+        return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
+
     }
 
 }

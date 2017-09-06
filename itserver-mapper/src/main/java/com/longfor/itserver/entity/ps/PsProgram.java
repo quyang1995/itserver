@@ -21,6 +21,10 @@ public class PsProgram {
     private Long id;
     @Transient
     private String name;
+    @Transient
+    private String type;
+    @Transient
+    private String programStatus;
 
     public Long getId() {
         return id;
@@ -36,5 +40,21 @@ public class PsProgram {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getProgramStatus() {
+        return programStatus;
+    }
+
+    public void setProgramStatus(String programStatus) {
+        this.programStatus = programStatus;
     }
 }

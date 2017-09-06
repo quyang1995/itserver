@@ -57,8 +57,8 @@
       (tb.account_id = #{accountId}
       OR ta.contact_account_id = #{accountId})
     </if>
-    <if test="productStatus != null and productStatus != '' and productStatus != -1 ">
-      AND ta.status= #{productStatus}
+    <if test="status != null and status != '' and status != -1 ">
+      AND ta.status= #{status}
     </if>
     <if test="searchText != null and searchText != ''">
       AND (tb.employee_name LIKE concat('%',#{searchText},'%') OR ta.name LIKE concat('%',#{searchText},'%') OR ta.contact_employee_name LIKE concat('%',#{searchText},'%'))
@@ -99,8 +99,8 @@
       (tb.account_id = #{accountId}
       OR ta.contact_account_id = #{accountId})
     </if>
-    <if test="productStatus != null and productStatus != '' and productStatus != -1 ">
-      AND ta.status= #{productStatus}
+    <if test="status != null and status != '' and status != -1 ">
+      AND ta.status= #{status}
     </if>
     ORDER BY ta.modified_time DESC
   </select>

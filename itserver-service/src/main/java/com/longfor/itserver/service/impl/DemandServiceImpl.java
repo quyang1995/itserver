@@ -6,7 +6,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
+import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
+import com.longfor.itserver.common.enums.DemandLevelEnum;
 import com.longfor.itserver.common.enums.DemandStatusEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
@@ -27,6 +29,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author wax Created on 2017/8/3 下午7:15
@@ -145,19 +149,22 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		Map<String,Object> logMap = getChangeLog(selectDemandOne,demand);
 		List<String> textList = (List)logMap.get("logList");
 		List<DemandChangeLog> logList = new ArrayList<>();
-		for (String demandChangeLog:textList){
-			DemandChangeLog log = new DemandChangeLog();
-			log.setDemandId(demand.getId());
-			log.setBefDescp(selectDemandOne.getDescp());
-			log.setType((Integer)logMap.get("type"));
-			log.setActionChangeInfo(demandChangeLog);
-			log.setModifiedName(draftedAccountLongfor.getName());
-			log.setModifiedAccountId(demand.getModifiedAccountId());
-			log.setCreateTime(TimeUtils.getTodayByDateTime());
-			log.setModifiedTime(TimeUtils.getTodayByDateTime());
-			logList.add(log);
+		if(logList.size() > 0){
+			for (String demandChangeLog:textList){
+				DemandChangeLog log = new DemandChangeLog();
+				log.setDemandId(demand.getId());
+				log.setBefDescp(selectDemandOne.getDescp());
+				log.setType((Integer)logMap.get("type"));
+				log.setActionChangeInfo(demandChangeLog);
+				log.setModifiedName(draftedAccountLongfor.getName());
+				log.setModifiedAccountId(demand.getModifiedAccountId());
+				log.setCreateTime(TimeUtils.getTodayByDateTime());
+				log.setModifiedTime(TimeUtils.getTodayByDateTime());
+				logList.add(log);
+			}
+			demandChangeLogMapper.insertList(logList);
 		}
-		demandChangeLogMapper.insertList(logList);
+
 
 		/*更新文件*/
 		DemandFile demandFile = new DemandFile();
@@ -173,10 +180,11 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			demandFileMapper.insertList(list);
 		}
 		/*添加文件结束*/
-
+		demand.setCreateTime(selectDemandOne.getCreateTime());
 		demandMapper.updateByPrimaryKey(demand);
 		return true;
 	}
+
 
 	@Override
 	public Demand getDemandById(Long id) {
@@ -229,15 +237,16 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 				map.put("type",1);
 			}
 			if(!Objects.equals(oldDemand.getStatus(),newDemand.getStatus())||
-					!Objects.equals(oldDemand.getLevel(),newDemand.getLevel())){
+					!Objects.equals(oldDemand.getLevel(),newDemand.getLevel())||
+					!Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())){
 				StringBuilder log = new StringBuilder();
 				if (!Objects.equals(oldDemand.getStatus(),newDemand.getStatus())){
 
 					log.append(newDemand.getModifiedName()).
 							append("将 状态 由[").
-							append(oldDemand.getStatus()).
+							append(DemandStatusEnum.getByCode(oldDemand.getStatus()).getText()).
 							append("]更改为[").
-							append(newDemand.getStatus()).
+							append(DemandStatusEnum.getByCode(newDemand.getStatus()).getText()).
 							append("]");
 					textList.add(log.toString());
 				}
@@ -248,9 +257,22 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 						log.append(newDemand.getModifiedName());
 					}
 					log.append("将 优先级 由[").
-							append(oldDemand.getLevel()).
+							append(DemandLevelEnum.getByCode(oldDemand.getLevel()).getText()).
 							append("]更改为[").
-							append(newDemand.getLevel()).
+							append(DemandLevelEnum.getByCode(newDemand.getLevel()).getText()).
+							append("]");
+					textList.add(log.toString());
+				}
+				if(!Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())){
+					if (StringUtils.isNotBlank(log)){
+						log.append(",");
+					}else{
+						log.append(newDemand.getModifiedName());
+					}
+					log.append("将 指派人 由[").
+							append(oldDemand.getCallonEmployeeName()).
+							append("]更改为[").
+							append(newDemand.getCallonEmployeeName()).
 							append("]");
 					textList.add(log.toString());
 				}
@@ -273,5 +295,108 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			map.put("logList",textList);
 		}
 		return map;
+	}
+
+
+
+	@Override
+	public boolean updateStatus(Map<String,String> paramsMap) {
+
+		JSONObject jsonObject   = (JSONObject)JSONObject.toJSON(paramsMap);
+		String modifiedAccountId =  jsonObject.getString("modifiedAccountId");
+		String modifiedName =  jsonObject.getString("modifiedName");
+		Long demandId = Long.valueOf(jsonObject.getString("demandId"));
+		Integer status = Integer.valueOf( jsonObject.getString("status"));
+		Demand oldDemand = demandMapper.selectByPrimaryKey(demandId);
+		Demand newDemand = demandMapper.selectByPrimaryKey(demandId);
+		newDemand.setStatus(status);
+		getChangeLog(oldDemand,newDemand);
+        /*添加BUG修改日志*/
+		Map<String,Object> logMap = getChangeLog(oldDemand,newDemand);
+		List<String> textList = (List)logMap.get("logList");
+		List<DemandChangeLog> logList = new ArrayList<>();
+		for (String log:textList){
+			DemandChangeLog demandChangeLog = new DemandChangeLog();
+			demandChangeLog.setDemandId(newDemand.getId());
+			demandChangeLog.setBefDescp(newDemand.getDescp());
+			demandChangeLog.setType((Integer) logMap.get("type"));
+			demandChangeLog.setActionChangeInfo(log);
+			demandChangeLog.setModifiedName(modifiedName);
+			demandChangeLog.setModifiedAccountId(modifiedAccountId);
+			demandChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+			demandChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+			logList.add(demandChangeLog);
+		}
+		demandChangeLogMapper.insertList(logList);
+		demandMapper.updateByPrimaryKey(newDemand);
+		return true;
+	}
+
+
+	@Override
+	public boolean updateCallon(Map<String, String> paramsMap) {
+		JSONObject jsonObject   = (JSONObject)JSONObject.toJSON(paramsMap);
+		String modifiedAccountId =  jsonObject.getString("modifiedAccountId");
+		String modifiedName =  jsonObject.getString("modifiedName");
+		Long demandId = Long.valueOf(jsonObject.getString("demandId"));
+		String callonAccountId =  jsonObject.getString("callonAccountId");
+		Demand oldDemand = demandMapper.selectByPrimaryKey(demandId);
+		Demand newDemand = demandMapper.selectByPrimaryKey(demandId);
+		getChangeLog(oldDemand,newDemand);
+		AccountLongfor accountLongfor =  adsHelper.getAccountLongforByLoginName(callonAccountId);
+		newDemand.setCallonAccountId(callonAccountId);
+		newDemand.setCallonEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
+		newDemand.setCallonEmployeeName(accountLongfor.getName());
+		newDemand.setCallonFullDeptPath(accountLongfor.getPsDeptFullName());
+		getChangeLog(oldDemand,newDemand);
+        /*添加BUG修改日志*/
+		Map<String,Object> logMap = getChangeLog(oldDemand,newDemand);
+		List<String> textList = (List)logMap.get("logList");
+		List<DemandChangeLog> logList = new ArrayList<>();
+		for (String log:textList){
+			DemandChangeLog demandChangeLog = new DemandChangeLog();
+			demandChangeLog.setDemandId(newDemand.getId());
+			demandChangeLog.setBefDescp(newDemand.getDescp());
+			demandChangeLog.setType((Integer)logMap.get("type"));
+			demandChangeLog.setActionChangeInfo(log);
+			demandChangeLog.setModifiedName(modifiedName);
+			demandChangeLog.setModifiedAccountId(modifiedAccountId);
+			demandChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+			demandChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+			logList.add(demandChangeLog);
+		}
+		demandChangeLogMapper.insertList(logList);
+		demandMapper.updateByPrimaryKey(newDemand);
+		return true;
+	}
+
+	@Override
+	public Map statusList(HttpServletRequest request , Map<String, String> paramsMap) {
+
+		/* 生成查询用Example */
+		ELExample elExample = new ELExample(request, BugInfo.class);
+		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
+
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		JSONObject jsonObject = (JSONObject)JSONObject.toJSON(paramsMap);
+		Demand demand = new Demand();
+		String relationIds = jsonObject.getString("relationId");
+		String relationTypes = jsonObject.getString("relationType");
+		//关联产品
+		if("1".equals(relationTypes)){
+			demand.setRelationId(Long.valueOf(relationIds));
+			demand.setRelationType(Integer.valueOf(relationTypes));
+		}
+		else if("2".equals(relationTypes)){
+			//关联项目
+			demand.setRelationId(Long.valueOf(relationIds));
+			demand.setRelationType(Integer.valueOf(relationTypes));
+		}
+		List<Demand> list = demandMapper.statusList(demand);
+		resultMap.put("list",list);
+		resultMap.put(APIHelper.PAGE_NUM, elExample.getPageNum());
+		resultMap.put(APIHelper.PAGE_SIZE, elExample.getPageSize());
+		resultMap.put(APIHelper.TOTAL, new PageInfo(list).getTotal());
+		return resultMap;
 	}
 }

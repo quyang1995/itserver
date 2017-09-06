@@ -18,6 +18,7 @@ import com.longfor.itserver.service.IProgramService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import jodd.datetime.TimeUtil;
 import net.mayee.commons.TimeUtils;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -370,4 +371,19 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		return textList;
 	}
 
+
+	@Override
+	public List<Program> productIdAllList(Map parsmsMap) {
+		Long productId = Long.valueOf((String) parsmsMap.get("productId"));
+		Program program = new Program();
+		program.setProductId(productId);
+		List<Program> programList =	programMapper.select(program);
+		Product product = productMapper.selectByPrimaryKey(productId);
+		if(null != product) {
+			for (Program p : programList) {
+				p.setProductName(product.getName());
+			}
+		}
+		return programList;
+	}
 }
