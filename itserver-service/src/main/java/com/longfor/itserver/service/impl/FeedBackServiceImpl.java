@@ -103,7 +103,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 
 			//起草人
 			if(accountLongfor != null){
-				bugInfo.setDraftedAccountId(accountLongfor.getUcAccountId());
+				bugInfo.setDraftedAccountId(accountLongfor.getLoginName());
 				bugInfo.setDraftedEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
 				bugInfo.setDraftedEmployeeName(accountLongfor.getName());
 				bugInfo.setDraftedFullDeptPath(accountLongfor.getPsDeptFullName());
@@ -134,7 +134,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 
             //起草人
 			if(accountLongfor != null) {
-				demand.setDraftedAccountId(accountLongfor.getUcAccountId());
+				demand.setDraftedAccountId(accountLongfor.getLoginName());
 				demand.setDraftedEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
 				demand.setDraftedEmployeeName(accountLongfor.getName());
 				demand.setDraftedFullDeptPath(accountLongfor.getPsDeptFullName());

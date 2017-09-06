@@ -387,6 +387,7 @@
             <property name="channel" type="int" required="false" />
             <property name="productId" type="int" required="false" />
             <property name="programId" type="int" required="false" />
+            <property name="isPart" type="int" required="false"/>
         </request>
     </item>
 
@@ -524,6 +525,7 @@
             <property name="channel" type="int" required="false" />
             <property name="productId" type="int" required="false" />
             <property name="programId" type="int" required="false" />
+            <property name="isPart" type="int" required="false"/>
         </request>
     </item >
 
@@ -793,8 +795,8 @@
         <request>
             <property ref="pageNum"/>
             <property ref="pageSize"/>
-            <property name="relationId" type="int" required="true" />
-            <property name="relationType" type="int" required="true" />
+            <property name="relationId" type="int" required="false" />
+            <property name="relationType" type="int" required="false" />
         </request>
     </item>
 
@@ -808,8 +810,8 @@
         <request>
             <property ref="pageNum"/>
             <property ref="pageSize"/>
-            <property name="relationId" type="int" required="true" />
-            <property name="relationType" type="int" required="true" />
+            <property name="relationId" type="int" required="false" />
+            <property name="relationType" type="int" required="false" />
         </request>
     </item>
 </api>

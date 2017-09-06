@@ -61,6 +61,9 @@
     <if test='channel != "" and channel != null and channel !=-1' >
       and channel = #{channel}
     </if>
+    <if test='isPart == 1'>
+      and callon_account_id = #{accountId, jdbcType=VARCHAR}
+    </if>
     <if test='productId !="" and productId != null and productId != -1 and programId == -1'>
       and relation_type = 1 AND relation_id = #{productId}
     </if>
