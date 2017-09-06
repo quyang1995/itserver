@@ -6,6 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
+import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.enums.DemandLevelEnum;
 import com.longfor.itserver.common.enums.DemandStatusEnum;
@@ -28,6 +29,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author wax Created on 2017/8/3 下午7:15
@@ -365,5 +368,35 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		demandChangeLogMapper.insertList(logList);
 		demandMapper.updateByPrimaryKey(newDemand);
 		return true;
+	}
+
+	@Override
+	public Map statusList(HttpServletRequest request , Map<String, String> paramsMap) {
+
+		/* 生成查询用Example */
+		ELExample elExample = new ELExample(request, BugInfo.class);
+		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
+
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		JSONObject jsonObject = (JSONObject)JSONObject.toJSON(paramsMap);
+		Demand demand = new Demand();
+		String relationIds = jsonObject.getString("relationId");
+		String relationTypes = jsonObject.getString("relationType");
+		//关联产品
+		if("1".equals(relationTypes)){
+			demand.setRelationId(Long.valueOf(relationIds));
+			demand.setRelationType(Integer.valueOf(relationTypes));
+		}
+		else if("2".equals(relationTypes)){
+			//关联项目
+			demand.setRelationId(Long.valueOf(relationIds));
+			demand.setRelationType(Integer.valueOf(relationTypes));
+		}
+		List<Demand> list = demandMapper.statusList(demand);
+		resultMap.put("list",list);
+		resultMap.put(APIHelper.PAGE_NUM, elExample.getPageNum());
+		resultMap.put(APIHelper.PAGE_SIZE, elExample.getPageSize());
+		resultMap.put(APIHelper.TOTAL, new PageInfo(list).getTotal());
+		return resultMap;
 	}
 }

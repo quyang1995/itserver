@@ -781,4 +781,35 @@
             <property name="productId" type="int" required="true" />
         </request>
     </item>
+
+
+    <!--
+        URL:
+        /api/bug/statusList
+
+        说明:根据产品ID获取相关项目列表信息
+    -->
+    <item id="api_bug_statusList" description="根据产品/项目ID、状态获取相关BUG列表信息">
+        <request>
+            <property ref="pageNum"/>
+            <property ref="pageSize"/>
+            <property name="relationId" type="int" required="true" />
+            <property name="relationType" type="int" required="true" />
+        </request>
+    </item>
+
+    <!--
+        URL:
+        /api/demand/statusList
+
+        说明:根据产品ID获取相关项目列表信息
+    -->
+    <item id="api_demand_statusList" description="根据产品/项目ID、状态获取相关需求列表信息">
+        <request>
+            <property ref="pageNum"/>
+            <property ref="pageSize"/>
+            <property name="relationId" type="int" required="true" />
+            <property name="relationType" type="int" required="true" />
+        </request>
+    </item>
 </api>

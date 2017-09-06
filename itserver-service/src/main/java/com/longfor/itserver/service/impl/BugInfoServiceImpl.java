@@ -1,7 +1,10 @@
 package com.longfor.itserver.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.constant.ConfigConsts;
@@ -9,6 +12,8 @@ import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.enums.BugLevelEnum;
 import com.longfor.itserver.common.enums.BugStatusEnum;
+import com.longfor.itserver.common.util.CommonUtils;
+import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.entity.BugChangeLog;
 import com.longfor.itserver.entity.BugFile;
 import com.longfor.itserver.entity.BugInfo;
@@ -18,11 +23,13 @@ import com.longfor.itserver.mapper.BugInfoMapper;
 import com.longfor.itserver.service.IBugInfoService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import net.mayee.commons.TimeUtils;
+import net.mayee.commons.helper.APIHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -348,4 +355,36 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         return true;
     }
 
+    @Override
+    public Map statusList(HttpServletRequest request,Map<String, String> paramsMap) {
+         /* 生成查询用Example */
+        ELExample elExample = new ELExample(request, BugInfo.class);
+        PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
+
+        JSONObject jsonObject = (JSONObject)JSONObject.toJSON(paramsMap);
+        BugInfo bugInfo = new BugInfo();
+        String relationIds = jsonObject.getString("relationId");
+        String relationTypes = jsonObject.getString("relationType");
+
+        Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+
+        //关联产品
+        if("1".equals(relationTypes)){
+            Long relationId = Long.valueOf(relationIds);
+            bugInfo.setRelationId(relationId);
+            bugInfo.setRelationType(Integer.valueOf(relationTypes));
+        }
+        else if("2".equals(relationTypes)){
+            //关联项目
+            Long relationId = Long.valueOf(relationIds);
+            bugInfo.setRelationId(relationId);
+            bugInfo.setRelationType(Integer.valueOf(relationTypes));
+        }
+        List<BugInfo> list = bugInfoMapper.statusList(bugInfo);
+        resultMap.put("list",list);
+        resultMap.put(APIHelper.PAGE_NUM, elExample.getPageNum());
+        resultMap.put(APIHelper.PAGE_SIZE, elExample.getPageSize());
+        resultMap.put(APIHelper.TOTAL, new PageInfo(list).getTotal());
+        return resultMap;
+    }
 }

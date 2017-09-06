@@ -16,4 +16,7 @@ public interface BugInfoMapper extends BeeMapper<BugInfo> {
     BugInfo getBugId(long id);
 
     boolean updateBug(Map map);
+
+    List<BugInfo> statusList(BugInfo bugInfo);
+
 }
