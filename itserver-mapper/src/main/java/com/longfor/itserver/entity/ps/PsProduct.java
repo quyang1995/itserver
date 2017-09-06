@@ -13,6 +13,10 @@ public class PsProduct {
     private Long id;
     @Transient
     private String name;
+    @Transient
+    private String type;
+    @Transient
+    private String status;
 
     public Long getId() {
         return id;
@@ -28,5 +32,21 @@ public class PsProduct {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

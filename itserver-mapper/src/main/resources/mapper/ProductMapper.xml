@@ -26,6 +26,8 @@
     -->
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
   </resultMap>
 
   <resultMap id="ApiBaseResultMap" type="com.longfor.itserver.entity.ps.PsAPIProduct" >
@@ -126,7 +128,7 @@
   </select>
 
   <select id="selectIdList" resultMap="LikeBaseResultMap">
-    SELECT ID,NAME
+    SELECT ID,NAME,type,status
     FROM product
     WHERE ID IN(${_parameter})
   </select>

@@ -582,7 +582,7 @@ CREATE TABLE IF NOT EXISTS `itplus`.`feed_back` (
   COMMENT '产品名称',
   `problem_title`                  VARCHAR(100)    NULL
   COMMENT '问题标题',
-  `problem_descp`                  VARCHAR(1000)    NULL
+  `problem_descp`                  VARCHAR(5000)    NULL
   COMMENT '问题描述',
   `reproduction_step`                  VARCHAR(1000)    NULL
   COMMENT '复现步骤',

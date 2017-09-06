@@ -81,6 +81,15 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
         feedBack.setModifiedTime(TimeUtils.getTodayByDateTime());
 		//状态
 		feedBack.setStatus(FeedBackStatusEnum.PENDING.getCode());
+		//合并BUG描述和复现步骤
+		if(feedBack.getType().equals(0)){
+			String descp = "";
+			descp += feedBack.getProblemDescp().substring(0,feedBack.getProblemDescp().length() <= 500 ? feedBack.getProblemDescp().length() : 500);
+			descp +="<br>" +feedBack.getReproductionStep().substring(0,feedBack.getReproductionStep().length() <= 500 ? feedBack.getReproductionStep().length() : 500);
+			feedBack.setProblemDescp(descp);
+			feedBack.setReproductionStep(null);
+		}
+
 		feedBackMapper.insert(feedBack);
 		//0:新增BUG   1:新增需求
 		if(feedBack.getType().equals(0)){
@@ -90,7 +99,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 			bugInfo.setRelationType(1);
 			bugInfo.setName(feedBack.getProblemTitle());
 			bugInfo.setDescp(feedBack.getProblemDescp());
-			bugInfo.setReproductionStep(feedBack.getReproductionStep());
+//			bugInfo.setReproductionStep(feedBack.getReproductionStep());
 			bugInfo.setBrower(feedBack.getSysEnvironment());
 			bugInfo.setHopeDate(new Date());
 			bugInfo.setChannel(feedBack.getChannel());

@@ -359,7 +359,6 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         }
 
 		if(!Objects.equals(oldProgram.getName(), newProgram.getName())
-				|| !Objects.equals(oldProgram.getLikeProgram(), newProgram.getLikeProgram())
 				|| !Objects.equals(oldProgram.getLikeProduct(), newProgram.getLikeProduct())
 				|| !Objects.equals(oldProgram.getDescp(), newProgram.getDescp())){
 			StringBuilder sb = new StringBuilder();
