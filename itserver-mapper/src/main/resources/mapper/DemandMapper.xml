@@ -1,114 +1,143 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.longfor.itserver.mapper.DemandMapper" >
-  <resultMap id="BaseResultMap" type="com.longfor.itserver.entity.Demand" >
-    <!--
-      WARNING - @mbggenerated
-    -->
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="feed_back_id" property="feedBackId" jdbcType="BIGINT" />
-    <result column="relation_id" property="relationId" jdbcType="BIGINT" />
-    <result column="relation_type" property="relationType" jdbcType="INTEGER" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="descp" property="descp" jdbcType="VARCHAR" />
-    <result column="hope_date" property="hopeDate" jdbcType="TIMESTAMP" />
-    <result column="callon_account_id" property="callonAccountId" jdbcType="VARCHAR" />
-    <result column="callon_employee_code" property="callonEmployeeCode" jdbcType="BIGINT" />
-    <result column="callon_employee_name" property="callonEmployeeName" jdbcType="VARCHAR" />
-    <result column="callon_full_dept_path" property="callonFullDeptPath" jdbcType="VARCHAR" />
-    <result column="drafted_account_id" property="draftedAccountId" jdbcType="VARCHAR" />
-    <result column="drafted_employee_code" property="draftedEmployeeCode" jdbcType="BIGINT" />
-    <result column="drafted_employee_name" property="draftedEmployeeName" jdbcType="VARCHAR" />
-    <result column="drafted_full_dept_path" property="draftedFullDeptPath" jdbcType="VARCHAR" />
-    <result column="cc_account" property="ccAccount" jdbcType="VARCHAR" />
-    <result column="like_product" property="likeProduct" jdbcType="VARCHAR" />
-    <result column="like_program" property="likeProgram" jdbcType="VARCHAR" />
-    <result column="level" property="level" jdbcType="INTEGER" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="channel" property="channel" jdbcType="INTEGER" />
-    <result column="modified_account_id" property="modifiedAccountId" jdbcType="VARCHAR" />
-    <result column="modified_name" property="modifiedName" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <resultMap id="DemandDetailResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsDemandDetail">
+<mapper namespace="com.longfor.itserver.mapper.DemandMapper">
+    <resultMap id="BaseResultMap" type="com.longfor.itserver.entity.Demand">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="feed_back_id" property="feedBackId" jdbcType="BIGINT"/>
+        <result column="relation_id" property="relationId" jdbcType="BIGINT"/>
+        <result column="relation_type" property="relationType" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="descp" property="descp" jdbcType="VARCHAR"/>
+        <result column="hope_date" property="hopeDate" jdbcType="TIMESTAMP"/>
+        <result column="callon_account_id" property="callonAccountId" jdbcType="VARCHAR"/>
+        <result column="callon_employee_code" property="callonEmployeeCode" jdbcType="BIGINT"/>
+        <result column="callon_employee_name" property="callonEmployeeName" jdbcType="VARCHAR"/>
+        <result column="callon_full_dept_path" property="callonFullDeptPath" jdbcType="VARCHAR"/>
+        <result column="drafted_account_id" property="draftedAccountId" jdbcType="VARCHAR"/>
+        <result column="drafted_employee_code" property="draftedEmployeeCode" jdbcType="BIGINT"/>
+        <result column="drafted_employee_name" property="draftedEmployeeName" jdbcType="VARCHAR"/>
+        <result column="drafted_full_dept_path" property="draftedFullDeptPath" jdbcType="VARCHAR"/>
+        <result column="cc_account" property="ccAccount" jdbcType="VARCHAR"/>
+        <result column="like_product" property="likeProduct" jdbcType="VARCHAR"/>
+        <result column="like_program" property="likeProgram" jdbcType="VARCHAR"/>
+        <result column="level" property="level" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="channel" property="channel" jdbcType="INTEGER"/>
+        <result column="modified_account_id" property="modifiedAccountId" jdbcType="VARCHAR"/>
+        <result column="modified_name" property="modifiedName" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="DemandDetailResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsDemandDetail">
 
-  </resultMap>
+    </resultMap>
 
-  <resultMap id="IndexResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsIndex">
-    <result column="id" property="id" jdbcType="BIGINT" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="value" property="value" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    <!--
-      WARNING - @mbggenerated
-    -->
-    id, feed_back_id, relation_id, relation_type, name, descp, hope_date, callon_account_id,
-    callon_employee_code, callon_employee_name, callon_full_dept_path, drafted_account_id,
-    drafted_employee_code, drafted_employee_name, drafted_full_dept_path, cc_account,
-    like_product, like_program, level, status, channel, modified_account_id, modified_name,
-    create_time, modified_time
-  </sql>
-  <select id="searchList" resultMap="BaseResultMap">
-    SELECT
-    <include refid="Base_Column_List"></include>
-    FROM demand
-    WHERE  1=1
-    <if test='status != "" and status != null and status !=-1'>
-     and status = #{status}
-    </if>
-    <if test='channel != "" and channel != null and channel !=-1' >
-      and channel = #{channel}
-    </if>
-    <if test='isPart == 1'>
-      and callon_account_id = #{accountId, jdbcType=VARCHAR}
-    </if>
-    <if test='productId !="" and productId != null and productId != -1 and programId == -1'>
-      and relation_type = 1 AND relation_id = #{productId}
-    </if>
-    <if test='programId !="" and programId != null and programId != -1'>
-      and (relation_type = 1 AND relation_id = #{productId}) or (relation_type = 2 AND relation_id = #{programId})
-    </if>
-    <if test='searchText != "" and searchText != null'>
-      and (name like concat(concat('%',#{searchText}),'%') OR callon_employee_name like concat(concat('%',#{searchText}),'%'))
-    </if>
-    ORDER BY modified_time DESC
-  </select>
-  <select id="getDemandById" parameterType="java.lang.Long" resultMap="DemandDetailResultMap">
-    SELECT * FROM demand WHERE id = #{id}
-  </select>
+    <resultMap id="IndexResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsIndex">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="value" property="value" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        id, feed_back_id, relation_id, relation_type, name, descp, hope_date, callon_account_id,
+        callon_employee_code, callon_employee_name, callon_full_dept_path, drafted_account_id,
+        drafted_employee_code, drafted_employee_name, drafted_full_dept_path, cc_account,
+        like_product, like_program, level, status, channel, modified_account_id, modified_name,
+        create_time, modified_time
+    </sql>
+    <select id="searchList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM demand
+        WHERE 1=1
+        <if test='status != "" and status != null and status !=-1'>
+            and status = #{status}
+        </if>
+        <if test='channel != "" and channel != null and channel !=-1'>
+            and channel = #{channel}
+        </if>
+        <if test='isPart == 1'>
+            and (callon_account_id = #{accountId, jdbcType=VARCHAR} OR drafted_account_id =
+            #{accountId, jdbcType=VARCHAR})
+        </if>
+        <if test='productId !="" and productId != null and productId != -1 and programId == -1'>
+            and relation_type = 1 AND relation_id = #{productId}
+        </if>
+        <if test='programId !="" and programId != null and programId != -1'>
+            and (relation_type = 1 AND relation_id = #{productId}) or (relation_type = 2 AND relation_id = #{programId})
+        </if>
+        <if test='searchText != "" and searchText != null'>
+            and (name like concat(concat('%',#{searchText}),'%') OR callon_employee_name like
+            concat(concat('%',#{searchText}),'%'))
+        </if>
+        ORDER BY create_time DESC
+    </select>
+    <select id="getDemandById" parameterType="java.lang.Long" resultMap="DemandDetailResultMap">
+        SELECT *
+        FROM demand
+        WHERE id = #{id}
+    </select>
 
-  <!--统计待处理信息的个数-->
-  <select id="countPending" parameterType="string" resultMap="IndexResultMap">
-    SELECT 'pending' AS name,'1' as id,'0' as value
-    UNION ALL
-    SELECT 'pending' AS name,'2' as id,COUNT(*) as value FROM bug_info WHERE `status`=2  AND callon_account_id = #{accountId, jdbcType=VARCHAR}
-    UNION ALL
-    SELECT 'pending' AS name,'3' as id,COUNT(*) as value FROM demand WHERE `status`=2 AND callon_account_id = #{accountId, jdbcType=VARCHAR}
-    UNION ALL
-    SELECT 'working' AS name,'1' as id,'0' as value
-    UNION ALL
-    SELECT 'working' AS name,'2' as id,COUNT(*) as value FROM bug_info WHERE `status`=3  AND callon_account_id = #{accountId, jdbcType=VARCHAR}
-    UNION ALL
-    SELECT 'working' AS name,'3' as id,COUNT(*) as value FROM demand WHERE `status`=3 AND callon_account_id = #{accountId, jdbcType=VARCHAR}
-  </select>
+    <!--统计待处理信息的个数-->
+    <select id="countPending" parameterType="string" resultMap="IndexResultMap">
+        SELECT
+            'pending' AS name,
+            '1'       AS id,
+            '0'       AS value
+        UNION ALL
+        SELECT
+            'pending' AS name,
+            '2'       AS id,
+            COUNT(*)  AS value
+        FROM bug_info
+        WHERE `status` = 2 AND callon_account_id = #{accountId, jdbcType=VARCHAR}
+        UNION ALL
+        SELECT
+            'pending' AS name,
+            '3'       AS id,
+            COUNT(*)  AS value
+        FROM demand
+        WHERE `status` = 2 AND callon_account_id = #{accountId, jdbcType=VARCHAR}
+        UNION ALL
+        SELECT
+            'working' AS name,
+            '1'       AS id,
+            '0'       AS value
+        UNION ALL
+        SELECT
+            'working' AS name,
+            '2'       AS id,
+            COUNT(*)  AS value
+        FROM bug_info
+        WHERE `status` = 3 AND callon_account_id = #{accountId, jdbcType=VARCHAR}
+        UNION ALL
+        SELECT
+            'working' AS name,
+            '3'       AS id,
+            COUNT(*)  AS value
+        FROM demand
+        WHERE `status` = 3 AND callon_account_id = #{accountId, jdbcType=VARCHAR}
+    </select>
 
 
-
-  <!-- 状态查询需求列表 -->
-  <select id="statusList"   resultMap="BaseResultMap">
-    SELECT
-    <include refid="Base_Column_List" />
-    FROM demand
-    WHERE 1=1
-    <if test='relationType !="" and relationType != null and relationType != -1'>
-      AND relation_type = #{relationType}
-    </if>
-    <if test='relationId != "" and relationId != null  and relationId != -1'>
-      and relation_id = #{relationId}
-    </if>
-      and status != 1
-    ORDER BY create_time DESC
-  </select>
+    <!-- 状态查询需求列表 -->
+    <select id="statusList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM demand
+        WHERE 1=1
+        <if test='relationType !="" and relationType != null and relationType != -1'>
+            AND relation_type = #{relationType}
+        </if>
+        <if test='relationId != "" and relationId != null  and relationId != -1'>
+            and relation_id = #{relationId}
+        </if>
+        and status != 1
+        ORDER BY create_time DESC
+    </select>
 </mapper>

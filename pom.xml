@@ -37,7 +37,7 @@
         <ads-helper.version>1.0.3-SNAPSHOT</ads-helper.version>
 
         <judi-encrypt.version>1.12</judi-encrypt.version>
-        <judi-commons.version>1.15-SNAPSHOT</judi-commons.version>
+        <judi-commons.version>1.16-SNAPSHOT</judi-commons.version>
         <judi-mysql.version>1.07-SNAPSHOT</judi-mysql.version>
         <judi-redis.version>1.01-SNAPSHOT</judi-redis.version>
 
