@@ -54,23 +54,26 @@ public class CommonUtils {
 
     private static BASE64Encoder encoder = new BASE64Encoder();
     private static List<String> RESERVED_NAME_LIST = new ArrayList<>();
-    public static List<String> TOKEN_LIST = new ArrayList<>();
+    public static List<String> TOKEN_LIST_UAT = new ArrayList<>();
+    public static List<String> TOKEN_LIST_PROD = new ArrayList<>();
 
     static {
         RESERVED_NAME_LIST.add("serialVersionUID");
-        TOKEN_LIST.add("eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJwY3MiLCJpYXQiOjE0OTg1MzU3NDksInN1YiI6InBjcyIsImlzcyI6ImFnYXRlIn0.tmHpnupQsmzR1LuDjttZcRm_AQi77PJbesMAA1hRQU4");
+        TOKEN_LIST_UAT.add("eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJwY3MiLCJpYXQiOjE0OTg1MzU3NDksInN1YiI6InBjcyIsImlzcyI6ImFnYXRlIn0.tmHpnupQsmzR1LuDjttZcRm_AQi77PJbesMAA1hRQU4");
+        TOKEN_LIST_PROD.add("eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJpdHBsdXNwcm9kIiwiaWF0IjoxNTA0NzU2NTU4LCJzdWIiOiJpdHBsdXNwcm9kIiwiaXNzIjoiaXRwbHVzcHJvZCJ9.Bv3Z4NPX8VPnBt1WiNJMUm0RQPJBpbZyPmHT8m8UZpM");
     }
 
-//    public static Map<String, Object> getErrMap(String code, String msg) {
-//        return buildErrMap(code, msg);
-//    }
-//
-//    private static Map<String, Object> buildErrMap(String code, String msg) {
-//        Map<String, Object> reMap = new HashMap<String, Object>();
-//        reMap.put(APIHelper.CODE, code);
-//        reMap.put(APIHelper.MSG, msg);
-//        return reMap;
-//    }
+    public static boolean isDevelopment() {
+        return "development".equals(JoddHelper.getInstance().getJoddProps().getActiveProfiles()[0]);
+    }
+
+    public static boolean isProduction() {
+        return "production".equals(JoddHelper.getInstance().getJoddProps().getActiveProfiles()[0]);
+    }
+
+    public static boolean isUat() {
+        return "uat".equals(JoddHelper.getInstance().getJoddProps().getActiveProfiles()[0]);
+    }
 
     public static String getSSOLoginURL(){
         return JoddHelper.getInstance().getJoddProps().getValue("web.sso.url");

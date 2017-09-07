@@ -44,10 +44,18 @@ public class TokenAPIFilter extends AccessControlFilter {
         Props props = JoddHelper.getInstance().getJoddProps();
         if ("true".equals(props.getValue("system.token.use"))) {
             String token = getHeadersInfo(req).get(ConfigConsts.TOKEN_NAME);
-            if(CommonUtils.TOKEN_LIST.contains(token)){
-                paramsMap.put(APIHelper.TOKEN, token);
+            if(CommonUtils.isProduction()){
+                if(CommonUtils.TOKEN_LIST_PROD.contains(token)){
+                    paramsMap.put(APIHelper.TOKEN, token);
+                }else{
+                    return false;
+                }
             }else{
-                return false;
+                if(CommonUtils.TOKEN_LIST_UAT.contains(token)){
+                    paramsMap.put(APIHelper.TOKEN, token);
+                }else{
+                    return false;
+                }
             }
 
 //            try{

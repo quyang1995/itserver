@@ -4,18 +4,18 @@
 
 [eds<development>]
 #发送地址#
-url=http://eds.longhu.net
-token=eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNDk3NTEwMDA4LCJzdWIiOiJwZWFybCIsImlzcyI6InBlYXJsIn0.5k5IOsv3rel07CtuepSVaHPM_8y4FM6liGrqoo63X_M
+url=http://edsuat.longhu.net
+token=eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIxMSIsImlhdCI6MTUwNDc1NzQ5OCwic3ViIjoiaXRwbHVzdWF0IiwiaXNzIjoiaXRwbHVzdWF0In0.UnLzQkVvrVcKsdgOPdz4zCDqK6u8iH8olYdPOpd1jjs
 
 [eds<uat>]
 #发送地址#
-url=http://eds.longhu.net
-token=eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNDk3NTEwMDA4LCJzdWIiOiJwZWFybCIsImlzcyI6InBlYXJsIn0.5k5IOsv3rel07CtuepSVaHPM_8y4FM6liGrqoo63X_M
+url=http://edsuat.longhu.net
+token=eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIxMSIsImlhdCI6MTUwNDc1NzQ5OCwic3ViIjoiaXRwbHVzdWF0IiwiaXNzIjoiaXRwbHVzdWF0In0.UnLzQkVvrVcKsdgOPdz4zCDqK6u8iH8olYdPOpd1jjs
 
 [eds<production>]
 #发送地址#
 url=http://eds.longhu.net
-token=eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyIiwiaWF0IjoxNDk3NTEwMDA4LCJzdWIiOiJwZWFybCIsImlzcyI6InBlYXJsIn0.5k5IOsv3rel07CtuepSVaHPM_8y4FM6liGrqoo63X_M
+token=eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIxMiIsImlhdCI6MTUwNDc1MzIzMSwic3ViIjoiaXRwbHVzIiwiaXNzIjoiaXRwbHVzIn0.6xx0eds-eab6QMrTNQwgsWvjtzyBtCrghpxunDDGjC8
 
 ##———————————————————————————————————————————
 

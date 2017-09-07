@@ -5,26 +5,26 @@
 
 [jdbc<development>]
 driverClass=com.mysql.jdbc.Driver
-url=jdbc:mysql://192.168.96.71:3306/itplus?useUnicode=true&characterEncoding=UTF-8
-username=itplusprod
-password=11hs47uZQLyTjNZg
+url=jdbc:mysql://192.168.36.105:3306/itplus?useUnicode=true&characterEncoding=UTF-8
+username=root
+password=hUHwCImQp7slcLtB
 initial.size=10
 max.active=60
 
 
 [jdbc<uat>]
 driverClass=com.mysql.jdbc.Driver
-url=jdbc:mysql://192.168.36.90:3306/agate?useUnicode=true&characterEncoding=UTF-8
-username=agate
-password=SQyUEGGPAYW2DWQR
+url=jdbc:mysql://192.168.36.105:3306/itplus?useUnicode=true&characterEncoding=UTF-8
+username=root
+password=hUHwCImQp7slcLtB
 initial.size=10
 max.active=80
 
 
 [jdbc<production>]
 driverClass=com.mysql.jdbc.Driver
-url=jdbc:mysql://192.168.36.90:3306/agate?useUnicode=true&characterEncoding=UTF-8
-username=agate
-password=
+url=jdbc:mysql://192.168.96.71:3306/itplus?useUnicode=true&characterEncoding=UTF-8
+username=itplusprod
+password=11hs47uZQLyTjNZg
 initial.size=10
 max.active=80
