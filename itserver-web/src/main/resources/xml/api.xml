@@ -465,7 +465,7 @@
     <!--
     URL:
     /api/bugComment/list
-    说明:通过demandID获取评论基本信息
+    说明:通过bugID获取评论基本信息
     -->
     <item id="api_bugComment_list" description="通过BUGID获取评论基本信息">
         <request>
