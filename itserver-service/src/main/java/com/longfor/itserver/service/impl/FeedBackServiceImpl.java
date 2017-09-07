@@ -8,21 +8,17 @@ import com.longfor.itserver.common.enums.*;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.entity.*;
 import com.longfor.itserver.entity.ps.PsFeedBackStatus;
-import com.longfor.itserver.mapper.BugInfoMapper;
-import com.longfor.itserver.mapper.DemandMapper;
-import com.longfor.itserver.mapper.FeedBackMapper;
-import com.longfor.itserver.mapper.ProductMapper;
+import com.longfor.itserver.mapper.*;
 import com.longfor.itserver.service.IFeedBackService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import net.mayee.commons.TimeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Transient;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author wax Created on 2017/8/3 下午7:15
@@ -45,6 +41,12 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 
 	@Autowired
 	private ADSHelper adsHelper;
+
+	@Autowired
+	private BugChangeLogMapper bugChangeLogMapper;
+
+	@Autowired
+	private DemandChangeLogMapper demandChangeLogMapper;
 
 
 	@Override
@@ -125,6 +127,24 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
             bugInfo.setCreateTime(TimeUtils.getTodayByDateTime());
             bugInfo.setModifiedTime(TimeUtils.getTodayByDateTime());
 			bugInfoMapper.insert(bugInfo);
+			//添加日志
+			Map<String,Object> logMap =  getChangeLog(null ,  bugInfo);
+			List<String> textList = (List)logMap.get("logList");
+			List<BugChangeLog> logList = new ArrayList<>();
+			for (String log:textList){
+				BugChangeLog bugChangeLog = new BugChangeLog();
+				bugChangeLog.setBugId(bugInfo.getId());
+				bugChangeLog.setBefDescp(bugInfo.getDescp());
+				bugChangeLog.setType((Integer)logMap.get("type"));
+				bugChangeLog.setActionChangeInfo(log);
+				bugChangeLog.setModifiedName(bugInfo.getModifiedName());
+				bugChangeLog.setModifiedAccountId(bugInfo.getModifiedAccountId());
+				bugChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+				bugChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+			}
+			if(logList.size()>0) {
+				bugChangeLogMapper.insertList(logList);
+			}
 		}else if(feedBack.getType().equals(1)){
 			Demand demand = new Demand();
 			demand.setFeedBackId(feedBack.getId());
@@ -155,7 +175,28 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
             demand.setCreateTime(TimeUtils.getTodayByDateTime());
             demand.setModifiedTime(TimeUtils.getTodayByDateTime());
 			demandMapper.insert(demand);
+			//添加日志
+			Map<String,Object> logMap = getChangeLog( demand, null );
+
+			List<String> textList = (List)logMap.get("logList");
+			List<DemandChangeLog> logList = new ArrayList<>();
+			for (String log:textList){
+				DemandChangeLog demandChangeLog = new DemandChangeLog();
+				demandChangeLog.setDemandId(demand.getId());
+				demandChangeLog.setBefDescp(demand.getDescp());
+				demandChangeLog.setType((Integer)logMap.get("type"));
+				demandChangeLog.setActionChangeInfo(log);
+				demandChangeLog.setModifiedName(demand.getModifiedName());
+				demandChangeLog.setModifiedAccountId(demand.getModifiedAccountId());
+				demandChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+				demandChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+				logList.add(demandChangeLog);
+			}
+			if(logList.size() > 0){
+				demandChangeLogMapper.insertList(logList);
+			}
 		}
+
 		return true;
 	}
 
@@ -172,4 +213,26 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 		resultMap.put("status",status);
 		return resultMap;
 	}
+
+
+
+
+	public Map getChangeLog(Demand newDemand,BugInfo newBug) {
+		Map<String,Object> map = new HashMap<>();
+		List<String> textList = new ArrayList<String>();
+		StringBuilder log = new StringBuilder();
+		if(newBug == null && newDemand != null){
+			log.append(newDemand.getModifiedName()).
+					append("新增了需求信息");
+		}
+		if(newDemand == null && newBug != null){
+			log.append(newBug.getModifiedName()).
+					append("新增了bug信息");
+		}
+		textList.add(log.toString());
+		map.put("type",2);
+		map.put("logList",textList);
+		return map;
+	}
+
 }
