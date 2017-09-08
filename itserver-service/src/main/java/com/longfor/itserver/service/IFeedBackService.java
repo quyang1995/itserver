@@ -14,5 +14,5 @@ public interface IFeedBackService extends IAdminService<FeedBack> {
 
     FeedBack getFeedBackId(long id);
 
-    Map countStatus();
+    Map countStatus(Map map);
 }

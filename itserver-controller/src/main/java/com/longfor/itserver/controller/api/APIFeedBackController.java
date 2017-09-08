@@ -180,8 +180,9 @@ public class APIFeedBackController extends BaseController {
 	@RequestMapping(value = "/countStatus" ,method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public Map countStatus(HttpServletRequest request , HttpServletResponse response){
-
-		return this.getFeedBackService().countStatus();
+		@SuppressWarnings("unchecked")
+		Map<String,String> paramsMap = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		return this.getFeedBackService().countStatus(paramsMap);
 	}
 
 }

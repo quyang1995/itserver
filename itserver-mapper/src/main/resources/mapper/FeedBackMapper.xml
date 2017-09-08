@@ -44,23 +44,23 @@
         modified_full_dept_path, file_path, create_time, modified_time
     </sql>
 
-    <!-- BUG列表 -->
-    <select id="feedBackList" parameterType="map" resultMap="BaseResultMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM feed_back
-        WHERE 1=1
-        <if test='status != "" and status != null  and status != -1'>
-            and status = #{status}
-        </if>
-        <if test='channel != "" and channel != null  and channel != -1'>
-            and channel = #{channel}
-        </if>
-        <if test='searchText != "" and searchText != null'>
-            and (name like concat(concat('%',#{searchText}),'%'))
-        </if>
-        ORDER BY create_time DESC
-    </select>
+  <!-- BUG列表 -->
+  <select id="feedBackList" parameterType="map" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM feed_back
+    WHERE 1=1 AND modified_account_id = #{accountId}
+    <if test='status != "" and status != null  and status != -1'>
+      and status = #{status}
+    </if>
+    <if test='channel != "" and channel != null  and channel != -1'>
+      and channel = #{channel}
+    </if>
+    <if test='searchText != "" and searchText != null'>
+      and (name like concat(concat('%',#{searchText}),'%'))
+    </if>
+    ORDER BY create_time DESC
+  </select>
 
     <!-- 通过ID查询BUG -->
     <select id="getFeedBackId" parameterType="java.lang.Long" resultMap="FeedBackDetailResultMap">
@@ -71,15 +71,15 @@
 
 
     <!-- 反馈表状态统计 -->
-    <select id="countStatus" resultType="com.longfor.itserver.entity.ps.PsFeedBackStatus">
+    <select id="countStatus" parameterType="map" resultType="com.longfor.itserver.entity.ps.PsFeedBackStatus">
         SELECT
             sum(f.`status` = 0) AS "cancel",
             sum(f.`status` = 1) AS "close",
             sum(f.`status` = 2) AS "pending",
             sum(f.`status` = 3) AS "working",
             sum(f.`status` = 4) AS "completed"
-        FROM feed_back f;
-
+        FROM feed_back f
+        WHERE modified_account_id = #{accountId}
     </select>
 
 </mapper>

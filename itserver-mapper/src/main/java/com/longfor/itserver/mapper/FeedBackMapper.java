@@ -13,5 +13,5 @@ public interface FeedBackMapper extends BeeMapper<FeedBack> {
 
     FeedBack getFeedBackId(long id);
 
-    PsFeedBackStatus countStatus();
+    PsFeedBackStatus countStatus(Map map);
 }
