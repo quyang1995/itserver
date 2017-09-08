@@ -816,4 +816,21 @@
             <property name="relationType" type="int" required="false" />
         </request>
     </item>
+
+
+
+
+    <!--
+      URL:
+      /api/program/update/status
+      说明:项目状态变更
+    -->
+    <item id="api_program_update_status" description="需求状态变更">
+        <request>
+            <property name="programId" type="int" required="true"/>
+            <property name="status" type="int" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true"/>
+            <property name="modifiedName" type="string" required="true"/>
+        </request>
+    </item>
 </api>

@@ -8,11 +8,13 @@ import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
+import com.longfor.itserver.entity.EmployeeType;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ProgramEmployee;
 import com.longfor.itserver.entity.ps.PsProgramDetail;
 import net.mayee.commons.helper.APIHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -305,5 +307,33 @@ public class APIProgramController extends BaseController {
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		resultMap.put("list",list);
 		return resultMap;
+	}
+
+
+	@RequestMapping(value = "/update/status",method = RequestMethod.POST,produces = {"application/json;charset=utf-8"})
+	@ResponseBody
+	public Map updateStatus(HttpServletRequest request,HttpServletResponse response){
+		Map paramsMap= (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		/*责任人*/
+		ProgramEmployee employee = new ProgramEmployee();
+		employee.setProgramId(Long.valueOf((String)paramsMap.get("programId")));
+		employee.setEmployeeType(AvaStatusEnum.LIABLEAVA.getCode());
+		/*责任人*/
+		List<ProgramEmployee> personLiableList = this.getProgramEmployeeService().select(employee);
+		//用户名为空直接返回
+		if(StringUtils.isBlank((String)paramsMap.get("modifiedAccountId"))) return CommonUtils.getResultMapByBizEnum(BizEnum.E1011,"用户名");
+		boolean isAllow = false;
+		for (ProgramEmployee personLiable:personLiableList){
+			if(paramsMap.get("modifiedAccountId").equals(personLiable.getAccountId())){
+				isAllow = true;
+				break;
+			}
+		}
+		if(isAllow) {
+			this.getProgramService().updateStatus(paramsMap);
+			return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
+		}else{
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+		}
 	}
 }
