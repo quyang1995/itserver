@@ -135,6 +135,7 @@
     <item id="api_product_add" description="新增产品基本信息">
         <request>
             <property name="name" type="string" required="true" />
+            <property name="code" type="string" required="true" />
             <property name="descp" type="string" required="false" />
             <property name="contactAccountId" type="string" required="true" />
             <property name="likeProgram" type="string" required="false" />

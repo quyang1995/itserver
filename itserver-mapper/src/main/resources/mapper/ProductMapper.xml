@@ -21,6 +21,12 @@
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP"/>
     </resultMap>
+
+
+    <resultMap id="CountBaseResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsProductCount">
+        <result column="programCount" property="programCount" jdbcType="VARCHAR"/>
+    </resultMap>
+
     <resultMap id="LikeBaseResultMap" type="com.longfor.itserver.entity.ps.PsProduct">
         <!--
           WARNING - @mbggenerated
@@ -47,8 +53,9 @@
         contact_full_dept_path, like_program, type, status, modified_account_id, modified_name,
         create_time, modified_time
     </sql>
-    <select id="selectList" resultMap="BaseResultMap">
-        SELECT DISTINCT ta.*
+    <select id="selectList" resultMap="CountBaseResultMap">
+        SELECT DISTINCT ta.*,
+        (select IFNULL(sum(CASE WHEN p.product_id =ta.id THEN 1 ELSE 0 END),0) from program p) AS programCount
         FROM product ta LEFT JOIN product_employee tb ON ta.id = tb.product_id
         WHERE
         <if test="mySelf != null and mySelf != '' and mySelf == 0">
