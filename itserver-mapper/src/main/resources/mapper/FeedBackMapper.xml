@@ -8,6 +8,7 @@
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="product_id" property="productId" jdbcType="BIGINT"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="product_code" jdbcType="VARCHAR" property="productCode" />
         <result column="problem_title" property="problemTitle" jdbcType="VARCHAR"/>
         <result column="problem_descp" property="problemDescp" jdbcType="VARCHAR"/>
         <result column="reproduction_step" property="reproductionStep" jdbcType="VARCHAR"/>
@@ -38,7 +39,7 @@
         <!--
           WARNING - @mbggenerated
         -->
-        id, product_id, name, problem_title, problem_descp, reproduction_step, sys_environment,
+        id, product_id, product_code, name, problem_title, problem_descp, reproduction_step, sys_environment,
         contact_account_id, contact_employee_code, contact_employee_name, contact_full_dept_path,
         type, status, channel, modified_account_id, modified_employee_code, modified_name,
         modified_full_dept_path, file_path, create_time, modified_time

@@ -8,11 +8,14 @@
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="product_id" jdbcType="BIGINT" property="productId"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="product_code" jdbcType="VARCHAR" property="productCode" />
         <result column="descp" jdbcType="VARCHAR" property="descp"/>
         <result column="commit_date" jdbcType="TIMESTAMP" property="commitDate"/>
         <result column="start_date" jdbcType="TIMESTAMP" property="startDate"/>
         <result column="gray_release_date" jdbcType="TIMESTAMP" property="grayReleaseDate"/>
         <result column="release_date" jdbcType="TIMESTAMP" property="releaseDate"/>
+        <result column="ued_date" jdbcType="TIMESTAMP" property="uedDate" />
+        <result column="architecture_date" jdbcType="TIMESTAMP" property="architectureDate" />
         <result column="like_product" jdbcType="VARCHAR" property="likeProduct"/>
         <result column="like_program" jdbcType="VARCHAR" property="likeProgram"/>
         <result column="type" jdbcType="INTEGER" property="type"/>
@@ -48,16 +51,16 @@
         <!--
           WARNING - @mbggenerated
         -->
-        id, product_id, product_name, name, descp, commit_date, start_date, gray_release_date, release_date,
-        like_product, like_program, type, program_status, modified_account_id, modified_name,
+        id, product_id, product_name, product_code, name, descp, commit_date, start_date, gray_release_date, release_date,
+        ued_date, architecture_date, like_product, like_program, type, program_status, modified_account_id, modified_name,
         create_time, modified_time
     </sql>
 
     <!-- 项目列表 -->
     <select id="programList" parameterType="map" resultMap="BaseResultMap">
         SELECT DISTINCT
-        p.id, p.product_id, p.product_name, p.name, p.descp, p.commit_date, p.start_date, p.gray_release_date,
-        p.release_date,
+        p.id, p.product_id, p.product_name, p.product_code, p.name, p.descp, p.commit_date, p.start_date, p.gray_release_date,
+        p.release_date,p.ued_date,p.architecture_date,
         p.like_product, p.like_program, p.type, p.program_status, p.modified_account_id, p.modified_name,
         p.create_time, p.modified_time
         FROM program p JOIN program_employee pe ON p.id = pe.program_id

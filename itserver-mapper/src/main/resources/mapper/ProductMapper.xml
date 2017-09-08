@@ -7,6 +7,7 @@
         -->
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="code" jdbcType="VARCHAR" property="code" />
         <result column="descp" property="descp" jdbcType="VARCHAR"/>
         <result column="contact_account_id" property="contactAccountId" jdbcType="VARCHAR"/>
         <result column="contact_employee_code" property="contactEmployeeCode" jdbcType="BIGINT"/>
@@ -42,7 +43,7 @@
         <!--
           WARNING - @mbggenerated
         -->
-        id, name, descp, contact_account_id, contact_employee_code, contact_employee_name,
+        id, name, code, descp, contact_account_id, contact_employee_code, contact_employee_name,
         contact_full_dept_path, like_program, type, status, modified_account_id, modified_name,
         create_time, modified_time
     </sql>

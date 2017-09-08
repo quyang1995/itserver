@@ -1,14 +1,13 @@
 package com.longfor.itserver.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import net.mayee.commons.CustomFullDateSerializer;
+import net.mayee.commons.CustomDateSerializer;
 
 import java.util.Date;
 import javax.persistence.*;
+
 @Table(name = "product")
 public class Product {
-    private static final long serialVersionUID = -6776870685616143799L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,6 +16,8 @@ public class Product {
      * 产品名称
      */
     private String name;
+
+    private String code;
 
     /**
      * 产品描述
@@ -48,7 +49,7 @@ public class Product {
     private String contactFullDeptPath;
 
     /**
-     * 关联产品id字符串，e.g. xx,xx,xx,...
+     * 关联项目id字符串，e.g. xx,xx,xx,...
      */
     @Column(name = "like_program")
     private String likeProgram;
@@ -59,7 +60,7 @@ public class Product {
     private Integer type;
 
     /**
-     * 状态：0=已关闭，1=未关闭
+     * 状态：0=已下线，1=正常，-1=全部
      */
     private Integer status;
 
@@ -76,11 +77,11 @@ public class Product {
     private String modifiedName;
 
     @Column(name = "create_time")
-    @JsonSerialize(using = CustomFullDateSerializer.class)
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date createTime;
 
     @Column(name = "modified_time")
-    @JsonSerialize(using = CustomFullDateSerializer.class)
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date modifiedTime;
 
     /**
@@ -113,6 +114,20 @@ public class Product {
      */
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    /**
+     * @return code
+     */
+    public String getCode() {
+        return code;
+    }
+
+    /**
+     * @param code
+     */
+    public void setCode(String code) {
+        this.code = code == null ? null : code.trim();
     }
 
     /**
@@ -242,18 +257,18 @@ public class Product {
     }
 
     /**
-     * 获取状态：0=已关闭，1=未关闭
+     * 获取状态：0=已下线，1=正常，-1=全部
      *
-     * @return status - 状态：0=已关闭，1=未关闭
+     * @return status - 状态：0=已下线，1=正常，-1=全部
      */
     public Integer getStatus() {
         return status;
     }
 
     /**
-     * 设置状态：0=已关闭，1=未关闭
+     * 设置状态：0=已下线，1=正常，-1=全部
      *
-     * @param status 状态：0=已关闭，1=未关闭
+     * @param status 状态：0=已下线，1=正常，-1=全部
      */
     public void setStatus(Integer status) {
         this.status = status;

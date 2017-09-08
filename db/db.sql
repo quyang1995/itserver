@@ -13,6 +13,8 @@ CREATE TABLE IF NOT EXISTS `itplus`.`product` (
   `id`                     BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name`                   VARCHAR(100)    NOT NULL
   COMMENT '产品名称',
+  `code`                   VARCHAR(100)    NOT NULL
+  COMMENT '产品CODE',
   `descp`                  VARCHAR(3000)   NULL
   COMMENT '产品描述',
   `contact_account_id`     VARCHAR(50)     NOT NULL
@@ -166,6 +168,8 @@ CREATE TABLE IF NOT EXISTS `itplus`.`program` (
   COMMENT '归属产品',
   `product_name`        VARCHAR(100)    NOT NULL
   COMMENT '归属产品名称',
+  `product_code`        VARCHAR(100)    NOT NULL
+  COMMENT '产品CODE',
   `name`                VARCHAR(100)    NOT NULL
   COMMENT '项目名称',
   `descp`               VARCHAR(3000)   NULL
@@ -178,6 +182,10 @@ CREATE TABLE IF NOT EXISTS `itplus`.`program` (
   COMMENT '灰度日期',
   `release_date`        DATETIME        NOT NULL
   COMMENT '发布日期',
+  `ued_date`            DATETIME        NOT NULL
+  COMMENT 'UED日期',
+  `architecture_date`   DATETIME        NOT NULL
+  COMMENT '架构日期',
   `like_product`        VARCHAR(500)    NULL
   COMMENT '关联产品id字符串，e.g. 1,2,3,...',
   `like_program`        VARCHAR(500)    NULL
@@ -564,6 +572,8 @@ CREATE TABLE IF NOT EXISTS `itplus`.`feed_back` (
   COMMENT '归属产品',
   `name`                    VARCHAR(100)    NOT NULL
   COMMENT '产品名称',
+  `product_code`        VARCHAR(100)    NOT NULL
+  COMMENT '产品CODE',
   `problem_title`           VARCHAR(100)    NULL
   COMMENT '问题标题',
   `problem_descp`           VARCHAR(5000)    NULL

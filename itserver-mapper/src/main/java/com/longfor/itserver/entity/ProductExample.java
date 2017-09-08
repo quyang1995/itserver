@@ -235,6 +235,76 @@ public class ProductExample {
             return (Criteria) this;
         }
 
+        public Criteria andCodeIsNull() {
+            addCriterion("code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeIsNotNull() {
+            addCriterion("code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeEqualTo(String value) {
+            addCriterion("code =", value, "code");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeNotEqualTo(String value) {
+            addCriterion("code <>", value, "code");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeGreaterThan(String value) {
+            addCriterion("code >", value, "code");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("code >=", value, "code");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeLessThan(String value) {
+            addCriterion("code <", value, "code");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeLessThanOrEqualTo(String value) {
+            addCriterion("code <=", value, "code");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeLike(String value) {
+            addCriterion("code like", value, "code");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeNotLike(String value) {
+            addCriterion("code not like", value, "code");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeIn(List<String> values) {
+            addCriterion("code in", values, "code");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeNotIn(List<String> values) {
+            addCriterion("code not in", values, "code");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeBetween(String value1, String value2) {
+            addCriterion("code between", value1, value2, "code");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeNotBetween(String value1, String value2) {
+            addCriterion("code not between", value1, value2, "code");
+            return (Criteria) this;
+        }
+
         public Criteria andDescpIsNull() {
             addCriterion("descp is null");
             return (Criteria) this;
@@ -575,73 +645,73 @@ public class ProductExample {
             return (Criteria) this;
         }
 
-        public Criteria andLikeProductIsNull() {
-            addCriterion("like_product is null");
+        public Criteria andLikeProgramIsNull() {
+            addCriterion("like_program is null");
             return (Criteria) this;
         }
 
-        public Criteria andLikeProductIsNotNull() {
-            addCriterion("like_product is not null");
+        public Criteria andLikeProgramIsNotNull() {
+            addCriterion("like_program is not null");
             return (Criteria) this;
         }
 
-        public Criteria andLikeProductEqualTo(String value) {
-            addCriterion("like_product =", value, "likeProduct");
+        public Criteria andLikeProgramEqualTo(String value) {
+            addCriterion("like_program =", value, "likeProgram");
             return (Criteria) this;
         }
 
-        public Criteria andLikeProductNotEqualTo(String value) {
-            addCriterion("like_product <>", value, "likeProduct");
+        public Criteria andLikeProgramNotEqualTo(String value) {
+            addCriterion("like_program <>", value, "likeProgram");
             return (Criteria) this;
         }
 
-        public Criteria andLikeProductGreaterThan(String value) {
-            addCriterion("like_product >", value, "likeProduct");
+        public Criteria andLikeProgramGreaterThan(String value) {
+            addCriterion("like_program >", value, "likeProgram");
             return (Criteria) this;
         }
 
-        public Criteria andLikeProductGreaterThanOrEqualTo(String value) {
-            addCriterion("like_product >=", value, "likeProduct");
+        public Criteria andLikeProgramGreaterThanOrEqualTo(String value) {
+            addCriterion("like_program >=", value, "likeProgram");
             return (Criteria) this;
         }
 
-        public Criteria andLikeProductLessThan(String value) {
-            addCriterion("like_product <", value, "likeProduct");
+        public Criteria andLikeProgramLessThan(String value) {
+            addCriterion("like_program <", value, "likeProgram");
             return (Criteria) this;
         }
 
-        public Criteria andLikeProductLessThanOrEqualTo(String value) {
-            addCriterion("like_product <=", value, "likeProduct");
+        public Criteria andLikeProgramLessThanOrEqualTo(String value) {
+            addCriterion("like_program <=", value, "likeProgram");
             return (Criteria) this;
         }
 
-        public Criteria andLikeProductLike(String value) {
-            addCriterion("like_product like", value, "likeProduct");
+        public Criteria andLikeProgramLike(String value) {
+            addCriterion("like_program like", value, "likeProgram");
             return (Criteria) this;
         }
 
-        public Criteria andLikeProductNotLike(String value) {
-            addCriterion("like_product not like", value, "likeProduct");
+        public Criteria andLikeProgramNotLike(String value) {
+            addCriterion("like_program not like", value, "likeProgram");
             return (Criteria) this;
         }
 
-        public Criteria andLikeProductIn(List<String> values) {
-            addCriterion("like_product in", values, "likeProduct");
+        public Criteria andLikeProgramIn(List<String> values) {
+            addCriterion("like_program in", values, "likeProgram");
             return (Criteria) this;
         }
 
-        public Criteria andLikeProductNotIn(List<String> values) {
-            addCriterion("like_product not in", values, "likeProduct");
+        public Criteria andLikeProgramNotIn(List<String> values) {
+            addCriterion("like_program not in", values, "likeProgram");
             return (Criteria) this;
         }
 
-        public Criteria andLikeProductBetween(String value1, String value2) {
-            addCriterion("like_product between", value1, value2, "likeProduct");
+        public Criteria andLikeProgramBetween(String value1, String value2) {
+            addCriterion("like_program between", value1, value2, "likeProgram");
             return (Criteria) this;
         }
 
-        public Criteria andLikeProductNotBetween(String value1, String value2) {
-            addCriterion("like_product not between", value1, value2, "likeProduct");
+        public Criteria andLikeProgramNotBetween(String value1, String value2) {
+            addCriterion("like_program not between", value1, value2, "likeProgram");
             return (Criteria) this;
         }
 
