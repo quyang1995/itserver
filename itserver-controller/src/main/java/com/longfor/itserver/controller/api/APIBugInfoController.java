@@ -215,7 +215,7 @@ public class APIBugInfoController extends BaseController {
 
             Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
             resultMap.put("newStatusText", bugStatusEnum.getText());
-            return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+            return resultMap;
         }else{
             return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
         }
@@ -240,7 +240,7 @@ public class APIBugInfoController extends BaseController {
 
             Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
             resultMap.put("newCallonEmployeeText", accountLongfor.getName());
-            return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+			return resultMap;
         }else{
             return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
         }
