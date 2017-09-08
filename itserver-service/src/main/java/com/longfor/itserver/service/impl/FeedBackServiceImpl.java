@@ -130,7 +130,6 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 			//添加日志
 			Map<String,Object> logMap =  getChangeLog(null ,  bugInfo);
 			List<String> textList = (List)logMap.get("logList");
-			List<BugChangeLog> logList = new ArrayList<>();
 			for (String log:textList){
 				BugChangeLog bugChangeLog = new BugChangeLog();
 				bugChangeLog.setBugId(bugInfo.getId());
@@ -141,9 +140,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 				bugChangeLog.setModifiedAccountId(bugInfo.getModifiedAccountId());
 				bugChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
 				bugChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
-			}
-			if(logList.size()>0) {
-				bugChangeLogMapper.insertList(logList);
+				bugChangeLogMapper.insert(bugChangeLog);
 			}
 		}else if(feedBack.getType().equals(1)){
 			Demand demand = new Demand();
@@ -179,7 +176,6 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 			Map<String,Object> logMap = getChangeLog( demand, null );
 
 			List<String> textList = (List)logMap.get("logList");
-			List<DemandChangeLog> logList = new ArrayList<>();
 			for (String log:textList){
 				DemandChangeLog demandChangeLog = new DemandChangeLog();
 				demandChangeLog.setDemandId(demand.getId());
@@ -190,10 +186,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 				demandChangeLog.setModifiedAccountId(demand.getModifiedAccountId());
 				demandChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
 				demandChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
-				logList.add(demandChangeLog);
-			}
-			if(logList.size() > 0){
-				demandChangeLogMapper.insertList(logList);
+				demandChangeLogMapper.insert(demandChangeLog);
 			}
 		}
 
