@@ -7,6 +7,7 @@
         -->
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="code" jdbcType="VARCHAR" property="code" />
         <result column="descp" property="descp" jdbcType="VARCHAR"/>
         <result column="contact_account_id" property="contactAccountId" jdbcType="VARCHAR"/>
         <result column="contact_employee_code" property="contactEmployeeCode" jdbcType="BIGINT"/>
@@ -20,6 +21,12 @@
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP"/>
     </resultMap>
+
+
+    <resultMap id="CountBaseResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsProductCount">
+        <result column="programCount" property="programCount" jdbcType="VARCHAR"/>
+    </resultMap>
+
     <resultMap id="LikeBaseResultMap" type="com.longfor.itserver.entity.ps.PsProduct">
         <!--
           WARNING - @mbggenerated
@@ -42,12 +49,13 @@
         <!--
           WARNING - @mbggenerated
         -->
-        id, name, descp, contact_account_id, contact_employee_code, contact_employee_name,
+        id, name, code, descp, contact_account_id, contact_employee_code, contact_employee_name,
         contact_full_dept_path, like_program, type, status, modified_account_id, modified_name,
         create_time, modified_time
     </sql>
-    <select id="selectList" resultMap="BaseResultMap">
-        SELECT DISTINCT ta.*
+    <select id="selectList" resultMap="CountBaseResultMap">
+        SELECT DISTINCT ta.*,
+        (select IFNULL(sum(CASE WHEN p.product_id =ta.id THEN 1 ELSE 0 END),0) from program p) AS programCount
         FROM product ta LEFT JOIN product_employee tb ON ta.id = tb.product_id
         WHERE
         <if test="mySelf != null and mySelf != '' and mySelf == 0">

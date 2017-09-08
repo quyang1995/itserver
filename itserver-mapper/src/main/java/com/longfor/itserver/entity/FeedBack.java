@@ -1,7 +1,7 @@
 package com.longfor.itserver.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import net.mayee.commons.CustomFullDateSerializer;
+import net.mayee.commons.CustomDateSerializer;
 
 import java.util.Date;
 import javax.persistence.*;
@@ -17,6 +17,9 @@ public class FeedBack {
      */
     @Column(name = "product_id")
     private Long productId;
+
+    @Column(name = "product_code")
+    private String productCode;
 
     /**
      * 产品名称
@@ -82,7 +85,7 @@ public class FeedBack {
     private Integer status;
 
     /**
-     * 渠道: 0=OA，1=龙客
+     * 渠道: 0=PC，1=OA，2=龙信，3=龙客
      */
     private Integer channel;
 
@@ -110,15 +113,18 @@ public class FeedBack {
     @Column(name = "modified_full_dept_path")
     private String modifiedFullDeptPath;
 
+    /**
+     * 上传文件路径
+     */
     @Column(name = "file_path")
     private String filePath;
 
     @Column(name = "create_time")
-    @JsonSerialize(using = CustomFullDateSerializer.class)
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date createTime;
 
     @Column(name = "modified_time")
-    @JsonSerialize(using = CustomFullDateSerializer.class)
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date modifiedTime;
 
     /**
@@ -151,6 +157,20 @@ public class FeedBack {
      */
     public void setProductId(Long productId) {
         this.productId = productId;
+    }
+
+    /**
+     * @return product_code
+     */
+    public String getProductCode() {
+        return productCode;
+    }
+
+    /**
+     * @param productCode
+     */
+    public void setProductCode(String productCode) {
+        this.productCode = productCode == null ? null : productCode.trim();
     }
 
     /**
@@ -352,18 +372,18 @@ public class FeedBack {
     }
 
     /**
-     * 获取渠道: 0=OA，1=龙客
+     * 获取渠道: 0=PC，1=OA，2=龙信，3=龙客
      *
-     * @return channel - 渠道: 0=OA，1=龙客
+     * @return channel - 渠道: 0=PC，1=OA，2=龙信，3=龙客
      */
     public Integer getChannel() {
         return channel;
     }
 
     /**
-     * 设置渠道: 0=OA，1=龙客
+     * 设置渠道: 0=PC，1=OA，2=龙信，3=龙客
      *
-     * @param channel 渠道: 0=OA，1=龙客
+     * @param channel 渠道: 0=PC，1=OA，2=龙信，3=龙客
      */
     public void setChannel(Integer channel) {
         this.channel = channel;
@@ -442,14 +462,18 @@ public class FeedBack {
     }
 
     /**
-     * @return file_path
+     * 获取上传文件路径
+     *
+     * @return file_path - 上传文件路径
      */
     public String getFilePath() {
         return filePath;
     }
 
     /**
-     * @param filePath
+     * 设置上传文件路径
+     *
+     * @param filePath 上传文件路径
      */
     public void setFilePath(String filePath) {
         this.filePath = filePath == null ? null : filePath.trim();

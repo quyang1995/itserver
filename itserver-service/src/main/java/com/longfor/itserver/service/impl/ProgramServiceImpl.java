@@ -80,6 +80,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			return false;
 		}
 		program.setProductName(product.getName());
+		program.setProductCode(product.getCode());
 		program.setCreateTime(TimeUtils.getTodayByDateTime());
 		program.setModifiedTime(TimeUtils.getTodayByDateTime());
 		programMapper.insert(program);
@@ -389,5 +390,28 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			}
 		}
 		return programList;
+	}
+
+	@Override
+	@Transactional
+	public boolean updateStatus(Map paramsMap) {
+		JSONObject jsonObject = (JSONObject)JSONObject.toJSON(paramsMap);
+		Long programId=Long.valueOf((String) paramsMap.get("programId"));
+		Program	oldProgram = programMapper.selectByPrimaryKey(programId);
+		Program newProgram = programMapper.selectByPrimaryKey(programId);
+		newProgram.setProgramStatus(Integer.valueOf((String) jsonObject.get("status")));
+		List<String> textList =  getChangeLogText(oldProgram,newProgram);
+		for (String logtext:textList){
+			ProgramEmployeeChangeLog log = new ProgramEmployeeChangeLog();
+			log.setProgramId(programId);
+			log.setActionChangeInfo(logtext);
+			log.setModifiedAccountId((String) paramsMap.get("modifiedAccountId"));
+			log.setModifiedName((String) paramsMap.get("modifiedName"));
+			log.setCreateTime(TimeUtils.getTodayByDateTime());
+			log.setModifiedTime(TimeUtils.getTodayByDateTime());
+			programEmployeeChangeLogMapper.insertUseGeneratedKeys(log);
+		}
+		programMapper.updateByPrimaryKey(newProgram);
+		return true;
 	}
 }
