@@ -310,8 +310,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		Demand oldDemand = demandMapper.selectByPrimaryKey(demandId);
 		Demand newDemand = demandMapper.selectByPrimaryKey(demandId);
 		newDemand.setStatus(status);
-		getChangeLog(oldDemand,newDemand);
-        /*添加BUG修改日志*/
+        /*添加需求修改日志*/
 		Map<String,Object> logMap = getChangeLog(oldDemand,newDemand);
 		List<String> textList = (List)logMap.get("logList");
 		List<DemandChangeLog> logList = new ArrayList<>();
@@ -350,8 +349,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		newDemand.setCallonEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
 		newDemand.setCallonEmployeeName(accountLongfor.getName());
 		newDemand.setCallonFullDeptPath(accountLongfor.getPsDeptFullName());
-		getChangeLog(oldDemand,newDemand);
-        /*添加BUG修改日志*/
+        /*添加B需求修改日志*/
 		Map<String,Object> logMap = getChangeLog(oldDemand,newDemand);
 		List<String> textList = (List)logMap.get("logList");
 		List<DemandChangeLog> logList = new ArrayList<>();

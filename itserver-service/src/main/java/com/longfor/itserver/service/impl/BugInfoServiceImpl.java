@@ -294,7 +294,6 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         BugInfo oldBug = bugInfoMapper.selectByPrimaryKey(bugId);
         BugInfo newBug = bugInfoMapper.selectByPrimaryKey(bugId);
         newBug.setStatus(status);
-        getChangeLog(oldBug,newBug);
         /*添加BUG修改日志*/
         Map<String,Object> logMap = getChangeLog(oldBug,newBug);
         List<String> textList = (List)logMap.get("logList");
@@ -335,7 +334,6 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         newBug.setCallonEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
         newBug.setCallonEmployeeName(accountLongfor.getName());
         newBug.setCallonFullDeptPath(accountLongfor.getPsDeptFullName());
-        getChangeLog(oldBug,newBug);
         /*添加BUG修改日志*/
         Map<String,Object> logMap = getChangeLog(oldBug,newBug);
         List<String> textList = (List)logMap.get("logList");
