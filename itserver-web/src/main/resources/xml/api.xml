@@ -68,7 +68,7 @@
             <property name="accountId" type="string" required="true"/>
             <property name="status" type="string" required="true"/>
             <property name="mySelf" type="string" required="true"/>
-            <property name="searchText" type="string" required="true" maxLength="30" description="搜索内容"/>
+            <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
         </request>
     </item>
 
@@ -196,7 +196,7 @@
             <property name="accountId" type="string" required="true"/>
             <property name="programStatus" type="int" required="true"/>
             <property name="isPart" type="int" required="true"/>
-            <property name="searchText" type="string" required="true" maxLength="30" description="搜索内容"/>
+            <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
             <property name="productId" type="int" required="false" />
         </request>
     </item>
@@ -335,7 +335,7 @@
             <property name="accountId" type="string" required="true"/>
             <property name="status" type="int" required="true"/>
             <property name="channel" type="int" required="false"/>
-            <property name="searchText" type="string" required="true" maxLength="30" description="搜索内容"/>
+            <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
         </request>
     </item>
 
@@ -383,7 +383,7 @@
             <property ref="pageSize"/>
             <property name="accountId" type="string" required="true"/>
             <property name="status" type="int" required="true"/>
-            <property name="searchText" type="string" required="true" maxLength="30" description="搜索内容"/>
+            <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
             <property name="channel" type="int" required="false" />
             <property name="productId" type="int" required="false" />
             <property name="programId" type="int" required="false" />
@@ -521,7 +521,7 @@
             <property ref="pageSize"/>
             <property name="accountId" type="string" required="true"/>
             <property name="status" type="int" required="true"/>
-            <property name="searchText" type="string" required="true" maxLength="30" description="搜索内容"/>
+            <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
             <property name="channel" type="int" required="false" />
             <property name="productId" type="int" required="false" />
             <property name="programId" type="int" required="false" />
