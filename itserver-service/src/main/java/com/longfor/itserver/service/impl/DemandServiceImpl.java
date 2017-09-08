@@ -127,7 +127,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			return false;
 		}
 		//获取状态信息(默认处理中)
-		demand.setStatus(DemandStatusEnum.PENDING.getCode());
+		demand.setStatus(selectDemandOne.getStatus());
 		// 获取发起人信息
 		AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getModifiedAccountId());
 		if(draftedAccountLongfor!=null){

@@ -145,7 +145,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         if (null == selectOneBugInfo) {
             return false;
         }
-        bugInfo.setStatus(BugStatusEnum.PENDING.getCode());
+        bugInfo.setStatus(selectOneBugInfo.getStatus());
 
         //获取发起人信息
         AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(bugInfo.getModifiedAccountId());

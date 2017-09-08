@@ -48,7 +48,7 @@
     SELECT
     <include refid="Base_Column_List" />
     FROM feed_back
-    WHERE 1=1
+    WHERE 1=1 AND modified_account_id = #{accountId}
     <if test='status != "" and status != null  and status != -1'>
       and status = #{status}
     </if>
