@@ -2,8 +2,11 @@ package com.longfor.itserver.controller.api;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.longfor.ads.entity.AccountLongfor;
+import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
+import com.longfor.itserver.common.enums.BugStatusEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
@@ -201,10 +204,21 @@ public class APIBugInfoController extends BaseController {
 	@RequestMapping(value = "/update/status" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
 	@ResponseBody
 	public Map updateStatus(HttpServletRequest request ,HttpServletResponse response){
-		Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-		this.getBugInfoService().updateStatus(paramsMap);
+        @SuppressWarnings("unchecked")
+		Map<String, String> paramsMap = (Map<String, String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
-		return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        //状态值有效性验证
+        int code = Integer.parseInt(paramsMap.get("status"));
+        BugStatusEnum bugStatusEnum = BugStatusEnum.getByCode(code);
+        if(bugStatusEnum != null){
+            this.getBugInfoService().updateStatus(paramsMap);
+
+            Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+            resultMap.put("newStatusText", bugStatusEnum.getText());
+            return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        }else{
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+        }
 	}
 
 	/**
@@ -216,10 +230,20 @@ public class APIBugInfoController extends BaseController {
 	@RequestMapping(value = "/update/callon" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
 	@ResponseBody
 	public Map updateCallon(HttpServletRequest request ,HttpServletResponse response){
-		Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-		this.getBugInfoService().updateCallon(paramsMap);
+        @SuppressWarnings("unchecked")
+        Map<String, String> paramsMap = (Map<String, String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
-		return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        //人员信息有效性验证
+        AccountLongfor accountLongfor = this.getAdsService().getAccountLongfor(paramsMap.get("callonAccountId"));
+        if(accountLongfor != null){
+            this.getBugInfoService().updateCallon(paramsMap);
+
+            Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+            resultMap.put("newCallonEmployeeText", accountLongfor.getName());
+            return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        }else{
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+        }
 	}
 
 	/**
