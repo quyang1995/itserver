@@ -1,17 +1,13 @@
 package com.longfor.itserver.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import net.mayee.commons.CustomDateSerializer;
 import net.mayee.commons.CustomFullDateSerializer;
 
-import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
+
 @Table(name = "program")
-public class Program implements Serializable {
-
-    private static final long serialVersionUID = -6776870685616143799L;
-
+public class Program {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,6 +17,15 @@ public class Program implements Serializable {
      */
     @Column(name = "product_id")
     private Long productId;
+
+    /**
+     * 归属产品名称
+     */
+    @Column(name = "product_name")
+    private String productName;
+
+    @Column(name = "product_code")
+    private String productCode;
 
     /**
      * 项目名称
@@ -36,29 +41,37 @@ public class Program implements Serializable {
      * 立项日期
      */
     @Column(name = "commit_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date commitDate;
 
     /**
      * 启动日期
      */
     @Column(name = "start_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date startDate;
 
     /**
      * 灰度日期
      */
     @Column(name = "gray_release_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date grayReleaseDate;
 
     /**
      * 发布日期
      */
     @Column(name = "release_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date releaseDate;
+
+    @Column(name = "ued_date")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
+    private Date uedDate;
+
+    @Column(name = "architecture_date")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
+    private Date architectureDate;
 
     /**
      * 关联产品id字符串，e.g. 1,2,3,...
@@ -103,9 +116,6 @@ public class Program implements Serializable {
     @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date modifiedTime;
 
-    @Column(name = "product_name")
-    private String productName;
-
     /**
      * @return id
      */
@@ -136,6 +146,38 @@ public class Program implements Serializable {
      */
     public void setProductId(Long productId) {
         this.productId = productId;
+    }
+
+    /**
+     * 获取归属产品名称
+     *
+     * @return product_name - 归属产品名称
+     */
+    public String getProductName() {
+        return productName;
+    }
+
+    /**
+     * 设置归属产品名称
+     *
+     * @param productName 归属产品名称
+     */
+    public void setProductName(String productName) {
+        this.productName = productName == null ? null : productName.trim();
+    }
+
+    /**
+     * @return product_code
+     */
+    public String getProductCode() {
+        return productCode;
+    }
+
+    /**
+     * @param productCode
+     */
+    public void setProductCode(String productCode) {
+        this.productCode = productCode == null ? null : productCode.trim();
     }
 
     /**
@@ -244,6 +286,34 @@ public class Program implements Serializable {
      */
     public void setReleaseDate(Date releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    /**
+     * @return ued_date
+     */
+    public Date getUedDate() {
+        return uedDate;
+    }
+
+    /**
+     * @param uedDate
+     */
+    public void setUedDate(Date uedDate) {
+        this.uedDate = uedDate;
+    }
+
+    /**
+     * @return architecture_date
+     */
+    public Date getArchitectureDate() {
+        return architectureDate;
+    }
+
+    /**
+     * @param architectureDate
+     */
+    public void setArchitectureDate(Date architectureDate) {
+        this.architectureDate = architectureDate;
     }
 
     /**
@@ -381,14 +451,4 @@ public class Program implements Serializable {
     public void setModifiedTime(Date modifiedTime) {
         this.modifiedTime = modifiedTime;
     }
-
-	public String getProductName() {
-		return productName;
-	}
-
-	public void setProductName(String productName) {
-		this.productName = productName;
-	}
-
-
 }

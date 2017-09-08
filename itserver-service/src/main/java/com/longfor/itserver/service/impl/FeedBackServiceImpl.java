@@ -75,6 +75,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 		obj.setId(feedBack.getProductId());
 		Product product = productMapper.selectOne(obj);
 		feedBack.setName(product.getName());
+		feedBack.setProductCode(product.getCode());
 		feedBack.setContactAccountId(product.getContactAccountId());
 		feedBack.setContactEmployeeCode(product.getContactEmployeeCode());
 		feedBack.setContactEmployeeName(product.getContactEmployeeName());

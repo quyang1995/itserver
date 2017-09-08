@@ -80,6 +80,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			return false;
 		}
 		program.setProductName(product.getName());
+		program.setProductCode(product.getCode());
 		program.setCreateTime(TimeUtils.getTodayByDateTime());
 		program.setModifiedTime(TimeUtils.getTodayByDateTime());
 		programMapper.insert(program);
