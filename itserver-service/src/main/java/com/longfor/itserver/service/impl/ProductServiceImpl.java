@@ -120,6 +120,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
         List<String> changeLogTextList = getChangeLogText(oldProduct, newProduct);
 
         oldProduct.setName(jsonObject.getString("name"));
+		oldProduct.setCode(jsonObject.getString("code"));
         oldProduct.setDescp(jsonObject.getString("descp"));
         oldProduct.setStatus(jsonObject.getInteger("status"));
         oldProduct.setContactAccountId(jsonObject.getString("contactAccountId"));
