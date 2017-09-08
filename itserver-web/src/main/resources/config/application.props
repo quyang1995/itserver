@@ -3,7 +3,7 @@
 #
 
 # [development:开发模式/uat:測試模式/production:生产模式   @profiles:激活配置]
-@profiles=development
+@profiles=uat
 
 #产品版本号#
 product.version=v1.0

@@ -1,136 +1,147 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.longfor.itserver.mapper.ProductMapper" >
-  <resultMap id="BaseResultMap" type="com.longfor.itserver.entity.Product" >
-    <!--
-      WARNING - @mbggenerated
-    -->
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="descp" property="descp" jdbcType="VARCHAR" />
-    <result column="contact_account_id" property="contactAccountId" jdbcType="VARCHAR" />
-    <result column="contact_employee_code" property="contactEmployeeCode" jdbcType="BIGINT" />
-    <result column="contact_employee_name" property="contactEmployeeName" jdbcType="VARCHAR" />
-    <result column="contact_full_dept_path" property="contactFullDeptPath" jdbcType="VARCHAR" />
-    <result column="like_program" property="likeProgram" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="INTEGER" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="modified_account_id" property="modifiedAccountId" jdbcType="VARCHAR" />
-    <result column="modified_name" property="modifiedName" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <resultMap id="LikeBaseResultMap" type="com.longfor.itserver.entity.ps.PsProduct" >
-    <!--
-      WARNING - @mbggenerated
-    -->
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="INTEGER" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-  </resultMap>
+<mapper namespace="com.longfor.itserver.mapper.ProductMapper">
+    <resultMap id="BaseResultMap" type="com.longfor.itserver.entity.Product">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="descp" property="descp" jdbcType="VARCHAR"/>
+        <result column="contact_account_id" property="contactAccountId" jdbcType="VARCHAR"/>
+        <result column="contact_employee_code" property="contactEmployeeCode" jdbcType="BIGINT"/>
+        <result column="contact_employee_name" property="contactEmployeeName" jdbcType="VARCHAR"/>
+        <result column="contact_full_dept_path" property="contactFullDeptPath" jdbcType="VARCHAR"/>
+        <result column="like_program" property="likeProgram" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="modified_account_id" property="modifiedAccountId" jdbcType="VARCHAR"/>
+        <result column="modified_name" property="modifiedName" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="LikeBaseResultMap" type="com.longfor.itserver.entity.ps.PsProduct">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+    </resultMap>
 
-  <resultMap id="ApiBaseResultMap" type="com.longfor.itserver.entity.ps.PsAPIProduct" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="pending" property="pending" jdbcType="BIGINT" />
-    <result column="working" property="working" jdbcType="BIGINT" />
-    <result column="complete" property="complete" jdbcType="BIGINT" />
-  </resultMap>
+    <resultMap id="ApiBaseResultMap" type="com.longfor.itserver.entity.ps.PsAPIProduct">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="pending" property="pending" jdbcType="BIGINT"/>
+        <result column="working" property="working" jdbcType="BIGINT"/>
+        <result column="complete" property="complete" jdbcType="BIGINT"/>
+    </resultMap>
 
-  <sql id="Base_Column_List" >
-    <!--
-      WARNING - @mbggenerated
-    -->
-    id, name, descp, contact_account_id, contact_employee_code, contact_employee_name, 
-    contact_full_dept_path, like_program, type, status, modified_account_id, modified_name,
-    create_time, modified_time
-  </sql>
-  <select id="selectList" resultMap="BaseResultMap">
-    SELECT DISTINCT ta.*
-    FROM product ta LEFT JOIN product_employee tb ON ta.id = tb.product_id
-    WHERE
-    <if test="mySelf != null and mySelf != '' and mySelf == 0">
-      (tb.account_id = #{accountId}
-      OR ta.contact_account_id = #{accountId}
-      OR ta.type=1)
-    </if>
-    <if test="mySelf != null and mySelf != '' and mySelf == 1">
-      (tb.account_id = #{accountId}
-      OR ta.contact_account_id = #{accountId})
-    </if>
-    <if test="status != null and status != '' and status != -1 ">
-      AND ta.status= #{status}
-    </if>
-    <if test="searchText != null and searchText != ''">
-      AND (tb.employee_name LIKE concat('%',#{searchText},'%') OR ta.name LIKE concat('%',#{searchText},'%') OR ta.contact_employee_name LIKE concat('%',#{searchText},'%'))
-    </if>
-    ORDER BY ta.modified_time DESC
-  </select>
+    <sql id="Base_Column_List">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        id, name, descp, contact_account_id, contact_employee_code, contact_employee_name,
+        contact_full_dept_path, like_program, type, status, modified_account_id, modified_name,
+        create_time, modified_time
+    </sql>
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT DISTINCT ta.*
+        FROM product ta LEFT JOIN product_employee tb ON ta.id = tb.product_id
+        WHERE
+        <if test="mySelf != null and mySelf != '' and mySelf == 0">
+            (tb.account_id = #{accountId}
+            OR ta.contact_account_id = #{accountId}
+            OR ta.type=1)
+        </if>
+        <if test="mySelf != null and mySelf != '' and mySelf == 1">
+            (tb.account_id = #{accountId}
+            OR ta.contact_account_id = #{accountId})
+        </if>
+        <if test="status != null and status != '' and status != -1 ">
+            AND ta.status= #{status}
+        </if>
+        <if test="searchText != null and searchText != ''">
+            AND (tb.employee_name LIKE concat('%',#{searchText},'%') OR ta.name LIKE concat('%',#{searchText},'%') OR
+            ta.contact_employee_name LIKE concat('%',#{searchText},'%'))
+        </if>
+        ORDER BY ta.create_time DESC
+    </select>
 
-<!--获取产品列表带各状态统计-->
-  <select id="productCountList" parameterType="map" resultMap="ApiBaseResultMap">
-    SELECT DISTINCT ta.id,ta.`name`,
-    (select IFNULL(sum(CASE WHEN d.relation_id =ta.id THEN  1 ELSE 0 END),0) from demand d where d.relation_type=1 and `status`=2)+
-    (select IFNULL(sum(CASE WHEN b.relation_id =ta.id THEN  1 ELSE 0 END),0) from bug_info b where b.relation_type=1 and `status`=2)+
-    (select IFNULL(sum(CASE WHEN p.product_id =ta.id THEN  1 ELSE 0 END),0) from program p
-    LEFT JOIN demand d ON d.relation_id = p.id and d.relation_type=2 where d.`status`=2)+
-    (select IFNULL(sum(CASE WHEN p.product_id =ta.id THEN  1 ELSE 0 END),0) from program p
-    LEFT JOIN bug_info b ON b.relation_id = p.id and b.relation_type=2 where b.`status`=2) as pending,
-    (select IFNULL(sum(CASE WHEN d.relation_id =ta.id THEN  1 ELSE 0 END),0) from demand d where d.relation_type=1 and `status`=3)+
-    (select IFNULL(sum(CASE WHEN b.relation_id =ta.id THEN  1 ELSE 0 END),0) from bug_info b where b.relation_type=1 and `status`=3)+
-    (select IFNULL(sum(CASE WHEN p.product_id =ta.id THEN  1 ELSE 0 END),0) from program p
-    LEFT JOIN demand d ON d.relation_id = p.id and d.relation_type=2 where d.`status`=3)+
-    (select IFNULL(sum(CASE WHEN p.product_id =ta.id THEN  1 ELSE 0 END),0) from program p
-    LEFT JOIN bug_info b ON b.relation_id = p.id and b.relation_type=2 where b.`status`=3) as working,
-    (select IFNULL(sum(CASE WHEN d.relation_id =ta.id THEN  1 ELSE 0 END),0) from demand d where d.relation_type=1 and `status`=4)+
-    (select IFNULL(sum(CASE WHEN b.relation_id =ta.id THEN  1 ELSE 0 END),0) from bug_info b where b.relation_type=1 and `status`=4)+
-    (select IFNULL(sum(CASE WHEN p.product_id =ta.id THEN  1 ELSE 0 END),0) from program p
-    LEFT JOIN demand d ON d.relation_id = p.id and d.relation_type=2 where d.`status`=4)+
-    (select IFNULL(sum(CASE WHEN p.product_id =ta.id THEN  1 ELSE 0 END),0) from program p
-    LEFT JOIN bug_info b ON b.relation_id = p.id and b.relation_type=2 where b.`status`=4) as complete
-    FROM product ta
-    LEFT JOIN product_employee tb ON ta.id = tb.product_id
-    WHERE
-    <if test="mySelf != null and mySelf != '' and mySelf == 0">
-      (tb.account_id = #{accountId}
-      OR ta.contact_account_id = #{accountId}
-      OR ta.type=1)
-    </if>
-    <if test="mySelf != null and mySelf != '' and mySelf == 1">
-      (tb.account_id = #{accountId}
-      OR ta.contact_account_id = #{accountId})
-    </if>
-    <if test="status != null and status != '' and status != -1 ">
-      AND ta.status= #{status}
-    </if>
-    ORDER BY ta.modified_time DESC
-  </select>
+    <!--获取产品列表带各状态统计-->
+    <select id="productCountList" parameterType="map" resultMap="ApiBaseResultMap">
+        SELECT DISTINCT ta.id,ta.`name`,
+        (select IFNULL(sum(CASE WHEN d.relation_id =ta.id THEN 1 ELSE 0 END),0) from demand d where d.relation_type=1
+        and `status`=2)+
+        (select IFNULL(sum(CASE WHEN b.relation_id =ta.id THEN 1 ELSE 0 END),0) from bug_info b where b.relation_type=1
+        and `status`=2)+
+        (select IFNULL(sum(CASE WHEN p.product_id =ta.id THEN 1 ELSE 0 END),0) from program p
+        LEFT JOIN demand d ON d.relation_id = p.id and d.relation_type=2 where d.`status`=2)+
+        (select IFNULL(sum(CASE WHEN p.product_id =ta.id THEN 1 ELSE 0 END),0) from program p
+        LEFT JOIN bug_info b ON b.relation_id = p.id and b.relation_type=2 where b.`status`=2) as pending,
+        (select IFNULL(sum(CASE WHEN d.relation_id =ta.id THEN 1 ELSE 0 END),0) from demand d where d.relation_type=1
+        and `status`=3)+
+        (select IFNULL(sum(CASE WHEN b.relation_id =ta.id THEN 1 ELSE 0 END),0) from bug_info b where b.relation_type=1
+        and `status`=3)+
+        (select IFNULL(sum(CASE WHEN p.product_id =ta.id THEN 1 ELSE 0 END),0) from program p
+        LEFT JOIN demand d ON d.relation_id = p.id and d.relation_type=2 where d.`status`=3)+
+        (select IFNULL(sum(CASE WHEN p.product_id =ta.id THEN 1 ELSE 0 END),0) from program p
+        LEFT JOIN bug_info b ON b.relation_id = p.id and b.relation_type=2 where b.`status`=3) as working,
+        (select IFNULL(sum(CASE WHEN d.relation_id =ta.id THEN 1 ELSE 0 END),0) from demand d where d.relation_type=1
+        and `status`=4)+
+        (select IFNULL(sum(CASE WHEN b.relation_id =ta.id THEN 1 ELSE 0 END),0) from bug_info b where b.relation_type=1
+        and `status`=4)+
+        (select IFNULL(sum(CASE WHEN p.product_id =ta.id THEN 1 ELSE 0 END),0) from program p
+        LEFT JOIN demand d ON d.relation_id = p.id and d.relation_type=2 where d.`status`=4)+
+        (select IFNULL(sum(CASE WHEN p.product_id =ta.id THEN 1 ELSE 0 END),0) from program p
+        LEFT JOIN bug_info b ON b.relation_id = p.id and b.relation_type=2 where b.`status`=4) as complete
+        FROM product ta
+        LEFT JOIN product_employee tb ON ta.id = tb.product_id
+        WHERE
+        <if test="mySelf != null and mySelf != '' and mySelf == 0">
+            (tb.account_id = #{accountId}
+            OR ta.contact_account_id = #{accountId}
+            OR ta.type=1)
+        </if>
+        <if test="mySelf != null and mySelf != '' and mySelf == 1">
+            (tb.account_id = #{accountId}
+            OR ta.contact_account_id = #{accountId})
+        </if>
+        <if test="status != null and status != '' and status != -1 ">
+            AND ta.status= #{status}
+        </if>
+        ORDER BY ta.modified_time DESC
+    </select>
 
-  <select id="selectLikeList" resultMap="BaseResultMap">
-    SELECT
-    <include refid="Base_Column_List"/>
-    FROM product
-    WHERE   1=1
-    <if test="name != null and name != ''">
-      and name LIKE concat('%',#{name},'%')
-    </if>
-    ORDER BY modified_time DESC
-    limit 0,20
-  </select>
+    <select id="selectLikeList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM product
+        WHERE 1=1
+        <if test="name != null and name != ''">
+            and name LIKE concat('%',#{name},'%')
+        </if>
+        ORDER BY modified_time DESC
+        limit 0,20
+    </select>
 
-  <!-- 产品列表A-Z排序 -->
-  <select id="getListSort" resultMap="BaseResultMap">
-    SELECT
-    <include refid="Base_Column_List"/>
-    FROM product
-    ORDER by convert(substr(name,1,1) using 'GBK')
-  </select>
+    <!-- 产品列表A-Z排序 -->
+    <select id="getListSort" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM product
+        ORDER by convert(substr(name,1,1) using 'GBK')
+    </select>
 
-  <select id="selectIdList" resultMap="LikeBaseResultMap">
-    SELECT ID,NAME,type,status
-    FROM product
-    WHERE ID IN(${_parameter})
-  </select>
+    <select id="selectIdList" resultMap="LikeBaseResultMap">
+        SELECT
+            ID,
+            NAME,
+            type,
+            status
+        FROM product
+        WHERE ID IN (${_parameter})
+    </select>
 
 </mapper>

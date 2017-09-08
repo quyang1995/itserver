@@ -677,6 +677,7 @@
    -->
     <item id="api_feedBack_countStatus" description="查询反馈状态统计">
         <request>
+            <property name="accountId" type="string" required="true"/>
         </request>
     </item >
 

@@ -207,9 +207,9 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 	}
 
 	@Override
-	public Map countStatus() {
+	public Map countStatus(Map map) {
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-		PsFeedBackStatus  status = feedBackMapper.countStatus();
+		PsFeedBackStatus  status = feedBackMapper.countStatus(map);
 		resultMap.put("status",status);
 		return resultMap;
 	}

@@ -79,7 +79,7 @@
             concat(concat('%',#{searchText}),'%'))
         </if>
 
-        ORDER BY p.modified_time DESC
+        ORDER BY p.create_time DESC
     </select>
 
 
