@@ -2,6 +2,7 @@ package com.longfor.itserver.controller.base;
 
 
 import com.longfor.itserver.common.helper.JoddHelper;
+import com.longfor.itserver.esi.IAdsService;
 import com.longfor.itserver.service.*;
 import com.longfor.itserver.service.ps.IPsProductService;
 import net.mayee.redis.RedisCache;
@@ -34,6 +35,8 @@ public class BaseController {
     private HttpServletRequest request;
     @Autowired
     private RedisCache redisCache;
+    @Autowired
+    private IAdsService adsService;
 
     @Autowired
     private IBugChangeLogService bugChangeLogService;
@@ -75,6 +78,9 @@ public class BaseController {
     private IBugFileService bugFileService;
 
 
+    public IAdsService getAdsService() {
+        return adsService;
+    }
 
     public IFeedBackService getFeedBackService() {
         return feedBackService;

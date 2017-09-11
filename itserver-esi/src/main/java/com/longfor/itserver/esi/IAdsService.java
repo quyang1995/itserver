@@ -1,5 +1,6 @@
 package com.longfor.itserver.esi;
 
+import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.entity.AccountLongforLike;
 
 import java.util.List;
@@ -15,4 +16,7 @@ public interface IAdsService {
 
     List<AccountLongforLike> likeByName(String name);
 
+    boolean isAvaAccount(String loginName);
+
+    AccountLongfor getAccountLongfor(String loginName);
 }

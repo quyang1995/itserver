@@ -5,6 +5,8 @@ import com.github.pagehelper.PageInfo;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
+import com.longfor.itserver.common.enums.BugStatusEnum;
+import com.longfor.itserver.common.enums.ProgramStatusEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
@@ -313,26 +315,16 @@ public class APIProgramController extends BaseController {
 	@ResponseBody
 	public Map updateStatus(HttpServletRequest request,HttpServletResponse response){
 		Map paramsMap= (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-		/*责任人*/
-		ProgramEmployee employee = new ProgramEmployee();
-		employee.setProgramId(Long.valueOf((String)paramsMap.get("programId")));
-		employee.setEmployeeType(AvaStatusEnum.LIABLEAVA.getCode());
-		/*责任人*/
-		List<ProgramEmployee> personLiableList = this.getProgramEmployeeService().select(employee);
-		//用户名为空直接返回
-		if(StringUtils.isBlank((String)paramsMap.get("modifiedAccountId"))) return CommonUtils.getResultMapByBizEnum(BizEnum.E1011,"用户名");
-		boolean isAllow = false;
-		for (ProgramEmployee personLiable:personLiableList){
-			if(paramsMap.get("modifiedAccountId").equals(personLiable.getAccountId())){
-				isAllow = true;
-				break;
-			}
-		}
-		if(isAllow) {
+		//状态值有效性验证
+		int code = Integer.parseInt((String) paramsMap.get("status"));
+		ProgramStatusEnum programStatusEnum = ProgramStatusEnum.getByCode(code);
+		if(programStatusEnum != null){
 			this.getProgramService().updateStatus(paramsMap);
-			return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
+			Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+			resultMap.put("newStatusText", programStatusEnum.getText());
+			return resultMap;
 		}else{
-			return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
 		}
 	}
 }

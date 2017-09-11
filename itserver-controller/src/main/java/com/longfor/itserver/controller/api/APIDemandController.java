@@ -1,7 +1,10 @@
 package com.longfor.itserver.controller.api;
 
+import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
+import com.longfor.itserver.common.enums.BugStatusEnum;
+import com.longfor.itserver.common.enums.DemandStatusEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
@@ -183,9 +186,18 @@ public class APIDemandController extends BaseController {
     @ResponseBody
     public Map updateStatus(HttpServletRequest request ,HttpServletResponse response){
         Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-        this.getDemandService().updateStatus(paramsMap);
+        //状态值有效性验证
+        int code = Integer.parseInt((String) paramsMap.get("status"));
+        DemandStatusEnum demandStatusEnum = DemandStatusEnum.getByCode(code);
+        if(demandStatusEnum != null){
+            this.getDemandService().updateStatus(paramsMap);
 
-        return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+            Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+            resultMap.put("newStatusText", demandStatusEnum.getText());
+            return resultMap;
+        }else{
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+        }
     }
 
     /**
@@ -198,9 +210,17 @@ public class APIDemandController extends BaseController {
     @ResponseBody
     public Map updateCallon(HttpServletRequest request ,HttpServletResponse response){
         Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-        this.getDemandService().updateCallon(paramsMap);
+        //人员信息有效性验证
+        AccountLongfor accountLongfor = this.getAdsService().getAccountLongfor((String) paramsMap.get("callonAccountId"));
+        if(accountLongfor != null){
+            this.getDemandService().updateCallon(paramsMap);
 
-        return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+            Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+            resultMap.put("newCallonEmployeeText", accountLongfor.getName());
+            return resultMap;
+        }else{
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+        }
     }
 
 

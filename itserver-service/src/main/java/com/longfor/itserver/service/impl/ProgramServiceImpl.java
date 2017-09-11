@@ -393,6 +393,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	}
 
 	@Override
+	@Transactional
 	public boolean updateStatus(Map paramsMap) {
 		JSONObject jsonObject = (JSONObject)JSONObject.toJSON(paramsMap);
 		Long programId=Long.valueOf((String) paramsMap.get("programId"));
