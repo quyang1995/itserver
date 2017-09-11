@@ -836,9 +836,9 @@
         URL:
         /api/bug/getFile
 
-        说明:BUGID获取bug文件信息
+        说明:根据BUG文件ID获取bug文件信息
     -->
-    <item id="api_bug_getFile" description="BUGID获取bug文件信息">
+    <item id="api_bug_getFile" description="根据BUG文件ID获取bug文件信息">
         <request>
             <property name="id" type="int" required="true" />
         </request>
@@ -848,9 +848,9 @@
        URL:
        /api/demand/getFile
 
-       说明:需求ID获取需求文件信息
+       说明:根据需求文件ID获取需求文件信息
    -->
-    <item id="api_demand_getFile" description="需求ID获取需求文件信息">
+    <item id="api_demand_getFile" description="根据需求文件ID获取需求文件信息">
         <request>
             <property name="id" type="int" required="true" />
         </request>

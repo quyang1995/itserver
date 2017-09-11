@@ -248,9 +248,7 @@ public class APIDemandController extends BaseController {
     @ResponseBody
     public Map getFile(HttpServletRequest request,HttpServletResponse response){
         Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-        JSONObject jsonObject = (JSONObject) JSONObject.toJSON(paramsMap);
-        DemandFile file =  JSONObject.toJavaObject(jsonObject,DemandFile.class);
-        DemandFile  result = this.getDemandFileService().selectOne(file);
+        DemandFile  result = this.getDemandFileService().selectById(Long.valueOf((String)paramsMap.get("id")));
         Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         resultMap.put("data",result);
         return  resultMap;
