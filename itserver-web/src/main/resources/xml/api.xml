@@ -817,15 +817,12 @@
         </request>
     </item>
 
-
-
-
     <!--
       URL:
       /api/program/update/status
       说明:项目状态变更
     -->
-    <item id="api_program_update_status" description="需求状态变更">
+    <item id="api_program_update_status" description="项目状态变更">
         <request>
             <property name="programId" type="int" required="true"/>
             <property name="status" type="int" required="true"/>
@@ -833,4 +830,31 @@
             <property name="modifiedName" type="string" required="true"/>
         </request>
     </item>
+
+
+    <!--
+        URL:
+        /api/bug/getFile
+
+        说明:BUGID获取bug文件信息
+    -->
+    <item id="api_bug_getFile" description="BUGID获取bug文件信息">
+        <request>
+            <property name="bugId" type="int" required="true" />
+        </request>
+    </item>
+
+    <!--
+       URL:
+       /api/demand/getFile
+
+       说明:需求ID获取需求文件信息
+   -->
+    <item id="api_demand_getFile" description="需求ID获取需求文件信息">
+        <request>
+            <property name="demandId" type="int" required="true" />
+        </request>
+    </item>
+
+
 </api>

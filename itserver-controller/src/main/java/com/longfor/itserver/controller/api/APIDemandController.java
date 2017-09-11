@@ -1,5 +1,6 @@
 package com.longfor.itserver.controller.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
@@ -235,5 +236,23 @@ public class APIDemandController extends BaseController {
         Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
         return this.getDemandService().statusList(request, paramsMap);
+    }
+
+    /**
+     * 根据需求ID 获取相关需求文件
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/getFile" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+    @ResponseBody
+    public Map getFile(HttpServletRequest request,HttpServletResponse response){
+        Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        JSONObject jsonObject = (JSONObject) JSONObject.toJSON(paramsMap);
+        DemandFile file =  JSONObject.toJavaObject(jsonObject,DemandFile.class);
+        List<DemandFile> list = this.getDemandFileService().select(file);
+        Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        resultMap.put("data",list);
+        return  resultMap;
     }
 }
