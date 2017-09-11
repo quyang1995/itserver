@@ -250,9 +250,9 @@ public class APIDemandController extends BaseController {
         Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         JSONObject jsonObject = (JSONObject) JSONObject.toJSON(paramsMap);
         DemandFile file =  JSONObject.toJavaObject(jsonObject,DemandFile.class);
-        List<DemandFile> list = this.getDemandFileService().select(file);
+        DemandFile  result = this.getDemandFileService().selectOne(file);
         Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-        resultMap.put("data",list);
+        resultMap.put("data",result);
         return  resultMap;
     }
 }

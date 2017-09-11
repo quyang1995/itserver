@@ -840,7 +840,7 @@
     -->
     <item id="api_bug_getFile" description="BUGID获取bug文件信息">
         <request>
-            <property name="bugId" type="int" required="true" />
+            <property name="id" type="int" required="true" />
         </request>
     </item>
 
@@ -852,7 +852,7 @@
    -->
     <item id="api_demand_getFile" description="需求ID获取需求文件信息">
         <request>
-            <property name="demandId" type="int" required="true" />
+            <property name="id" type="int" required="true" />
         </request>
     </item>
 

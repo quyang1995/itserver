@@ -273,10 +273,11 @@ public class APIBugInfoController extends BaseController {
 	public Map getFile(HttpServletRequest request,HttpServletResponse response){
 		Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		JSONObject jsonObject = (JSONObject)JSONObject.toJSON(paramsMap);
+
 		BugFile file = JSONObject.toJavaObject(jsonObject,BugFile.class);
-		List<BugFile> list = this.getBugFileService().select(file);
+		BugFile result = this.getBugFileService().selectOne(file);
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-		resultMap.put("data",list);
+		resultMap.put("data",result);
 		return  resultMap;
 	}
 }
