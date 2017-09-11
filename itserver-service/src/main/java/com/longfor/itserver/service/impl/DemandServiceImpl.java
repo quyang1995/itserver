@@ -367,6 +367,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 
 
 	@Override
+	@Transactional
 	public boolean updateCallon(Map<String, String> paramsMap) {
 		JSONObject jsonObject   = (JSONObject)JSONObject.toJSON(paramsMap);
 		String modifiedAccountId =  jsonObject.getString("modifiedAccountId");
