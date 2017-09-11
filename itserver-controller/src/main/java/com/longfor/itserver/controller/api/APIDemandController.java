@@ -191,7 +191,6 @@ public class APIDemandController extends BaseController {
         DemandStatusEnum demandStatusEnum = DemandStatusEnum.getByCode(code);
         if(demandStatusEnum != null){
             this.getDemandService().updateStatus(paramsMap);
-
             Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
             resultMap.put("newStatusText", demandStatusEnum.getText());
             return resultMap;
