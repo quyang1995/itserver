@@ -279,14 +279,14 @@ public class APIProductController extends BaseController {
             int persionaLiableCount =  this.getProductEmployeeService().selectCount(productEmployee);
             if (persionaLiableCount > 1) {
                 //删除当前用户
-                this.getProductEmployeeService().delete(employee);
+                this.getProductEmployeeService().delEmployee(employee);
             } else {
                 return CommonUtils.getResultMapByBizEnum(BizEnum.E1027, " 唯一责任人");
             }
         } else {
             //删除成员
             employee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
-            this.getProductEmployeeService().delete(employee);
+            this.getProductEmployeeService().delEmployee(employee);
         }
             
         return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
