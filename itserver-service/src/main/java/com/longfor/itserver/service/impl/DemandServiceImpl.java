@@ -239,20 +239,22 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 				textList.add(log.toString());
 				map.put("type",1);
 			}
-			if(!Objects.equals(oldDemand.getStatus(),newDemand.getStatus())||
-					!Objects.equals(oldDemand.getLevel(),newDemand.getLevel())||
-					!Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())){
+			if(!Objects.equals(oldDemand.getLevel(),newDemand.getLevel())
+//					||
+//					!Objects.equals(oldDemand.getStatus(),newDemand.getStatus())||
+//					!Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())
+					){
 				StringBuilder log = new StringBuilder();
-				if (!Objects.equals(oldDemand.getStatus(),newDemand.getStatus())){
-
-					log.append(newDemand.getModifiedName()).
-							append("将 状态 由[").
-							append(DemandStatusEnum.getByCode(oldDemand.getStatus()).getText()).
-							append("]更改为[").
-							append(DemandStatusEnum.getByCode(newDemand.getStatus()).getText()).
-							append("]");
-					textList.add(log.toString());
-				}
+//				if (!Objects.equals(oldDemand.getStatus(),newDemand.getStatus())){
+//
+//					log.append(newDemand.getModifiedName()).
+//							append("将 状态 由[").
+//							append(DemandStatusEnum.getByCode(oldDemand.getStatus()).getText()).
+//							append("]更改为[").
+//							append(DemandStatusEnum.getByCode(newDemand.getStatus()).getText()).
+//							append("]");
+//					textList.add(log.toString());
+//				}
 				if(!Objects.equals(oldDemand.getLevel(),newDemand.getLevel())){
 					if (StringUtils.isNotBlank(log)){
 						log.append(",");
@@ -266,19 +268,19 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 							append("]");
 					textList.add(log.toString());
 				}
-				if(!Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())){
-					if (StringUtils.isNotBlank(log)){
-						log.append(",");
-					}else{
-						log.append(newDemand.getModifiedName());
-					}
-					log.append("将 指派人 由[").
-							append(oldDemand.getCallonEmployeeName()).
-							append("]更改为[").
-							append(newDemand.getCallonEmployeeName()).
-							append("]");
-					textList.add(log.toString());
-				}
+//				if(!Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())){
+//					if (StringUtils.isNotBlank(log)){
+//						log.append(",");
+//					}else{
+//						log.append(newDemand.getModifiedName());
+//					}
+//					log.append("将 指派人 由[").
+//							append(oldDemand.getCallonEmployeeName()).
+//							append("]更改为[").
+//							append(newDemand.getCallonEmployeeName()).
+//							append("]");
+//					textList.add(log.toString());
+//				}
 				map.put("type",2);
 			}
 

@@ -231,20 +231,22 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                 textList.add(log.toString());
                 map.put("type", 1);
             }
-            if (!Objects.equals(oldBug.getStatus(), newBug.getStatus()) ||
-                    !Objects.equals(oldBug.getLevel(), newBug.getLevel()) ||
-                    !Objects.equals(oldBug.getCallonAccountId(), newBug.getCallonAccountId())) {
+            if (    !Objects.equals(oldBug.getLevel(), newBug.getLevel())
+//                    ||
+//                    !Objects.equals(oldBug.getStatus(), newBug.getStatus()) ||
+//                    !Objects.equals(oldBug.getCallonAccountId(), newBug.getCallonAccountId())
+                    ) {
                 StringBuilder log = new StringBuilder();
-                if (!Objects.equals(oldBug.getStatus(), newBug.getStatus())) {
-
-                    log.append(newBug.getModifiedName()).
-                            append("将 状态 由[").
-                            append(BugStatusEnum.getByCode(oldBug.getStatus()).getText()).
-                            append("]更改为[").
-                            append(BugStatusEnum.getByCode(newBug.getStatus()).getText()).
-                            append("]");
-                    textList.add(log.toString());
-                }
+//                if (!Objects.equals(oldBug.getStatus(), newBug.getStatus())) {
+//
+//                    log.append(newBug.getModifiedName()).
+//                            append("将 状态 由[").
+//                            append(BugStatusEnum.getByCode(oldBug.getStatus()).getText()).
+//                            append("]更改为[").
+//                            append(BugStatusEnum.getByCode(newBug.getStatus()).getText()).
+//                            append("]");
+//                    textList.add(log.toString());
+//                }
                 if (!Objects.equals(oldBug.getLevel(), newBug.getLevel())) {
                     if (StringUtils.isNotBlank(log)) {
                         log.append(",");
@@ -258,19 +260,19 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                             append("]");
                     textList.add(log.toString());
                 }
-                if (!Objects.equals(oldBug.getCallonAccountId(), newBug.getCallonAccountId())) {
-                    if (StringUtils.isNotBlank(log)) {
-                        log.append(",");
-                    } else {
-                        log.append(newBug.getModifiedName());
-                    }
-                    log.append("将 指派人 由[").
-                            append(oldBug.getCallonEmployeeName()).
-                            append("]更改为[").
-                            append(newBug.getCallonEmployeeName()).
-                            append("]");
-                    textList.add(log.toString());
-                }
+//                if (!Objects.equals(oldBug.getCallonAccountId(), newBug.getCallonAccountId())) {
+//                    if (StringUtils.isNotBlank(log)) {
+//                        log.append(",");
+//                    } else {
+//                        log.append(newBug.getModifiedName());
+//                    }
+//                    log.append("将 指派人 由[").
+//                            append(oldBug.getCallonEmployeeName()).
+//                            append("]更改为[").
+//                            append(newBug.getCallonEmployeeName()).
+//                            append("]");
+//                    textList.add(log.toString());
+//                }
 
                 map.put("type", 2);
             }
@@ -291,8 +293,6 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
     }
 
     public String statusLog(BugInfo oldBug, BugInfo newBug) {
-//        if (!Objects.equals(oldBug.getStatus(), newBug.getStatus()) ||
-//                !Objects.equals(oldBug.getCallonAccountId(), newBug.getCallonAccountId())) {
             StringBuilder log = new StringBuilder();
             if (newBug.getStatus() != null && !Objects.equals(oldBug.getStatus(), newBug.getStatus())) {
                 log.append(newBug.getModifiedName()).
@@ -301,7 +301,6 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                         append("]更改为[").
                         append(BugStatusEnum.getByCode(newBug.getStatus()).getText()).
                         append("]");
-//                return log.toString();
             }
 
             else if (newBug.getCallonAccountId() != null&& !Objects.equals(oldBug.getCallonAccountId(), newBug.getCallonAccountId())) {
@@ -311,7 +310,6 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                         append("]更改为[").
                         append(newBug.getCallonEmployeeName()).
                         append("]");
-//                return log.toString();
             }
 
             return  log.toString();
@@ -331,7 +329,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
             newBug.setModifiedAccountId(modifiedAccountId);
             newBug.setModifiedName(modifiedName);
             newBug.setStatus(status);
-        /*添加BUG修改日志*/
+            /*添加BUG修改日志*/
             String log = statusLog(oldBug, newBug);
             if(StringUtils.isNotBlank(log)) {
                 BugChangeLog bugChangeLog = new BugChangeLog();
