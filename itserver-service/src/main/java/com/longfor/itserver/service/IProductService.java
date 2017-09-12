@@ -11,7 +11,7 @@ import java.util.Map;
 public interface IProductService extends IAdminService<Product> {
     List<Product> searchList(Map map);
     List<Product> searchLikeList(Map map);
-    boolean addProduct(Map map);
+    Map<String, Object> addProduct(Map map);
     List<Product> searchIdList(String likeProduct);
     boolean updateProduct(Map map);
     List<Product> getListSort();

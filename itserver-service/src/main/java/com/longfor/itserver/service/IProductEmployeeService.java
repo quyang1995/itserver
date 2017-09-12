@@ -9,4 +9,5 @@ import java.util.List;
 public interface IProductEmployeeService extends IAdminService<ProductEmployee> {
     List<ProductEmployee> searchTypeList(Long productId, Integer employeeType, Long employeeTypeId);
 
+    boolean delEmployee (ProductEmployee employee);
 }

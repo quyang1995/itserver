@@ -9,4 +9,6 @@ import java.util.Map;
 public interface IProgramEmployeeService extends IAdminService<ProgramEmployee> {
 
     List<ProgramEmployee> selectTypeList(Map map);
+
+    boolean delEmployee(ProgramEmployee employee);
 }

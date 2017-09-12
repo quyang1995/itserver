@@ -1,5 +1,6 @@
 package com.longfor.itserver.controller.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.longfor.ads.entity.AccountLongfor;
@@ -215,7 +216,7 @@ public class APIBugInfoController extends BaseController {
 
             Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
             resultMap.put("newStatusText", bugStatusEnum.getText());
-            return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+            return resultMap;
         }else{
             return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
         }
@@ -240,7 +241,7 @@ public class APIBugInfoController extends BaseController {
 
             Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
             resultMap.put("newCallonEmployeeText", accountLongfor.getName());
-            return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+			return resultMap;
         }else{
             return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
         }
@@ -261,5 +262,19 @@ public class APIBugInfoController extends BaseController {
 		return this.getBugInfoService().statusList(request,paramsMap);
 	}
 
-
+	/**
+	 * 根据BUGID 获取相关BUG文件
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/getFile" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+	@ResponseBody
+	public Map getFile(HttpServletRequest request,HttpServletResponse response){
+		Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		BugFile result = this.getBugFileService().selectById(Long.valueOf((String)paramsMap.get("id")));
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		resultMap.put("data",result);
+		return  resultMap;
+	}
 }

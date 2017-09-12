@@ -17,6 +17,7 @@ import com.longfor.itserver.entity.ps.PsIndex;
 import com.longfor.itserver.mapper.DemandChangeLogMapper;
 import com.longfor.itserver.mapper.DemandFileMapper;
 import com.longfor.itserver.mapper.DemandMapper;
+import com.longfor.itserver.mapper.FeedBackMapper;
 import com.longfor.itserver.service.IDemandService;
 import com.longfor.itserver.service.base.AdminBaseService;
 
@@ -46,6 +47,8 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 	private DemandChangeLogMapper demandChangeLogMapper;
 	@Autowired
 	private DemandFileMapper demandFileMapper;
+	@Autowired
+	private FeedBackMapper feedBackMapper;
 
 	/**
 	 * 	新增需求信息
@@ -236,20 +239,22 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 				textList.add(log.toString());
 				map.put("type",1);
 			}
-			if(!Objects.equals(oldDemand.getStatus(),newDemand.getStatus())||
-					!Objects.equals(oldDemand.getLevel(),newDemand.getLevel())||
-					!Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())){
+			if(!Objects.equals(oldDemand.getLevel(),newDemand.getLevel())
+//					||
+//					!Objects.equals(oldDemand.getStatus(),newDemand.getStatus())||
+//					!Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())
+					){
 				StringBuilder log = new StringBuilder();
-				if (!Objects.equals(oldDemand.getStatus(),newDemand.getStatus())){
-
-					log.append(newDemand.getModifiedName()).
-							append("将 状态 由[").
-							append(DemandStatusEnum.getByCode(oldDemand.getStatus()).getText()).
-							append("]更改为[").
-							append(DemandStatusEnum.getByCode(newDemand.getStatus()).getText()).
-							append("]");
-					textList.add(log.toString());
-				}
+//				if (!Objects.equals(oldDemand.getStatus(),newDemand.getStatus())){
+//
+//					log.append(newDemand.getModifiedName()).
+//							append("将 状态 由[").
+//							append(DemandStatusEnum.getByCode(oldDemand.getStatus()).getText()).
+//							append("]更改为[").
+//							append(DemandStatusEnum.getByCode(newDemand.getStatus()).getText()).
+//							append("]");
+//					textList.add(log.toString());
+//				}
 				if(!Objects.equals(oldDemand.getLevel(),newDemand.getLevel())){
 					if (StringUtils.isNotBlank(log)){
 						log.append(",");
@@ -263,19 +268,19 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 							append("]");
 					textList.add(log.toString());
 				}
-				if(!Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())){
-					if (StringUtils.isNotBlank(log)){
-						log.append(",");
-					}else{
-						log.append(newDemand.getModifiedName());
-					}
-					log.append("将 指派人 由[").
-							append(oldDemand.getCallonEmployeeName()).
-							append("]更改为[").
-							append(newDemand.getCallonEmployeeName()).
-							append("]");
-					textList.add(log.toString());
-				}
+//				if(!Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())){
+//					if (StringUtils.isNotBlank(log)){
+//						log.append(",");
+//					}else{
+//						log.append(newDemand.getModifiedName());
+//					}
+//					log.append("将 指派人 由[").
+//							append(oldDemand.getCallonEmployeeName()).
+//							append("]更改为[").
+//							append(newDemand.getCallonEmployeeName()).
+//							append("]");
+//					textList.add(log.toString());
+//				}
 				map.put("type",2);
 			}
 
@@ -297,9 +302,33 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		return map;
 	}
 
+	public String statusLog(Demand oldDemand,Demand newDemand){
+		StringBuilder log = new StringBuilder();
+		if (newDemand.getStatus()!=null && !Objects.equals(oldDemand.getStatus(),newDemand.getStatus())){
+
+			log.append(oldDemand.getModifiedName()).
+				append("将 状态 由[").
+				append(DemandStatusEnum.getByCode(oldDemand.getStatus()).getText()).
+				append("]更改为[").
+				append(DemandStatusEnum.getByCode(newDemand.getStatus()).getText()).
+				append("]");
+		}
+
+		if(newDemand.getCallonAccountId()!=null && !Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())){
+
+				log.append(oldDemand.getModifiedName()).
+					append("将 指派人 由[").
+					append(oldDemand.getCallonEmployeeName()).
+					append("]更改为[").
+					append(newDemand.getCallonEmployeeName()).
+					append("]");
+		}
+		return log.toString();
+	}
 
 
 	@Override
+	@Transactional
 	public boolean updateStatus(Map<String,String> paramsMap) {
 
 		JSONObject jsonObject   = (JSONObject)JSONObject.toJSON(paramsMap);
@@ -308,33 +337,39 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		Long demandId = Long.valueOf(jsonObject.getString("demandId"));
 		Integer status = Integer.valueOf( jsonObject.getString("status"));
 		Demand oldDemand = demandMapper.selectByPrimaryKey(demandId);
-		Demand newDemand = demandMapper.selectByPrimaryKey(demandId);
+		Demand newDemand = new Demand();
 		newDemand.setStatus(status);
+
         /*添加需求修改日志*/
-		Map<String,Object> logMap = getChangeLog(oldDemand,newDemand);
-		List<String> textList = (List)logMap.get("logList");
-		List<DemandChangeLog> logList = new ArrayList<>();
-		for (String log:textList){
+		String log = statusLog(oldDemand,newDemand);
+		if(StringUtils.isNotBlank(log)) {
 			DemandChangeLog demandChangeLog = new DemandChangeLog();
-			demandChangeLog.setDemandId(newDemand.getId());
-			demandChangeLog.setBefDescp(newDemand.getDescp());
-			demandChangeLog.setType((Integer) logMap.get("type"));
+			demandChangeLog.setDemandId(oldDemand.getId());
+			demandChangeLog.setBefDescp(oldDemand.getDescp());
+			demandChangeLog.setType(2);
 			demandChangeLog.setActionChangeInfo(log);
 			demandChangeLog.setModifiedName(modifiedName);
 			demandChangeLog.setModifiedAccountId(modifiedAccountId);
 			demandChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
 			demandChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
-			logList.add(demandChangeLog);
+			demandChangeLogMapper.insertUseGeneratedKeys(demandChangeLog);
 		}
-		if(logList.size() > 0){
-			demandChangeLogMapper.insertList(logList);
+
+		oldDemand.setStatus(status);
+		demandMapper.updateByPrimaryKey(oldDemand);
+
+		//如果需求对应的反馈建议不为空，则更新反馈建议状态信息
+		FeedBack feedBack = feedBackMapper.selectByPrimaryKey(oldDemand.getFeedBackId());
+		if(feedBack != null){
+			feedBack.setStatus(status);
+			feedBackMapper.updateByPrimaryKey(feedBack);
 		}
-		demandMapper.updateByPrimaryKey(newDemand);
 		return true;
 	}
 
 
 	@Override
+	@Transactional
 	public boolean updateCallon(Map<String, String> paramsMap) {
 		JSONObject jsonObject   = (JSONObject)JSONObject.toJSON(paramsMap);
 		String modifiedAccountId =  jsonObject.getString("modifiedAccountId");
@@ -349,26 +384,37 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		newDemand.setCallonEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
 		newDemand.setCallonEmployeeName(accountLongfor.getName());
 		newDemand.setCallonFullDeptPath(accountLongfor.getPsDeptFullName());
+
         /*添加B需求修改日志*/
-		Map<String,Object> logMap = getChangeLog(oldDemand,newDemand);
-		List<String> textList = (List)logMap.get("logList");
-		List<DemandChangeLog> logList = new ArrayList<>();
-		for (String log:textList){
+		String log = statusLog(oldDemand,newDemand);
+		if(StringUtils.isNotBlank(log)) {
 			DemandChangeLog demandChangeLog = new DemandChangeLog();
-			demandChangeLog.setDemandId(newDemand.getId());
-			demandChangeLog.setBefDescp(newDemand.getDescp());
-			demandChangeLog.setType((Integer)logMap.get("type"));
+			demandChangeLog.setDemandId(oldDemand.getId());
+			demandChangeLog.setBefDescp(oldDemand.getDescp());
+			demandChangeLog.setType(2);
 			demandChangeLog.setActionChangeInfo(log);
 			demandChangeLog.setModifiedName(modifiedName);
 			demandChangeLog.setModifiedAccountId(modifiedAccountId);
 			demandChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
 			demandChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
-			logList.add(demandChangeLog);
+			demandChangeLogMapper.insertUseGeneratedKeys(demandChangeLog);
 		}
-		if(logList.size() > 0){
-			demandChangeLogMapper.insertList(logList);
+
+		oldDemand.setCallonAccountId(callonAccountId);
+		oldDemand.setCallonEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
+		oldDemand.setCallonEmployeeName(accountLongfor.getName());
+		oldDemand.setCallonFullDeptPath(accountLongfor.getPsDeptFullName());
+		demandMapper.updateByPrimaryKey(oldDemand);
+
+		FeedBack feedBack = feedBackMapper.selectByPrimaryKey(oldDemand.getFeedBackId());
+		//如果需求对应的反馈建议不为空，更新反馈建议接口人信息
+		if(feedBack != null) {
+			feedBack.setContactAccountId(callonAccountId);
+			feedBack.setContactEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
+			feedBack.setContactEmployeeName(accountLongfor.getName());
+			feedBack.setContactFullDeptPath(accountLongfor.getPsDeptFullName());
+			feedBackMapper.updateByPrimaryKey(feedBack);
 		}
-		demandMapper.updateByPrimaryKey(newDemand);
 		return true;
 	}
 

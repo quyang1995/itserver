@@ -192,12 +192,12 @@ public class APIProductController extends BaseController {
     @ResponseBody
     public Map addProduct(HttpServletRequest request, HttpServletResponse response) {
         /* 获得已经验证过的参数map*/
+        @SuppressWarnings("unchecked")
         Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         /*新增产品信息*/
         this.getProductService().addProduct(paramsMap);
         /*返回数据*/
-        Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
-        return map;
+        return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
     }
 
     /**
@@ -279,14 +279,14 @@ public class APIProductController extends BaseController {
             int persionaLiableCount =  this.getProductEmployeeService().selectCount(productEmployee);
             if (persionaLiableCount > 1) {
                 //删除当前用户
-                this.getProductEmployeeService().delete(employee);
+                this.getProductEmployeeService().delEmployee(employee);
             } else {
                 return CommonUtils.getResultMapByBizEnum(BizEnum.E1027, " 唯一责任人");
             }
         } else {
             //删除成员
             employee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
-            this.getProductEmployeeService().delete(employee);
+            this.getProductEmployeeService().delEmployee(employee);
         }
             
         return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
