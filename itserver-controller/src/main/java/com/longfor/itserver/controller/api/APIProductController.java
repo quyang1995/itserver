@@ -304,7 +304,7 @@ public class APIProductController extends BaseController {
         ProductStatusEnum productStatusEnum  =  ProductStatusEnum.getByCode(code);
         if(productStatusEnum != null ){
             this.getProductService().updateStatus(paramsMap);
-            Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+            Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
             resultMap.put("newStatusText", productStatusEnum.getText());
             return resultMap;
         }else{
