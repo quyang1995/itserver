@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
+import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.enums.ProductStatusEnum;
 import com.longfor.itserver.common.enums.PublicTypeEnum;
+import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.ProductEmployee;
 import com.longfor.itserver.entity.ProductEmployeeChangeLog;
@@ -54,12 +56,21 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 
 	@Transactional
 	@Override
-	public boolean addProduct(Map map) {
+	public Map<String, Object> addProduct(Map map) {
 		JSONObject jsonObject = (JSONObject) JSONObject.toJSON(map);
 		Product product = JSONObject.toJavaObject(jsonObject, Product.class);
+
+		//code唯一检查
+        String code = product.getCode();
+        Product codeCheckProduct = new Product();
+        codeCheckProduct.setCode(code);
+        if(StringUtils.isBlank(code) || productMapper.selectOne(codeCheckProduct) != null){
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E1028, code);
+        }
+
 		String descp = product.getDescp();
-		if (descp != null && descp.length() > 3000) {
-			product.setDescp(descp.substring(0, 3000));
+		if (descp != null && descp.length() > 500) {
+			product.setDescp(descp.substring(0, 500));
 		}
 		product.setStatus(Integer.parseInt(jsonObject.getString("status")));
 		product.setContactAccountId(jsonObject.getString("contactAccountId"));
@@ -101,7 +112,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
             productEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
         }
 
-		return true;
+		return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
 	}
 
 	@Override
@@ -120,7 +131,6 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
         List<String> changeLogTextList = getChangeLogText(oldProduct, newProduct);
 
         oldProduct.setName(jsonObject.getString("name"));
-		oldProduct.setCode(jsonObject.getString("code"));
         oldProduct.setDescp(jsonObject.getString("descp"));
         oldProduct.setStatus(jsonObject.getInteger("status"));
         oldProduct.setContactAccountId(jsonObject.getString("contactAccountId"));

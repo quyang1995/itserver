@@ -146,8 +146,8 @@
             <property name="productManagerList" type="string" required="false"/>
             <property name="developerList" type="string" required="false"/>
             <property name="uedList" type="string" required="false"/>
-            <property name="modifiedAccountId" type="string" required="true" />
-            <property name="modifiedName" type="string" required="true" />
+            <property name="modifiedAccountId" type="string" required="true" maxLength="50" />
+            <property name="modifiedName" type="string" required="true" maxLength="50" />
         </request>
     </item>
 
@@ -172,8 +172,8 @@
             <property name="productManagerList" type="string" required="false"/>
             <property name="developerList" type="string" required="false"/>
             <property name="uedList" type="string" required="false"/>
-            <property name="modifiedAccountId" type="string" required="true" />
-            <property name="modifiedName" type="string" required="true" />
+            <property name="modifiedAccountId" type="string" required="true" maxLength="50" />
+            <property name="modifiedName" type="string" required="true" maxLength="50" />
         </request>
     </item>
 
@@ -266,8 +266,8 @@
             <property name="likeProgram" type="string" required="false" maxLength="20"/>
             <property name="type" type="int" required="true"/>
             <property name="programStatus" type="int" required="true"/>
-            <property name="modifiedAccountId" type="string" required="true"/>
-            <property name="modifiedName" type="string" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
+            <property name="modifiedName" type="string" required="true" maxLength="50"/>
             <property name="personLiableList" type="string" required="true"/>
             <property name="programManagerList" type="string" required="false"/>
             <property name="productManagerList" type="string" required="false"/>
@@ -290,8 +290,8 @@
             <property name="likeProgram" type="string" required="false" maxLength="20"/>
             <property name="type" type="int" required="true"/>
             <property name="programStatus" type="int" required="true"/>
-            <property name="modifiedAccountId" type="string" required="true"/>
-            <property name="modifiedName" type="string" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
+            <property name="modifiedName" type="string" required="true" maxLength="50"/>
             <property name="personLiableList" type="string" required="true"/>
             <property name="programManagerList" type="string" required="false"/>
             <property name="productManagerList" type="string" required="false"/>
