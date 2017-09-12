@@ -157,7 +157,6 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
         for(String text : changeLogTextList){
             ProductEmployeeChangeLog employeeChangeLog = new ProductEmployeeChangeLog();
             employeeChangeLog.setProductId(newProduct.getId());
-            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
             employeeChangeLog.setActionChangeInfo(text);
             employeeChangeLog.setModifiedAccountId(newProduct.getModifiedAccountId());
             employeeChangeLog.setModifiedName(newProduct.getModifiedName());
@@ -241,6 +240,30 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		return true;
 	}
 
+	@Override
+	@Transactional
+	public boolean updateStatus(Map paramsMap) {
+		Long productId =  Long.parseLong((String)paramsMap.get("productId"));
+		int status =  Integer.parseInt((String)paramsMap.get("status"));
+		String modifiedName = (String)paramsMap.get("modifiedName");
+		String modifiedAccountId = (String)paramsMap.get("modifiedAccountId");
+
+		Product oldProduct =  productMapper.selectByPrimaryKey(productId);
+		String text = statusLog(oldProduct , paramsMap);
+		if(StringUtils.isNotBlank(text)){
+			ProductEmployeeChangeLog employeeChangeLog = new ProductEmployeeChangeLog();
+			employeeChangeLog.setProductId(productId);
+			employeeChangeLog.setActionChangeInfo(text);
+			employeeChangeLog.setModifiedAccountId(modifiedAccountId);
+			employeeChangeLog.setModifiedName(modifiedName);
+			employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+			employeeChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+			productEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
+		}
+		productMapper.updateByPrimaryKey(oldProduct);
+		return true;
+	}
+
 	private List<String> getChangeLogText(Product oldProduct, Product newProduct){
 	    List<String> textList = new ArrayList<>();
 
@@ -292,4 +315,24 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
         return textList;
     }
 
+    //产品状态修改日志
+    private String statusLog(Product oldProduct,Map paramsMap){
+
+		Integer status = null;
+		//判断是否为更改状态
+		if(StringUtils.isNotBlank((String)paramsMap.get("status"))){
+			status =  Integer.parseInt((String)paramsMap.get("status"));
+		}
+		String modifiedName = (String)paramsMap.get("modifiedName");
+		StringBuilder sb = new StringBuilder();
+		if(status != null && ProductStatusEnum.getByCode(status) != null && !Objects.equals(oldProduct.getStatus(), status)){
+			sb.append(modifiedName)
+					.append(" 将 产品状态 从 [")
+					.append(ProductStatusEnum.getByCode(oldProduct.getStatus()).getText())
+					.append("] 更新为 [")
+					.append(ProductStatusEnum.getByCode((status)))
+					.append("] ");
+		}
+		return  sb.toString();
+	}
 }

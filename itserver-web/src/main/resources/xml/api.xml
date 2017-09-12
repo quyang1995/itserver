@@ -65,9 +65,9 @@
         <request>
             <property ref="pageNum"/>
             <property ref="pageSize"/>
-            <property name="accountId" type="string" required="true"/>
+            <property name="accountId" type="string" required="true" maxLength="30" />
             <property name="status" type="string" required="true"/>
-            <property name="mySelf" type="string" required="true"/>
+            <property name="mySelf" type="string" required="true" maxLength="30"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
         </request>
     </item>
@@ -83,9 +83,9 @@
         <request>
             <property ref="pageNum"/>
             <property ref="pageSize"/>
-            <property name="accountId" type="string" required="true"/>
+            <property name="accountId" type="string" required="true" maxLength="30"/>
             <property name="status" type="string" required="true"/>
-            <property name="mySelf" type="string" required="true"/>
+            <property name="mySelf" type="string" required="true" maxLength="30"/>
         </request>
     </item>
     <!--
@@ -134,11 +134,11 @@
     -->
     <item id="api_product_add" description="新增产品基本信息">
         <request>
-            <property name="name" type="string" required="true" />
-            <property name="code" type="string" required="true" />
-            <property name="descp" type="string" required="false" />
-            <property name="contactAccountId" type="string" required="true" />
-            <property name="likeProgram" type="string" required="false" />
+            <property name="name" type="string" required="true" maxLength="100" />
+            <property name="code" type="string" required="true" maxLength="20" />
+            <property name="descp" type="string" required="false" maxLength="3000" />
+            <property name="contactAccountId" type="string" required="true" maxLength="500" />
+            <property name="likeProgram" type="string" required="false" maxLength="20" />
             <property name="type" type="int" required="true" />
             <property name="status" type="int" required="true" />
             <property name="personLiableList" type="string" required="true"/>
@@ -161,10 +161,10 @@
     <item id="api_product_update" description="修改产品基本信息">
         <request>
             <property name="id" type="int" required="true" />
-            <property name="name" type="string" required="true" />
-            <property name="descp" type="string" required="false" />
-            <property name="contactAccountId" type="string" required="true" />
-            <property name="likeProgram" type="string" required="false" />
+            <property name="name" type="string" required="true" maxLength="100" />
+            <property name="descp" type="string" required="false" maxLength="3000" />
+            <property name="contactAccountId" type="string" required="true" maxLength="500" />
+            <property name="likeProgram" type="string" required="false" maxLength="20" />
             <property name="type" type="int" required="true" />
             <property name="status" type="int" required="true" />
             <property name="personLiableList" type="string" required="true"/>
@@ -194,7 +194,7 @@
         <request>
             <property ref="pageNum"/>
             <property ref="pageSize"/>
-            <property name="accountId" type="string" required="true"/>
+            <property name="accountId" type="string" required="true" maxLength="30"/>
             <property name="programStatus" type="int" required="true"/>
             <property name="isPart" type="int" required="true"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
@@ -226,7 +226,7 @@
         <request>
             <property ref="pageNum"/>
             <property ref="pageSize"/>
-            <property name="accountId" type="string" required="true"/>
+            <property name="accountId" type="string" required="true" maxLength="30"/>
             <property name="programStatus" type="int" required="true"/>
             <property name="isPart" type="int" required="true"/>
             <property name="productId" type="int" required="true"/>
@@ -256,14 +256,14 @@
     <item id="api_program_add" description="新增项目基本信息">
         <request>
             <property name="productId" type="int" required="true"/>
-            <property name="name" type="string" required="true"/>
-            <property name="descp" type="string" required="false"/>
-            <property name="commitDate" type="string" required="true"/>
-            <property name="startDate" type="string" required="true"/>
-            <property name="grayReleaseDate" type="string" required="true"/>
-            <property name="releaseDate" type="string" required="true"/>
-            <property name="likeProduct" type="string" required="false"/>
-            <property name="likeProgram" type="string" required="false"/>
+            <property name="name" type="string" required="true" maxLength="100"/>
+            <property name="descp" type="string" required="false" maxLength="3000"/>
+            <property name="commitDate" type="string" required="true" maxLength="20"/>
+            <property name="startDate" type="string" required="true" maxLength="20"/>
+            <property name="grayReleaseDate" type="string" required="true" maxLength="20"/>
+            <property name="releaseDate" type="string" required="true" maxLength="20"/>
+            <property name="likeProduct" type="string" required="false" maxLength="20"/>
+            <property name="likeProgram" type="string" required="false" maxLength="20"/>
             <property name="type" type="int" required="true"/>
             <property name="programStatus" type="int" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
@@ -280,14 +280,14 @@
         <request>
             <property name="id" type="int" required="true"/>
             <property name="productId" type="int" required="true"/>
-            <property name="name" type="string" required="true"/>
-            <property name="descp" type="string" required="false"/>
-            <property name="commitDate" type="string" required="true"/>
-            <property name="startDate" type="string" required="true"/>
-            <property name="grayReleaseDate" type="string" required="true"/>
-            <property name="releaseDate" type="string" required="true"/>
-            <property name="likeProduct" type="string" required="false"/>
-            <property name="likeProgram" type="string" required="false"/>
+            <property name="name" type="string" required="true" maxLength="100"/>
+            <property name="descp" type="string" required="false" maxLength="3000"/>
+            <property name="commitDate" type="string" required="true" maxLength="20"/>
+            <property name="startDate" type="string" required="true" maxLength="20"/>
+            <property name="grayReleaseDate" type="string" required="true" maxLength="20"/>
+            <property name="releaseDate" type="string" required="true" maxLength="20"/>
+            <property name="likeProduct" type="string" required="false" maxLength="20"/>
+            <property name="likeProgram" type="string" required="false" maxLength="20"/>
             <property name="type" type="int" required="true"/>
             <property name="programStatus" type="int" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
@@ -311,14 +311,14 @@
     <item id="api_feedBack_add" description="新增反馈基本信息">
         <request>
             <property name="productId" type="int" required="true"/>
-            <property name="problemTitle" type="string" required="false"/>
-            <property name="problemDescp" type="string" required="false"/>
-            <property name="reproductionStep" type="string" required="false"/>
-            <property name="sysEnvironment" type="string" required="false"/>
-            <property name="modifiedAccountId" type="string" required="true"/>
+            <property name="problemTitle" type="string" required="false" maxLength="100"/>
+            <property name="problemDescp" type="string" required="false" maxLength="3000"/>
+            <property name="reproductionStep" type="string" required="false" maxLength="3000"/>
+            <property name="sysEnvironment" type="string" required="false" maxLength="50"/>
+            <property name="modifiedAccountId" type="string" required="true" maxLength="20"/>
             <property name="type" type="int" required="true"/>
             <property name="channel" type="int" required="true"/>
-            <property name="filePath" type="string" required="false"/>
+            <property name="filePath" type="string" required="false" maxLength="3000"/>
         </request>
     </item>
 
@@ -333,7 +333,7 @@
         <request>
             <property ref="pageNum"/>
             <property ref="pageSize"/>
-            <property name="accountId" type="string" required="true"/>
+            <property name="accountId" type="string" required="true" maxLength="30"/>
             <property name="status" type="int" required="true"/>
             <property name="channel" type="int" required="false"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
@@ -382,7 +382,7 @@
         <request>
             <property ref="pageNum"/>
             <property ref="pageSize"/>
-            <property name="accountId" type="string" required="true"/>
+            <property name="accountId" type="string" required="true" maxLength="30"/>
             <property name="status" type="int" required="true"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
             <property name="channel" type="int" required="false" />
@@ -417,18 +417,18 @@
         <request>
             <property name="relationId" type="int" required="true"/>
             <property name="relationType" type="int" required="true"/>
-            <property name="name" type="string" required="true"/>
-            <property name="descp" type="string" required="false"/>
-            <property name="reproductionStep" type="string" required="false"/>
-            <property name="brower" type="string" required="false"/>
-            <property name="hopeDate" type="string" required="true"/>
-            <property name="callonAccountId" type="string" required="true"/>
-            <property name="ccAccount" type="string" required="false"/>
-            <property name="likeProduct" type="string" required="false"/>
-            <property name="likeProgram" type="string" required="false"/>
+            <property name="name" type="string" required="true" maxLength="100"/>
+            <property name="descp" type="string" required="false" maxLength="3000"/>
+            <property name="reproductionStep" type="string" required="false" maxLength="3000"/>
+            <property name="brower" type="string" required="false" maxLength="50"/>
+            <property name="hopeDate" type="string" required="true" maxLength="20"/>
+            <property name="callonAccountId" type="string" required="true" maxLength="50"/>
+            <property name="ccAccount" type="string" required="false" />
+            <property name="likeProduct" type="string" required="false" maxLength="500"/>
+            <property name="likeProgram" type="string" required="false" maxLength="500"/>
             <property name="level" type="int" required="true"/>
-            <property name="modifiedAccountId" type="string" required="true"/>
-            <property name="modifiedName" type="string" required="false"/>
+            <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
+            <property name="modifiedName" type="string" required="false" maxLength="50"/>
             <property name="channel" type="int" required="true" />
             <property name="fileList" type="string" required="false" />
         </request>
@@ -446,18 +446,18 @@
             <property name="id" type="int" required="true"/>
             <property name="relationId" type="int" required="true"/>
             <property name="relationType" type="int" required="true"/>
-            <property name="name" type="string" required="true"/>
-            <property name="descp" type="string" required="false"/>
-            <property name="reproductionStep" type="string" required="false"/>
-            <property name="brower" type="string" required="false"/>
-            <property name="hopeDate" type="string" required="true"/>
-            <property name="callonAccountId" type="string" required="true"/>
+            <property name="name" type="string" required="true" maxLength="100"/>
+            <property name="descp" type="string" required="false" maxLength="3000"/>
+            <property name="reproductionStep" type="string" required="false" maxLength="3000"/>
+            <property name="brower" type="string" required="false" maxLength="50"/>
+            <property name="hopeDate" type="string" required="true" maxLength="20"/>
+            <property name="callonAccountId" type="string" required="true" maxLength="50"/>
             <property name="ccAccount" type="string" required="false"/>
-            <property name="likeProduct" type="string" required="false"/>
-            <property name="likeProgram" type="string" required="false"/>
+            <property name="likeProduct" type="string" required="false" maxLength="500"/>
+            <property name="likeProgram" type="string" required="false" maxLength="500"/>
             <property name="level" type="int" required="true"/>
-            <property name="modifiedAccountId" type="string" required="true"/>
-            <property name="modifiedName" type="string" required="false"/>
+            <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
+            <property name="modifiedName" type="string" required="false" maxLength="50"/>
             <property name="channel" type="int" required="true" />
             <property name="fileList" type="string" required="false" />
         </request>
@@ -483,11 +483,11 @@
     -->
     <item id="api_bugComment_add" description="通过用户名查询用户信息添加至bug评论表">
         <request>
-            <property name="accountId" type="string" required="true" />
+            <property name="accountId" type="string" required="true" maxLength="50" />
             <property name="bugId" type="long" required="true" />
             <property name="parentId" type="long" required="true" />
-            <property name="content" type="string" maxLength="500" required="true" />
-            <property name="ip" type="string" required="false" />
+            <property name="content" type="string" required="true" maxLength="1500"  />
+            <property name="ip" type="string"  required="false" maxLength="32"/>
         </request>
     </item >
 
@@ -501,11 +501,11 @@
     -->
     <item id="api_demandComment_add" description="通过用户名查询用户信息添加至需求评论表">
         <request>
-            <property name="accountId" type="string" required="true" />
+            <property name="accountId" type="string" required="true" maxLength="50" />
             <property name="demandId" type="int" required="true" />
             <property name="parentId" type="int" required="true" />
-            <property name="content" type="string" maxLength="500" required="false" />
-            <property name="ip" type="string" required="false" />
+            <property name="content" type="string"  required="false" maxLength="1500"/>
+            <property name="ip" type="string" required="false" maxLength="32" />
         </request>
     </item >
 
@@ -520,7 +520,7 @@
         <request>
             <property ref="pageNum"/>
             <property ref="pageSize"/>
-            <property name="accountId" type="string" required="true"/>
+            <property name="accountId" type="string" required="true" maxLength="30"/>
             <property name="status" type="int" required="true"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
             <property name="channel" type="int" required="false" />
@@ -540,16 +540,16 @@
             <property name="id" type="int" required="true"/>
             <property name="relationId" type="int" required="true"/>
             <property name="relationType" type="int" required="true"/>
-            <property name="name" type="string" required="true"/>
-            <property name="descp" type="string" required="false"/>
-            <property name="hopeDate" type="string" required="true"/>
-            <property name="callonAccountId" type="string" required="true"/>
+            <property name="name" type="string" required="true" maxLength="100"/>
+            <property name="descp" type="string" required="false" maxLength="3000"/>
+            <property name="hopeDate" type="string" required="true" maxLength="20"/>
+            <property name="callonAccountId" type="string" required="true" maxLength="50"/>
             <property name="ccAccount" type="string" required="false"/>
-            <property name="likeProduct" type="string" required="false"/>
-            <property name="likeProgram" type="string" required="false"/>
+            <property name="likeProduct" type="string" required="false" maxLength="500"/>
+            <property name="likeProgram" type="string" required="false" maxLength="500"/>
             <property name="level" type="int" required="true"/>
-            <property name="modifiedAccountId" type="string" required="true"/>
-            <property name="modifiedName" type="string" required="false"/>
+            <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
+            <property name="modifiedName" type="string" required="false" maxLength="50"/>
             <property name="channel" type="int" required="true" />
             <property name="fileList" type="string" required="false" />
         </request>
@@ -566,16 +566,16 @@
         <request>
             <property name="relationId" type="int" required="true"/>
             <property name="relationType" type="int" required="true"/>
-            <property name="name" type="string" required="true"/>
-            <property name="descp" type="string" required="false"/>
-            <property name="hopeDate" type="string" required="true"/>
-            <property name="callonAccountId" type="string" required="true"/>
+            <property name="name" type="string" required="true" maxLength="100"/>
+            <property name="descp" type="string" required="false" maxLength="3000"/>
+            <property name="hopeDate" type="string" required="true" maxLength="20"/>
+            <property name="callonAccountId" type="string" required="true" maxLength="50"/>
             <property name="ccAccount" type="string" required="false"/>
-            <property name="likeProduct" type="string" required="false"/>
-            <property name="likeProgram" type="string" required="false"/>
+            <property name="likeProduct" type="string" required="false" maxLength="500"/>
+            <property name="likeProgram" type="string" required="false" maxLength="500"/>
             <property name="level" type="int" required="true"/>
-            <property name="modifiedAccountId" type="string" required="true"/>
-            <property name="modifiedName" type="string" required="false"/>
+            <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
+            <property name="modifiedName" type="string" required="false" maxLength="50"/>
             <property name="channel" type="int" required="true" />
             <property name="fileList" type="string" required="false" />
         </request>
@@ -603,11 +603,11 @@
     -->
     <item id="api_feedBack_addComment" description="通过用户名查询用户信息添加至评论表">
         <request>
-            <property name="accountId" type="string" required="true" />
+            <property name="accountId" type="string" required="true" maxLength="50" />
             <property name="feedBackId" type="int" required="true" />
             <property name="parentId" type="int" required="true" />
-            <property name="content" type="string" maxLength="500" required="false" />
-            <property name="ip" type="string" required="false" />
+            <property name="content" type="string" maxLength="1500" required="false" />
+            <property name="ip" type="string" required="false" maxLength="32" />
         </request>
     </item >
 
@@ -618,7 +618,7 @@
     -->
     <item id="api_index_analysis" description="PC首页统计">
         <request>
-            <property name="accountId" type="string" required="true"/>
+            <property name="accountId" type="string" required="true" maxLength="30"/>
         </request>
     </item>
 
@@ -678,7 +678,7 @@
    -->
     <item id="api_feedBack_countStatus" description="查询反馈状态统计">
         <request>
-            <property name="accountId" type="string" required="true"/>
+            <property name="accountId" type="string" required="true" maxLength="30"/>
         </request>
     </item >
 
@@ -693,7 +693,7 @@
     <item id="api_product_delEmployee" description="删除产品相关人员">
         <request>
             <property name="productId" type="int" required="true" />
-            <property name="accountId" type="string" required="true" />
+            <property name="accountId" type="string" required="true" maxLength="50" />
         </request>
     </item>
 
@@ -707,7 +707,7 @@
     <item id="api_program_delEmployee" description="删除项目相关人员">
         <request>
             <property name="programId" type="int" required="true" />
-            <property name="accountId" type="string" required="true" />
+            <property name="accountId" type="string" required="true" maxLength="50" />
         </request>
     </item>
 
@@ -722,8 +722,8 @@
         <request>
             <property name="bugId" type="int" required="true"/>
             <property name="status" type="int" required="true"/>
-            <property name="modifiedAccountId" type="string" required="true"/>
-            <property name="modifiedName" type="string" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
+            <property name="modifiedName" type="string" required="true" maxLength="50"/>
         </request>
     </item>
 
@@ -736,9 +736,9 @@
     <item id="api_bug_update_callon" description="BUG指派人变更">
         <request>
             <property name="bugId" type="int" required="true"/>
-            <property name="callonAccountId" type="string" required="true"/>
-            <property name="modifiedAccountId" type="string" required="true"/>
-            <property name="modifiedName" type="string" required="true"/>
+            <property name="callonAccountId" type="string" required="true" maxLength="50"/>
+            <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
+            <property name="modifiedName" type="string" required="true" maxLength="50"/>
         </request>
     </item>
 
@@ -752,8 +752,8 @@
         <request>
             <property name="demandId" type="int" required="true"/>
             <property name="status" type="int" required="true"/>
-            <property name="modifiedAccountId" type="string" required="true"/>
-            <property name="modifiedName" type="string" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
+            <property name="modifiedName" type="string" required="true" maxLength="50"/>
         </request>
     </item>
 
@@ -766,9 +766,9 @@
     <item id="api_demand_update_callon" description="需求指派人变更">
         <request>
             <property name="demandId" type="int" required="true"/>
-            <property name="callonAccountId" type="string" required="true"/>
-            <property name="modifiedAccountId" type="string" required="true"/>
-            <property name="modifiedName" type="string" required="true"/>
+            <property name="callonAccountId" type="string" required="true" maxLength="50"/>
+            <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
+            <property name="modifiedName" type="string" required="true" maxLength="50"/>
         </request>
     </item>
 
@@ -826,8 +826,8 @@
         <request>
             <property name="programId" type="int" required="true"/>
             <property name="status" type="int" required="true"/>
-            <property name="modifiedAccountId" type="string" required="true"/>
-            <property name="modifiedName" type="string" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
+            <property name="modifiedName" type="string" required="true" maxLength="50"/>
         </request>
     </item>
 
@@ -856,5 +856,19 @@
         </request>
     </item>
 
+
+    <!--
+      URL:
+      /api/product/update/status
+      说明:产品状态变更
+    -->
+    <item id="api_product_update_status" description="产品状态变更">
+        <request>
+            <property name="productId" type="int" required="true"/>
+            <property name="status" type="int" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
+            <property name="modifiedName" type="string" required="true" maxLength="50"/>
+        </request>
+    </item>
 
 </api>

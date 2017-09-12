@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
+import com.longfor.itserver.common.enums.ProductStatusEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
@@ -293,4 +294,21 @@ public class APIProductController extends BaseController {
     }
 
 
+
+    @RequestMapping(value = "/update/status" , method = RequestMethod.POST , produces = {"application/json;charset=utf-8"})
+    @ResponseBody
+    public Map updateStatus(HttpServletRequest request , HttpServletResponse response){
+        Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+
+        int code = Integer.parseInt((String)paramsMap.get("status"));
+        ProductStatusEnum productStatusEnum  =  ProductStatusEnum.getByCode(code);
+        if(productStatusEnum != null ){
+            this.getProductService().updateStatus(paramsMap);
+            Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+            resultMap.put("newStatusText", productStatusEnum.getText());
+            return resultMap;
+        }else{
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+        }
+    }
 }
