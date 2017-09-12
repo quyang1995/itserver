@@ -64,7 +64,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
         String code = product.getCode();
         Product codeCheckProduct = new Product();
         codeCheckProduct.setCode(code);
-        if(StringUtils.isBlank(code) || productMapper.selectOne(codeCheckProduct) != null){
+        if(StringUtils.isBlank(code) || productMapper.select(codeCheckProduct).size() > 0){
             return CommonUtils.getResultMapByBizEnum(BizEnum.E1028, code);
         }
 

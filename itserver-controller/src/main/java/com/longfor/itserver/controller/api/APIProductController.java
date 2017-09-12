@@ -2,9 +2,11 @@ package com.longfor.itserver.controller.api;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
+import com.longfor.itserver.common.helper.DataPermissionHelper;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
@@ -50,12 +52,27 @@ public class APIProductController extends BaseController {
     @ResponseBody
     public Map list(HttpServletRequest request, HttpServletResponse response) {
         /* 获得已经验证过的参数map */
-        Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-        /*获取查询用例*/
+        @SuppressWarnings("unchecked")
+        Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+
+//        List<Product> products = new ArrayList<>();
+        /* 获取查询用例 */
         ELExample elExample = new ELExample(request, Product.class);
-        /*查询数据*/
+
+        /* 查询数据 and admin权限判断 */
+        String accountId = paramsMap.get("accountId");
+//        if(DataPermissionHelper.getInstance().isShowAllData(accountId)){
+//            paramsMap.put("isAdmin", "1");
+//            PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
+//            products = this.getProductService().select(null);
+//        }else{
+//            PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
+//            products = this.getProductService().searchList(paramsMap);
+//        }
+        paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
         PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
         List<Product> products = this.getProductService().searchList(paramsMap);
+
         /*返回数据*/
         Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         map.put("productList", products);
@@ -76,7 +93,8 @@ public class APIProductController extends BaseController {
     @ResponseBody
     public Map productList(HttpServletRequest request, HttpServletResponse response) {
         /* 获得已经验证过的参数map */
-        Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        @SuppressWarnings("unchecked")
+        Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         /*获取查询用例*/
         ELExample elExample = new ELExample(request, Product.class);
         /*查询数据*/
@@ -195,9 +213,7 @@ public class APIProductController extends BaseController {
         @SuppressWarnings("unchecked")
         Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         /*新增产品信息*/
-        this.getProductService().addProduct(paramsMap);
-        /*返回数据*/
-        return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
+        return this.getProductService().addProduct(paramsMap);
     }
 
     /**

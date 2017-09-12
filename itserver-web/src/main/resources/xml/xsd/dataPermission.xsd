@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" >
+
+	<xs:attribute name="loginName" type="xs:string" />
+
+	<xs:complexType name="baseAccount">
+		<xs:attribute ref="loginName" use="required" />
+	</xs:complexType>
+	<xs:complexType name="account">
+		<xs:complexContent>
+			<xs:extension base="baseAccount">
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="dataPermission">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="accounts" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="account" type="account" />
+
+	<xs:element name="accounts">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="account" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>

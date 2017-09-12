@@ -42,7 +42,8 @@ CREATE TABLE IF NOT EXISTS `itplus`.`product` (
   ENGINE = InnoDB;
 
 INSERT INTO itplus.product (name, descp, contact_account_id, contact_employee_code, contact_employee_name, contact_full_dept_path, like_program, type, status, modified_account_id, modified_name, create_time, modified_time)
-VALUES ('IT+平台', 'IT项目管理平台，产品需求和bug收集、跟进、反馈、项目进度管理功能', 'wenting', 100118473, '闻婷', '集团总部-流程与信息管理部-系统管理中心', '', 0, 1, 'wenting', '闻婷',
+VALUES ('IT+平台', 'IT项目管理平台，产品需求和bug收集、跟进、反馈、项目进度管理功能', 'wenting', 100118473, '闻婷', '集团总部-流程与信息管理部-系统管理中心', '', 0, 1,
+                 'wenting', '闻婷',
         '2017-08-05 16:54:07', '2017-08-05 16:54:24');
 
 -- -----------------------------------------------------
@@ -203,6 +204,11 @@ CREATE TABLE IF NOT EXISTS `itplus`.`program` (
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB;
+
+INSERT INTO itplus.program (product_id, product_name, product_code, name, descp, commit_date, start_date, gray_release_date, release_date, ued_date, architecture_date, like_product, like_program, type, program_status, modified_account_id, modified_name, create_time, modified_time)
+VALUES
+  (1, 'IT+平台', NULL, 'IT+1.0', '平台搭建，提供产品项目管理功能。', '2017-07-19 00:00:00', '2017-08-07 00:00:00', '2017-09-07 00:00:00',
+      '2017-09-11 00:00:00', '2017-09-12 00:00:00','2017-09-13 00:00:00','', NULL, 1, 1, 'wenting', '闻婷', '2017-09-07 11:55:30', '2017-09-07 11:55:30');
 
 -- -----------------------------------------------------
 -- Table `itplus`.`program_employee` 项目-人员
@@ -572,11 +578,11 @@ CREATE TABLE IF NOT EXISTS `itplus`.`feed_back` (
   COMMENT '归属产品',
   `name`                    VARCHAR(100)    NOT NULL
   COMMENT '产品名称',
-  `product_code`        VARCHAR(100)    NOT NULL
+  `product_code`            VARCHAR(100)    NOT NULL
   COMMENT '产品CODE',
   `problem_title`           VARCHAR(100)    NULL
   COMMENT '问题标题',
-  `problem_descp`           VARCHAR(5000)    NULL
+  `problem_descp`           VARCHAR(5000)   NULL
   COMMENT '问题描述',
   `reproduction_step`       VARCHAR(1000)   NULL
   COMMENT '复现步骤',

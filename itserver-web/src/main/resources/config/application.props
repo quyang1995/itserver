@@ -6,7 +6,7 @@
 @profiles=uat
 
 #产品版本号#
-product.version=v1.0
+product.version=v1.3
 #产品名称(切勿修改)#
 product.name=IT+
 #产品英文简称#

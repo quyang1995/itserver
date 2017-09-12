@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataPermission xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:noNamespaceSchemaLocation="xsd/dataPermission.xsd">
+
+    <accounts>
+        <account loginName="wang" />
+        <account loginName="liwzhe" />
+        <account loginName="lichuan" />
+    </accounts>
+
+</dataPermission>

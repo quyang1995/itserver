@@ -53,19 +53,27 @@
         contact_full_dept_path, like_program, type, status, modified_account_id, modified_name,
         create_time, modified_time
     </sql>
-    <select id="selectList" resultMap="CountBaseResultMap">
+    <select id="selectList" parameterType="map" resultMap="CountBaseResultMap">
         SELECT DISTINCT ta.*,
         (select IFNULL(sum(CASE WHEN p.product_id =ta.id THEN 1 ELSE 0 END),0) from program p) AS programCount
         FROM product ta LEFT JOIN product_employee tb ON ta.id = tb.product_id
-        WHERE
-        <if test="mySelf != null and mySelf != '' and mySelf == 0">
-            (tb.account_id = #{accountId}
-            OR ta.contact_account_id = #{accountId}
-            OR ta.type=1)
+        WHERE 1=1
+        <if test="isAdmin == 1">
+            <if test="mySelf != null and mySelf != '' and mySelf == 1">
+                AND (tb.account_id = #{accountId}
+                OR ta.contact_account_id = #{accountId})
+            </if>
         </if>
-        <if test="mySelf != null and mySelf != '' and mySelf == 1">
-            (tb.account_id = #{accountId}
-            OR ta.contact_account_id = #{accountId})
+        <if test="isAdmin == 0">
+            <if test="mySelf != null and mySelf != '' and mySelf == 0">
+                AND (tb.account_id = #{accountId}
+                OR ta.contact_account_id = #{accountId}
+                OR ta.type=1)
+            </if>
+            <if test="mySelf != null and mySelf != '' and mySelf == 1">
+                AND (tb.account_id = #{accountId}
+                OR ta.contact_account_id = #{accountId})
+            </if>
         </if>
         <if test="status != null and status != '' and status != -1 ">
             AND ta.status= #{status}
