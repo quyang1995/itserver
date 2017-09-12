@@ -376,6 +376,18 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		return textList;
 	}
 
+	private String statusLog(Program oldProgram,Program newProgram){
+		StringBuilder sb = new StringBuilder();
+		if( ProgramStatusEnum.getByCode(oldProgram.getProgramStatus()) != null && !Objects.equals(oldProgram.getProgramStatus(), newProgram.getProgramStatus())){
+			sb.append(newProgram.getModifiedName())
+					.append(" 将 项目状态 从 [")
+					.append(ProgramStatusEnum.getByCode(oldProgram.getProgramStatus()).getText())
+					.append("] 更新为 [")
+					.append(ProgramStatusEnum.getByCode(newProgram.getProgramStatus()).getText())
+					.append("] ");
+		}
+		return sb.toString();
+	}
 
 	@Override
 	public List<Program> productIdAllList(Map parsmsMap) {
@@ -398,20 +410,26 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		JSONObject jsonObject = (JSONObject)JSONObject.toJSON(paramsMap);
 		Long programId=Long.valueOf((String) paramsMap.get("programId"));
 		Program	oldProgram = programMapper.selectByPrimaryKey(programId);
-		Program newProgram = programMapper.selectByPrimaryKey(programId);
+		Program newProgram = new Program();
+		newProgram.setId(programId);
 		newProgram.setProgramStatus(Integer.valueOf((String) jsonObject.get("status")));
-		List<String> textList =  getChangeLogText(oldProgram,newProgram);
-		for (String logtext:textList){
+		newProgram.setModifiedName((String) paramsMap.get("modifiedName"));
+		newProgram.setModifiedAccountId((String) paramsMap.get("modifiedAccountId"));
+
+		String text = statusLog(oldProgram,newProgram);
+		if(StringUtils.isNotBlank(text)) {
 			ProgramEmployeeChangeLog log = new ProgramEmployeeChangeLog();
 			log.setProgramId(programId);
-			log.setActionChangeInfo(logtext);
+			log.setActionChangeInfo(text);
 			log.setModifiedAccountId((String) paramsMap.get("modifiedAccountId"));
 			log.setModifiedName((String) paramsMap.get("modifiedName"));
 			log.setCreateTime(TimeUtils.getTodayByDateTime());
 			log.setModifiedTime(TimeUtils.getTodayByDateTime());
 			programEmployeeChangeLogMapper.insertUseGeneratedKeys(log);
 		}
-		programMapper.updateByPrimaryKey(newProgram);
+
+		oldProgram.setProgramStatus(newProgram.getProgramStatus());
+		programMapper.updateByPrimaryKey(oldProgram);
 		return true;
 	}
 }

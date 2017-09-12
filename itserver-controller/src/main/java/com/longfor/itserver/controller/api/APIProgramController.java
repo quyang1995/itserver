@@ -320,7 +320,7 @@ public class APIProgramController extends BaseController {
 		ProgramStatusEnum programStatusEnum = ProgramStatusEnum.getByCode(code);
 		if(programStatusEnum != null){
 			this.getProgramService().updateStatus(paramsMap);
-			Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+			Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
 			resultMap.put("newStatusText", programStatusEnum.getText());
 			return resultMap;
 		}else{
