@@ -256,8 +256,8 @@
     <item id="api_program_add" description="新增项目基本信息">
         <request>
             <property name="productId" type="int" required="true"/>
-            <property name="name" type="string" required="true"/>
-            <property name="descp" type="string" required="false"/>
+            <property name="name" type="string" required="true" maxLength="50"/>
+            <property name="descp" type="string" required="false" maxLength="500"/>
             <property name="commitDate" type="string" required="true"/>
             <property name="startDate" type="string" required="true"/>
             <property name="grayReleaseDate" type="string" required="true"/>
@@ -280,8 +280,8 @@
         <request>
             <property name="id" type="int" required="true"/>
             <property name="productId" type="int" required="true"/>
-            <property name="name" type="string" required="true"/>
-            <property name="descp" type="string" required="false"/>
+            <property name="name" type="string" required="true" maxLength="50"/>
+            <property name="descp" type="string" required="false" maxLength="500"/>
             <property name="commitDate" type="string" required="true"/>
             <property name="startDate" type="string" required="true"/>
             <property name="grayReleaseDate" type="string" required="true"/>
