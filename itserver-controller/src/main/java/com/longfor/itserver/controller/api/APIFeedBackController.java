@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
+import com.longfor.itserver.common.helper.DataPermissionHelper;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
@@ -51,6 +52,9 @@ public class APIFeedBackController extends BaseController {
 
 		/* 生成查询用Example */
 		ELExample elExample = new ELExample(request, FeedBack.class);
+		/* 查询数据 and admin权限判断 */
+		String accountId = paramsMap.get("accountId");
+		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
 		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
 		List<FeedBack> feedBackList = this.getFeedBackService().feedBackList(paramsMap);
 
@@ -182,6 +186,9 @@ public class APIFeedBackController extends BaseController {
 	public Map countStatus(HttpServletRequest request , HttpServletResponse response){
 		@SuppressWarnings("unchecked")
 		Map<String,String> paramsMap = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		/* 查询数据 and admin权限判断 */
+		String accountId = paramsMap.get("accountId");
+		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
 		return this.getFeedBackService().countStatus(paramsMap);
 	}
 

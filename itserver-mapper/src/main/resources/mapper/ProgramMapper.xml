@@ -64,12 +64,19 @@
         p.like_product, p.like_program, p.type, p.program_status, p.modified_account_id, p.modified_name,
         p.create_time, p.modified_time
         FROM program p JOIN program_employee pe ON p.id = pe.program_id
-        WHERE
-        <if test='isPart == 0'>
-            (pe.account_id = #{accountId, jdbcType=VARCHAR} OR p.type = 1)
+        WHERE 1=1
+        <if test="isAdmin == 0">
+            <if test='isPart == 0'>
+                and (pe.account_id = #{accountId, jdbcType=VARCHAR} OR p.type = 1)
+            </if>
+            <if test='isPart == 1'>
+                and pe.account_id = #{accountId, jdbcType=VARCHAR}
+            </if>
         </if>
-        <if test='isPart == 1'>
-            pe.account_id = #{accountId, jdbcType=VARCHAR}
+        <if test="isAdmin == 1">
+            <if test='isPart == 1'>
+                and pe.account_id = #{accountId, jdbcType=VARCHAR}
+            </if>
         </if>
         <if test='programStatus != "" and programStatus != null  and programStatus != -1'>
             and p.program_status = #{programStatus}
@@ -102,12 +109,19 @@
         (select IFNULL(sum(CASE WHEN b.relation_id =p.id THEN 1 ELSE 0 END),0) from bug_info b where b.relation_type=2
         and `status`=4) as complete
         FROM program p JOIN program_employee pe ON p.id = pe.program_id
-        WHERE
-        <if test='isPart == 0'>
-            (pe.account_id = #{accountId, jdbcType=VARCHAR} OR p.type = 1)
+        WHERE 1=1
+        <if test="isAdmin == 0">
+            <if test='isPart == 0'>
+                and (pe.account_id = #{accountId, jdbcType=VARCHAR} OR p.type = 1)
+            </if>
+            <if test='isPart == 1'>
+                and pe.account_id = #{accountId, jdbcType=VARCHAR}
+            </if>
         </if>
-        <if test='isPart == 1'>
-            pe.account_id = #{accountId, jdbcType=VARCHAR}
+        <if test="isAdmin == 1">
+            <if test='isPart == 1'>
+                and pe.account_id = #{accountId, jdbcType=VARCHAR}
+            </if>
         </if>
         <if test='programStatus != "" and programStatus != null  and programStatus != -1'>
             and p.program_status = #{programStatus}

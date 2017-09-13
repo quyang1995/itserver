@@ -98,7 +98,9 @@ public class APIProductController extends BaseController {
         Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         /*获取查询用例*/
         ELExample elExample = new ELExample(request, Product.class);
-        /*查询数据*/
+        /* 查询数据 and admin权限判断 */
+        String accountId = paramsMap.get("accountId");
+        paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
         PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
         List<Product> products = this.getProductService().productCountList(paramsMap);
         /*返回数据*/
