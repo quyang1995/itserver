@@ -24,7 +24,7 @@
         <result column="modified_employee_code" property="modifiedEmployeeCode" jdbcType="BIGINT"/>
         <result column="modified_name" property="modifiedName" jdbcType="VARCHAR"/>
         <result column="modified_full_dept_path" property="modifiedFullDeptPath" jdbcType="VARCHAR"/>
-        <result column="file_path" property="filePath" jdbcType="VARCHAR"/>
+        <result column="file_path" property="filePath" jdbcType="LONGVARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP"/>
     </resultMap>

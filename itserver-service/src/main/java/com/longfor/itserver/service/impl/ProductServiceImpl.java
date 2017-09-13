@@ -341,7 +341,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 					.append(" 将 产品状态 从 [")
 					.append(ProductStatusEnum.getByCode(oldProduct.getStatus()).getText())
 					.append("] 更新为 [")
-					.append(ProductStatusEnum.getByCode((status)))
+					.append(ProductStatusEnum.getByCode((status)).getText())
 					.append("] ");
 		}
 		return  sb.toString();
