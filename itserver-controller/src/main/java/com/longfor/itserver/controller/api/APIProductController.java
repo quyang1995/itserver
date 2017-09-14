@@ -56,20 +56,11 @@ public class APIProductController extends BaseController {
         @SuppressWarnings("unchecked")
         Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
-//        List<Product> products = new ArrayList<>();
         /* 获取查询用例 */
         ELExample elExample = new ELExample(request, Product.class);
 
         /* 查询数据 and admin权限判断 */
         String accountId = paramsMap.get("accountId");
-//        if(DataPermissionHelper.getInstance().isShowAllData(accountId)){
-//            paramsMap.put("isAdmin", "1");
-//            PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
-//            products = this.getProductService().select(null);
-//        }else{
-//            PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
-//            products = this.getProductService().searchList(paramsMap);
-//        }
         paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
         PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
         List<Product> products = this.getProductService().searchList(paramsMap);
