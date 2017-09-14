@@ -135,7 +135,7 @@
         <if test="status != null and status != '' and status != -1 ">
             AND ta.status= #{status}
         </if>
-        ORDER BY ta.modified_time DESC
+        ORDER BY ta.create_time DESC
     </select>
 
     <select id="selectLikeList" resultMap="BaseResultMap">
@@ -146,7 +146,7 @@
         <if test="name != null and name != ''">
             and name LIKE concat('%',#{name},'%')
         </if>
-        ORDER BY modified_time DESC
+        ORDER BY create_time DESC
         limit 0,20
     </select>
 
