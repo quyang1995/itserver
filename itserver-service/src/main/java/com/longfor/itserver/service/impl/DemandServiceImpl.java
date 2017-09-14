@@ -169,11 +169,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		}
 
 
-		/*更新文件*/
-		DemandFile demandFile = new DemandFile();
-		demandFile.setDemandId(demand.getId());
-		demandFileMapper.delete(demandFile);
-
+		/*更新文件 不删除原有文件，在原有文件的基础上添加新文件*/
 		List<DemandFile> list = JSONArray.parseArray((String)map.get("fileList"),DemandFile.class);
 		if(list != null && list.size()>0) {
 			for (DemandFile file:list) {

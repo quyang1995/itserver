@@ -248,9 +248,27 @@ public class APIDemandController extends BaseController {
     @ResponseBody
     public Map getFile(HttpServletRequest request,HttpServletResponse response){
         Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        //获取文件
         DemandFile  result = this.getDemandFileService().selectById(Long.valueOf((String)paramsMap.get("id")));
         Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         resultMap.put("data",result);
         return  resultMap;
+    }
+
+
+    /**
+     * 根据需求ID 删除相关需求文件
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/delete/file" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+    @ResponseBody
+    public Map deleteFile(HttpServletRequest request,HttpServletResponse response){
+        Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        //删除文件
+        this.getDemandFileService().deleteById(Long.valueOf((String)paramsMap.get("id")));
+
+        return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_D);
     }
 }

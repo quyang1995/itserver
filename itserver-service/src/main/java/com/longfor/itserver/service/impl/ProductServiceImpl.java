@@ -285,8 +285,8 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
             textList.add(sb.toString());
             return textList;
         }
-
-        if(!Objects.equals(oldProduct.getStatus(), newProduct.getStatus())
+		//判断状态code是否有效
+        if((Objects.nonNull(ProductStatusEnum.getByCode(newProduct.getStatus())) && !Objects.equals(oldProduct.getStatus(), newProduct.getStatus()))
                 || !Objects.equals(oldProduct.getType(), newProduct.getType())){
             StringBuilder sb = new StringBuilder();
             if(!Objects.equals(oldProduct.getStatus(), newProduct.getStatus())){
