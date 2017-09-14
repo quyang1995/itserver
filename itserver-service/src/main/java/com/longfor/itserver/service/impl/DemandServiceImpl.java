@@ -377,8 +377,8 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		Long demandId = Long.valueOf(jsonObject.getString("demandId"));
 		String callonAccountId =  jsonObject.getString("callonAccountId");
 		Demand oldDemand = demandMapper.selectByPrimaryKey(demandId);
-		Demand newDemand = demandMapper.selectByPrimaryKey(demandId);
-		getChangeLog(oldDemand,newDemand);
+		Demand newDemand = new Demand();
+//		getChangeLog(oldDemand,newDemand);
 		AccountLongfor accountLongfor =  adsHelper.getAccountLongforByLoginName(callonAccountId);
 		newDemand.setCallonAccountId(callonAccountId);
 		newDemand.setCallonEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));

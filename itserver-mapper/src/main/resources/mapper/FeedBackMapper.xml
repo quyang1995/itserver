@@ -24,7 +24,7 @@
         <result column="modified_employee_code" property="modifiedEmployeeCode" jdbcType="BIGINT"/>
         <result column="modified_name" property="modifiedName" jdbcType="VARCHAR"/>
         <result column="modified_full_dept_path" property="modifiedFullDeptPath" jdbcType="VARCHAR"/>
-        <result column="file_path" property="filePath" jdbcType="VARCHAR"/>
+        <result column="file_path" property="filePath" jdbcType="LONGVARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP"/>
     </resultMap>
@@ -50,7 +50,10 @@
     SELECT
     <include refid="Base_Column_List" />
     FROM feed_back
-    WHERE 1=1 AND modified_account_id = #{accountId}
+    WHERE 1=1
+    <if test="isAdmin == 0">
+      AND modified_account_id = #{accountId}
+    </if>
     <if test='status != "" and status != null  and status != -1'>
       and status = #{status}
     </if>
@@ -80,7 +83,9 @@
             sum(f.`status` = 3) AS "working",
             sum(f.`status` = 4) AS "completed"
         FROM feed_back f
-        WHERE modified_account_id = #{accountId}
+        <if test="isAdmin == 0">
+            WHERE modified_account_id = #{accountId}
+        </if>
     </select>
 
 </mapper>

@@ -7,6 +7,7 @@ import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.enums.BugStatusEnum;
 import com.longfor.itserver.common.enums.ProgramStatusEnum;
+import com.longfor.itserver.common.helper.DataPermissionHelper;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
@@ -55,10 +56,13 @@ public class APIProgramController extends BaseController {
 	public Map programList(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		/* 获得已经验证过的参数map */
 		@SuppressWarnings("unchecked")
-		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
 		/* 生成查询用Example */
 		ELExample elExample = new ELExample(request, Program.class);
+		/* 查询数据 and admin权限判断 */
+		String accountId = paramsMap.get("accountId");
+		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
 		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
 		List<Program> programList = this.getProgramService().programList(paramsMap);
 
@@ -85,10 +89,13 @@ public class APIProgramController extends BaseController {
 	public Map productIdList(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		/* 获得已经验证过的参数map */
 		@SuppressWarnings("unchecked")
-		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
 		/* 生成查询用Example */
 		ELExample elExample = new ELExample(request, Program.class);
+		/* 查询数据 and admin权限判断 */
+		String accountId = paramsMap.get("accountId");
+		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
 		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
 		List<Program> programList = this.getProgramService().productIdList(paramsMap);
 
