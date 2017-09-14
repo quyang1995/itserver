@@ -4,8 +4,11 @@
 
     <accounts>
         <account loginName="wang" />
-        <account loginName="liwzhe" />
+        <account loginName="chengxiujin" />
         <account loginName="lichuan" />
+        <account loginName="wenting" />
+        <account loginName="qiongshuo" />
+        <account loginName="zhangchi4" />
     </accounts>
 
 </dataPermission>
