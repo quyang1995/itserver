@@ -295,7 +295,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		if(!Objects.equals(oldProgram.getProgramStatus(), newProgram.getProgramStatus())
 				|| !Objects.equals(oldProgram.getType(), newProgram.getType())){
 			StringBuilder sb = new StringBuilder();
-			if(!Objects.equals(oldProgram.getProgramStatus(), newProgram.getProgramStatus())){
+			//判断code是否有效
+			if(Objects.nonNull(ProgramStatusEnum.getByCode(newProgram.getProgramStatus())) && !Objects.equals(oldProgram.getProgramStatus(), newProgram.getProgramStatus())){
 				sb.append(newProgram.getModifiedName())
 						.append(" 将 项目状态 从 [")
 						.append(ProgramStatusEnum.getByCode(oldProgram.getProgramStatus()).getText())

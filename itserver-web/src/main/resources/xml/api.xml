@@ -856,6 +856,17 @@
         </request>
     </item>
 
+    <!--
+       URL:
+       /api/demand/delete/file
+
+       说明:根据需求文件ID获取需求文件信息
+   -->
+    <item id="api_demand_delete_file" description="根据需求文件ID删除需求文件信息">
+        <request>
+            <property name="id" type="int" required="true" />
+        </request>
+    </item>
 
     <!--
       URL:
@@ -871,4 +882,14 @@
         </request>
     </item>
 
+    <!--
+        URL:
+      /api/bug/delete/file
+      说明:根据文件ID 删除对应BUG文件
+    -->
+    <item id="api_bug_delete_file" description="根据文件ID 删除对应BUG文件">
+        <request>
+            <property name="id" type="int" required="true"/>
+        </request>
+    </item>
 </api>

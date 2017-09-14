@@ -270,11 +270,21 @@ public class APIBugInfoController extends BaseController {
 	 */
 	@RequestMapping(value = "/getFile" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
 	@ResponseBody
-	public Map getFile(HttpServletRequest request,HttpServletResponse response){
+	public Map getFile(HttpServletRequest request , HttpServletResponse response){
 		Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		BugFile result = this.getBugFileService().selectById(Long.valueOf((String)paramsMap.get("id")));
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		resultMap.put("data",result);
 		return  resultMap;
+	}
+
+	@RequestMapping(value = "/delete/file" , method = RequestMethod.POST , produces = {"application/json;charset=utf-8"})
+	@ResponseBody
+	public Map deleteFile(HttpServletRequest request , HttpServletResponse response){
+		Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+
+		this.getBugFileService().deleteById(Long.parseLong((String)paramsMap.get("id")));
+
+		return  CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_D);
 	}
 }
