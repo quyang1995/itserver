@@ -418,19 +418,28 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
             BugInfo bugInfo = new BugInfo();
             String relationIds = jsonObject.getString("relationId");
             String relationTypes = jsonObject.getString("relationType");
+            String accountId = jsonObject.getString("accountId");
+            Integer  relationType = null;
+            Long relationId = null;
+            if(StringUtils.isNotBlank(relationTypes)){
+              relationType = Integer.parseInt(relationTypes);
+            }
+            if(StringUtils.isNotBlank(relationIds)){
+                relationId = Long.parseLong(relationIds);
+            }
 
             Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 
             //关联产品
             if ("1".equals(relationTypes)) {
-                Long relationId = Long.valueOf(relationIds);
                 bugInfo.setRelationId(relationId);
-                bugInfo.setRelationType(Integer.valueOf(relationTypes));
+                bugInfo.setRelationType(relationType);
+                bugInfo.setCallonAccountId(accountId);
             } else if ("2".equals(relationTypes)) {
                 //关联项目
-                Long relationId = Long.valueOf(relationIds);
                 bugInfo.setRelationId(relationId);
                 bugInfo.setRelationType(Integer.valueOf(relationTypes));
+                bugInfo.setCallonAccountId(accountId);
             }
             List<BugInfo> list = bugInfoMapper.statusList(bugInfo);
             resultMap.put("list", list);

@@ -139,6 +139,9 @@
         <if test='relationId != "" and relationId != null  and relationId != -1'>
             and relation_id = #{relationId}
         </if>
+        <if test='callonAccountId != "" and callonAccountId != null'>
+            AND callon_account_id = #{callonAccountId}
+        </if>
         and status != 1
         ORDER BY create_time DESC
     </select>
