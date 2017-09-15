@@ -411,25 +411,8 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
             ELExample elExample = new ELExample(request, BugInfo.class);
             PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
 
-            JSONObject jsonObject = (JSONObject) JSONObject.toJSON(paramsMap);
-            BugInfo bugInfo = new BugInfo();
-            String relationIds = jsonObject.getString("relationId");
-            String relationTypes = jsonObject.getString("relationType");
-
             Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-
-            //关联产品
-            if ("1".equals(relationTypes)) {
-                Long relationId = Long.valueOf(relationIds);
-                bugInfo.setRelationId(relationId);
-                bugInfo.setRelationType(Integer.valueOf(relationTypes));
-            } else if ("2".equals(relationTypes)) {
-                //关联项目
-                Long relationId = Long.valueOf(relationIds);
-                bugInfo.setRelationId(relationId);
-                bugInfo.setRelationType(Integer.valueOf(relationTypes));
-            }
-            List<BugInfo> list = bugInfoMapper.statusList(bugInfo);
+            List<BugInfo> list = bugInfoMapper.statusList(paramsMap);
             resultMap.put("list", list);
             resultMap.put(APIHelper.PAGE_NUM, elExample.getPageNum());
             resultMap.put(APIHelper.PAGE_SIZE, elExample.getPageSize());

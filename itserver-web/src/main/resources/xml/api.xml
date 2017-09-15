@@ -802,6 +802,7 @@
             <property ref="pageSize"/>
             <property name="relationId" type="int" required="false" />
             <property name="relationType" type="int" required="false" />
+            <property name="accountId" type="string" required="false" />
         </request>
     </item>
 
@@ -817,6 +818,7 @@
             <property ref="pageSize"/>
             <property name="relationId" type="int" required="false" />
             <property name="relationType" type="int" required="false" />
+            <property name="accountId" type="string" required="false"/>
         </request>
     </item>
 

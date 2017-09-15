@@ -126,9 +126,8 @@
         WHERE `status` = 3 AND callon_account_id = #{accountId, jdbcType=VARCHAR}
     </select>
 
-
-    <!-- 状态查询需求列表 -->
-    <select id="statusList" resultMap="BaseResultMap">
+    <!--状态查询需求列表 -->
+    <select id="statusList" parameterType="map" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM demand
@@ -139,7 +138,11 @@
         <if test='relationId != "" and relationId != null  and relationId != -1'>
             and relation_id = #{relationId}
         </if>
+        <if test='accountId != "" and accountId != null'>
+            AND callon_account_id = #{accountId}
+        </if>
         and status != 1
+        and status != 0
         ORDER BY create_time DESC
     </select>
 </mapper>
