@@ -143,6 +143,7 @@
             AND callon_account_id = #{callonAccountId}
         </if>
         and status != 1
+        and status != 0
         ORDER BY create_time DESC
     </select>
 </mapper>

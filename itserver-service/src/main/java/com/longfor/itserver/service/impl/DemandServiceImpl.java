@@ -444,7 +444,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		}
 		else if("2".equals(relationTypes)){
 			//关联项目
-			demand.setRelationId( relationId);
+			demand.setRelationId(relationId);
 			demand.setRelationType(relationType);
 			demand.setCallonAccountId(accountId);
 		}

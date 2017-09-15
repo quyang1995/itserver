@@ -435,7 +435,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
             } else if ("2".equals(relationTypes)) {
                 //关联项目
                 bugInfo.setRelationId(relationId);
-                bugInfo.setRelationType(Integer.valueOf(relationTypes));
+                bugInfo.setRelationType(relationType);
                 bugInfo.setCallonAccountId(accountId);
             }
             List<BugInfo> list = bugInfoMapper.statusList(bugInfo);
