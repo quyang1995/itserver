@@ -43,7 +43,6 @@ public class Program {
      */
     @Column(name = "commit_date")
     @JsonSerialize(using = CustomDateSerializer.class)
-//    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date commitDate;
 
     /**
@@ -51,14 +50,12 @@ public class Program {
      */
     @Column(name = "start_date")
     @JsonSerialize(using = CustomDateSerializer.class)
-//    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date startDate;
 
     /**
      * 灰度日期
      */
     @Column(name = "gray_release_date")
-//    @JsonSerialize(using = CustomFullDateSerializer.class)
     @JsonSerialize(using = CustomDateSerializer.class)
     private Date grayReleaseDate;
 
@@ -66,7 +63,6 @@ public class Program {
      * 发布日期
      */
     @Column(name = "release_date")
-//    @JsonSerialize(using = CustomFullDateSerializer.class)
     @JsonSerialize(using = CustomDateSerializer.class)
     private Date releaseDate;
 
