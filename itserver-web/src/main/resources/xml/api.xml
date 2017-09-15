@@ -2,7 +2,7 @@
 <api xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:noNamespaceSchemaLocation="xsd/api.xsd">
 
-    <version value="0.1"/>
+    <version value="1.1"/>
 
     <!--
 
@@ -14,6 +14,7 @@
     regex：          [非必填]正则表达式；
     maxLength：      [非必填]最大长度；
     minLength：      [非必填]最小长度；
+    area：           [非必填]取值范围，用英文逗号分隔。 e.g. 1,2,3；
     searchFor：      [非必填]模糊查询字段, 格式: 字段名1@字段名2...；
                             该属性仅可用在 name="searchText" 对象上;
     maxSize：        [非必填]上传附件的最大尺寸；
@@ -318,8 +319,8 @@
             <property name="modifiedAccountId" type="string" required="false" maxLength="20"/>
             <property name="feedbackPhone" ref="mobileNo" />
             <property name="feedbackName" type="string" required="false" maxLength="20"/>
-            <property name="type" type="int" required="true"/>
-            <property name="channel" type="int" required="true"/>
+            <property name="type" type="int" required="true" area="0,1"/>
+            <property name="channel" type="int" required="true" area="0,1,2,3"/>
             <property name="filePath" type="string" required="false" maxLength="3000"/>
         </request>
     </item>

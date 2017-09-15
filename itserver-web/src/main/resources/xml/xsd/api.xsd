@@ -27,6 +27,7 @@
 	<xs:attribute name="regex" type="xs:string" />
 	<xs:attribute name="required" type="xs:boolean" />
 	<xs:attribute name="description" type="xs:string" />
+	<xs:attribute name="area" type="xs:string" />
 
 	<xs:attributeGroup name="propertyAttrGroup">
 	    <xs:attribute ref="ref" />
@@ -42,6 +43,7 @@
 		<xs:attribute ref="regex" />
 		<xs:attribute ref="required" />
 		<xs:attribute ref="description" />
+		<xs:attribute ref="area" />
 	</xs:attributeGroup>
 
 	<xs:element name="api">
