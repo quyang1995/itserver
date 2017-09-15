@@ -610,6 +610,10 @@ CREATE TABLE IF NOT EXISTS `itplus`.`feed_back` (
   COMMENT '提交人名称',
   `modified_full_dept_path` VARCHAR(100)    NULL
   COMMENT '提交人部门完整路径',
+  `feedback_phone`     VARCHAR(20)     NULL
+  COMMENT '反馈人电话',
+  `feedback_name`     VARCHAR(20)     NULL
+  COMMENT '反馈人姓名',
   `file_path`               TEXT   NULL
   COMMENT '上传文件路径',
   `create_time`             TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,

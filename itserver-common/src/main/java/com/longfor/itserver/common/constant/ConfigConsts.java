@@ -2,6 +2,7 @@ package com.longfor.itserver.common.constant;
 
 import java.io.File;
 import java.security.Provider;
+import java.util.regex.Pattern;
 
 /**
  * @author mayee
@@ -34,6 +35,11 @@ public class ConfigConsts {
     public static final String SESSION_ACCOUNT_LONGFOR = "SESSION_ACCOUNT_LONGFOR";
     public static final String SESSION_EMPLOYEE = "SESSION_EMPLOYEE";
     public static final String SESSION_ORGANIZATION_LV1 = "SESSION_ORGANIZATION_LV1";
+
+    public static final Pattern MOBILE_PHONE_NUMBER_PATTERN = Pattern
+            .compile("^(13[0-9]|14[0-9]|15[0-9]|16[0-9]|17[0-9]|18[0-9])[0-9]{8}$");
+    public static final Pattern EMAIL_PATTERN = Pattern
+            .compile("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
 
     public static final class ADMIN {
 

@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface IFeedBackService extends IAdminService<FeedBack> {
 
-    boolean addFeedBack(Map map);
+    Map<String , Object> addFeedBack(Map map);
 
     List<FeedBack> feedBackList(Map map);
 

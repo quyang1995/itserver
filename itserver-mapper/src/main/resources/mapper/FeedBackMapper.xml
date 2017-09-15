@@ -27,6 +27,8 @@
         <result column="file_path" property="filePath" jdbcType="LONGVARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP"/>
+        <result column="feedback_phone" property="feedbackPhone" jdbcType="VARCHAR" />
+        <result column="feedback_name" property="feedbackName" jdbcType="VARCHAR" />
     </resultMap>
 
 
@@ -42,7 +44,8 @@
         id, product_id, product_code, name, problem_title, problem_descp, reproduction_step, sys_environment,
         contact_account_id, contact_employee_code, contact_employee_name, contact_full_dept_path,
         type, status, channel, modified_account_id, modified_employee_code, modified_name,
-        modified_full_dept_path, file_path, create_time, modified_time
+        modified_full_dept_path, file_path, create_time, modified_time, feedback_phone,
+        feedback_name
     </sql>
 
   <!-- BUG列表 -->

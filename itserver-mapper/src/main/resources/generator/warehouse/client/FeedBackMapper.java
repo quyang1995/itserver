@@ -11,9 +11,13 @@ public interface FeedBackMapper extends Mapper<FeedBack> {
 
     int deleteByExample(FeedBackExample example);
 
+    List<FeedBack> selectByExampleWithBLOBs(FeedBackExample example);
+
     List<FeedBack> selectByExample(FeedBackExample example);
 
     int updateByExampleSelective(@Param("record") FeedBack record, @Param("example") FeedBackExample example);
+
+    int updateByExampleWithBLOBs(@Param("record") FeedBack record, @Param("example") FeedBackExample example);
 
     int updateByExample(@Param("record") FeedBack record, @Param("example") FeedBackExample example);
 }

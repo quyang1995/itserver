@@ -1,7 +1,4 @@
-package com.longfor.itserver.entity;
-
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import net.mayee.commons.CustomDateSerializer;
+package generator.warehouse.entity;
 
 import java.util.Date;
 import javax.persistence.*;
@@ -113,18 +110,10 @@ public class FeedBack {
     @Column(name = "modified_full_dept_path")
     private String modifiedFullDeptPath;
 
-    /**
-     * 上传文件路径
-     */
-    @Column(name = "file_path")
-    private String filePath;
-
     @Column(name = "create_time")
-    @JsonSerialize(using = CustomDateSerializer.class)
     private Date createTime;
 
     @Column(name = "modified_time")
-    @JsonSerialize(using = CustomDateSerializer.class)
     private Date modifiedTime;
 
     @Column(name = "feedback_phone")
@@ -133,21 +122,11 @@ public class FeedBack {
     @Column(name = "feedback_name")
     private String feedbackName;
 
-    public String getFeedbackPhone() {
-        return feedbackPhone;
-    }
-
-    public void setFeedbackPhone(String feedbackPhone) {
-        this.feedbackPhone = feedbackPhone;
-    }
-
-    public String getFeedbackName() {
-        return feedbackName;
-    }
-
-    public void setFeedbackName(String feedbackName) {
-        this.feedbackName = feedbackName;
-    }
+    /**
+     * 上传文件路径
+     */
+    @Column(name = "file_path")
+    private String filePath;
 
     /**
      * @return id
@@ -484,24 +463,6 @@ public class FeedBack {
     }
 
     /**
-     * 获取上传文件路径
-     *
-     * @return file_path - 上传文件路径
-     */
-    public String getFilePath() {
-        return filePath;
-    }
-
-    /**
-     * 设置上传文件路径
-     *
-     * @param filePath 上传文件路径
-     */
-    public void setFilePath(String filePath) {
-        this.filePath = filePath == null ? null : filePath.trim();
-    }
-
-    /**
      * @return create_time
      */
     public Date getCreateTime() {
@@ -527,5 +488,51 @@ public class FeedBack {
      */
     public void setModifiedTime(Date modifiedTime) {
         this.modifiedTime = modifiedTime;
+    }
+
+    /**
+     * @return feedback_phone
+     */
+    public String getFeedbackPhone() {
+        return feedbackPhone;
+    }
+
+    /**
+     * @param feedbackPhone
+     */
+    public void setFeedbackPhone(String feedbackPhone) {
+        this.feedbackPhone = feedbackPhone == null ? null : feedbackPhone.trim();
+    }
+
+    /**
+     * @return feedback_name
+     */
+    public String getFeedbackName() {
+        return feedbackName;
+    }
+
+    /**
+     * @param feedbackName
+     */
+    public void setFeedbackName(String feedbackName) {
+        this.feedbackName = feedbackName == null ? null : feedbackName.trim();
+    }
+
+    /**
+     * 获取上传文件路径
+     *
+     * @return file_path - 上传文件路径
+     */
+    public String getFilePath() {
+        return filePath;
+    }
+
+    /**
+     * 设置上传文件路径
+     *
+     * @param filePath 上传文件路径
+     */
+    public void setFilePath(String filePath) {
+        this.filePath = filePath == null ? null : filePath.trim();
     }
 }
