@@ -2,7 +2,6 @@ package com.longfor.itserver.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.mayee.commons.CustomDateSerializer;
-import net.mayee.commons.CustomFullDateSerializer;
 
 import java.util.Date;
 import javax.persistence.*;
@@ -124,6 +123,9 @@ public class Demand {
      */
     private Integer status;
 
+    /**
+     * 渠道: 0=PC，1=OA，2=龙信，3=龙客
+     */
     private Integer channel;
 
     /**
@@ -139,12 +141,18 @@ public class Demand {
     private String modifiedName;
 
     @Column(name = "create_time")
-    @JsonSerialize(using = CustomFullDateSerializer.class)
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date createTime;
 
     @Column(name = "modified_time")
-    @JsonSerialize(using = CustomFullDateSerializer.class)
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date modifiedTime;
+
+    @Column(name = "feedback_phone")
+    private String feedbackPhone;
+
+    @Column(name = "feedback_name")
+    private String feedbackName;
 
     /**
      * @return id
@@ -503,14 +511,18 @@ public class Demand {
     }
 
     /**
-     * @return channel
+     * 获取渠道: 0=PC，1=OA，2=龙信，3=龙客
+     *
+     * @return channel - 渠道: 0=PC，1=OA，2=龙信，3=龙客
      */
     public Integer getChannel() {
         return channel;
     }
 
     /**
-     * @param channel
+     * 设置渠道: 0=PC，1=OA，2=龙信，3=龙客
+     *
+     * @param channel 渠道: 0=PC，1=OA，2=龙信，3=龙客
      */
     public void setChannel(Integer channel) {
         this.channel = channel;
@@ -578,5 +590,33 @@ public class Demand {
      */
     public void setModifiedTime(Date modifiedTime) {
         this.modifiedTime = modifiedTime;
+    }
+
+    /**
+     * @return feedback_phone
+     */
+    public String getFeedbackPhone() {
+        return feedbackPhone;
+    }
+
+    /**
+     * @param feedbackPhone
+     */
+    public void setFeedbackPhone(String feedbackPhone) {
+        this.feedbackPhone = feedbackPhone == null ? null : feedbackPhone.trim();
+    }
+
+    /**
+     * @return feedback_name
+     */
+    public String getFeedbackName() {
+        return feedbackName;
+    }
+
+    /**
+     * @param feedbackName
+     */
+    public void setFeedbackName(String feedbackName) {
+        this.feedbackName = feedbackName == null ? null : feedbackName.trim();
     }
 }

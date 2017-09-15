@@ -1,60 +1,62 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="generator.warehouse.client.BugInfoMapper" >
-  <resultMap id="BaseResultMap" type="generator.warehouse.entity.BugInfo" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="generator.warehouse.client.BugInfoMapper">
+  <resultMap id="BaseResultMap" type="generator.warehouse.entity.BugInfo">
     <!--
       WARNING - @mbggenerated
     -->
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="feed_back_id" property="feedBackId" jdbcType="BIGINT" />
-    <result column="relation_id" property="relationId" jdbcType="BIGINT" />
-    <result column="relation_type" property="relationType" jdbcType="INTEGER" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="descp" property="descp" jdbcType="VARCHAR" />
-    <result column="reproduction_step" property="reproductionStep" jdbcType="VARCHAR" />
-    <result column="brower" property="brower" jdbcType="VARCHAR" />
-    <result column="hope_date" property="hopeDate" jdbcType="TIMESTAMP" />
-    <result column="callon_account_id" property="callonAccountId" jdbcType="VARCHAR" />
-    <result column="callon_employee_code" property="callonEmployeeCode" jdbcType="BIGINT" />
-    <result column="callon_employee_name" property="callonEmployeeName" jdbcType="VARCHAR" />
-    <result column="callon_full_dept_path" property="callonFullDeptPath" jdbcType="VARCHAR" />
-    <result column="drafted_account_id" property="draftedAccountId" jdbcType="VARCHAR" />
-    <result column="drafted_employee_code" property="draftedEmployeeCode" jdbcType="BIGINT" />
-    <result column="drafted_employee_name" property="draftedEmployeeName" jdbcType="VARCHAR" />
-    <result column="drafted_full_dept_path" property="draftedFullDeptPath" jdbcType="VARCHAR" />
-    <result column="cc_account" property="ccAccount" jdbcType="VARCHAR" />
-    <result column="like_product" property="likeProduct" jdbcType="VARCHAR" />
-    <result column="like_program" property="likeProgram" jdbcType="VARCHAR" />
-    <result column="level" property="level" jdbcType="INTEGER" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="channel" property="channel" jdbcType="INTEGER" />
-    <result column="modified_account_id" property="modifiedAccountId" jdbcType="VARCHAR" />
-    <result column="modified_name" property="modifiedName" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="feed_back_id" jdbcType="BIGINT" property="feedBackId" />
+    <result column="relation_id" jdbcType="BIGINT" property="relationId" />
+    <result column="relation_type" jdbcType="INTEGER" property="relationType" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="descp" jdbcType="VARCHAR" property="descp" />
+    <result column="reproduction_step" jdbcType="VARCHAR" property="reproductionStep" />
+    <result column="brower" jdbcType="VARCHAR" property="brower" />
+    <result column="hope_date" jdbcType="TIMESTAMP" property="hopeDate" />
+    <result column="callon_account_id" jdbcType="VARCHAR" property="callonAccountId" />
+    <result column="callon_employee_code" jdbcType="BIGINT" property="callonEmployeeCode" />
+    <result column="callon_employee_name" jdbcType="VARCHAR" property="callonEmployeeName" />
+    <result column="callon_full_dept_path" jdbcType="VARCHAR" property="callonFullDeptPath" />
+    <result column="drafted_account_id" jdbcType="VARCHAR" property="draftedAccountId" />
+    <result column="drafted_employee_code" jdbcType="BIGINT" property="draftedEmployeeCode" />
+    <result column="drafted_employee_name" jdbcType="VARCHAR" property="draftedEmployeeName" />
+    <result column="drafted_full_dept_path" jdbcType="VARCHAR" property="draftedFullDeptPath" />
+    <result column="cc_account" jdbcType="VARCHAR" property="ccAccount" />
+    <result column="like_product" jdbcType="VARCHAR" property="likeProduct" />
+    <result column="like_program" jdbcType="VARCHAR" property="likeProgram" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="channel" jdbcType="INTEGER" property="channel" />
+    <result column="modified_account_id" jdbcType="VARCHAR" property="modifiedAccountId" />
+    <result column="modified_name" jdbcType="VARCHAR" property="modifiedName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="feedback_phone" jdbcType="VARCHAR" property="feedbackPhone" />
+    <result column="feedback_name" jdbcType="VARCHAR" property="feedbackName" />
   </resultMap>
-  <sql id="Example_Where_Clause" >
+  <sql id="Example_Where_Clause">
     <!--
       WARNING - @mbggenerated
     -->
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -65,28 +67,28 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Update_By_Example_Where_Clause" >
+  <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - @mbggenerated
     -->
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -97,7 +99,7 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List" >
+  <sql id="Base_Column_List">
     <!--
       WARNING - @mbggenerated
     -->
@@ -105,136 +107,142 @@
     hope_date, callon_account_id, callon_employee_code, callon_employee_name, callon_full_dept_path, 
     drafted_account_id, drafted_employee_code, drafted_employee_name, drafted_full_dept_path, 
     cc_account, like_product, like_program, level, status, channel, modified_account_id, 
-    modified_name, create_time, modified_time
+    modified_name, create_time, modified_time, feedback_phone, feedback_name
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="generator.warehouse.entity.BugInfoExample" >
+  <select id="selectByExample" parameterType="generator.warehouse.entity.BugInfoExample" resultMap="BaseResultMap">
     <!--
       WARNING - @mbggenerated
     -->
     select
-    <if test="distinct" >
+    <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
     from bug_info
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null" >
+    <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="generator.warehouse.entity.BugInfoExample" >
+  <delete id="deleteByExample" parameterType="generator.warehouse.entity.BugInfoExample">
     <!--
       WARNING - @mbggenerated
     -->
     delete from bug_info
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <select id="countByExample" parameterType="generator.warehouse.entity.BugInfoExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="generator.warehouse.entity.BugInfoExample" resultType="java.lang.Integer">
     <!--
       WARNING - @mbggenerated
     -->
     select count(*) from bug_info
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+  <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - @mbggenerated
     -->
     update bug_info
-    <set >
-      <if test="record.id != null" >
+    <set>
+      <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.feedBackId != null" >
+      <if test="record.feedBackId != null">
         feed_back_id = #{record.feedBackId,jdbcType=BIGINT},
       </if>
-      <if test="record.relationId != null" >
+      <if test="record.relationId != null">
         relation_id = #{record.relationId,jdbcType=BIGINT},
       </if>
-      <if test="record.relationType != null" >
+      <if test="record.relationType != null">
         relation_type = #{record.relationType,jdbcType=INTEGER},
       </if>
-      <if test="record.name != null" >
+      <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.descp != null" >
+      <if test="record.descp != null">
         descp = #{record.descp,jdbcType=VARCHAR},
       </if>
-      <if test="record.reproductionStep != null" >
+      <if test="record.reproductionStep != null">
         reproduction_step = #{record.reproductionStep,jdbcType=VARCHAR},
       </if>
-      <if test="record.brower != null" >
+      <if test="record.brower != null">
         brower = #{record.brower,jdbcType=VARCHAR},
       </if>
-      <if test="record.hopeDate != null" >
+      <if test="record.hopeDate != null">
         hope_date = #{record.hopeDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.callonAccountId != null" >
+      <if test="record.callonAccountId != null">
         callon_account_id = #{record.callonAccountId,jdbcType=VARCHAR},
       </if>
-      <if test="record.callonEmployeeCode != null" >
+      <if test="record.callonEmployeeCode != null">
         callon_employee_code = #{record.callonEmployeeCode,jdbcType=BIGINT},
       </if>
-      <if test="record.callonEmployeeName != null" >
+      <if test="record.callonEmployeeName != null">
         callon_employee_name = #{record.callonEmployeeName,jdbcType=VARCHAR},
       </if>
-      <if test="record.callonFullDeptPath != null" >
+      <if test="record.callonFullDeptPath != null">
         callon_full_dept_path = #{record.callonFullDeptPath,jdbcType=VARCHAR},
       </if>
-      <if test="record.draftedAccountId != null" >
+      <if test="record.draftedAccountId != null">
         drafted_account_id = #{record.draftedAccountId,jdbcType=VARCHAR},
       </if>
-      <if test="record.draftedEmployeeCode != null" >
+      <if test="record.draftedEmployeeCode != null">
         drafted_employee_code = #{record.draftedEmployeeCode,jdbcType=BIGINT},
       </if>
-      <if test="record.draftedEmployeeName != null" >
+      <if test="record.draftedEmployeeName != null">
         drafted_employee_name = #{record.draftedEmployeeName,jdbcType=VARCHAR},
       </if>
-      <if test="record.draftedFullDeptPath != null" >
+      <if test="record.draftedFullDeptPath != null">
         drafted_full_dept_path = #{record.draftedFullDeptPath,jdbcType=VARCHAR},
       </if>
-      <if test="record.ccAccount != null" >
+      <if test="record.ccAccount != null">
         cc_account = #{record.ccAccount,jdbcType=VARCHAR},
       </if>
-      <if test="record.likeProduct != null" >
+      <if test="record.likeProduct != null">
         like_product = #{record.likeProduct,jdbcType=VARCHAR},
       </if>
-      <if test="record.likeProgram != null" >
+      <if test="record.likeProgram != null">
         like_program = #{record.likeProgram,jdbcType=VARCHAR},
       </if>
-      <if test="record.level != null" >
+      <if test="record.level != null">
         level = #{record.level,jdbcType=INTEGER},
       </if>
-      <if test="record.status != null" >
+      <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
-      <if test="record.channel != null" >
+      <if test="record.channel != null">
         channel = #{record.channel,jdbcType=INTEGER},
       </if>
-      <if test="record.modifiedAccountId != null" >
+      <if test="record.modifiedAccountId != null">
         modified_account_id = #{record.modifiedAccountId,jdbcType=VARCHAR},
       </if>
-      <if test="record.modifiedName != null" >
+      <if test="record.modifiedName != null">
         modified_name = #{record.modifiedName,jdbcType=VARCHAR},
       </if>
-      <if test="record.createTime != null" >
+      <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.modifiedTime != null" >
+      <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.feedbackPhone != null">
+        feedback_phone = #{record.feedbackPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackName != null">
+        feedback_name = #{record.feedbackName,jdbcType=VARCHAR},
+      </if>
     </set>
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map" >
+  <update id="updateByExample" parameterType="map">
     <!--
       WARNING - @mbggenerated
     -->
@@ -265,8 +273,10 @@
       modified_account_id = #{record.modifiedAccountId,jdbcType=VARCHAR},
       modified_name = #{record.modifiedName,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null" >
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      feedback_phone = #{record.feedbackPhone,jdbcType=VARCHAR},
+      feedback_name = #{record.feedbackName,jdbcType=VARCHAR}
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
