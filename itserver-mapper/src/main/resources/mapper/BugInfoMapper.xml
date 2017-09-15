@@ -32,6 +32,8 @@
         <result column="modified_name" property="modifiedName" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP"/>
+        <result column="feedback_phone" jdbcType="VARCHAR" property="feedbackPhone" />
+        <result column="feedback_name" jdbcType="VARCHAR" property="feedbackName" />
     </resultMap>
     <resultMap id="BugInfoDetailResultMap" extends="BaseResultMap"
                type="com.longfor.itserver.entity.ps.PsBugInfoDetail">
@@ -46,7 +48,7 @@
         hope_date, callon_account_id, callon_employee_code, callon_employee_name, callon_full_dept_path,
         drafted_account_id, drafted_employee_code, drafted_employee_name, drafted_full_dept_path,
         cc_account, like_product, like_program, level, status, channel, modified_account_id,
-        modified_name, create_time, modified_time
+        modified_name, create_time, modified_time, feedback_phone, feedback_name
     </sql>
 
     <!-- BUG列表 -->

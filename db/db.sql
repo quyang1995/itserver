@@ -344,6 +344,10 @@ CREATE TABLE IF NOT EXISTS `itplus`.`demand` (
   COMMENT '状态：0=已取消，1=已关闭，2=待处理，3=处理中，4=已完成',
   `channel`                INT             NOT NULL
   COMMENT '渠道: 0=PC，1=OA，2=龙信，3=龙客',
+  `feedback_phone`     VARCHAR(20)     NULL
+  COMMENT '反馈人电话',
+  `feedback_name`     VARCHAR(20)     NULL
+  COMMENT '反馈人姓名',
   `modified_account_id`    VARCHAR(50)     NULL
   COMMENT '最后修改人账户id',
   `modified_name`          VARCHAR(50)     NULL
@@ -483,6 +487,10 @@ CREATE TABLE IF NOT EXISTS `itplus`.`bug_info` (
   COMMENT '状态：0=已取消，1=已关闭，2=待处理，3=处理中，4=已完成',
   `channel`                INT             NOT NULL
   COMMENT '渠道: 0=PC，1=OA，2=龙信，3=龙客',
+  `feedback_phone`     VARCHAR(20)     NULL
+  COMMENT '反馈人电话',
+  `feedback_name`     VARCHAR(20)     NULL
+  COMMENT '反馈人姓名',
   `modified_account_id`    VARCHAR(50)     NULL
   COMMENT '最后修改人账户id',
   `modified_name`          VARCHAR(50)     NULL

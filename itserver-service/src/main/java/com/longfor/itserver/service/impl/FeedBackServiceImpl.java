@@ -152,6 +152,8 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
             bugInfo.setModifiedName(feedBack.getModifiedName());
             bugInfo.setCreateTime(TimeUtils.getTodayByDateTime());
             bugInfo.setModifiedTime(TimeUtils.getTodayByDateTime());
+            bugInfo.setFeedbackPhone(feedBack.getFeedbackPhone());
+            bugInfo.setFeedbackName(feedBack.getFeedbackName());
             bugInfoMapper.insert(bugInfo);
             //添加日志
             Map<String, Object> logMap = getChangeLog(null, bugInfo);
@@ -198,6 +200,8 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
             demand.setModifiedName(feedBack.getModifiedName());
             demand.setCreateTime(TimeUtils.getTodayByDateTime());
             demand.setModifiedTime(TimeUtils.getTodayByDateTime());
+            demand.setFeedbackPhone(feedBack.getFeedbackPhone());
+            demand.setFeedbackName(feedBack.getFeedbackName());
             demandMapper.insert(demand);
             //添加日志
             Map<String, Object> logMap = getChangeLog(demand, null);
