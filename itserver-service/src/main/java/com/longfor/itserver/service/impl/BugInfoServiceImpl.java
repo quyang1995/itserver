@@ -411,34 +411,8 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
             ELExample elExample = new ELExample(request, BugInfo.class);
             PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
 
-            JSONObject jsonObject = (JSONObject) JSONObject.toJSON(paramsMap);
-            BugInfo bugInfo = new BugInfo();
-            String relationIds = jsonObject.getString("relationId");
-            String relationTypes = jsonObject.getString("relationType");
-            String accountId = jsonObject.getString("accountId");
-            Integer  relationType = null;
-            Long relationId = null;
-            if(StringUtils.isNotBlank(relationTypes)){
-              relationType = Integer.parseInt(relationTypes);
-            }
-            if(StringUtils.isNotBlank(relationIds)){
-                relationId = Long.parseLong(relationIds);
-            }
-
             Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-
-            //关联产品
-            if ("1".equals(relationTypes)) {
-                bugInfo.setRelationId(relationId);
-                bugInfo.setRelationType(relationType);
-                bugInfo.setCallonAccountId(accountId);
-            } else if ("2".equals(relationTypes)) {
-                //关联项目
-                bugInfo.setRelationId(relationId);
-                bugInfo.setRelationType(relationType);
-                bugInfo.setCallonAccountId(accountId);
-            }
-            List<BugInfo> list = bugInfoMapper.statusList(bugInfo);
+            List<BugInfo> list = bugInfoMapper.statusList(paramsMap);
             resultMap.put("list", list);
             resultMap.put(APIHelper.PAGE_NUM, elExample.getPageNum());
             resultMap.put(APIHelper.PAGE_SIZE, elExample.getPageSize());

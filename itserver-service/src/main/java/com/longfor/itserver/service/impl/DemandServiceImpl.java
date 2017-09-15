@@ -374,7 +374,6 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		String callonAccountId =  jsonObject.getString("callonAccountId");
 		Demand oldDemand = demandMapper.selectByPrimaryKey(demandId);
 		Demand newDemand = new Demand();
-//		getChangeLog(oldDemand,newDemand);
 		AccountLongfor accountLongfor =  adsHelper.getAccountLongforByLoginName(callonAccountId);
 		newDemand.setCallonAccountId(callonAccountId);
 		newDemand.setCallonEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
@@ -422,33 +421,34 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
 
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-		JSONObject jsonObject = (JSONObject)JSONObject.toJSON(paramsMap);
-		Demand demand = new Demand();
-		String relationIds = jsonObject.getString("relationId");
-		String relationTypes = jsonObject.getString("relationType");
-		String accountId = jsonObject.getString("accountId");
-		Integer  relationType = null;
-		Long relationId = null;
-		if(StringUtils.isNotBlank(relationTypes)){
-			relationType = Integer.parseInt(relationTypes);
-		}
-		if(StringUtils.isNotBlank(relationIds)){
-			relationId = Long.parseLong(relationIds);
-		}
-
-		//关联产品
-		if("1".equals(relationTypes)){
-			demand.setRelationId(relationId);
-			demand.setRelationType(relationType);
-			demand.setCallonAccountId(accountId);
-		}
-		else if("2".equals(relationTypes)){
-			//关联项目
-			demand.setRelationId(relationId);
-			demand.setRelationType(relationType);
-			demand.setCallonAccountId(accountId);
-		}
-		List<Demand> list = demandMapper.statusList(demand);
+//		JSONObject jsonObject = (JSONObject)JSONObject.toJSON(paramsMap);
+//		Demand demand = new Demand();
+//		String relationIds = jsonObject.getString("relationId");
+//		String relationTypes = jsonObject.getString("relationType");
+//		String accountId = jsonObject.getString("accountId");
+//		Integer  relationType = null;
+//		Long relationId = null;
+//		if(StringUtils.isNotBlank(relationTypes)){
+//			relationType = Integer.parseInt(relationTypes);
+//		}
+//		if(StringUtils.isNotBlank(relationIds)){
+//			relationId = Long.parseLong(relationIds);
+//		}
+//
+//		//关联产品
+//		if("1".equals(relationTypes)){
+//			demand.setRelationId(relationId);
+//			demand.setRelationType(relationType);
+//			demand.setCallonAccountId(accountId);
+//		}
+//		else if("2".equals(relationTypes)){
+//			//关联项目
+//			demand.setRelationId(relationId);
+//			demand.setRelationType(relationType);
+//			demand.setCallonAccountId(accountId);
+//		}
+//		List<Demand> list = demandMapper.statusList(demand);
+		List<Demand> list = demandMapper.statusList(paramsMap);
 		resultMap.put("list",list);
 		resultMap.put(APIHelper.PAGE_NUM, elExample.getPageNum());
 		resultMap.put(APIHelper.PAGE_SIZE, elExample.getPageSize());

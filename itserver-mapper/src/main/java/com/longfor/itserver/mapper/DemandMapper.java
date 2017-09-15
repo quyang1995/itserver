@@ -23,5 +23,5 @@ public interface DemandMapper extends BeeMapper<Demand> {
 
 	List<PsIndex> countPending(String id);
 
-	List<Demand> statusList(Demand demand);
+	List<Demand> statusList(Map paramsMap);
 }
