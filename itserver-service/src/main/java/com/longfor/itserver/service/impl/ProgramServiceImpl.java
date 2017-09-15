@@ -72,6 +72,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	}
 
 	@Override
+	@Transactional
 	public boolean addProgram(Map map) {
 		JSONObject json = (JSONObject) JSONObject.toJSON(map);
 		Program program = JSONObject.toJavaObject(json, Program.class);
