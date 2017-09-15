@@ -99,6 +99,9 @@
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
 -->
+        <table tableName="feed_back" domainObjectName="FeedBack">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
     </context>
 
 </generatorConfiguration>

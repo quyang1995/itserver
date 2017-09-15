@@ -1,4 +1,4 @@
-package com.longfor.itserver.entity;
+package generator.warehouse.entity;
 
 import java.util.ArrayList;
 import java.util.Date;

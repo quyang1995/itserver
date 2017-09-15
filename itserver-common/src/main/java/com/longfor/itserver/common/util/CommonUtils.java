@@ -315,12 +315,12 @@ public class CommonUtils {
      * @param msg
      * @return
      */
-//    public static Map<String, Object> getResultMap(String code, String msg) {
-//        Map<String, Object> resultMap = new HashMap<String, Object>();
-//        resultMap.put(APIHelper.CODE, code);
-//        resultMap.put(APIHelper.MSG, msg);
-//        return resultMap;
-//    }
+    public static Map<String, Object> getResultMap(String code, String msg) {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put(APIHelper.CODE, code);
+        resultMap.put(APIHelper.MSG, msg);
+        return resultMap;
+    }
 
 
     /**

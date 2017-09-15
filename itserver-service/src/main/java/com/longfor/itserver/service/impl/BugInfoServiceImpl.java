@@ -172,9 +172,6 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         }
 
         /*修改文件*/
-        BugFile bugFile = new BugFile();
-        bugFile.setBugId(bugInfo.getId());
-        bugFileMapper.delete(bugFile);
         List<BugFile> fileList = JSONArray.parseArray(json.getString("fileList"), BugFile.class);
         if (fileList != null && fileList.size() > 0) {
             for (BugFile file : fileList) {

@@ -315,7 +315,9 @@
             <property name="problemDescp" type="string" required="false" maxLength="3000"/>
             <property name="reproductionStep" type="string" required="false" maxLength="3000"/>
             <property name="sysEnvironment" type="string" required="false" maxLength="50"/>
-            <property name="modifiedAccountId" type="string" required="true" maxLength="20"/>
+            <property name="modifiedAccountId" type="string" required="false" maxLength="20"/>
+            <property name="feedbackPhone" ref="mobileNo" />
+            <property name="feedbackName" type="string" required="false" maxLength="20"/>
             <property name="type" type="int" required="true"/>
             <property name="channel" type="int" required="true"/>
             <property name="filePath" type="string" required="false" maxLength="3000"/>

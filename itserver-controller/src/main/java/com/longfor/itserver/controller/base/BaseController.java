@@ -22,14 +22,6 @@ import java.util.regex.Pattern;
 
 public class BaseController {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
-    public static final Pattern EMAIL_PATTERN = Pattern
-            .compile("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
-    public static final Pattern MOBILE_PHONE_NUMBER_PATTERN = Pattern
-            .compile("^(13[0-9]|14[0-9]|15[0-9]|16[0-9]|17[0-9]|18[0-9])[0-9]{8}$");
-    public static final Pattern LOGIN_NAME_PATTERN = Pattern
-            .compile("^([a-zA-Z0-9]{4,20})$");
-    public static final Pattern LOGIN_PASSWORD_PATTERN = Pattern
-            .compile("^([a-zA-Z0-9!@#$%^*_]{6,16})$");
 
     @Autowired
     private HttpServletRequest request;
