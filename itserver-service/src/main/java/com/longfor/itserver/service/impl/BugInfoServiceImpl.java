@@ -85,6 +85,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
      * @return
      */
     @Override
+    @Transactional
     public boolean addBug(Map map) {
         JSONObject json = (JSONObject) JSONObject.toJSON(map);
         BugInfo bugInfo = JSONObject.toJavaObject(json, BugInfo.class);

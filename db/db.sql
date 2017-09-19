@@ -183,9 +183,9 @@ CREATE TABLE IF NOT EXISTS `itplus`.`program` (
   COMMENT '灰度日期',
   `release_date`        DATETIME        NOT NULL
   COMMENT '发布日期',
-  `ued_date`            DATETIME        NOT NULL
+  `ued_date`            DATETIME        NULL
   COMMENT 'UED日期',
-  `architecture_date`   DATETIME        NOT NULL
+  `architecture_date`   DATETIME        NULL
   COMMENT '架构日期',
   `like_product`        VARCHAR(500)    NULL
   COMMENT '关联产品id字符串，e.g. 1,2,3,...',
