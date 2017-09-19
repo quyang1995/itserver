@@ -48,7 +48,7 @@
         feedback_name
     </sql>
 
-  <!-- BUG列表 -->
+    <!-- 反馈列表 -->
   <select id="feedBackList" parameterType="map" resultMap="BaseResultMap">
     SELECT
     <include refid="Base_Column_List" />
