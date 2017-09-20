@@ -53,8 +53,8 @@ public class APIFeedBackController extends BaseController {
 		/* 生成查询用Example */
 		ELExample elExample = new ELExample(request, FeedBack.class);
 		/* 查询数据 and admin权限判断 */
-		String accountId = paramsMap.get("accountId");
-		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
+//		String accountId = paramsMap.get("accountId");
+//		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
 		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
 		List<FeedBack> feedBackList = this.getFeedBackService().feedBackList(paramsMap);
 

@@ -53,10 +53,7 @@
     SELECT
     <include refid="Base_Column_List" />
     FROM feed_back
-    WHERE 1=1
-    <if test="isAdmin == 0">
-      AND modified_account_id = #{accountId}
-    </if>
+    WHERE modified_account_id = #{accountId}
     <if test='status != "" and status != null  and status != -1'>
       and status = #{status}
     </if>
@@ -86,9 +83,7 @@
             sum(f.`status` = 3) AS "working",
             sum(f.`status` = 4) AS "completed"
         FROM feed_back f
-        <if test="isAdmin == 0">
-            WHERE modified_account_id = #{accountId}
-        </if>
+        WHERE modified_account_id = #{accountId}
     </select>
 
 </mapper>
