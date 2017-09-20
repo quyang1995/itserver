@@ -214,7 +214,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         if (oldBug == null && newBug != null) {
             StringBuilder log = new StringBuilder();
             log.append(newBug.getModifiedName()).
-                    append("新增了bug信息");
+                    append(" 新增了bug信息");
             textList.add(log.toString());
             map.put("type", 2);
             map.put("logList", textList);
@@ -225,7 +225,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
             if (!Objects.equals(oldBug.getDescp(), newBug.getDescp())) {
                 StringBuilder log = new StringBuilder();
                 log.append(newBug.getModifiedName()).
-                        append("修改了bug描述信息");
+                        append(" 修改了bug描述信息");
                 textList.add(log.toString());
                 map.put("type", 1);
             }
@@ -249,7 +249,8 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                     if (StringUtils.isNotBlank(log)) {
                         log.append(",");
                     } else {
-                        log.append(newBug.getModifiedName());
+                        log.append(newBug.getModifiedName())
+                                .append(" ");
                     }
                     log.append("将 优先级 由[").
                             append(BugLevelEnum.getByCode(oldBug.getLevel()).getText()).
@@ -281,7 +282,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                     && Objects.equals(oldBug.getRelationType(), newBug.getRelationType()) && Objects.equals(oldBug.getReproductionStep(), newBug.getReproductionStep()))) {
                 StringBuilder log = new StringBuilder();
                 log.append(newBug.getModifiedName()).
-                        append("修改了bug基础信息");
+                        append(" 修改了bug基础信息");
                 textList.add(log.toString());
                 map.put("type", 2);
             }
@@ -294,7 +295,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
             StringBuilder log = new StringBuilder();
             if (newBug.getStatus() != null && !Objects.equals(oldBug.getStatus(), newBug.getStatus())) {
                 log.append(newBug.getModifiedName()).
-                        append("将 状态 由[").
+                        append(" 将 状态 由[").
                         append(BugStatusEnum.getByCode(oldBug.getStatus()).getText()).
                         append("]更改为[").
                         append(BugStatusEnum.getByCode(newBug.getStatus()).getText()).
@@ -303,7 +304,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
 
             else if (newBug.getCallonAccountId() != null&& !Objects.equals(oldBug.getCallonAccountId(), newBug.getCallonAccountId())) {
                 log.append(newBug.getModifiedName())
-                        .append("将 指派人 由[").
+                        .append(" 将 指派人 由[").
                         append(oldBug.getCallonEmployeeName()).
                         append("]更改为[").
                         append(newBug.getCallonEmployeeName()).
