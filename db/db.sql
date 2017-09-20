@@ -631,7 +631,25 @@ CREATE TABLE IF NOT EXISTS `itplus`.`feed_back` (
   ENGINE = InnoDB;
 
 
-
+-- -----------------------------------------------------
+-- Table `itplus`.`feed_back_file` 反馈附件
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `itplus`.`feed_back_file` (
+  `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `feed_back_id`      BIGINT    NULL
+  COMMENT '反馈',
+  `file_name`   VARCHAR(500)    NULL
+  COMMENT '文件名称',
+  `file_suffix` VARCHAR(50)     NULL
+  COMMENT '文件扩展名',
+  `file_size`   VARCHAR(50)     NULL
+  COMMENT '文件大小',
+  `file_path`   TEXT            NULL
+  COMMENT '文件绝对路径',
+  `create_time` TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = InnoDB;
 
 
 

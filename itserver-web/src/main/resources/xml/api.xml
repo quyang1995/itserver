@@ -322,6 +322,7 @@
             <property name="type" type="int" required="true" area="0,1"/>
             <property name="channel" type="int" required="true" area="0,1,2,3"/>
             <property name="filePath" type="string" required="false" maxLength="3000"/>
+            <property name="fileList" type="string" required="false"/>
         </request>
     </item>
 
@@ -895,6 +896,17 @@
     <item id="api_bug_delete_file" description="根据文件ID 删除对应BUG文件">
         <request>
             <property name="id" type="int" required="true"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
+        /api/feedBack/baseFileUpload
+        说明:反馈上传图片
+    -->
+    <item id="api_feedBack_baseFileUpload" description="反馈上传图片">
+        <request>
+            <property name="baseFile" type="string" required="false"/>
         </request>
     </item>
 </api>
