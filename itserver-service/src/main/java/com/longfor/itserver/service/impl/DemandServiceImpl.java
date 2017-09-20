@@ -220,7 +220,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		if(oldDemand == null && newDemand != null){
 			StringBuilder log = new StringBuilder();
 			log.append(newDemand.getModifiedName()).
-					append("新增了需求信息");
+					append(" 新增了需求信息");
 			textList.add(log.toString());
 			map.put("type",2);
 			map.put("logList",textList);
@@ -231,7 +231,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			if(!Objects.equals(oldDemand.getDescp(),newDemand.getDescp())){
 				StringBuilder log = new StringBuilder();
 				log.append(newDemand.getModifiedName()).
-						append("修改了需求描述信息");
+						append(" 修改了需求描述信息");
 				textList.add(log.toString());
 				map.put("type",1);
 			}
@@ -255,7 +255,8 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 					if (StringUtils.isNotBlank(log)){
 						log.append(",");
 					}else{
-						log.append(newDemand.getModifiedName());
+						log.append(newDemand.getModifiedName())
+								.append(" ");
 					}
 					log.append("将 优先级 由[").
 							append(DemandLevelEnum.getByCode(oldDemand.getLevel()).getText()).
@@ -289,7 +290,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 					){
 				StringBuilder log = new StringBuilder();
 				log.append(newDemand.getModifiedName()).
-						append("修改了需求基础信息");
+						append(" 修改了需求基础信息");
 				textList.add(log.toString());
 				map.put("type",2);
 			}
@@ -303,7 +304,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		if (newDemand.getStatus()!=null && !Objects.equals(oldDemand.getStatus(),newDemand.getStatus())){
 
 			log.append(oldDemand.getModifiedName()).
-				append("将 状态 由[").
+				append(" 将 状态 由[").
 				append(DemandStatusEnum.getByCode(oldDemand.getStatus()).getText()).
 				append("]更改为[").
 				append(DemandStatusEnum.getByCode(newDemand.getStatus()).getText()).
@@ -313,7 +314,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		if(newDemand.getCallonAccountId()!=null && !Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())){
 
 				log.append(oldDemand.getModifiedName()).
-					append("将 指派人 由[").
+					append(" 将 指派人 由[").
 					append(oldDemand.getCallonEmployeeName()).
 					append("]更改为[").
 					append(newDemand.getCallonEmployeeName()).

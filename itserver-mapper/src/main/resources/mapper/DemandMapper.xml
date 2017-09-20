@@ -143,11 +143,9 @@
         <if test='accountId != "" and accountId != null'>
             AND callon_account_id = #{accountId}
         </if>
-        and status != 1
-        and status != 0
+        and status in (2,3)
         ORDER BY
-        CASE WHEN `status` =2 THEN modified_time END DESC,
-        CASE WHEN `status` =3 THEN modified_time END DESC,
-        CASE WHEN `status` =4 THEN modified_time END DESC
+        CASE WHEN `status` = 2 THEN modified_time END DESC,
+        CASE WHEN `status` = 3 THEN modified_time END DESC
     </select>
 </mapper>

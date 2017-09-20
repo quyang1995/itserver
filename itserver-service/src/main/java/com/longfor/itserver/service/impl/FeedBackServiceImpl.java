@@ -245,11 +245,11 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
         StringBuilder log = new StringBuilder();
         if (newBug == null && newDemand != null) {
             log.append(newDemand.getModifiedName()).
-                    append("新增了需求信息");
+                    append(" 新增了需求信息");
         }
         if (newDemand == null && newBug != null) {
             log.append(newBug.getModifiedName()).
-                    append("新增了bug信息");
+                    append(" 新增了bug信息");
         }
         textList.add(log.toString());
         map.put("type", 2);
