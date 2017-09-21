@@ -16,12 +16,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sun.misc.BASE64Decoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.io.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * 项目
@@ -188,6 +191,55 @@ public class APIFeedBackController extends BaseController {
 		String accountId = paramsMap.get("accountId");
 		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
 		return this.getFeedBackService().countStatus(paramsMap);
+	}
+
+
+	@RequestMapping(value = "/baseFileUpload", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public Map fileCAjax(HttpServletResponse response, HttpServletRequest request) throws Exception {
+		Map<String,String> paramsMap = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		String filePath = ConfigConsts.FILE_ADDRESS;
+		File tmpDir = new File(filePath);
+		if (!tmpDir.exists()) {
+			tmpDir.mkdirs();
+		}
+		//生成图片路径
+		StringBuffer sbRealPath = new StringBuffer();
+		Map<String, Object> filemap = new HashMap<String, Object>();
+		String sb = paramsMap.get("baseFile");
+
+		if(sb == null){
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E9994, "");
+		}
+		sb = sb.substring(sb.indexOf(",")+1,sb.length());
+		BASE64Decoder decoder = new BASE64Decoder();
+		try{
+			//Base64解码
+			byte[] b = decoder.decodeBuffer(sb.toString());
+			for(int i=0;i<b.length;++i){
+				if(b[i]<0){
+					//调整异常数据
+					b[i]+=256;
+				}
+			}
+			String uuid = UUID.randomUUID().toString();
+			sbRealPath.append(filePath).append("/").append(uuid).append(".").append("jpg");
+			OutputStream out = new FileOutputStream(sbRealPath.toString());
+			out.write(b);
+			out.flush();
+			out.close();
+			FileInputStream fis = new FileInputStream(sbRealPath.toString());
+			filemap.put("filePath",sbRealPath.toString());
+			filemap.put("fileName", uuid);
+			filemap.put("fileSuffix", "jpg");
+			filemap.put("fileSize", fis.available());
+		}catch (Exception e){
+			e.printStackTrace();
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E9999, "");
+		}
+
+
+		return filemap;
 	}
 
 }

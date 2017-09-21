@@ -1,5 +1,6 @@
 package com.longfor.itserver.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.longfor.ads.entity.AccountLongfor;
@@ -48,6 +49,12 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
 
     @Autowired
     private DemandChangeLogMapper demandChangeLogMapper;
+    @Autowired
+    private FeedBackFileMapper feedBackFileMapper;
+    @Autowired
+    private BugFileMapper bugFileMapper;
+    @Autowired
+    private DemandFileMapper demandFileMapper;
 
 
     @Override
@@ -119,6 +126,17 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
         }
 
         feedBackMapper.insert(feedBack);
+
+        //添加文件
+        List<FeedBackFile> fileList = JSONArray.parseArray(json.getString("fileList"), FeedBackFile.class);
+        if (fileList != null && fileList.size() > 0) {
+            for (FeedBackFile file : fileList) {
+                file.setFeedBackId(feedBack.getId());
+                file.setCreateTime(TimeUtils.getTodayByDateTime());
+            }
+            feedBackFileMapper.insertList(fileList);
+        }
+
         //0:新增BUG   1:新增需求
         if (feedBack.getType().equals(0)) {
             BugInfo bugInfo = new BugInfo();
@@ -155,6 +173,17 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
             bugInfo.setFeedbackPhone(feedBack.getFeedbackPhone());
             bugInfo.setFeedbackName(feedBack.getFeedbackName());
             bugInfoMapper.insert(bugInfo);
+
+            //添加文件
+            List<BugFile> bugFileList = JSONArray.parseArray(json.getString("fileList"), BugFile.class);
+            if (bugFileList != null && bugFileList.size() > 0) {
+                for (BugFile file : bugFileList) {
+                    file.setBugId(bugInfo.getId());
+                    file.setCreateTime(TimeUtils.getTodayByDateTime());
+                }
+                bugFileMapper.insertList(bugFileList);
+            }
+
             //添加日志
             Map<String, Object> logMap = getChangeLog(null, bugInfo);
             @SuppressWarnings("unchecked")
@@ -203,6 +232,15 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
             demand.setFeedbackPhone(feedBack.getFeedbackPhone());
             demand.setFeedbackName(feedBack.getFeedbackName());
             demandMapper.insert(demand);
+            //添加文件
+            List<DemandFile> demamdFileList = JSONArray.parseArray(json.getString("fileList"), DemandFile.class);
+            if(demamdFileList!= null && demamdFileList.size()>0) {
+                for (DemandFile demandFile : demamdFileList) {
+                    demandFile.setDemandId(demand.getId());
+                    demandFile.setCreateTime(TimeUtils.getTodayByDateTime());
+                }
+                demandFileMapper.insertList(demamdFileList);
+            }
             //添加日志
             Map<String, Object> logMap = getChangeLog(demand, null);
             @SuppressWarnings("unchecked")
