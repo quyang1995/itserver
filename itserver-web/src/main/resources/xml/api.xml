@@ -337,7 +337,8 @@
         <request>
             <property ref="pageNum"/>
             <property ref="pageSize"/>
-            <property name="accountId" type="string" required="true" maxLength="30"/>
+            <property name="accountId" type="string" required="false" maxLength="30"/>
+            <property name="feedbackPhone" ref="mobileNo" />
             <property name="status" type="int" required="true" area="-1,0,1,2,3,4"/>
             <property name="channel" type="int" required="false" area="-1,0,1,2,3"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
@@ -906,7 +907,22 @@
     -->
     <item id="api_feedBack_baseFileUpload" description="反馈上传图片">
         <request>
-            <property name="baseFile" type="string" required="false"/>
+            <property name="baseFile" type="string" required="true"/>
         </request>
+    </item>
+    <!--
+        URL:
+        /down/load/bug
+        说明:下载BUG文件
+    -->
+    <item id="down_load_bug" description="下载BUG文件">
+    </item>
+    <!--
+        URL:
+        /api/download/demand
+        说明:下载需求文件
+    -->
+    <item id="down_load_demand" description="下载需求文件">
+
     </item>
 </api>
