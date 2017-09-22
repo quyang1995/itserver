@@ -110,15 +110,17 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         bugInfoMapper.insert(bugInfo);
 
         //添加文件
-        List<BugFile> fileList = JSONArray.parseArray(json.getString("fileList"), BugFile.class);
-        if (fileList != null && fileList.size() > 0) {
-            for (BugFile file : fileList) {
-                file.setBugId(bugInfo.getId());
-                file.setCreateTime(TimeUtils.getTodayByDateTime());
+        String filelist = json.getString("fileList");
+        if(StringUtils.isNotBlank(filelist)) {
+            List<BugFile> fileList = JSONArray.parseArray(filelist, BugFile.class);
+            if (fileList != null && fileList.size() > 0) {
+                for (BugFile file : fileList) {
+                    file.setBugId(bugInfo.getId());
+                    file.setCreateTime(TimeUtils.getTodayByDateTime());
+                }
+                bugFileMapper.insertList(fileList);
             }
-            bugFileMapper.insertList(fileList);
         }
-
         /*添加BUG修改日志*/
 
         Map<String, Object> logMap = getChangeLog(null, bugInfo);
@@ -173,13 +175,16 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         }
 
         /*修改文件*/
-        List<BugFile> fileList = JSONArray.parseArray(json.getString("fileList"), BugFile.class);
-        if (fileList != null && fileList.size() > 0) {
-            for (BugFile file : fileList) {
-                file.setBugId(bugInfo.getId());
-                file.setCreateTime(TimeUtils.getTodayByDateTime());
+        String filelist = json.getString("fileList");
+        if(StringUtils.isNotBlank(filelist)) {
+            List<BugFile> fileList = JSONArray.parseArray(filelist, BugFile.class);
+            if (fileList != null && fileList.size() > 0) {
+                for (BugFile file : fileList) {
+                    file.setBugId(bugInfo.getId());
+                    file.setCreateTime(TimeUtils.getTodayByDateTime());
+                }
+                bugFileMapper.insertList(fileList);
             }
-            bugFileMapper.insertList(fileList);
         }
 
         /*添加BUG修改日志*/

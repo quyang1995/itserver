@@ -84,15 +84,17 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		demandMapper.insert(demand);
 
 		//添加文件
-		List<DemandFile> fileList = JSONArray.parseArray(json.getString("fileList"), DemandFile.class);
-		if(fileList!= null && fileList.size()>0) {
-			for (DemandFile demandFile : fileList) {
-				demandFile.setDemandId(demand.getId());
-				demandFile.setCreateTime(TimeUtils.getTodayByDateTime());
+		String filelist = json.getString("fileList");
+		if(StringUtils.isNotBlank(filelist)) {
+			List<DemandFile> fileList = JSONArray.parseArray(filelist, DemandFile.class);
+			if (fileList != null && fileList.size() > 0) {
+				for (DemandFile demandFile : fileList) {
+					demandFile.setDemandId(demand.getId());
+					demandFile.setCreateTime(TimeUtils.getTodayByDateTime());
+				}
+				demandFileMapper.insertList(fileList);
 			}
-			demandFileMapper.insertList(fileList);
 		}
-
 
 		/*新增需求更新日志*/
 		demand.setModifiedTime(TimeUtils.getTodayByDateTime());
@@ -170,14 +172,18 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 
 
 		/*更新文件 不删除原有文件，在原有文件的基础上添加新文件*/
-		List<DemandFile> list = JSONArray.parseArray((String)map.get("fileList"),DemandFile.class);
-		if(list != null && list.size()>0) {
-			for (DemandFile file:list) {
-				file.setDemandId(demand.getId());
-				file.setCreateTime(TimeUtils.getTodayByDateTime());
+		String filelist = (String)map.get("fileList");
+		if(StringUtils.isNotBlank(filelist)) {
+			List<DemandFile> list = JSONArray.parseArray(filelist, DemandFile.class);
+			if (list != null && list.size() > 0) {
+				for (DemandFile file : list) {
+					file.setDemandId(demand.getId());
+					file.setCreateTime(TimeUtils.getTodayByDateTime());
+				}
+				demandFileMapper.insertList(list);
 			}
-			demandFileMapper.insertList(list);
 		}
+
 		/*添加文件结束*/
 		demand.setCreateTime(selectDemandOne.getCreateTime());
 		demandMapper.updateByPrimaryKey(demand);
