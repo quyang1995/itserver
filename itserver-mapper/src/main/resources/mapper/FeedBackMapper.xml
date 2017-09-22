@@ -53,7 +53,13 @@
     SELECT
     <include refid="Base_Column_List" />
     FROM feed_back
-    WHERE modified_account_id = #{accountId}
+    WHERE 1=1
+      <if test='accountId != "" and accountId != null'>
+          and modified_account_id = #{accountId}
+      </if>
+      <if test='feedbackPhone != "" and feedbackPhone != null and (accountId == "" or accountId == null)'>
+          and feedback_phone = #{feedbackPhone}
+      </if>
     <if test='status != "" and status != null  and status != -1'>
       and status = #{status}
     </if>

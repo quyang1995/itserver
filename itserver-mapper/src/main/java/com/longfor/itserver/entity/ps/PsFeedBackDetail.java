@@ -19,6 +19,10 @@ public class PsFeedBackDetail extends FeedBack implements Serializable {
     private List<DemandComment> demandCommentList;
     @Transient
     private List<BugComment> bugCommentList;
+    @Transient
+    private List<BugFile> bugFileList;
+    @Transient
+    private List<DemandFile> demandFileList;
 
     public List<DemandComment> getDemandCommentList() {
         return demandCommentList;
@@ -34,5 +38,21 @@ public class PsFeedBackDetail extends FeedBack implements Serializable {
 
     public void setBugCommentList(List<BugComment> bugCommentList) {
         this.bugCommentList = bugCommentList;
+    }
+
+    public List<BugFile> getBugFileList() {
+        return bugFileList;
+    }
+
+    public void setBugFileList(List<BugFile> bugFileList) {
+        this.bugFileList = bugFileList;
+    }
+
+    public List<DemandFile> getDemandFileList() {
+        return demandFileList;
+    }
+
+    public void setDemandFileList(List<DemandFile> demandFileList) {
+        this.demandFileList = demandFileList;
     }
 }

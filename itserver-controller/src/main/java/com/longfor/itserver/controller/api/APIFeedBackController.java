@@ -11,6 +11,7 @@ import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.*;
 import com.longfor.itserver.entity.ps.PsFeedBackDetail;
 import net.mayee.commons.helper.APIHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,6 +54,12 @@ public class APIFeedBackController extends BaseController {
 		@SuppressWarnings("unchecked")
         Map<String,String> paramsMap = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
+		//二者不可都为空
+		String accountId = paramsMap.get("accountId");
+		String feedbackPhone = paramsMap.get("feedbackPhone");
+		if (accountId == null && StringUtils.isBlank(accountId) && feedbackPhone == null && StringUtils.isBlank(feedbackPhone)) {
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E1201, "accountId", "feedbackPhone");
+		}
 		/* 生成查询用Example */
 		ELExample elExample = new ELExample(request, FeedBack.class);
 		/* 查询数据 and admin权限判断 */
@@ -116,6 +123,12 @@ public class APIFeedBackController extends BaseController {
 				demandComment.setDemandId(demand.getId());
 				List<DemandComment> demandCommentList = this.getDemandCommentService().select(demandComment);
 				feedBack.setDemandCommentList(demandCommentList);
+
+				//需求相关文件信息
+				DemandFile file = new DemandFile();
+				file.setDemandId(demand.getId());
+				List<DemandFile> fileList  = this.getDemandFileService().select(file);
+				feedBack.setDemandFileList(fileList);
 			}
 		}else if(feedBack.getType().equals(0)){
 			BugInfo bugInfo = new BugInfo();
@@ -126,6 +139,12 @@ public class APIFeedBackController extends BaseController {
 				bugComment.setBugId(bugInfoList.get(0).getId());
 				List<BugComment> bugCommentList = this.getBugCommentService().select(bugComment);
 				feedBack.setBugCommentList(bugCommentList);
+
+				//bug相关文件信息
+				BugFile file = new BugFile();
+				file.setBugId(bugInfoList.get(0).getId());
+				List<BugFile> fileList  = this.getBugFileService().select(file);
+				feedBack.setBugFileList(fileList);
 			}
 		}
 
@@ -230,7 +249,7 @@ public class APIFeedBackController extends BaseController {
 			out.close();
 			FileInputStream fis = new FileInputStream(sbRealPath.toString());
 			filemap.put("filePath",sbRealPath.toString());
-			filemap.put("fileName", uuid);
+			filemap.put("fileName", uuid + ".jpg");
 			filemap.put("fileSuffix", "jpg");
 			filemap.put("fileSize", fis.available());
 		}catch (Exception e){
