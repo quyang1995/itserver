@@ -1734,6 +1734,146 @@ public class DemandExample {
             addCriterion("modified_time not between", value1, value2, "modifiedTime");
             return (Criteria) this;
         }
+
+        public Criteria andFeedbackPhoneIsNull() {
+            addCriterion("feedback_phone is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackPhoneIsNotNull() {
+            addCriterion("feedback_phone is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackPhoneEqualTo(String value) {
+            addCriterion("feedback_phone =", value, "feedbackPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackPhoneNotEqualTo(String value) {
+            addCriterion("feedback_phone <>", value, "feedbackPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackPhoneGreaterThan(String value) {
+            addCriterion("feedback_phone >", value, "feedbackPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackPhoneGreaterThanOrEqualTo(String value) {
+            addCriterion("feedback_phone >=", value, "feedbackPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackPhoneLessThan(String value) {
+            addCriterion("feedback_phone <", value, "feedbackPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackPhoneLessThanOrEqualTo(String value) {
+            addCriterion("feedback_phone <=", value, "feedbackPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackPhoneLike(String value) {
+            addCriterion("feedback_phone like", value, "feedbackPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackPhoneNotLike(String value) {
+            addCriterion("feedback_phone not like", value, "feedbackPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackPhoneIn(List<String> values) {
+            addCriterion("feedback_phone in", values, "feedbackPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackPhoneNotIn(List<String> values) {
+            addCriterion("feedback_phone not in", values, "feedbackPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackPhoneBetween(String value1, String value2) {
+            addCriterion("feedback_phone between", value1, value2, "feedbackPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackPhoneNotBetween(String value1, String value2) {
+            addCriterion("feedback_phone not between", value1, value2, "feedbackPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackNameIsNull() {
+            addCriterion("feedback_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackNameIsNotNull() {
+            addCriterion("feedback_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackNameEqualTo(String value) {
+            addCriterion("feedback_name =", value, "feedbackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackNameNotEqualTo(String value) {
+            addCriterion("feedback_name <>", value, "feedbackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackNameGreaterThan(String value) {
+            addCriterion("feedback_name >", value, "feedbackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackNameGreaterThanOrEqualTo(String value) {
+            addCriterion("feedback_name >=", value, "feedbackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackNameLessThan(String value) {
+            addCriterion("feedback_name <", value, "feedbackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackNameLessThanOrEqualTo(String value) {
+            addCriterion("feedback_name <=", value, "feedbackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackNameLike(String value) {
+            addCriterion("feedback_name like", value, "feedbackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackNameNotLike(String value) {
+            addCriterion("feedback_name not like", value, "feedbackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackNameIn(List<String> values) {
+            addCriterion("feedback_name in", values, "feedbackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackNameNotIn(List<String> values) {
+            addCriterion("feedback_name not in", values, "feedbackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackNameBetween(String value1, String value2) {
+            addCriterion("feedback_name between", value1, value2, "feedbackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackNameNotBetween(String value1, String value2) {
+            addCriterion("feedback_name not between", value1, value2, "feedbackName");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -67,7 +67,7 @@
             <property ref="pageNum"/>
             <property ref="pageSize"/>
             <property name="accountId" type="string" required="true" maxLength="30" />
-            <property name="status" type="string" required="true"/>
+            <property name="status" type="int" required="true" area="0,1,-1"/>
             <property name="mySelf" type="string" required="true" maxLength="30"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
         </request>
@@ -85,7 +85,7 @@
             <property ref="pageNum"/>
             <property ref="pageSize"/>
             <property name="accountId" type="string" required="true" maxLength="30"/>
-            <property name="status" type="string" required="true"/>
+            <property name="status" type="int" required="true" area="0,1,-1"/>
             <property name="mySelf" type="string" required="true" maxLength="30"/>
         </request>
     </item>
@@ -140,8 +140,8 @@
             <property name="descp" type="string" required="false" maxLength="3000" />
             <property name="contactAccountId" type="string" required="true" maxLength="500" />
             <property name="likeProgram" type="string" required="false" maxLength="20" />
-            <property name="type" type="int" required="true" />
-            <property name="status" type="int" required="true" />
+            <property name="type" type="int" required="true" area="0,1" />
+            <property name="status" type="int" required="true" area="0,1" />
             <property name="personLiableList" type="string" required="true"/>
             <property name="programManagerList" type="string" required="false"/>
             <property name="productManagerList" type="string" required="false"/>
@@ -166,8 +166,8 @@
             <property name="descp" type="string" required="false" maxLength="3000" />
             <property name="contactAccountId" type="string" required="true" maxLength="500" />
             <property name="likeProgram" type="string" required="false" maxLength="20" />
-            <property name="type" type="int" required="true" />
-            <property name="status" type="int" required="true" />
+            <property name="type" type="int" required="true" area="0,1" />
+            <property name="status" type="int" required="true" area="0,1" />
             <property name="personLiableList" type="string" required="true"/>
             <property name="programManagerList" type="string" required="false"/>
             <property name="productManagerList" type="string" required="false"/>
@@ -196,8 +196,8 @@
             <property ref="pageNum"/>
             <property ref="pageSize"/>
             <property name="accountId" type="string" required="true" maxLength="30"/>
-            <property name="programStatus" type="int" required="true"/>
-            <property name="isPart" type="int" required="true"/>
+            <property name="programStatus" type="int" required="true" area="-1,0,1,2"/>
+            <property name="isPart" type="int" required="true" area="0,1"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
             <property name="productId" type="int" required="false" />
         </request>
@@ -228,8 +228,8 @@
             <property ref="pageNum"/>
             <property ref="pageSize"/>
             <property name="accountId" type="string" required="true" maxLength="30"/>
-            <property name="programStatus" type="int" required="true"/>
-            <property name="isPart" type="int" required="true"/>
+            <property name="programStatus" type="int" required="true" area="-1,0,1,2"/>
+            <property name="isPart" type="int" required="true" area="0,1"/>
             <property name="productId" type="int" required="true"/>
         </request>
     </item>
@@ -265,8 +265,8 @@
             <property name="releaseDate" type="string" required="true" maxLength="20"/>
             <property name="likeProduct" type="string" required="false" maxLength="20"/>
             <property name="likeProgram" type="string" required="false" maxLength="20"/>
-            <property name="type" type="int" required="true"/>
-            <property name="programStatus" type="int" required="true"/>
+            <property name="type" type="int" required="true" area="0,1"/>
+            <property name="programStatus" type="int" required="true" area="0,1,2"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="true" maxLength="50"/>
             <property name="personLiableList" type="string" required="true"/>
@@ -289,8 +289,8 @@
             <property name="releaseDate" type="string" required="true" maxLength="20"/>
             <property name="likeProduct" type="string" required="false" maxLength="20"/>
             <property name="likeProgram" type="string" required="false" maxLength="20"/>
-            <property name="type" type="int" required="true"/>
-            <property name="programStatus" type="int" required="true"/>
+            <property name="type" type="int" required="true" area="0,1"/>
+            <property name="programStatus" type="int" required="true" area="0,1,2"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="true" maxLength="50"/>
             <property name="personLiableList" type="string" required="true"/>
@@ -322,6 +322,7 @@
             <property name="type" type="int" required="true" area="0,1"/>
             <property name="channel" type="int" required="true" area="0,1,2,3"/>
             <property name="filePath" type="string" required="false" maxLength="3000"/>
+            <property name="fileList" type="string" required="false"/>
         </request>
     </item>
 
@@ -336,9 +337,10 @@
         <request>
             <property ref="pageNum"/>
             <property ref="pageSize"/>
-            <property name="accountId" type="string" required="true" maxLength="30"/>
-            <property name="status" type="int" required="true"/>
-            <property name="channel" type="int" required="false"/>
+            <property name="accountId" type="string" required="false" maxLength="30"/>
+            <property name="feedbackPhone" ref="mobileNo" />
+            <property name="status" type="int" required="true" area="-1,0,1,2,3,4"/>
+            <property name="channel" type="int" required="false" area="-1,0,1,2,3"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
         </request>
     </item>
@@ -386,12 +388,12 @@
             <property ref="pageNum"/>
             <property ref="pageSize"/>
             <property name="accountId" type="string" required="true" maxLength="30"/>
-            <property name="status" type="int" required="true"/>
+            <property name="status" type="int" required="true" area="-1,0,1,2,3,4"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
-            <property name="channel" type="int" required="false" />
+            <property name="channel" type="int" required="false" area="-1,0,1,2,3" />
             <property name="productId" type="int" required="false" />
             <property name="programId" type="int" required="false" />
-            <property name="isPart" type="int" required="false"/>
+            <property name="isPart" type="int" required="false" area="0,1,2"/>
         </request>
     </item>
 
@@ -419,7 +421,7 @@
     <item id="api_bug_add" description="新增BUG基本信息">
         <request>
             <property name="relationId" type="int" required="true"/>
-            <property name="relationType" type="int" required="true"/>
+            <property name="relationType" type="int" required="true" area="1,2"/>
             <property name="name" type="string" required="true" maxLength="100"/>
             <property name="descp" type="string" required="false" maxLength="3000"/>
             <property name="reproductionStep" type="string" required="false" maxLength="3000"/>
@@ -429,10 +431,10 @@
             <property name="ccAccount" type="string" required="false" />
             <property name="likeProduct" type="string" required="false" maxLength="500"/>
             <property name="likeProgram" type="string" required="false" maxLength="500"/>
-            <property name="level" type="int" required="true"/>
+            <property name="level" type="int" required="true" area="0,1,2,3"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="false" maxLength="50"/>
-            <property name="channel" type="int" required="true" />
+            <property name="channel" type="int" required="true" area="0,1,2,3" />
             <property name="fileList" type="string" required="false" />
         </request>
     </item>
@@ -448,7 +450,7 @@
         <request>
             <property name="id" type="int" required="true"/>
             <property name="relationId" type="int" required="true"/>
-            <property name="relationType" type="int" required="true"/>
+            <property name="relationType" type="int" required="true" area="1,2"/>
             <property name="name" type="string" required="true" maxLength="100"/>
             <property name="descp" type="string" required="false" maxLength="3000"/>
             <property name="reproductionStep" type="string" required="false" maxLength="3000"/>
@@ -458,10 +460,10 @@
             <property name="ccAccount" type="string" required="false"/>
             <property name="likeProduct" type="string" required="false" maxLength="500"/>
             <property name="likeProgram" type="string" required="false" maxLength="500"/>
-            <property name="level" type="int" required="true"/>
+            <property name="level" type="int" required="true" area="0,1,2,3"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="false" maxLength="50"/>
-            <property name="channel" type="int" required="true" />
+            <property name="channel" type="int" required="true" area="0,1,2,3" />
             <property name="fileList" type="string" required="false" />
         </request>
     </item>
@@ -524,12 +526,12 @@
             <property ref="pageNum"/>
             <property ref="pageSize"/>
             <property name="accountId" type="string" required="true" maxLength="30"/>
-            <property name="status" type="int" required="true"/>
+            <property name="status" type="int" required="true" area="-1,0,1,2,3,4"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
-            <property name="channel" type="int" required="false" />
+            <property name="channel" type="int" required="false" area="-1,0,1,2,3" />
             <property name="productId" type="int" required="false" />
             <property name="programId" type="int" required="false" />
-            <property name="isPart" type="int" required="false"/>
+            <property name="isPart" type="int" required="false" area="0,1,2"/>
         </request>
     </item >
 
@@ -542,7 +544,7 @@
         <request>
             <property name="id" type="int" required="true"/>
             <property name="relationId" type="int" required="true"/>
-            <property name="relationType" type="int" required="true"/>
+            <property name="relationType" type="int" required="true" area="1,2"/>
             <property name="name" type="string" required="true" maxLength="100"/>
             <property name="descp" type="string" required="false" maxLength="3000"/>
             <property name="hopeDate" type="string" required="true" maxLength="20"/>
@@ -550,10 +552,10 @@
             <property name="ccAccount" type="string" required="false"/>
             <property name="likeProduct" type="string" required="false" maxLength="500"/>
             <property name="likeProgram" type="string" required="false" maxLength="500"/>
-            <property name="level" type="int" required="true"/>
+            <property name="level" type="int" required="true" area="0,1,2,3"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="false" maxLength="50"/>
-            <property name="channel" type="int" required="true" />
+            <property name="channel" type="int" required="true" area="0,1,2,3" />
             <property name="fileList" type="string" required="false" />
         </request>
     </item>
@@ -568,7 +570,7 @@
     <item id="api_demand_add" description="添加需求信息">
         <request>
             <property name="relationId" type="int" required="true"/>
-            <property name="relationType" type="int" required="true"/>
+            <property name="relationType" type="int" required="true" area="1,2"/>
             <property name="name" type="string" required="true" maxLength="100"/>
             <property name="descp" type="string" required="false" maxLength="3000"/>
             <property name="hopeDate" type="string" required="true" maxLength="20"/>
@@ -576,10 +578,10 @@
             <property name="ccAccount" type="string" required="false"/>
             <property name="likeProduct" type="string" required="false" maxLength="500"/>
             <property name="likeProgram" type="string" required="false" maxLength="500"/>
-            <property name="level" type="int" required="true"/>
+            <property name="level" type="int" required="true" area="0,1,2,3"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="false" maxLength="50"/>
-            <property name="channel" type="int" required="true" />
+            <property name="channel" type="int" required="true" area="0,1,2,3" />
             <property name="fileList" type="string" required="false" />
         </request>
     </item>
@@ -724,7 +726,7 @@
     <item id="api_bug_update_status" description="BUG状态变更">
         <request>
             <property name="bugId" type="int" required="true"/>
-            <property name="status" type="int" required="true"/>
+            <property name="status" type="int" required="true" area="0,1,2,3,4"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="true" maxLength="50"/>
         </request>
@@ -754,7 +756,7 @@
     <item id="api_demand_update_status" description="需求状态变更">
         <request>
             <property name="demandId" type="int" required="true"/>
-            <property name="status" type="int" required="true"/>
+            <property name="status" type="int" required="true" area="0,1,2,3,4"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="true" maxLength="50"/>
         </request>
@@ -801,7 +803,7 @@
             <property ref="pageNum"/>
             <property ref="pageSize"/>
             <property name="relationId" type="int" required="false" />
-            <property name="relationType" type="int" required="false" />
+            <property name="relationType" type="int" required="false" area="1,2" />
             <property name="accountId" type="string" required="false" />
         </request>
     </item>
@@ -817,7 +819,7 @@
             <property ref="pageNum"/>
             <property ref="pageSize"/>
             <property name="relationId" type="int" required="false" />
-            <property name="relationType" type="int" required="false" />
+            <property name="relationType" type="int" required="false" area="1,2" />
             <property name="accountId" type="string" required="false"/>
         </request>
     </item>
@@ -830,7 +832,7 @@
     <item id="api_program_update_status" description="项目状态变更">
         <request>
             <property name="programId" type="int" required="true"/>
-            <property name="status" type="int" required="true"/>
+            <property name="status" type="int" required="true" area="0,1,2"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="true" maxLength="50"/>
         </request>
@@ -881,7 +883,7 @@
     <item id="api_product_update_status" description="产品状态变更">
         <request>
             <property name="productId" type="int" required="true"/>
-            <property name="status" type="int" required="true"/>
+            <property name="status" type="int" required="true" area="0,1"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="true" maxLength="50"/>
         </request>
@@ -896,5 +898,31 @@
         <request>
             <property name="id" type="int" required="true"/>
         </request>
+    </item>
+
+    <!--
+        URL:
+        /api/feedBack/baseFileUpload
+        说明:反馈上传图片
+    -->
+    <item id="api_feedBack_baseFileUpload" description="反馈上传图片">
+        <request>
+            <property name="baseFile" type="string" required="true"/>
+        </request>
+    </item>
+    <!--
+        URL:
+        /down/load/bug
+        说明:下载BUG文件
+    -->
+    <item id="down_load_bug" description="下载BUG文件">
+    </item>
+    <!--
+        URL:
+        /api/download/demand
+        说明:下载需求文件
+    -->
+    <item id="down_load_demand" description="下载需求文件">
+
     </item>
 </api>

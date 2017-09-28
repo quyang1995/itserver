@@ -183,9 +183,9 @@ CREATE TABLE IF NOT EXISTS `itplus`.`program` (
   COMMENT '灰度日期',
   `release_date`        DATETIME        NOT NULL
   COMMENT '发布日期',
-  `ued_date`            DATETIME        NOT NULL
+  `ued_date`            DATETIME        NULL
   COMMENT 'UED日期',
-  `architecture_date`   DATETIME        NOT NULL
+  `architecture_date`   DATETIME        NULL
   COMMENT '架构日期',
   `like_product`        VARCHAR(500)    NULL
   COMMENT '关联产品id字符串，e.g. 1,2,3,...',
@@ -344,6 +344,10 @@ CREATE TABLE IF NOT EXISTS `itplus`.`demand` (
   COMMENT '状态：0=已取消，1=已关闭，2=待处理，3=处理中，4=已完成',
   `channel`                INT             NOT NULL
   COMMENT '渠道: 0=PC，1=OA，2=龙信，3=龙客',
+  `feedback_phone`     VARCHAR(20)     NULL
+  COMMENT '反馈人电话',
+  `feedback_name`     VARCHAR(20)     NULL
+  COMMENT '反馈人姓名',
   `modified_account_id`    VARCHAR(50)     NULL
   COMMENT '最后修改人账户id',
   `modified_name`          VARCHAR(50)     NULL
@@ -483,6 +487,10 @@ CREATE TABLE IF NOT EXISTS `itplus`.`bug_info` (
   COMMENT '状态：0=已取消，1=已关闭，2=待处理，3=处理中，4=已完成',
   `channel`                INT             NOT NULL
   COMMENT '渠道: 0=PC，1=OA，2=龙信，3=龙客',
+  `feedback_phone`     VARCHAR(20)     NULL
+  COMMENT '反馈人电话',
+  `feedback_name`     VARCHAR(20)     NULL
+  COMMENT '反馈人姓名',
   `modified_account_id`    VARCHAR(50)     NULL
   COMMENT '最后修改人账户id',
   `modified_name`          VARCHAR(50)     NULL
@@ -623,7 +631,25 @@ CREATE TABLE IF NOT EXISTS `itplus`.`feed_back` (
   ENGINE = InnoDB;
 
 
-
+-- -----------------------------------------------------
+-- Table `itplus`.`feed_back_file` 反馈附件
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `itplus`.`feed_back_file` (
+  `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `feed_back_id`      BIGINT    NULL
+  COMMENT '反馈',
+  `file_name`   VARCHAR(500)    NULL
+  COMMENT '文件名称',
+  `file_suffix` VARCHAR(50)     NULL
+  COMMENT '文件扩展名',
+  `file_size`   VARCHAR(50)     NULL
+  COMMENT '文件大小',
+  `file_path`   TEXT            NULL
+  COMMENT '文件绝对路径',
+  `create_time` TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = InnoDB;
 
 
 

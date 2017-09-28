@@ -48,15 +48,18 @@
         feedback_name
     </sql>
 
-  <!-- BUG列表 -->
+    <!-- 反馈列表 -->
   <select id="feedBackList" parameterType="map" resultMap="BaseResultMap">
     SELECT
     <include refid="Base_Column_List" />
     FROM feed_back
     WHERE 1=1
-    <if test="isAdmin == 0">
-      AND modified_account_id = #{accountId}
-    </if>
+      <if test='accountId != "" and accountId != null'>
+          and modified_account_id = #{accountId}
+      </if>
+      <if test='feedbackPhone != "" and feedbackPhone != null and (accountId == "" or accountId == null)'>
+          and feedback_phone = #{feedbackPhone}
+      </if>
     <if test='status != "" and status != null  and status != -1'>
       and status = #{status}
     </if>
@@ -80,15 +83,13 @@
     <!-- 反馈表状态统计 -->
     <select id="countStatus" parameterType="map" resultType="com.longfor.itserver.entity.ps.PsFeedBackStatus">
         SELECT
-            sum(f.`status` = 0) AS "cancel",
-            sum(f.`status` = 1) AS "close",
-            sum(f.`status` = 2) AS "pending",
-            sum(f.`status` = 3) AS "working",
-            sum(f.`status` = 4) AS "completed"
+            IFNULL(sum(f.`status` = 0),0) AS "cancel",
+            IFNULL(sum(f.`status` = 1),0) AS "close",
+            IFNULL(sum(f.`status` = 2),0) AS "pending",
+            IFNULL(sum(f.`status` = 3),0) AS "working",
+            IFNULL(sum(f.`status` = 4),0) AS "completed"
         FROM feed_back f
-        <if test="isAdmin == 0">
-            WHERE modified_account_id = #{accountId}
-        </if>
+        WHERE modified_account_id = #{accountId}
     </select>
 
 </mapper>

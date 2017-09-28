@@ -1,62 +1,62 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="generator.warehouse.client.FeedBackMapper" >
-  <resultMap id="BaseResultMap" type="generator.warehouse.entity.FeedBack" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="generator.warehouse.client.FeedBackMapper">
+  <resultMap id="BaseResultMap" type="generator.warehouse.entity.FeedBack">
     <!--
       WARNING - @mbggenerated
     -->
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="product_id" property="productId" jdbcType="BIGINT" />
-    <result column="product_code" property="productCode" jdbcType="VARCHAR" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="problem_title" property="problemTitle" jdbcType="VARCHAR" />
-    <result column="problem_descp" property="problemDescp" jdbcType="VARCHAR" />
-    <result column="reproduction_step" property="reproductionStep" jdbcType="VARCHAR" />
-    <result column="sys_environment" property="sysEnvironment" jdbcType="VARCHAR" />
-    <result column="contact_account_id" property="contactAccountId" jdbcType="VARCHAR" />
-    <result column="contact_employee_code" property="contactEmployeeCode" jdbcType="BIGINT" />
-    <result column="contact_employee_name" property="contactEmployeeName" jdbcType="VARCHAR" />
-    <result column="contact_full_dept_path" property="contactFullDeptPath" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="INTEGER" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="channel" property="channel" jdbcType="INTEGER" />
-    <result column="modified_account_id" property="modifiedAccountId" jdbcType="VARCHAR" />
-    <result column="modified_employee_code" property="modifiedEmployeeCode" jdbcType="BIGINT" />
-    <result column="modified_name" property="modifiedName" jdbcType="VARCHAR" />
-    <result column="modified_full_dept_path" property="modifiedFullDeptPath" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
-    <result column="feedback_phone" property="feedbackPhone" jdbcType="VARCHAR" />
-    <result column="feedback_name" property="feedbackName" jdbcType="VARCHAR" />
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="problem_title" jdbcType="VARCHAR" property="problemTitle" />
+    <result column="problem_descp" jdbcType="VARCHAR" property="problemDescp" />
+    <result column="reproduction_step" jdbcType="VARCHAR" property="reproductionStep" />
+    <result column="sys_environment" jdbcType="VARCHAR" property="sysEnvironment" />
+    <result column="contact_account_id" jdbcType="VARCHAR" property="contactAccountId" />
+    <result column="contact_employee_code" jdbcType="BIGINT" property="contactEmployeeCode" />
+    <result column="contact_employee_name" jdbcType="VARCHAR" property="contactEmployeeName" />
+    <result column="contact_full_dept_path" jdbcType="VARCHAR" property="contactFullDeptPath" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="channel" jdbcType="INTEGER" property="channel" />
+    <result column="modified_account_id" jdbcType="VARCHAR" property="modifiedAccountId" />
+    <result column="modified_employee_code" jdbcType="BIGINT" property="modifiedEmployeeCode" />
+    <result column="modified_name" jdbcType="VARCHAR" property="modifiedName" />
+    <result column="modified_full_dept_path" jdbcType="VARCHAR" property="modifiedFullDeptPath" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="feedback_phone" jdbcType="VARCHAR" property="feedbackPhone" />
+    <result column="feedback_name" jdbcType="VARCHAR" property="feedbackName" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="generator.warehouse.entity.FeedBack" extends="BaseResultMap" >
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="generator.warehouse.entity.FeedBack">
     <!--
       WARNING - @mbggenerated
     -->
-    <result column="file_path" property="filePath" jdbcType="LONGVARCHAR" />
+    <result column="file_path" jdbcType="LONGVARCHAR" property="filePath" />
   </resultMap>
-  <sql id="Example_Where_Clause" >
+  <sql id="Example_Where_Clause">
     <!--
       WARNING - @mbggenerated
     -->
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -67,28 +67,28 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Update_By_Example_Where_Clause" >
+  <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - @mbggenerated
     -->
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -99,7 +99,7 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List" >
+  <sql id="Base_Column_List">
     <!--
       WARNING - @mbggenerated
     -->
@@ -109,150 +109,150 @@
     modified_name, modified_full_dept_path, create_time, modified_time, feedback_phone, 
     feedback_name
   </sql>
-  <sql id="Blob_Column_List" >
+  <sql id="Blob_Column_List">
     <!--
       WARNING - @mbggenerated
     -->
     file_path
   </sql>
-  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="generator.warehouse.entity.FeedBackExample" >
+  <select id="selectByExampleWithBLOBs" parameterType="generator.warehouse.entity.FeedBackExample" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - @mbggenerated
     -->
     select
-    <if test="distinct" >
+    <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
     from feed_back
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null" >
+    <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="generator.warehouse.entity.FeedBackExample" >
+  <select id="selectByExample" parameterType="generator.warehouse.entity.FeedBackExample" resultMap="BaseResultMap">
     <!--
       WARNING - @mbggenerated
     -->
     select
-    <if test="distinct" >
+    <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
     from feed_back
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null" >
+    <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="generator.warehouse.entity.FeedBackExample" >
+  <delete id="deleteByExample" parameterType="generator.warehouse.entity.FeedBackExample">
     <!--
       WARNING - @mbggenerated
     -->
     delete from feed_back
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <select id="countByExample" parameterType="generator.warehouse.entity.FeedBackExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="generator.warehouse.entity.FeedBackExample" resultType="java.lang.Integer">
     <!--
       WARNING - @mbggenerated
     -->
     select count(*) from feed_back
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+  <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - @mbggenerated
     -->
     update feed_back
-    <set >
-      <if test="record.id != null" >
+    <set>
+      <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.productId != null" >
+      <if test="record.productId != null">
         product_id = #{record.productId,jdbcType=BIGINT},
       </if>
-      <if test="record.productCode != null" >
+      <if test="record.productCode != null">
         product_code = #{record.productCode,jdbcType=VARCHAR},
       </if>
-      <if test="record.name != null" >
+      <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.problemTitle != null" >
+      <if test="record.problemTitle != null">
         problem_title = #{record.problemTitle,jdbcType=VARCHAR},
       </if>
-      <if test="record.problemDescp != null" >
+      <if test="record.problemDescp != null">
         problem_descp = #{record.problemDescp,jdbcType=VARCHAR},
       </if>
-      <if test="record.reproductionStep != null" >
+      <if test="record.reproductionStep != null">
         reproduction_step = #{record.reproductionStep,jdbcType=VARCHAR},
       </if>
-      <if test="record.sysEnvironment != null" >
+      <if test="record.sysEnvironment != null">
         sys_environment = #{record.sysEnvironment,jdbcType=VARCHAR},
       </if>
-      <if test="record.contactAccountId != null" >
+      <if test="record.contactAccountId != null">
         contact_account_id = #{record.contactAccountId,jdbcType=VARCHAR},
       </if>
-      <if test="record.contactEmployeeCode != null" >
+      <if test="record.contactEmployeeCode != null">
         contact_employee_code = #{record.contactEmployeeCode,jdbcType=BIGINT},
       </if>
-      <if test="record.contactEmployeeName != null" >
+      <if test="record.contactEmployeeName != null">
         contact_employee_name = #{record.contactEmployeeName,jdbcType=VARCHAR},
       </if>
-      <if test="record.contactFullDeptPath != null" >
+      <if test="record.contactFullDeptPath != null">
         contact_full_dept_path = #{record.contactFullDeptPath,jdbcType=VARCHAR},
       </if>
-      <if test="record.type != null" >
+      <if test="record.type != null">
         type = #{record.type,jdbcType=INTEGER},
       </if>
-      <if test="record.status != null" >
+      <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
-      <if test="record.channel != null" >
+      <if test="record.channel != null">
         channel = #{record.channel,jdbcType=INTEGER},
       </if>
-      <if test="record.modifiedAccountId != null" >
+      <if test="record.modifiedAccountId != null">
         modified_account_id = #{record.modifiedAccountId,jdbcType=VARCHAR},
       </if>
-      <if test="record.modifiedEmployeeCode != null" >
+      <if test="record.modifiedEmployeeCode != null">
         modified_employee_code = #{record.modifiedEmployeeCode,jdbcType=BIGINT},
       </if>
-      <if test="record.modifiedName != null" >
+      <if test="record.modifiedName != null">
         modified_name = #{record.modifiedName,jdbcType=VARCHAR},
       </if>
-      <if test="record.modifiedFullDeptPath != null" >
+      <if test="record.modifiedFullDeptPath != null">
         modified_full_dept_path = #{record.modifiedFullDeptPath,jdbcType=VARCHAR},
       </if>
-      <if test="record.createTime != null" >
+      <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.modifiedTime != null" >
+      <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.feedbackPhone != null" >
+      <if test="record.feedbackPhone != null">
         feedback_phone = #{record.feedbackPhone,jdbcType=VARCHAR},
       </if>
-      <if test="record.feedbackName != null" >
+      <if test="record.feedbackName != null">
         feedback_name = #{record.feedbackName,jdbcType=VARCHAR},
       </if>
-      <if test="record.filePath != null" >
+      <if test="record.filePath != null">
         file_path = #{record.filePath,jdbcType=LONGVARCHAR},
       </if>
     </set>
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map" >
+  <update id="updateByExampleWithBLOBs" parameterType="map">
     <!--
       WARNING - @mbggenerated
     -->
@@ -281,11 +281,11 @@
       feedback_phone = #{record.feedbackPhone,jdbcType=VARCHAR},
       feedback_name = #{record.feedbackName,jdbcType=VARCHAR},
       file_path = #{record.filePath,jdbcType=LONGVARCHAR}
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map" >
+  <update id="updateByExample" parameterType="map">
     <!--
       WARNING - @mbggenerated
     -->
@@ -313,7 +313,7 @@
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       feedback_phone = #{record.feedbackPhone,jdbcType=VARCHAR},
       feedback_name = #{record.feedbackName,jdbcType=VARCHAR}
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>

@@ -32,6 +32,8 @@
         <result column="modified_name" property="modifiedName" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP"/>
+        <result column="feedback_phone" jdbcType="VARCHAR" property="feedbackPhone" />
+        <result column="feedback_name" jdbcType="VARCHAR" property="feedbackName" />
     </resultMap>
     <resultMap id="BugInfoDetailResultMap" extends="BaseResultMap"
                type="com.longfor.itserver.entity.ps.PsBugInfoDetail">
@@ -46,11 +48,11 @@
         hope_date, callon_account_id, callon_employee_code, callon_employee_name, callon_full_dept_path,
         drafted_account_id, drafted_employee_code, drafted_employee_name, drafted_full_dept_path,
         cc_account, like_product, like_program, level, status, channel, modified_account_id,
-        modified_name, create_time, modified_time
+        modified_name, create_time, modified_time, feedback_phone, feedback_name
     </sql>
 
     <!-- BUG列表 -->
-    <select id="bugList" parameterType="map" resultMap="BaseResultMap">
+    <!--<select id="bugList" parameterType="map" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM bug_info
@@ -78,7 +80,45 @@
             concat(concat('%',#{searchText}),'%'))
         </if>
         ORDER BY create_time DESC
+    </select>-->
+
+
+    <select id="bugList" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM bug_info
+        WHERE 1=1
+        <if test='status != "" and status != null  and status != -1'>
+            and status = #{status}
+        </if>
+        <if test='channel != "" and channel != null and channel != -1'>
+            and channel = #{channel}
+        </if>
+        <if test='isPart == 1'>
+            and callon_account_id = #{accountId, jdbcType=VARCHAR}
+        </if>
+        <if test='isPart == 2'>
+            and drafted_account_id = #{accountId, jdbcType=VARCHAR}
+        </if>
+        <if test='productId !="" and productId != null and productId != -1 and (programId == "" or programId == -1) '>
+            and relation_type = 1 AND relation_id = #{productId}
+            <if test='programId == -1'>
+              OR (
+                relation_type = 2 AND relation_id IN (SELECT id FROM program WHERE product_id = #{productId})
+                )
+            </if>
+        </if>
+        <if test='productId !="" and productId != null and productId != -1 and programId !="" and programId != null and programId != -1'>
+            and  relation_type = 2 AND relation_id = #{programId}
+        </if>
+        <if test='searchText != "" and searchText != null'>
+            and (name like concat(concat('%',#{searchText}),'%') OR callon_employee_name like
+            concat(concat('%',#{searchText}),'%'))
+        </if>
+        ORDER BY create_time DESC
     </select>
+
+
 
     <!-- 通过ID查询BUG -->
     <select id="getBugId" parameterType="java.lang.Long" resultMap="BugInfoDetailResultMap">
@@ -97,14 +137,14 @@
             AND relation_type = #{relationType}
         </if>
         <if test='relationId != "" and relationId != null  and relationId != -1'>
-            and relation_id = #{relationId}
+            AND relation_id = #{relationId}
         </if>
         <if test='accountId != "" and accountId != null ' >
             AND callon_account_id = #{accountId}
         </if>
-        and status != 1
-        and status != 0
-        ORDER BY create_time DESC
+        AND status IN (2,3)
+        ORDER BY
+        modified_time  DESC
     </select>
 
 </mapper>

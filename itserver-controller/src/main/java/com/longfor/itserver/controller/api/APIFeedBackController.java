@@ -11,17 +11,21 @@ import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.*;
 import com.longfor.itserver.entity.ps.PsFeedBackDetail;
 import net.mayee.commons.helper.APIHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sun.misc.BASE64Decoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.io.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * 项目
@@ -50,11 +54,17 @@ public class APIFeedBackController extends BaseController {
 		@SuppressWarnings("unchecked")
         Map<String,String> paramsMap = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
+		//二者不可都为空
+		String accountId = paramsMap.get("accountId");
+		String feedbackPhone = paramsMap.get("feedbackPhone");
+		if (accountId == null && StringUtils.isBlank(accountId) && feedbackPhone == null && StringUtils.isBlank(feedbackPhone)) {
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E1201, "accountId", "feedbackPhone");
+		}
 		/* 生成查询用Example */
 		ELExample elExample = new ELExample(request, FeedBack.class);
 		/* 查询数据 and admin权限判断 */
-		String accountId = paramsMap.get("accountId");
-		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
+//		String accountId = paramsMap.get("accountId");
+//		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
 		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
 		List<FeedBack> feedBackList = this.getFeedBackService().feedBackList(paramsMap);
 
@@ -113,6 +123,12 @@ public class APIFeedBackController extends BaseController {
 				demandComment.setDemandId(demand.getId());
 				List<DemandComment> demandCommentList = this.getDemandCommentService().select(demandComment);
 				feedBack.setDemandCommentList(demandCommentList);
+
+				//需求相关文件信息
+				DemandFile file = new DemandFile();
+				file.setDemandId(demand.getId());
+				List<DemandFile> fileList  = this.getDemandFileService().select(file);
+				feedBack.setDemandFileList(fileList);
 			}
 		}else if(feedBack.getType().equals(0)){
 			BugInfo bugInfo = new BugInfo();
@@ -123,6 +139,12 @@ public class APIFeedBackController extends BaseController {
 				bugComment.setBugId(bugInfoList.get(0).getId());
 				List<BugComment> bugCommentList = this.getBugCommentService().select(bugComment);
 				feedBack.setBugCommentList(bugCommentList);
+
+				//bug相关文件信息
+				BugFile file = new BugFile();
+				file.setBugId(bugInfoList.get(0).getId());
+				List<BugFile> fileList  = this.getBugFileService().select(file);
+				feedBack.setBugFileList(fileList);
 			}
 		}
 
@@ -188,6 +210,55 @@ public class APIFeedBackController extends BaseController {
 		String accountId = paramsMap.get("accountId");
 		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
 		return this.getFeedBackService().countStatus(paramsMap);
+	}
+
+
+	@RequestMapping(value = "/baseFileUpload", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public Map fileCAjax(HttpServletResponse response, HttpServletRequest request) throws Exception {
+		Map<String,String> paramsMap = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		String filePath = ConfigConsts.FILE_ADDRESS;
+		File tmpDir = new File(filePath);
+		if (!tmpDir.exists()) {
+			tmpDir.mkdirs();
+		}
+		//生成图片路径
+		StringBuffer sbRealPath = new StringBuffer();
+		Map<String, Object> filemap = new HashMap<String, Object>();
+		String sb = paramsMap.get("baseFile");
+
+		if(sb == null){
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E9994, "");
+		}
+		sb = sb.substring(sb.indexOf(",")+1,sb.length());
+		BASE64Decoder decoder = new BASE64Decoder();
+		try{
+			//Base64解码
+			byte[] b = decoder.decodeBuffer(sb.toString());
+			for(int i=0;i<b.length;++i){
+				if(b[i]<0){
+					//调整异常数据
+					b[i]+=256;
+				}
+			}
+			String uuid = UUID.randomUUID().toString();
+			sbRealPath.append(filePath).append("/").append(uuid).append(".").append("jpg");
+			OutputStream out = new FileOutputStream(sbRealPath.toString());
+			out.write(b);
+			out.flush();
+			out.close();
+			FileInputStream fis = new FileInputStream(sbRealPath.toString());
+			filemap.put("filePath",sbRealPath.toString());
+			filemap.put("fileName", uuid + ".jpg");
+			filemap.put("fileSuffix", "jpg");
+			filemap.put("fileSize", fis.available());
+		}catch (Exception e){
+			e.printStackTrace();
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E9999, "");
+		}
+
+
+		return filemap;
 	}
 
 }

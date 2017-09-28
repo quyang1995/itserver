@@ -84,15 +84,17 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		demandMapper.insert(demand);
 
 		//添加文件
-		List<DemandFile> fileList = JSONArray.parseArray(json.getString("fileList"), DemandFile.class);
-		if(fileList!= null && fileList.size()>0) {
-			for (DemandFile demandFile : fileList) {
-				demandFile.setDemandId(demand.getId());
-				demandFile.setCreateTime(TimeUtils.getTodayByDateTime());
+		String filelist = json.getString("fileList");
+		if(StringUtils.isNotBlank(filelist)) {
+			List<DemandFile> fileList = JSONArray.parseArray(filelist, DemandFile.class);
+			if (fileList != null && fileList.size() > 0) {
+				for (DemandFile demandFile : fileList) {
+					demandFile.setDemandId(demand.getId());
+					demandFile.setCreateTime(TimeUtils.getTodayByDateTime());
+				}
+				demandFileMapper.insertList(fileList);
 			}
-			demandFileMapper.insertList(fileList);
 		}
-
 
 		/*新增需求更新日志*/
 		demand.setModifiedTime(TimeUtils.getTodayByDateTime());
@@ -170,14 +172,18 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 
 
 		/*更新文件 不删除原有文件，在原有文件的基础上添加新文件*/
-		List<DemandFile> list = JSONArray.parseArray((String)map.get("fileList"),DemandFile.class);
-		if(list != null && list.size()>0) {
-			for (DemandFile file:list) {
-				file.setDemandId(demand.getId());
-				file.setCreateTime(TimeUtils.getTodayByDateTime());
+		String filelist = (String)map.get("fileList");
+		if(StringUtils.isNotBlank(filelist)) {
+			List<DemandFile> list = JSONArray.parseArray(filelist, DemandFile.class);
+			if (list != null && list.size() > 0) {
+				for (DemandFile file : list) {
+					file.setDemandId(demand.getId());
+					file.setCreateTime(TimeUtils.getTodayByDateTime());
+				}
+				demandFileMapper.insertList(list);
 			}
-			demandFileMapper.insertList(list);
 		}
+
 		/*添加文件结束*/
 		demand.setCreateTime(selectDemandOne.getCreateTime());
 		demandMapper.updateByPrimaryKey(demand);
@@ -220,7 +226,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		if(oldDemand == null && newDemand != null){
 			StringBuilder log = new StringBuilder();
 			log.append(newDemand.getModifiedName()).
-					append("新增了需求信息");
+					append(" 新增了需求信息");
 			textList.add(log.toString());
 			map.put("type",2);
 			map.put("logList",textList);
@@ -231,7 +237,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			if(!Objects.equals(oldDemand.getDescp(),newDemand.getDescp())){
 				StringBuilder log = new StringBuilder();
 				log.append(newDemand.getModifiedName()).
-						append("修改了需求描述信息");
+						append(" 修改了需求描述信息");
 				textList.add(log.toString());
 				map.put("type",1);
 			}
@@ -255,7 +261,8 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 					if (StringUtils.isNotBlank(log)){
 						log.append(",");
 					}else{
-						log.append(newDemand.getModifiedName());
+						log.append(newDemand.getModifiedName())
+								.append(" ");
 					}
 					log.append("将 优先级 由[").
 							append(DemandLevelEnum.getByCode(oldDemand.getLevel()).getText()).
@@ -289,7 +296,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 					){
 				StringBuilder log = new StringBuilder();
 				log.append(newDemand.getModifiedName()).
-						append("修改了需求基础信息");
+						append(" 修改了需求基础信息");
 				textList.add(log.toString());
 				map.put("type",2);
 			}
@@ -303,7 +310,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		if (newDemand.getStatus()!=null && !Objects.equals(oldDemand.getStatus(),newDemand.getStatus())){
 
 			log.append(oldDemand.getModifiedName()).
-				append("将 状态 由[").
+				append(" 将 状态 由[").
 				append(DemandStatusEnum.getByCode(oldDemand.getStatus()).getText()).
 				append("]更改为[").
 				append(DemandStatusEnum.getByCode(newDemand.getStatus()).getText()).
@@ -313,7 +320,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		if(newDemand.getCallonAccountId()!=null && !Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())){
 
 				log.append(oldDemand.getModifiedName()).
-					append("将 指派人 由[").
+					append(" 将 指派人 由[").
 					append(oldDemand.getCallonEmployeeName()).
 					append("]更改为[").
 					append(newDemand.getCallonEmployeeName()).
