@@ -112,6 +112,16 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		if (!"".equals(jsonArrUed)) {
 			getAccountLongfor(program, jsonArrUed, "4");
 		}
+		// 测试人员
+		String jsonArrTest = json.get("testingList").toString();
+		if (!"".equals(jsonArrTest)) {
+			getAccountLongfor(program, jsonArrTest, "5");
+		}
+		// 业务人员
+		String jsonArrBusiness = json.get("businessList").toString();
+		if (!"".equals(jsonArrBusiness)) {
+			getAccountLongfor(program, jsonArrBusiness, "6");
+		}
 
         //先生成变动日志
         List<String> changeLogTextList = getChangeLogText(null, program);
@@ -160,6 +170,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 					pe.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
 					pe.setEmployeeTypeId(new Long(AvaStatusEnum.UEDAVA.getCode()));
 					pe.setEmployeeTypeText(AvaStatusEnum.UEDAVA.getText());
+				} else if ("5".equals(id)) {
+					pe.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
+					pe.setEmployeeTypeId(new Long(AvaStatusEnum.TESTINGAVA.getCode()));
+					pe.setEmployeeTypeText(AvaStatusEnum.TESTINGAVA.getText());
+				} else if ("6".equals(id)) {
+					pe.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
+					pe.setEmployeeTypeId(new Long(AvaStatusEnum.BUSINESSAVA.getCode()));
+					pe.setEmployeeTypeText(AvaStatusEnum.BUSINESSAVA.getText());
 				}
 				pe.setStatus(AvaStatusEnum.AVA.getCode());
 				pe.setCreateTime(TimeUtils.getTodayByDateTime());
@@ -260,6 +278,18 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		if (!"".equals(jsonArrUed)) {
 			deleteByParam(2, 4, program);
 			getAccountLongfor(program, jsonArrUed, "4");
+		}
+		// 测试人员
+		String jsonArrTest = json.get("testingList").toString();
+		if (!"".equals(jsonArrTest)) {
+			deleteByParam(2, 5, program);
+			getAccountLongfor(program, jsonArrTest, "5");
+		}
+		// 业务人员
+		String jsonArrBusiness = json.get("businessList").toString();
+		if (!"".equals(jsonArrBusiness)) {
+			deleteByParam(2, 6, program);
+			getAccountLongfor(program, jsonArrBusiness, "6");
 		}
 
 		/*添加日志*/

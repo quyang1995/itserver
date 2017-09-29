@@ -14,6 +14,7 @@ import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.ProductEmployee;
 import com.longfor.itserver.entity.Program;
+import com.longfor.itserver.entity.ProgramEmployee;
 import com.longfor.itserver.entity.ps.PsProductAll;
 import net.mayee.commons.helper.APIHelper;
 import org.slf4j.Logger;
@@ -163,10 +164,10 @@ public class APIProductController extends BaseController {
         List<ProductEmployee> personLiableList = this.getProductEmployeeService()
                 .searchTypeList(new Long(id), AvaStatusEnum.LIABLEAVA.getCode(), null);
         /*产品经理*/
-        List<ProductEmployee> programManagerList = this.getProductEmployeeService()
+        List<ProductEmployee> productManagerList = this.getProductEmployeeService()
                 .searchTypeList(new Long(id), AvaStatusEnum.MEMBERAVA.getCode(), new Long(AvaStatusEnum.PRODAVA.getCode()));
         /*项目经理*/
-        List<ProductEmployee> productManagerList = this.getProductEmployeeService()
+        List<ProductEmployee> programManagerList = this.getProductEmployeeService()
                 .searchTypeList(new Long(id), AvaStatusEnum.MEMBERAVA.getCode(), new Long(AvaStatusEnum.PROGAVA.getCode()));
         /*开发人员*/
         List<ProductEmployee> developerList = this.getProductEmployeeService()
@@ -174,6 +175,13 @@ public class APIProductController extends BaseController {
         /*UED人员*/
         List<ProductEmployee> uedList = this.getProductEmployeeService()
                 .searchTypeList(new Long(id), AvaStatusEnum.MEMBERAVA.getCode(), new Long(AvaStatusEnum.UEDAVA.getCode()));
+        /* 测试人员 */
+        List<ProductEmployee> testingList = this.getProductEmployeeService()
+                .searchTypeList(new Long(id), AvaStatusEnum.MEMBERAVA.getCode(), new Long(AvaStatusEnum.TESTINGAVA.getCode()));
+         /* 业务人员 */
+        List<ProductEmployee> businessList = this.getProductEmployeeService()
+                .searchTypeList(new Long(id), AvaStatusEnum.MEMBERAVA.getCode(), new Long(AvaStatusEnum.BUSINESSAVA.getCode()));
+
 
         /*产品关联项目*/
         String likeProgram = psProduct.getLikeProgram();
@@ -188,6 +196,8 @@ public class APIProductController extends BaseController {
         psProduct.setProgramManagerList(programManagerList);
         psProduct.setDeveloperList(developerList);
         psProduct.setUedList(uedList);
+        psProduct.setTestingList(testingList);
+        psProduct.setBusinessList(businessList);
         /*返回数据*/
         Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         resultMap.put("pro", psProduct);

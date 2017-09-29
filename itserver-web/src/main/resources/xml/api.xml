@@ -147,6 +147,8 @@
             <property name="productManagerList" type="string" required="false"/>
             <property name="developerList" type="string" required="false"/>
             <property name="uedList" type="string" required="false"/>
+            <property name="testingList" type="string" required="false"/>
+            <property name="businessList" type="string" required="false"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50" />
             <property name="modifiedName" type="string" required="true" maxLength="50" />
         </request>
@@ -173,6 +175,8 @@
             <property name="productManagerList" type="string" required="false"/>
             <property name="developerList" type="string" required="false"/>
             <property name="uedList" type="string" required="false"/>
+            <property name="testingList" type="string" required="false"/>
+            <property name="businessList" type="string" required="false"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50" />
             <property name="modifiedName" type="string" required="true" maxLength="50" />
         </request>
@@ -263,6 +267,8 @@
             <property name="startDate" type="string" required="true" maxLength="20"/>
             <property name="grayReleaseDate" type="string" required="true" maxLength="20"/>
             <property name="releaseDate" type="string" required="true" maxLength="20"/>
+            <property name="uedDate" type="string" required="true" maxLength="20"/>
+            <property name="architectureDate" type="string" required="true" maxLength="20"/>
             <property name="likeProduct" type="string" required="false" maxLength="20"/>
             <property name="likeProgram" type="string" required="false" maxLength="20"/>
             <property name="type" type="int" required="true" area="0,1"/>
@@ -274,6 +280,8 @@
             <property name="productManagerList" type="string" required="false"/>
             <property name="developerList" type="string" required="false"/>
             <property name="uedList" type="string" required="false"/>
+            <property name="testingList" type="string" required="false"/>
+            <property name="businessList" type="string" required="false"/>
         </request>
     </item>
 
@@ -287,6 +295,8 @@
             <property name="startDate" type="string" required="true" maxLength="20"/>
             <property name="grayReleaseDate" type="string" required="true" maxLength="20"/>
             <property name="releaseDate" type="string" required="true" maxLength="20"/>
+            <property name="uedDate" type="string" required="true" maxLength="20"/>
+            <property name="architectureDate" type="string" required="true" maxLength="20"/>
             <property name="likeProduct" type="string" required="false" maxLength="20"/>
             <property name="likeProgram" type="string" required="false" maxLength="20"/>
             <property name="type" type="int" required="true" area="0,1"/>
@@ -298,6 +308,8 @@
             <property name="productManagerList" type="string" required="false"/>
             <property name="developerList" type="string" required="false"/>
             <property name="uedList" type="string" required="false"/>
+            <property name="testingList" type="string" required="false"/>
+            <property name="businessList" type="string" required="false"/>
         </request>
     </item>
 
@@ -683,7 +695,8 @@
    -->
     <item id="api_feedBack_countStatus" description="查询反馈状态统计">
         <request>
-            <property name="accountId" type="string" required="true" maxLength="30"/>
+            <property name="accountId" type="string" required="false" maxLength="30"/>
+            <property name="feedbackPhone" ref="mobileNo" />
         </request>
     </item >
 
@@ -924,5 +937,16 @@
     -->
     <item id="down_load_demand" description="下载需求文件">
 
+    </item>
+
+    <!--
+        URL:
+        /api/index/isAdmin
+        说明:反馈上传图片
+    -->
+    <item id="api_index_isAdmin" description="检查是否为管理员账户">
+        <request>
+            <property name="accountId" type="string" required="true"/>
+        </request>
     </item>
 </api>

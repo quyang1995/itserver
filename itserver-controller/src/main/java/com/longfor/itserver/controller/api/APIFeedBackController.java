@@ -57,7 +57,7 @@ public class APIFeedBackController extends BaseController {
 		//二者不可都为空
 		String accountId = paramsMap.get("accountId");
 		String feedbackPhone = paramsMap.get("feedbackPhone");
-		if (accountId == null && StringUtils.isBlank(accountId) && feedbackPhone == null && StringUtils.isBlank(feedbackPhone)) {
+		if ((accountId == null || StringUtils.isBlank(accountId)) && (feedbackPhone == null || StringUtils.isBlank(feedbackPhone))) {
 			return CommonUtils.getResultMapByBizEnum(BizEnum.E1201, "accountId", "feedbackPhone");
 		}
 		/* 生成查询用Example */
@@ -206,9 +206,15 @@ public class APIFeedBackController extends BaseController {
 	public Map countStatus(HttpServletRequest request , HttpServletResponse response){
 		@SuppressWarnings("unchecked")
 		Map<String,String> paramsMap = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-		/* 查询数据 and admin权限判断 */
+		//二者不可都为空
 		String accountId = paramsMap.get("accountId");
-		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
+		String feedbackPhone = paramsMap.get("feedbackPhone");
+		if ((accountId == null || StringUtils.isBlank(accountId)) && (feedbackPhone == null || StringUtils.isBlank(feedbackPhone))) {
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E1201, "accountId", "feedbackPhone");
+		}
+		/* 查询数据 and admin权限判断 */
+//		String accountId = paramsMap.get("accountId");
+//		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
 		return this.getFeedBackService().countStatus(paramsMap);
 	}
 

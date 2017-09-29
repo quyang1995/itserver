@@ -85,17 +85,24 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		String personLiableList = (String) map.get("personLiableList");
 		getAccountInfo(1, product, personLiableList);
 		/* 产品经理 */
-		String programManagerList = (String) map.get("programManagerList");
-		getAccountInfo(2, product, programManagerList);
-		/* 项目经理 */
 		String productManagerList = (String) map.get("productManagerList");
-		getAccountInfo(3, product, productManagerList);
+		getAccountInfo(2, product, productManagerList);
+		/* 项目经理 */
+		String programManagerList = (String) map.get("programManagerList");
+		getAccountInfo(3, product, programManagerList);
 		/* 开发人员 */
 		String developerList = (String) map.get("developerList");
 		getAccountInfo(4, product, developerList);
 		/* UED人员 */
 		String uedList = (String) map.get("uedList");
 		getAccountInfo(5, product, uedList);
+		/* 测试人员 */
+		String testList = (String) map.get("testingList");
+		getAccountInfo(6, product, testList);
+		/* 业务人员 */
+		String businessList = (String) map.get("businessList");
+		getAccountInfo(7, product, businessList);
+
 
         //先生成变动日志
         List<String> changeLogTextList = getChangeLogText(null, product);
@@ -147,21 +154,24 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		deleteByParam(1, newProduct);
 		getAccountInfo(1, newProduct, personLiableList);
 		/* 产品经理 */
-		String programManagerList = (String) map.get("programManagerList");
-		deleteByParam(2, newProduct);
-		getAccountInfo(2, newProduct, programManagerList);
-		/* 项目经理 */
 		String productManagerList = (String) map.get("productManagerList");
-		deleteByParam(3, newProduct);
-		getAccountInfo(3, newProduct, productManagerList);
+		deleteByParam(2, newProduct);
+		getAccountInfo(2, newProduct, productManagerList);
+		/* 项目经理 */
+		String programManagerList = (String) map.get("programManagerList");
+		getAccountInfo(3, newProduct, programManagerList);
 		/* 开发人员 */
 		String developerList = (String) map.get("developerList");
-		deleteByParam(4, newProduct);
 		getAccountInfo(4, newProduct, developerList);
 		/* UED人员 */
 		String uedList = (String) map.get("uedList");
-		deleteByParam(5, newProduct);
 		getAccountInfo(5, newProduct, uedList);
+		/* 测试人员 */
+		String testList = (String) map.get("testingList");
+		getAccountInfo(6, newProduct, testList);
+		/* 业务人员 */
+		String businessList = (String) map.get("businessList");
+		getAccountInfo(7, newProduct, businessList);
 
 		/*添加日志*/
         for(String text : changeLogTextList){
@@ -238,6 +248,14 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 								productEmployee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
 								productEmployee.setEmployeeTypeId(new Long(AvaStatusEnum.UEDAVA.getCode()));
 								productEmployee.setEmployeeTypeText(AvaStatusEnum.UEDAVA.getText());
+							} else if (num == 6) {
+								productEmployee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
+								productEmployee.setEmployeeTypeId(new Long(AvaStatusEnum.TESTINGAVA.getCode()));
+								productEmployee.setEmployeeTypeText(AvaStatusEnum.TESTINGAVA.getText());
+							} else if (num == 7) {
+								productEmployee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
+								productEmployee.setEmployeeTypeId(new Long(AvaStatusEnum.BUSINESSAVA.getCode()));
+								productEmployee.setEmployeeTypeText(AvaStatusEnum.BUSINESSAVA.getText());
 							}
 							productEmployee.setCreateTime(TimeUtils.getTodayByDateTime());
 							productEmployee.setModifiedTime(TimeUtils.getTodayByDateTime());

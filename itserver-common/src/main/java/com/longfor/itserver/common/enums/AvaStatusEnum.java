@@ -20,6 +20,8 @@ public enum AvaStatusEnum {
     PROGAVA(2, "项目经理", ""),
     DEVEAVA(3, "开发人员", ""),
     UEDAVA(4, "UED人员", ""),
+    TESTINGAVA(5, "测试人员", ""),
+    BUSINESSAVA(6, "业务人员", ""),
     /*评论回复类型*/
     REPLY_ZERO(0, "未回复", ""),
     REPLY_ONE(1, "已回复", ""),

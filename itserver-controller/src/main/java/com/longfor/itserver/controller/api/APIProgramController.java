@@ -179,6 +179,14 @@ public class APIProgramController extends BaseController {
 		map.put("employeeTypeId", new Long(AvaStatusEnum.UEDAVA.getCode()));
 		List<ProgramEmployee> uedList = this.getProgramEmployeeService().selectTypeList(map);
 		program.setUedList(uedList);
+		/* 测试人员 */
+		map.put("employeeTypeId", new Long(AvaStatusEnum.TESTINGAVA.getCode()));
+		List<ProgramEmployee> testingList = this.getProgramEmployeeService().selectTypeList(map);
+		program.setTestingList(testingList);
+		/* 业务人员 */
+		map.put("employeeTypeId", new Long(AvaStatusEnum.BUSINESSAVA.getCode()));
+		List<ProgramEmployee> businessList = this.getProgramEmployeeService().selectTypeList(map);
+		program.setBusinessList(businessList);
 
 		/* 返回报文 */
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
