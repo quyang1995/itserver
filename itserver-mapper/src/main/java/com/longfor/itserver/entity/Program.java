@@ -42,28 +42,28 @@ public class Program {
      * 立项日期
      */
     @Column(name = "commit_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date commitDate;
 
     /**
      * 启动日期
      */
     @Column(name = "start_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date startDate;
 
     /**
      * 灰度日期
      */
     @Column(name = "gray_release_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date grayReleaseDate;
 
     /**
      * 发布日期
      */
     @Column(name = "release_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date releaseDate;
 
     @Column(name = "ued_date")

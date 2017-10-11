@@ -373,6 +373,28 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                     .append("]");
             textList.add(sb.toString());
         }
+		//UED评审时间
+		if(!TimeUtils.sameDate(oldProgram.getUedDate(), newProgram.getUedDate())){
+			StringBuilder sb = new StringBuilder();
+			sb.append(newProgram.getModifiedName());
+			sb.append(" 将 UED评审时间 从 [")
+					.append(oldProgram.getUedDate())
+					.append("] 更新为 [")
+					.append(newProgram.getUedDate())
+					.append("]");
+			textList.add(sb.toString());
+		}
+		//架构评审时间
+		if(!TimeUtils.sameDate(oldProgram.getArchitectureDate(), newProgram.getArchitectureDate())){
+			StringBuilder sb = new StringBuilder();
+			sb.append(newProgram.getModifiedName());
+			sb.append(" 将 架构评审时间 从 [")
+					.append(oldProgram.getArchitectureDate())
+					.append("] 更新为 [")
+					.append(newProgram.getArchitectureDate())
+					.append("]");
+			textList.add(sb.toString());
+		}
         //灰度时间
         if(!TimeUtils.sameDate(oldProgram.getGrayReleaseDate(), newProgram.getGrayReleaseDate())){
             StringBuilder sb = new StringBuilder();

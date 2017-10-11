@@ -89,24 +89,24 @@ public class APIDemandController extends BaseController {
         //获取已经验证的参数map
         @SuppressWarnings("unchecked")
         Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-        Demand demand = this.getDemandService().getDemandById(Long.parseLong(paramsMap.get("id").toString()));
-        boolean isAllow = false;
-        if(!"".equals(paramsMap.get("modifiedAccountId"))){
-            if(demand.getModifiedAccountId().equals(paramsMap.get("modifiedAccountId"))){
-                isAllow = true;
-            }
-        }else {
-            return CommonUtils.getResultMapByBizEnum(BizEnum.E9993,"modifiedAccountId");
-        }
-        if(isAllow){
+//        Demand demand = this.getDemandService().getDemandById(Long.parseLong(paramsMap.get("id").toString()));
+//        boolean isAllow = false;
+//        if(!"".equals(paramsMap.get("modifiedAccountId"))){
+//            if(demand.getModifiedAccountId().equals(paramsMap.get("modifiedAccountId"))){
+//                isAllow = true;
+//            }
+//        }else {
+//            return CommonUtils.getResultMapByBizEnum(BizEnum.E9993,"modifiedAccountId");
+//        }
+//        if(isAllow){
             /*更新操作*/
             this.getDemandService().updateDemand(paramsMap);
             // 返回报文
             return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
-        }else{
-            // 返回报文
-            return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
-        }
+//        }else{
+//            // 返回报文
+//            return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+//        }
     }
 
     /**
