@@ -17,7 +17,7 @@ public class ConfigConsts {
     public static final String GBK = "GBK";
     public static final String ISO_8859_1 = "ISO-8859-1";
 
-    //附件存储地址  生产环境 /lhdata/itplus/upload/    测试环境 /mnt/ITPlusnas/ITPlus
+    //附件存储地址  生产环境 /lhdata/itplus/upload    测试环境 /mnt/ITPlusnas/ITPlus
     public static final String FILE_ADDRESS = "/mnt/ITPlusnas/ITPlus";
 
     //接口提交方式

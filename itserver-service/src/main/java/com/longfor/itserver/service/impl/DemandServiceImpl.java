@@ -359,12 +359,14 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		}
 
 		oldDemand.setStatus(status);
+		oldDemand.setModifiedTime(TimeUtils.getTodayByDateTime());
 		demandMapper.updateByPrimaryKey(oldDemand);
 
 		//如果需求对应的反馈建议不为空，则更新反馈建议状态信息
 		FeedBack feedBack = feedBackMapper.selectByPrimaryKey(oldDemand.getFeedBackId());
 		if(feedBack != null){
 			feedBack.setStatus(status);
+			feedBack.setModifiedTime(TimeUtils.getTodayByDateTime());
 			feedBackMapper.updateByPrimaryKey(feedBack);
 		}
 		return true;
@@ -406,6 +408,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		oldDemand.setCallonEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
 		oldDemand.setCallonEmployeeName(accountLongfor.getName());
 		oldDemand.setCallonFullDeptPath(accountLongfor.getPsDeptFullName());
+		oldDemand.setModifiedTime(TimeUtils.getTodayByDateTime());
 		demandMapper.updateByPrimaryKey(oldDemand);
 
 		FeedBack feedBack = feedBackMapper.selectByPrimaryKey(oldDemand.getFeedBackId());
@@ -415,6 +418,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			feedBack.setContactEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
 			feedBack.setContactEmployeeName(accountLongfor.getName());
 			feedBack.setContactFullDeptPath(accountLongfor.getPsDeptFullName());
+			feedBack.setModifiedTime(TimeUtils.getTodayByDateTime());
 			feedBackMapper.updateByPrimaryKey(feedBack);
 		}
 		return true;

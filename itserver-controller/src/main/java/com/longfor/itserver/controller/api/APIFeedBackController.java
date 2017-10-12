@@ -262,8 +262,6 @@ public class APIFeedBackController extends BaseController {
 			e.printStackTrace();
 			return CommonUtils.getResultMapByBizEnum(BizEnum.E9999, "");
 		}
-
-
 		return filemap;
 	}
 

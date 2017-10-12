@@ -289,6 +289,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 			productEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
 		}
 		oldProduct.setStatus(status);
+		oldProduct.setModifiedTime(TimeUtils.getTodayByDateTime());
 		productMapper.updateByPrimaryKey(oldProduct);
 		return true;
 	}

@@ -356,9 +356,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             StringBuilder sb = new StringBuilder();
             sb.append(newProgram.getModifiedName());
             sb.append(" 将 立项时间 从 [")
-                    .append(oldProgram.getCommitDate())
+                    .append(TimeUtils.getTime(oldProgram.getCommitDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
                     .append("] 更新为 [")
-                    .append(newProgram.getCommitDate())
+                    .append(TimeUtils.getTime(newProgram.getCommitDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
                     .append("]");
             textList.add(sb.toString());
         }
@@ -367,9 +367,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             StringBuilder sb = new StringBuilder();
             sb.append(newProgram.getModifiedName());
             sb.append(" 将 启动时间 从 [")
-                    .append(oldProgram.getStartDate())
+                    .append(TimeUtils.getTime(oldProgram.getStartDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
                     .append("] 更新为 [")
-                    .append(newProgram.getStartDate())
+                    .append(TimeUtils.getTime(newProgram.getStartDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
                     .append("]");
             textList.add(sb.toString());
         }
@@ -378,9 +378,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			StringBuilder sb = new StringBuilder();
 			sb.append(newProgram.getModifiedName());
 			sb.append(" 将 UED评审时间 从 [")
-					.append(oldProgram.getUedDate())
+					.append(TimeUtils.getTime(oldProgram.getUedDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
 					.append("] 更新为 [")
-					.append(newProgram.getUedDate())
+					.append(TimeUtils.getTime(newProgram.getUedDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
 					.append("]");
 			textList.add(sb.toString());
 		}
@@ -389,9 +389,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			StringBuilder sb = new StringBuilder();
 			sb.append(newProgram.getModifiedName());
 			sb.append(" 将 架构评审时间 从 [")
-					.append(oldProgram.getArchitectureDate())
+					.append(TimeUtils.getTime(oldProgram.getArchitectureDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
 					.append("] 更新为 [")
-					.append(newProgram.getArchitectureDate())
+					.append(TimeUtils.getTime(newProgram.getArchitectureDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
 					.append("]");
 			textList.add(sb.toString());
 		}
@@ -400,9 +400,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             StringBuilder sb = new StringBuilder();
             sb.append(newProgram.getModifiedName());
             sb.append(" 将 灰度时间 从 [")
-                    .append(oldProgram.getGrayReleaseDate())
+                    .append(TimeUtils.getTime(oldProgram.getGrayReleaseDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
                     .append("] 更新为 [")
-                    .append(newProgram.getGrayReleaseDate())
+                    .append(TimeUtils.getTime(newProgram.getGrayReleaseDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
                     .append("]");
             textList.add(sb.toString());
         }
@@ -411,9 +411,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             StringBuilder sb = new StringBuilder();
             sb.append(newProgram.getModifiedName());
             sb.append(" 将 发布时间 从 [")
-                    .append(oldProgram.getReleaseDate())
+                    .append(TimeUtils.getTime(oldProgram.getReleaseDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
                     .append("] 更新为 [")
-                    .append(newProgram.getReleaseDate())
+                    .append(TimeUtils.getTime(newProgram.getReleaseDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
                     .append("]");
             textList.add(sb.toString());
         }
@@ -483,6 +483,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		}
 
 		oldProgram.setProgramStatus(newProgram.getProgramStatus());
+		oldProgram.setModifiedTime(TimeUtils.getTodayByDateTime());
 		programMapper.updateByPrimaryKey(oldProgram);
 		return true;
 	}

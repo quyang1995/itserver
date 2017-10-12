@@ -348,11 +348,13 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                 bugChangeLogMapper.insert(bugChangeLog);
             }
             oldBug.setStatus(newBug.getStatus());
+            oldBug.setModifiedTime(TimeUtils.getTodayByDateTime());
             bugInfoMapper.updateByPrimaryKey(oldBug);
             FeedBack feedBack = feedBackMapper.selectByPrimaryKey(oldBug.getFeedBackId());
             //如果BUG有对应反馈异常  更新反馈异常的状态
             if (feedBack != null) {
                 feedBack.setStatus(status);
+                feedBack.setModifiedTime(TimeUtils.getTodayByDateTime());
                 feedBackMapper.updateByPrimaryKey(feedBack);
             }
             return true;
@@ -398,6 +400,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
             oldBug.setCallonEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
             oldBug.setCallonEmployeeName(accountLongfor.getName());
             oldBug.setCallonFullDeptPath(accountLongfor.getPsDeptFullName());
+            oldBug.setModifiedTime(TimeUtils.getTodayByDateTime());
             bugInfoMapper.updateByPrimaryKey(oldBug);
             FeedBack feedBack = feedBackMapper.selectByPrimaryKey(oldBug.getFeedBackId());
             //如果 BUG有对应的反馈异常，更新反馈异常的信息
@@ -406,6 +409,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                 feedBack.setContactEmployeeCode(oldBug.getCallonEmployeeCode());
                 feedBack.setContactEmployeeName(oldBug.getCallonEmployeeName());
                 feedBack.setContactFullDeptPath(oldBug.getCallonFullDeptPath());
+                feedBack.setModifiedTime(TimeUtils.getTodayByDateTime());
                 feedBackMapper.updateByPrimaryKey(feedBack);
             }
 
