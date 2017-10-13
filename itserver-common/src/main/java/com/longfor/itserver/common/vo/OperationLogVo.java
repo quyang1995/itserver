@@ -1,9 +1,14 @@
 package com.longfor.itserver.common.vo;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by sunyanhui on 2017/10/13.
  */
-public class OperationLogVo {
+public class OperationLogVo implements Comparable<OperationLogVo> {
+    private long id;
     private String modifiedAccountId;//邮箱
     private String name;//姓名
     private String companyName;//
@@ -14,6 +19,21 @@ public class OperationLogVo {
     public OperationLogVo(String companyName,String operateModule){
         this.companyName = companyName;
         this.operateModule = operateModule;
+    }
+    @Override
+    public int compareTo(OperationLogVo s) {
+        long a = s.getId();
+        long b = this.id;
+        if(a > b)return 1;
+        return -1;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getModifiedAccountId() {

@@ -962,7 +962,7 @@
             <property name="operateTime" type="string" required="false"/>
             <property name="loginName" type="string" required="true"/>
             <property name="content" type="string" required="false"/>
-            <property name="type" type="string" required="true"/>
+            <property name="type" type="string" required="false"/>
         </request>
     </item>
 </api>
