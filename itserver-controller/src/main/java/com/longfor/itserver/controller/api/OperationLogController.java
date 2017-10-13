@@ -65,20 +65,18 @@ public class OperationLogController extends BaseController {
 
 		List<OperationLogVo> list = new ArrayList();
 		try{
-			if(StringUtils.isNotBlank(type)){//只需查询一张日志表
-				if(type.equals("0")){
-					list.addAll(this.convertProduct2OperationLogVo(
-							getProductEmployeeChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),PRODUCT_LIST));
-				}else if(type.equals("1")){
-					list.addAll(this.convertProduct2OperationLogVo(
-							getProgramEmployeeChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),PROGRAM_LIST));
-				}else if(type.equals("2")){
-					list.addAll(this.convertProduct2OperationLogVo(
-							getDemandChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),DEMAND_LIST));
-				}else if(type.equals("3")){
-					list.addAll(this.convertProduct2OperationLogVo(
-							getBugChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),BUG_LIST));
-				}
+			if("0".equals(type)){
+				list.addAll(this.convertProduct2OperationLogVo(
+						getProductEmployeeChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),PRODUCT_LIST));
+			}else if("1".equals(type)){
+				list.addAll(this.convertProduct2OperationLogVo(
+						getProgramEmployeeChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),PROGRAM_LIST));
+			}else if("2".equals(type)){
+				list.addAll(this.convertProduct2OperationLogVo(
+						getDemandChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),DEMAND_LIST));
+			}else if("3".equals(type)){
+				list.addAll(this.convertProduct2OperationLogVo(
+						getBugChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),BUG_LIST));
 			}else{
 				list.addAll(this.convertProduct2OperationLogVo(
 						getProductEmployeeChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),PRODUCT_LIST));
