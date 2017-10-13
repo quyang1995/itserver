@@ -35,4 +35,8 @@ public class BugChangeLogServiceImpl extends AdminBaseService<BugChangeLog> impl
         resultMap.put("list",list);
         return resultMap;
     }
+    @Override
+    public List<BugChangeLog> paraQuery(Map<String, String> paramsMap) {
+        return bugChangeLogMapper.paraQuery(paramsMap);
+    }
 }

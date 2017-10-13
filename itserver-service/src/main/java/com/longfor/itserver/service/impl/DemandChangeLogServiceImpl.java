@@ -36,4 +36,9 @@ public class DemandChangeLogServiceImpl extends AdminBaseService<DemandChangeLog
 
         return resultMap;
     }
+    @Override
+    public  List<DemandChangeLog> paraQuery(Map<String, String> paramsMap){
+        return demandChangeLogMapper.paraQuery(paramsMap);
+    }
+
 }

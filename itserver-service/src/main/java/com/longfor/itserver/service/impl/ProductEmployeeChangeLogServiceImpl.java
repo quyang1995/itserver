@@ -4,6 +4,7 @@ package com.longfor.itserver.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
+import com.longfor.itserver.entity.DemandChangeLog;
 import com.longfor.itserver.entity.ProductEmployeeChangeLog;
 import com.longfor.itserver.mapper.ProductEmployeeChangeLogMapper;
 import com.longfor.itserver.service.IProductEmployeeChangeLogService;
@@ -37,5 +38,10 @@ public class ProductEmployeeChangeLogServiceImpl extends AdminBaseService<Produc
         resultMap.put("list",list);
 
         return resultMap ;
+    }
+
+    @Override
+    public  List<ProductEmployeeChangeLog> paraQuery(Map<String, String> paramsMap){
+        return productEmployeeChangeLogMapper.paraQuery(paramsMap);
     }
 }
