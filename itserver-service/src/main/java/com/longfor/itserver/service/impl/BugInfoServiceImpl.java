@@ -156,23 +156,31 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         if (null == selectOneBugInfo) {
             return false;
         }
-        bugInfo.setStatus(selectOneBugInfo.getStatus());
-
-        //获取发起人信息
+        //获取最后修改人
         AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(bugInfo.getModifiedAccountId());
-//        if (draftedAccountLongfor != null) {
-//            bugInfo.setDraftedAccountId(bugInfo.getModifiedAccountId());
-//            bugInfo.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
-//            bugInfo.setDraftedEmployeeName(draftedAccountLongfor.getName());
-//            bugInfo.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
-//        }
+        if (draftedAccountLongfor != null) {
+            bugInfo.setModifiedAccountId(bugInfo.getModifiedAccountId());
+            bugInfo.setModifiedName(draftedAccountLongfor.getName());
+            bugInfo.setModifiedTime(TimeUtils.getTodayByDateTime());
+        }
         //获取指派人信息
         AccountLongfor callonAccountLongfor = adsHelper.getAccountLongforByLoginName(bugInfo.getCallonAccountId());
         if (callonAccountLongfor != null) {
-            bugInfo.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
-            bugInfo.setCallonEmployeeName(callonAccountLongfor.getName());
-            bugInfo.setCallonFullDeptPath(callonAccountLongfor.getPsDeptFullName());
+            selectOneBugInfo.setCallonAccountId(bugInfo.getCallonAccountId());
+            selectOneBugInfo.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
+            selectOneBugInfo.setCallonEmployeeName(callonAccountLongfor.getName());
+            selectOneBugInfo.setCallonFullDeptPath(callonAccountLongfor.getPsDeptFullName());
         }
+        selectOneBugInfo.setName(bugInfo.getName());
+        selectOneBugInfo.setDescp(bugInfo.getDescp());
+        selectOneBugInfo.setBrower(bugInfo.getBrower());
+        selectOneBugInfo.setRelationType(bugInfo.getRelationType());
+        selectOneBugInfo.setRelationId(bugInfo.getRelationId());
+        selectOneBugInfo.setLevel(bugInfo.getLevel());
+        selectOneBugInfo.setHopeDate(bugInfo.getHopeDate());
+        selectOneBugInfo.setLikeProduct(bugInfo.getLikeProduct());
+        selectOneBugInfo.setLikeProgram(bugInfo.getLikeProgram());
+        bugInfoMapper.updateByPrimaryKey(selectOneBugInfo);
 
         /*修改文件*/
         String filelist = json.getString("fileList");
@@ -207,12 +215,6 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         if (logList.size() > 0) {
             bugChangeLogMapper.insertList(logList);
         }
-        if("".equals(bugInfo.getDescp())){
-            bugInfo.setDescp(selectOneBugInfo.getDescp());
-        }
-        bugInfo.setModifiedTime(TimeUtils.getTodayByDateTime());
-        bugInfo.setCreateTime(selectOneBugInfo.getCreateTime());
-        bugInfoMapper.updateByPrimaryKey(bugInfo);
         return true;
     }
 
@@ -260,34 +262,38 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                         log.append(newBug.getModifiedName())
                                 .append(" ");
                     }
-                    log.append("将 优先级 由[").
+                    log.append("将 严重程度 由[").
                             append(BugLevelEnum.getByCode(oldBug.getLevel()).getText()).
                             append("]更改为[").
                             append(BugLevelEnum.getByCode(newBug.getLevel()).getText()).
                             append("]");
                     textList.add(log.toString());
                 }
-//                if (!Objects.equals(oldBug.getCallonAccountId(), newBug.getCallonAccountId())) {
-//                    if (StringUtils.isNotBlank(log)) {
-//                        log.append(",");
-//                    } else {
-//                        log.append(newBug.getModifiedName());
-//                    }
-//                    log.append("将 指派人 由[").
-//                            append(oldBug.getCallonEmployeeName()).
-//                            append("]更改为[").
-//                            append(newBug.getCallonEmployeeName()).
-//                            append("]");
-//                    textList.add(log.toString());
-//                }
+                if (!Objects.equals(oldBug.getCallonAccountId(), newBug.getCallonAccountId())) {
+                    if (StringUtils.isNotBlank(log)) {
+                        log.append(",");
+                    } else {
+                        log.append(newBug.getModifiedName());
+                    }
+                    log.append("将 指派给 由[").
+                            append(oldBug.getCallonEmployeeName()).
+                            append("]更改为[").
+                            append(newBug.getCallonEmployeeName()).
+                            append("]");
+                    textList.add(log.toString());
+                }
 
                 map.put("type", 2);
             }
 
-            if (!(Objects.equals(oldBug.getBrower(), newBug.getBrower()) && Objects.equals(oldBug.getLikeProduct(), newBug.getLikeProduct())
-                    && Objects.equals(oldBug.getLikeProgram(), newBug.getLikeProgram()) && Objects.equals(oldBug.getCcAccount(), newBug.getCcAccount())
-                    && Objects.equals(oldBug.getName(), newBug.getName()) && Objects.equals(oldBug.getRelationId(), newBug.getRelationId())
-                    && Objects.equals(oldBug.getRelationType(), newBug.getRelationType()) && Objects.equals(oldBug.getReproductionStep(), newBug.getReproductionStep()))) {
+            if (!(Objects.equals(oldBug.getBrower(), newBug.getBrower())
+                    && Objects.equals(oldBug.getLikeProduct(), newBug.getLikeProduct())
+                    && Objects.equals(oldBug.getLikeProgram(), newBug.getLikeProgram())
+                    && Objects.equals(oldBug.getCcAccount(), newBug.getCcAccount())
+                    && Objects.equals(oldBug.getName(), newBug.getName())
+                    && Objects.equals(oldBug.getRelationId(), newBug.getRelationId())
+                    && Objects.equals(oldBug.getRelationType(), newBug.getRelationType())
+                    && Objects.equals(oldBug.getReproductionStep(), newBug.getReproductionStep()))) {
                 StringBuilder log = new StringBuilder();
                 log.append(newBug.getModifiedName()).
                         append(" 修改了bug基础信息");
@@ -312,7 +318,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
 
             else if (newBug.getCallonAccountId() != null&& !Objects.equals(oldBug.getCallonAccountId(), newBug.getCallonAccountId())) {
                 log.append(newBug.getModifiedName())
-                        .append(" 将 指派人 由[").
+                        .append(" 将 指派给 由[").
                         append(oldBug.getCallonEmployeeName()).
                         append("]更改为[").
                         append(newBug.getCallonEmployeeName()).

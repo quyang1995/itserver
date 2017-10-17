@@ -132,22 +132,43 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		if (selectDemandOne==null){
 			return false;
 		}
-		//获取状态信息(默认处理中)
-		demand.setStatus(selectDemandOne.getStatus());
-		// 获取发起人信息
+
+		//获取最后修改人
 		AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getModifiedAccountId());
-//		if(draftedAccountLongfor!=null){
-//			demand.setDraftedAccountId(demand.getModifiedAccountId());
-//			demand.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
-//			demand.setDraftedEmployeeName(draftedAccountLongfor.getName());
-//			demand.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
-//		}
+		if (draftedAccountLongfor != null) {
+			demand.setModifiedAccountId(demand.getModifiedAccountId());
+			demand.setModifiedName(draftedAccountLongfor.getName());
+			demand.setModifiedTime(TimeUtils.getTodayByDateTime());
+		}
 		//获取指派人信息
 		AccountLongfor callonAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getCallonAccountId());
-		if (callonAccountLongfor!=null){
-			demand.setCallonEmployeeName(callonAccountLongfor.getName());
-			demand.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
-			demand.setCallonFullDeptPath(callonAccountLongfor.getPsDeptFullName());
+		if (callonAccountLongfor != null) {
+			selectDemandOne.setCallonAccountId(demand.getCallonAccountId());
+			selectDemandOne.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
+			selectDemandOne.setCallonEmployeeName(callonAccountLongfor.getName());
+			selectDemandOne.setCallonFullDeptPath(callonAccountLongfor.getPsDeptFullName());
+		}
+		selectDemandOne.setName(demand.getName());
+		selectDemandOne.setDescp(demand.getDescp());
+		selectDemandOne.setRelationType(demand.getRelationType());
+		selectDemandOne.setRelationId(demand.getRelationId());
+		selectDemandOne.setLevel(demand.getLevel());
+		selectDemandOne.setHopeDate(demand.getHopeDate());
+		selectDemandOne.setLikeProduct(demand.getLikeProduct());
+		selectDemandOne.setLikeProgram(demand.getLikeProgram());
+		demandMapper.updateByPrimaryKey(selectDemandOne);
+
+		/*更新文件 不删除原有文件，在原有文件的基础上添加新文件*/
+		String filelist = (String)map.get("fileList");
+		if(StringUtils.isNotBlank(filelist)) {
+			List<DemandFile> list = JSONArray.parseArray(filelist, DemandFile.class);
+			if (list != null && list.size() > 0) {
+				for (DemandFile file : list) {
+					file.setDemandId(demand.getId());
+					file.setCreateTime(TimeUtils.getTodayByDateTime());
+				}
+				demandFileMapper.insertList(list);
+			}
 		}
 
 		/*新增需求更新日志*/
@@ -171,26 +192,6 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			demandChangeLogMapper.insertList(logList);
 		}
 
-
-		/*更新文件 不删除原有文件，在原有文件的基础上添加新文件*/
-		String filelist = (String)map.get("fileList");
-		if(StringUtils.isNotBlank(filelist)) {
-			List<DemandFile> list = JSONArray.parseArray(filelist, DemandFile.class);
-			if (list != null && list.size() > 0) {
-				for (DemandFile file : list) {
-					file.setDemandId(demand.getId());
-					file.setCreateTime(TimeUtils.getTodayByDateTime());
-				}
-				demandFileMapper.insertList(list);
-			}
-		}
-
-		/*添加文件结束*/
-		if("".equals(demand.getDescp())){
-			demand.setDescp(selectDemandOne.getDescp());
-		}
-		demand.setCreateTime(selectDemandOne.getCreateTime());
-		demandMapper.updateByPrimaryKey(demand);
 		return true;
 	}
 
@@ -277,19 +278,19 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 							append("]");
 					textList.add(log.toString());
 				}
-//				if(!Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())){
-//					if (StringUtils.isNotBlank(log)){
-//						log.append(",");
-//					}else{
-//						log.append(newDemand.getModifiedName());
-//					}
-//					log.append("将 指派人 由[").
-//							append(oldDemand.getCallonEmployeeName()).
-//							append("]更改为[").
-//							append(newDemand.getCallonEmployeeName()).
-//							append("]");
-//					textList.add(log.toString());
-//				}
+				if(!Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())){
+					if (StringUtils.isNotBlank(log)){
+						log.append(",");
+					}else{
+						log.append(newDemand.getModifiedName());
+					}
+					log.append("将 指派给 由[").
+							append(oldDemand.getCallonEmployeeName()).
+							append("]更改为[").
+							append(newDemand.getCallonEmployeeName()).
+							append("]");
+					textList.add(log.toString());
+				}
 				map.put("type",2);
 			}
 
@@ -326,7 +327,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		if(newDemand.getCallonAccountId()!=null && !Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())){
 
 				log.append(oldDemand.getModifiedName()).
-					append(" 将 指派人 由[").
+					append(" 将 指派给 由[").
 					append(oldDemand.getCallonEmployeeName()).
 					append("]更改为[").
 					append(newDemand.getCallonEmployeeName()).
