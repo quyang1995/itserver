@@ -10,6 +10,7 @@ import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.enums.DemandLevelEnum;
 import com.longfor.itserver.common.enums.DemandStatusEnum;
+import com.longfor.itserver.common.helper.DataPermissionHelper;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.entity.*;
@@ -135,12 +136,12 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		demand.setStatus(selectDemandOne.getStatus());
 		// 获取发起人信息
 		AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getModifiedAccountId());
-		if(draftedAccountLongfor!=null){
-			demand.setDraftedAccountId(demand.getModifiedAccountId());
-			demand.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
-			demand.setDraftedEmployeeName(draftedAccountLongfor.getName());
-			demand.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
-		}
+//		if(draftedAccountLongfor!=null){
+//			demand.setDraftedAccountId(demand.getModifiedAccountId());
+//			demand.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
+//			demand.setDraftedEmployeeName(draftedAccountLongfor.getName());
+//			demand.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
+//		}
 		//获取指派人信息
 		AccountLongfor callonAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getCallonAccountId());
 		if (callonAccountLongfor!=null){
@@ -185,6 +186,9 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		}
 
 		/*添加文件结束*/
+		if("".equals(demand.getDescp())){
+			demand.setDescp(selectDemandOne.getDescp());
+		}
 		demand.setCreateTime(selectDemandOne.getCreateTime());
 		demandMapper.updateByPrimaryKey(demand);
 		return true;
@@ -200,7 +204,9 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Map<String, Object> getPageDemandList(Map<String, Object> paramsMap, ELExample elExample) {
-		/* 查询数据 */
+		/* 查询数据 and admin权限判断 */
+		String accountId = String.valueOf(paramsMap.get("accountId"));
+		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
 		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
 		List<Demand> demands = demandMapper.searchList(paramsMap);
 		/* 返回数据 */

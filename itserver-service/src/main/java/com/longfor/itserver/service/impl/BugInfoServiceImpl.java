@@ -160,12 +160,12 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
 
         //获取发起人信息
         AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(bugInfo.getModifiedAccountId());
-        if (draftedAccountLongfor != null) {
-            bugInfo.setDraftedAccountId(bugInfo.getModifiedAccountId());
-            bugInfo.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
-            bugInfo.setDraftedEmployeeName(draftedAccountLongfor.getName());
-            bugInfo.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
-        }
+//        if (draftedAccountLongfor != null) {
+//            bugInfo.setDraftedAccountId(bugInfo.getModifiedAccountId());
+//            bugInfo.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
+//            bugInfo.setDraftedEmployeeName(draftedAccountLongfor.getName());
+//            bugInfo.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
+//        }
         //获取指派人信息
         AccountLongfor callonAccountLongfor = adsHelper.getAccountLongforByLoginName(bugInfo.getCallonAccountId());
         if (callonAccountLongfor != null) {
@@ -206,6 +206,9 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         }
         if (logList.size() > 0) {
             bugChangeLogMapper.insertList(logList);
+        }
+        if("".equals(bugInfo.getDescp())){
+            bugInfo.setDescp(selectOneBugInfo.getDescp());
         }
         bugInfo.setModifiedTime(TimeUtils.getTodayByDateTime());
         bugInfo.setCreateTime(selectOneBugInfo.getCreateTime());

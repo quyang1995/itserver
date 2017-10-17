@@ -8,6 +8,7 @@ import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.enums.BugStatusEnum;
+import com.longfor.itserver.common.helper.DataPermissionHelper;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
@@ -58,6 +59,9 @@ public class APIBugInfoController extends BaseController {
 
 		/* 生成查询用Example */
 		ELExample elExample = new ELExample(request, BugInfo.class);
+		/* 查询数据 and admin权限判断 */
+		String accountId = String.valueOf(paramsMap.get("accountId"));
+		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
 		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
 		List<BugInfo> bugList = this.getBugInfoService().bugList(paramsMap);
 		
