@@ -28,4 +28,23 @@
     SELECT <include refid="Base_Column_List" /> from bug_change_log WHERE
     bug_id =#{bugId} ORDER BY create_time DESC limit 0,50;
   </select>
+
+  <select id="paraQuery" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM bug_change_log
+    <where>
+      <if test="operateTime != null and operateTime != ''">
+        and create_time <![CDATA[ >= #{operateTime}]]>
+      </if>
+      <if test="loginName != null and loginName != ''">
+        and modified_account_id = #{loginName}
+      </if>
+      <if test="content != null and content != ''">
+        and action_change_info LIKE concat('%',#{content},'%')
+      </if>
+    </where>
+    ORDER BY create_time DESC
+  </select>
+
 </mapper>

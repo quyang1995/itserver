@@ -949,4 +949,20 @@
             <property name="accountId" type="string" required="true"/>
         </request>
     </item>
+
+    <!--
+        URL:
+        /api/operationLog/list
+        说明:操作日志
+    -->
+    <item id="api_operationLog_list" description="操作日志">
+        <request>
+            <property ref="pageNum"/>
+            <property ref="pageSize"/>
+            <property name="operateTime" type="string" required="false"/>
+            <property name="loginName" type="string" required="true"/>
+            <property name="content" type="string" required="false"/>
+            <property name="type" type="string" required="false"/>
+        </request>
+    </item>
 </api>

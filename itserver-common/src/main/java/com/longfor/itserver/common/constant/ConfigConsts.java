@@ -30,6 +30,8 @@ public class ConfigConsts {
 
     //自定义token名称
     public static final String TOKEN_NAME = "x-authentication-token";
+    public static final String CHARSET = "UTF-8";
+    public static final String MEDIA_TYPE = "application/json;charset=UTF-8";
     //占位符
     public final static String PLACE_HOLDER = "\\{\\?\\}";
 //    public static final Provider DEFAULT_PROVIDER = new BouncyCastleProvider();
