@@ -34,7 +34,7 @@
         <persistence-api.version>1.0</persistence-api.version>
 
         <eds-helper.version>1.5.13-SNAPSHOT</eds-helper.version>
-        <ads-helper.version>1.0.3-SNAPSHOT</ads-helper.version>
+        <ads-helper.version>1.0.6-SNAPSHOT</ads-helper.version>
 
         <judi-encrypt.version>1.12</judi-encrypt.version>
         <judi-commons.version>1.19-SNAPSHOT</judi-commons.version>
