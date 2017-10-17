@@ -95,8 +95,14 @@ public class OperationLogController extends BaseController {
 
         /*返回数据*/
 		Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-        Collections.sort(list);
-		map.put("list", list.subList(pageNum-1,pageSize));
+		if(list.size()>0){
+			Collections.sort(list);
+			if(list.size() > pageSize){
+				list = list.subList(pageNum-1,pageSize);
+			}
+		}
+		map.put("list", list);
+
 		map.put(APIHelper.PAGE_NUM, pageNum);
 		map.put(APIHelper.PAGE_SIZE, pageSize);
 		map.put(APIHelper.TOTAL, new PageInfo(list).getTotal());
