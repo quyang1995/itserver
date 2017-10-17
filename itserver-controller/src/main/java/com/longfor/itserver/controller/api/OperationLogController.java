@@ -79,8 +79,8 @@ public class OperationLogController extends BaseController {
 				list.addAll(this.convertProduct2OperationLogVo(
 						getBugChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),BUG_LIST,buddyAccount.getName()));
 			}else{
-				List<ProductEmployeeChangeLog> aalist = getProductEmployeeChangeLogService().paraQuery(paramsMap);
-				list.addAll(this.convertProduct2OperationLogVo(aalist,buddyAccount.getCompanyName(),PRODUCT_LIST,buddyAccount.getName()));
+				list.addAll(this.convertProduct2OperationLogVo(
+						getProductEmployeeChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),PRODUCT_LIST,buddyAccount.getName()));
 				list.addAll(this.convertProduct2OperationLogVo(
 						getProgramEmployeeChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),PROGRAM_LIST,buddyAccount.getName()));
 				list.addAll(this.convertProduct2OperationLogVo(
