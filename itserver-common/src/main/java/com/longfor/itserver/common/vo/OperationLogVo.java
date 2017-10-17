@@ -1,5 +1,8 @@
 package com.longfor.itserver.common.vo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import net.mayee.commons.CustomFullDateSerializer;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,7 +17,8 @@ public class OperationLogVo implements Comparable<OperationLogVo> {
     private String companyName;//
     private String operateModule;//
     private String actionChangeInfo;//
-    private String createTime;//
+    @JsonSerialize(using = CustomFullDateSerializer.class)
+    private Date createTime;//
 
     public OperationLogVo(String companyName,String operateModule){
         this.companyName = companyName;
@@ -76,11 +80,11 @@ public class OperationLogVo implements Comparable<OperationLogVo> {
         this.actionChangeInfo = actionChangeInfo;
     }
 
-    public String getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 }

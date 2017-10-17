@@ -79,6 +79,9 @@ public class AdsServiceImpl implements IAdsService {
     public AccountLongfor getAccountLongfor(String loginName) {
         return adsHelper.getAccountLongforByLoginName(loginName);
     }
-
+    @Override
+    public com.longfor.ads.entity.BuddyAccount getBuddyAccountByLoginName(String loginName) {
+        return adsHelper.getByLoginNameBuddyAccount(loginName);
+    }
 
 }

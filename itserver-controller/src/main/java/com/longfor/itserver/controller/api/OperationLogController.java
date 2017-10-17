@@ -9,6 +9,7 @@ import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.common.vo.BuddyAccount;
 import com.longfor.itserver.common.vo.OperationLogVo;
 import com.longfor.itserver.controller.base.BaseController;
+import com.longfor.itserver.entity.ProductEmployeeChangeLog;
 import com.longfor.itserver.esi.impl.AdsServiceImpl;
 import net.mayee.commons.helper.APIHelper;
 import org.apache.commons.beanutils.BeanUtils;
@@ -67,25 +68,25 @@ public class OperationLogController extends BaseController {
 		try{
 			if("0".equals(type)){
 				list.addAll(this.convertProduct2OperationLogVo(
-						getProductEmployeeChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),PRODUCT_LIST));
+						getProductEmployeeChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),PRODUCT_LIST,buddyAccount.getName()));
 			}else if("1".equals(type)){
 				list.addAll(this.convertProduct2OperationLogVo(
-						getProgramEmployeeChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),PROGRAM_LIST));
+						getProgramEmployeeChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),PROGRAM_LIST,buddyAccount.getName()));
 			}else if("2".equals(type)){
 				list.addAll(this.convertProduct2OperationLogVo(
-						getDemandChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),DEMAND_LIST));
+						getDemandChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),DEMAND_LIST,buddyAccount.getName()));
 			}else if("3".equals(type)){
 				list.addAll(this.convertProduct2OperationLogVo(
-						getBugChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),BUG_LIST));
+						getBugChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),BUG_LIST,buddyAccount.getName()));
 			}else{
 				list.addAll(this.convertProduct2OperationLogVo(
-						getProductEmployeeChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),PRODUCT_LIST));
+						getProductEmployeeChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),PRODUCT_LIST,buddyAccount.getName()));
 				list.addAll(this.convertProduct2OperationLogVo(
-						getProgramEmployeeChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),PROGRAM_LIST));
+						getProgramEmployeeChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),PROGRAM_LIST,buddyAccount.getName()));
 				list.addAll(this.convertProduct2OperationLogVo(
-						getDemandChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),DEMAND_LIST));
+						getDemandChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),DEMAND_LIST,buddyAccount.getName()));
 				list.addAll(this.convertProduct2OperationLogVo(
-						getBugChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),BUG_LIST));
+						getBugChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),BUG_LIST,buddyAccount.getName()));
 			}
 		} catch (Exception e){
 			e.printStackTrace();
@@ -94,8 +95,14 @@ public class OperationLogController extends BaseController {
 
         /*返回数据*/
 		Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-        Collections.sort(list);
-		map.put("list", list.subList(pageNum-1,pageSize));
+		if(list.size()>0){
+			Collections.sort(list);
+			if(list.size() > pageSize){
+				list = list.subList(pageNum-1,pageSize);
+			}
+		}
+		map.put("list", list);
+
 		map.put(APIHelper.PAGE_NUM, pageNum);
 		map.put(APIHelper.PAGE_SIZE, pageSize);
 		map.put(APIHelper.TOTAL, new PageInfo(list).getTotal());
@@ -103,10 +110,11 @@ public class OperationLogController extends BaseController {
 	}
 
 	private <T> List<OperationLogVo> convertProduct2OperationLogVo
-			(List<T> list,String companyName,String operateModule) throws Exception{
+			(List<T> list,String companyName,String operateModule,String name) throws Exception{
 		List<OperationLogVo> operationLogVoList = new ArrayList<>();
 		for(Object objList:list){
 			OperationLogVo tmpOperationLogVo = new OperationLogVo(companyName,operateModule);
+			tmpOperationLogVo.setName(name);
 			BeanUtils.copyProperties(tmpOperationLogVo,objList);
 			operationLogVoList.add(tmpOperationLogVo);
 		}
