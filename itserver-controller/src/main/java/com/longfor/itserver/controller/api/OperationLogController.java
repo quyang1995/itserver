@@ -22,10 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /***
  * 操作日志
@@ -47,11 +44,11 @@ public class OperationLogController extends BaseController {
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map list(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public Map list(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
 		String operateTime = StringUtils.isBlank(paramsMap.get("operateTime"))
-				? DateUtil.getPastDate(30) : paramsMap.get("operateTime");//查询30天内日志
+				? DateUtil.date2String(new Date(),"yyyy-MM-dd") : paramsMap.get("operateTime");
 		String type = paramsMap.get("type");//操作类型：0-产品，1-项目，2-需求，3-bug
 		int pageNum = Integer.parseInt(paramsMap.get("pageNum"));
         int pageSize = Integer.parseInt(paramsMap.get("pageSize"));
@@ -95,17 +92,18 @@ public class OperationLogController extends BaseController {
 
         /*返回数据*/
 		Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		map.put(APIHelper.TOTAL, new PageInfo(list).getTotal());
 		if(list.size()>0){
 			Collections.sort(list);
 			if(list.size() > pageSize){
-				list = list.subList(pageNum-1,pageSize);
+				list = list.subList((pageNum-1)*pageSize,pageNum*pageSize);
 			}
 		}
 		map.put("list", list);
 
 		map.put(APIHelper.PAGE_NUM, pageNum);
 		map.put(APIHelper.PAGE_SIZE, pageSize);
-		map.put(APIHelper.TOTAL, new PageInfo(list).getTotal());
+
 		return map;
 	}
 
