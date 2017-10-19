@@ -14,6 +14,7 @@ import com.longfor.itserver.entity.DemandFile;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ps.PsDemandDetail;
+import com.longfor.itserver.service.util.AccountUitl;
 import org.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -211,9 +212,11 @@ public class APIDemandController extends BaseController {
     public Map updateCallon(HttpServletRequest request ,HttpServletResponse response){
         Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         //人员信息有效性验证
-        AccountLongfor accountLongfor = this.getAdsService().getAccountLongfor((String) paramsMap.get("callonAccountId"));
+        AccountLongfor accountLongfor = AccountUitl.getAccountByAccountTypes((String) paramsMap.get("callonAccountId"),getAdsHelper());
         if(accountLongfor != null){
-            this.getDemandService().updateCallon(paramsMap);
+            if(!this.getDemandService().updateCallon(paramsMap)){
+                return CommonUtils.getResultMapByBizEnum(BizEnum.E1029);
+            }
 
             Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
             resultMap.put("newCallonEmployeeText", accountLongfor.getName());

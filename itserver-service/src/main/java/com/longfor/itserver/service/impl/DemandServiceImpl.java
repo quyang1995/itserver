@@ -78,7 +78,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		}
 		//获取指派人信息
 		AccountLongfor callonAccountLongfor =
-				AccountUitl.getAccountByAccountType(accountType,demand.getCallonAccountId(),adsHelper);
+				AccountUitl.getAccountByAccountTypes(demand.getCallonAccountId(),adsHelper);
 		if (callonAccountLongfor!=null){
 			demand.setCallonEmployeeName(callonAccountLongfor.getName());
 			if(StringUtils.isNotBlank(callonAccountLongfor.getPsEmployeeCode())){
@@ -152,7 +152,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		}
 		//获取指派人信息
 		AccountLongfor callonAccountLongfor =
-				AccountUitl.getAccountByAccountType(accountType,demand.getCallonAccountId(),adsHelper);
+				AccountUitl.getAccountByAccountTypes(demand.getCallonAccountId(),adsHelper);
 		if (callonAccountLongfor != null) {
 			selectDemandOne.setCallonAccountId(demand.getCallonAccountId());
 			if(StringUtils.isNotBlank(callonAccountLongfor.getPsEmployeeCode())){
@@ -212,7 +212,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 
 	@Override
 	public Demand getDemandById(Long id) {
-			Demand demand = demandMapper.getDemandById(id);
+		Demand demand = demandMapper.getDemandById(id);
 		return demand;
 	}
 
@@ -331,16 +331,16 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		if (newDemand.getStatus()!=null && !Objects.equals(oldDemand.getStatus(),newDemand.getStatus())){
 
 			log.append(oldDemand.getModifiedName()).
-				append(" 将 状态 由[").
-				append(DemandStatusEnum.getByCode(oldDemand.getStatus()).getText()).
-				append("]更改为[").
-				append(DemandStatusEnum.getByCode(newDemand.getStatus()).getText()).
-				append("]");
+					append(" 将 状态 由[").
+					append(DemandStatusEnum.getByCode(oldDemand.getStatus()).getText()).
+					append("]更改为[").
+					append(DemandStatusEnum.getByCode(newDemand.getStatus()).getText()).
+					append("]");
 		}
 
 		if(newDemand.getCallonAccountId()!=null && !Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())){
 
-				log.append(oldDemand.getModifiedName()).
+			log.append(oldDemand.getModifiedName()).
 					append(" 将 指派给 由[").
 					append(oldDemand.getCallonEmployeeName()).
 					append("]更改为[").
@@ -407,9 +407,12 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		Demand oldDemand = demandMapper.selectByPrimaryKey(demandId);
 		Demand newDemand = new Demand();
 		AccountLongfor accountLongfor =
-				AccountUitl.getAccountByAccountType(accountType,callonAccountId,adsHelper);
+				AccountUitl.getAccountByAccountTypes(callonAccountId,adsHelper);
+		if(accountLongfor==null){
+			return false;
+		}
 		newDemand.setCallonAccountId(callonAccountId);
-		if(accountLongfor!=null&&StringUtils.isNotBlank(accountLongfor.getPsEmployeeCode())){
+		if(StringUtils.isNotBlank(accountLongfor.getPsEmployeeCode())){
 			newDemand.setCallonEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
 		}
 		newDemand.setCallonEmployeeName(accountLongfor.getName());
@@ -432,7 +435,9 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		}
 
 		oldDemand.setCallonAccountId(callonAccountId);
-		oldDemand.setCallonEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
+		if(StringUtils.isNotBlank(accountLongfor.getPsEmployeeCode())){
+			oldDemand.setCallonEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
+		}
 		oldDemand.setCallonEmployeeName(accountLongfor.getName());
 		oldDemand.setCallonFullDeptPath(accountLongfor.getPsDeptFullName());
 		oldDemand.setModifiedTime(TimeUtils.getTodayByDateTime());
@@ -443,7 +448,9 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		//如果需求对应的反馈建议不为空，更新反馈建议接口人信息
 		if(feedBack != null) {
 			feedBack.setContactAccountId(callonAccountId);
-			feedBack.setContactEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
+			if(StringUtils.isNotBlank(accountLongfor.getPsEmployeeCode())){
+				feedBack.setContactEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
+			}
 			feedBack.setContactEmployeeName(accountLongfor.getName());
 			feedBack.setContactFullDeptPath(accountLongfor.getPsDeptFullName());
 			feedBack.setModifiedTime(TimeUtils.getTodayByDateTime());

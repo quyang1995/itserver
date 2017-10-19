@@ -9,6 +9,7 @@ import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.ProductStatusEnum;
 import com.longfor.itserver.common.enums.ProgramStatusEnum;
 import com.longfor.itserver.common.enums.PublicTypeEnum;
+import com.longfor.itserver.common.util.StringUtil;
 import com.longfor.itserver.entity.*;
 import com.longfor.itserver.mapper.ProductMapper;
 import com.longfor.itserver.mapper.ProgramEmployeeChangeLogMapper;
@@ -92,38 +93,38 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		// 项目责任人
 		String jsonArrPl = json.get("personLiableList").toString();
 		if (!"".equals(jsonArrPl)) {
-			getAccountLongfor(program, jsonArrPl, "0",accountType);
+			getAccountLongfor(program, jsonArrPl, "0");
 		}
 		// 产品经理
 		String jsonArrPm = json.get("productManagerList").toString();
 		if (!"".equals(jsonArrPm)) {
-			getAccountLongfor(program, jsonArrPm, "1",accountType);
+			getAccountLongfor(program, jsonArrPm, "1");
 
 		}
 		// 项目经理
 		String jsonArrPMl = json.get("programManagerList").toString();
 		if (!"".equals(jsonArrPMl)) {
-			getAccountLongfor(program, jsonArrPMl, "2",accountType);
+			getAccountLongfor(program, jsonArrPMl, "2");
 		}
 		// 开发人员
 		String jsonArrDe = json.get("developerList").toString();
 		if (!"".equals(jsonArrDe)) {
-			getAccountLongfor(program, jsonArrDe, "3",accountType);
+			getAccountLongfor(program, jsonArrDe, "3");
 		}
 		// UED人员
 		String jsonArrUed = json.get("uedList").toString();
 		if (!"".equals(jsonArrUed)) {
-			getAccountLongfor(program, jsonArrUed, "4",accountType);
+			getAccountLongfor(program, jsonArrUed, "4");
 		}
 		// 测试人员
 		String jsonArrTest = json.get("testingList").toString();
 		if (!"".equals(jsonArrTest)) {
-			getAccountLongfor(program, jsonArrTest, "5",accountType);
+			getAccountLongfor(program, jsonArrTest, "5");
 		}
 		// 业务人员
 		String jsonArrBusiness = json.get("businessList").toString();
 		if (!"".equals(jsonArrBusiness)) {
-			getAccountLongfor(program, jsonArrBusiness, "6",accountType);
+			getAccountLongfor(program, jsonArrBusiness, "6");
 		}
 
 		//先生成变动日志
@@ -144,17 +145,17 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		return true;
 	}
 
-	public boolean getAccountLongfor(Program program, String str, String id,Integer accountType) {
+	public boolean getAccountLongfor(Program program, String str, String id) {
 		String[] strArr = str.split(",");
 		for (int i = 0; i < strArr.length; i++) {
 			String loginName = strArr[i].toString();
 			AccountLongfor accountLongfor =
-					AccountUitl.getAccountByAccountType(accountType,loginName,adsHelper);
+					AccountUitl.getAccountByAccountTypes(loginName,adsHelper);
 			if (accountLongfor != null) {
 				ProgramEmployee pe = new ProgramEmployee();
 				pe.setProgramId(program.getId());
 				pe.setAccountId(accountLongfor.getLoginName());
-				pe.setEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
+				pe.setEmployeeCode(StringUtil.getLongValue(accountLongfor.getPsEmployeeCode()));
 				pe.setEmployeeName(accountLongfor.getName());
 				pe.setFullDeptPath(accountLongfor.getPsDeptFullName());
 				if ("0".equals(id)) {
@@ -258,43 +259,43 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		String jsonArrPl = json.get("personLiableList").toString();
 		if (!"".equals(jsonArrPl)) {
 			deleteByParam(1, 0, program);
-			getAccountLongfor(program, jsonArrPl, "0",accountType);
+			getAccountLongfor(program, jsonArrPl, "0");
 		}
 		// 产品经理
 		String jsonArrPm = json.get("productManagerList").toString();
 		if (!"".equals(jsonArrPm)) {
 			deleteByParam(2, 1, program);
-			getAccountLongfor(program, jsonArrPm, "1",accountType);
+			getAccountLongfor(program, jsonArrPm, "1");
 		}
 		// 项目经理
 		String jsonArrPMl = json.get("programManagerList").toString();
 		if (!"".equals(jsonArrPMl)) {
 			deleteByParam(2, 2, program);
-			getAccountLongfor(program, jsonArrPMl, "2",accountType);
+			getAccountLongfor(program, jsonArrPMl, "2");
 		}
 		// 开发人员
 		String jsonArrDe = json.get("developerList").toString();
 		if (!"".equals(jsonArrDe)) {
 			deleteByParam(2, 3, program);
-			getAccountLongfor(program, jsonArrDe, "3",accountType);
+			getAccountLongfor(program, jsonArrDe, "3");
 		}
 		// UED人员
 		String jsonArrUed = json.get("uedList").toString();
 		if (!"".equals(jsonArrUed)) {
 			deleteByParam(2, 4, program);
-			getAccountLongfor(program, jsonArrUed, "4",accountType);
+			getAccountLongfor(program, jsonArrUed, "4");
 		}
 		// 测试人员
 		String jsonArrTest = json.get("testingList").toString();
 		if (!"".equals(jsonArrTest)) {
 			deleteByParam(2, 5, program);
-			getAccountLongfor(program, jsonArrTest, "5",accountType);
+			getAccountLongfor(program, jsonArrTest, "5");
 		}
 		// 业务人员
 		String jsonArrBusiness = json.get("businessList").toString();
 		if (!"".equals(jsonArrBusiness)) {
 			deleteByParam(2, 6, program);
-			getAccountLongfor(program, jsonArrBusiness, "6",accountType);
+			getAccountLongfor(program, jsonArrBusiness, "6");
 		}
 
 		/*添加日志*/

@@ -3,6 +3,7 @@ package com.longfor.itserver.service.util;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.entity.BuddyAccount;
 import com.longfor.ads.helper.ADSHelper;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by sunyanhui on 2017/10/18.
@@ -29,5 +30,23 @@ public class AccountUitl {
             return accountLongfor;
         }
         return null;
+    }
+
+    /***
+     * 先查询内部账号，如果有数据直接返回，否则在查询外部账号
+     * @param loginName
+     * @param adsHelper
+     * @return
+     */
+    public static AccountLongfor getAccountByAccountTypes( String loginName, ADSHelper adsHelper){
+        AccountLongfor accountLongfor = adsHelper.getAccountLongforByLoginName(loginName);
+        if(accountLongfor!=null){
+            return accountLongfor;
+        }
+        BuddyAccount buddyAccount = adsHelper.getByLoginNameBuddyAccount(loginName);
+        if(buddyAccount==null)return null;
+        accountLongfor = new AccountLongfor();
+        accountLongfor.setName(buddyAccount.getName());
+        return accountLongfor;
     }
 }

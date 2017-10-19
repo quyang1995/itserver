@@ -1,6 +1,7 @@
 package com.longfor.itserver.controller.base;
 
 
+import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.helper.JoddHelper;
 import com.longfor.itserver.esi.IAdsService;
 import com.longfor.itserver.service.*;
@@ -68,7 +69,12 @@ public class BaseController {
     private IDemandFileService demandFileService;
     @Autowired
     private IBugFileService bugFileService;
+    @Autowired
+    private ADSHelper adsHelper;
 
+    public ADSHelper getAdsHelper() {
+        return adsHelper;
+    }
 
     public IAdsService getAdsService() {
         return adsService;

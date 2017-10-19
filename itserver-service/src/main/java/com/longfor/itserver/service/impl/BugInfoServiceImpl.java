@@ -15,6 +15,7 @@ import com.longfor.itserver.common.enums.BugLevelEnum;
 import com.longfor.itserver.common.enums.BugStatusEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
+import com.longfor.itserver.common.util.StringUtil;
 import com.longfor.itserver.entity.BugChangeLog;
 import com.longfor.itserver.entity.BugFile;
 import com.longfor.itserver.entity.BugInfo;
@@ -99,15 +100,19 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                 AccountUitl.getAccountByAccountType(accountType,bugInfo.getModifiedAccountId(),adsHelper);
         if (draftedAccountLongfor != null) {
             bugInfo.setDraftedAccountId(bugInfo.getModifiedAccountId());
-            bugInfo.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
+            if(StringUtils.isNotBlank(draftedAccountLongfor.getPsEmployeeCode())){
+                bugInfo.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
+            }
             bugInfo.setDraftedEmployeeName(draftedAccountLongfor.getName());
             bugInfo.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
         }
         //获取指派人信息
         AccountLongfor callonAccountLongfor =
-                AccountUitl.getAccountByAccountType(accountType,bugInfo.getCallonAccountId(),adsHelper);
+                AccountUitl.getAccountByAccountTypes(bugInfo.getCallonAccountId(),adsHelper);
         if (callonAccountLongfor != null) {
-            bugInfo.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
+            if(StringUtils.isNotBlank(callonAccountLongfor.getPsEmployeeCode())){
+                bugInfo.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
+            }
             bugInfo.setCallonEmployeeName(callonAccountLongfor.getName());
             bugInfo.setCallonFullDeptPath(callonAccountLongfor.getPsDeptFullName());
         }
@@ -175,10 +180,12 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         }
         //获取指派人信息
         AccountLongfor callonAccountLongfor =
-                AccountUitl.getAccountByAccountType(accountType,bugInfo.getCallonAccountId(),adsHelper);
+                AccountUitl.getAccountByAccountTypes(bugInfo.getCallonAccountId(),adsHelper);
         if (callonAccountLongfor != null) {
             selectOneBugInfo.setCallonAccountId(bugInfo.getCallonAccountId());
-            selectOneBugInfo.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
+            if(StringUtils.isNotBlank(callonAccountLongfor.getPsEmployeeCode())){
+                selectOneBugInfo.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
+            }
             selectOneBugInfo.setCallonEmployeeName(callonAccountLongfor.getName());
             selectOneBugInfo.setCallonFullDeptPath(callonAccountLongfor.getPsDeptFullName());
         }
@@ -402,9 +409,9 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         //指派人更改后对象 用于更新
 //        BugInfo newBug = bugInfoMapper.selectByPrimaryKey(bugId);
         BugInfo newBug = new BugInfo();
-        AccountLongfor accountLongfor = AccountUitl.getAccountByAccountType(accountType,callonAccountId,adsHelper);
+        AccountLongfor accountLongfor = AccountUitl.getAccountByAccountTypes(callonAccountId,adsHelper);
         newBug.setCallonAccountId(callonAccountId);
-        newBug.setCallonEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
+        newBug.setCallonEmployeeCode(StringUtil.getLongValue(accountLongfor.getPsEmployeeCode()));
         newBug.setCallonEmployeeName(accountLongfor.getName());
         newBug.setCallonFullDeptPath(accountLongfor.getPsDeptFullName());
         newBug.setModifiedName(modifiedName);
@@ -426,7 +433,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         }
 
         oldBug.setCallonAccountId(callonAccountId);
-        oldBug.setCallonEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
+        oldBug.setCallonEmployeeCode(StringUtil.getLongValue(accountLongfor.getPsEmployeeCode()));
         oldBug.setCallonEmployeeName(accountLongfor.getName());
         oldBug.setCallonFullDeptPath(accountLongfor.getPsDeptFullName());
         oldBug.setModifiedTime(TimeUtils.getTodayByDateTime());

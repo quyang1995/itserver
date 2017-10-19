@@ -8,6 +8,7 @@ import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.enums.ProductStatusEnum;
 import com.longfor.itserver.common.enums.PublicTypeEnum;
 import com.longfor.itserver.common.util.CommonUtils;
+import com.longfor.itserver.common.util.StringUtil;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.ProductEmployee;
 import com.longfor.itserver.entity.ProductEmployeeChangeLog;
@@ -78,7 +79,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		product.setLikeProgram(jsonObject.getString("likeProgram"));
 		Integer accountType = Integer.parseInt(jsonObject.getString("accountType"));
 		/* 接口人相关信息 */
-		getAccountInfo(0, product, null,accountType);
+		getAccountInfo(0, product, null);
 		/* 添加产品 */
 		product.setCreateTime(TimeUtils.getTodayByDateTime());
 		product.setModifiedTime(TimeUtils.getTodayByDateTime());
@@ -86,25 +87,25 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		int insert = productMapper.insert(product);
 		/* 产品责任人 */
 		String personLiableList = (String) map.get("personLiableList");
-		getAccountInfo(1, product, personLiableList,accountType);
+		getAccountInfo(1, product, personLiableList);
 		/* 产品经理 */
 		String productManagerList = (String) map.get("productManagerList");
-		getAccountInfo(2, product, productManagerList,accountType);
+		getAccountInfo(2, product, productManagerList);
 		/* 项目经理 */
 		String programManagerList = (String) map.get("programManagerList");
-		getAccountInfo(3, product, programManagerList,accountType);
+		getAccountInfo(3, product, programManagerList);
 		/* 开发人员 */
 		String developerList = (String) map.get("developerList");
-		getAccountInfo(4, product, developerList,accountType);
+		getAccountInfo(4, product, developerList);
 		/* UED人员 */
 		String uedList = (String) map.get("uedList");
-		getAccountInfo(5, product, uedList,accountType);
+		getAccountInfo(5, product, uedList);
 		/* 测试人员 */
 		String testList = (String) map.get("testingList");
-		getAccountInfo(6, product, testList,accountType);
+		getAccountInfo(6, product, testList);
 		/* 业务人员 */
 		String businessList = (String) map.get("businessList");
-		getAccountInfo(7, product, businessList,accountType);
+		getAccountInfo(7, product, businessList);
 
 
 		//先生成变动日志
@@ -148,7 +149,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		oldProduct.setContactAccountId(jsonObject.getString("contactAccountId"));
 		oldProduct.setType(jsonObject.getInteger("type"));
 		/* 接口人相关信息 */
-		getAccountInfo(0, oldProduct, null,accountType);
+		getAccountInfo(0, oldProduct, null);
 		/* 关联项目 */
 		oldProduct.setLikeProgram(newProduct.getLikeProgram());
 		oldProduct.setModifiedTime(TimeUtils.getTodayByDateTime());
@@ -158,26 +159,26 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		/* 产品责任人 */
 		String personLiableList = (String) map.get("personLiableList");
 		deleteByParam(1, newProduct);
-		getAccountInfo(1, newProduct, personLiableList,accountType);
+		getAccountInfo(1, newProduct, personLiableList);
 		/* 产品经理 */
 		String productManagerList = (String) map.get("productManagerList");
 		deleteByParam(2, newProduct);
-		getAccountInfo(2, newProduct, productManagerList,accountType);
+		getAccountInfo(2, newProduct, productManagerList);
 		/* 项目经理 */
 		String programManagerList = (String) map.get("programManagerList");
-		getAccountInfo(3, newProduct, programManagerList,accountType);
+		getAccountInfo(3, newProduct, programManagerList);
 		/* 开发人员 */
 		String developerList = (String) map.get("developerList");
-		getAccountInfo(4, newProduct, developerList,accountType);
+		getAccountInfo(4, newProduct, developerList);
 		/* UED人员 */
 		String uedList = (String) map.get("uedList");
-		getAccountInfo(5, newProduct, uedList,accountType);
+		getAccountInfo(5, newProduct, uedList);
 		/* 测试人员 */
 		String testList = (String) map.get("testingList");
-		getAccountInfo(6, newProduct, testList,accountType);
+		getAccountInfo(6, newProduct, testList);
 		/* 业务人员 */
 		String businessList = (String) map.get("businessList");
-		getAccountInfo(7, newProduct, businessList,accountType);
+		getAccountInfo(7, newProduct, businessList);
 
 		/*添加日志*/
 		for(String text : changeLogTextList){
@@ -214,12 +215,12 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		return productMapper.getListSort();
 	}
 
-	public boolean getAccountInfo(int num, Product product, String str,Integer accountType) {
+	public boolean getAccountInfo(int num, Product product, String str) {
 		if (num == 0) {
 			AccountLongfor accountInfo =
-					AccountUitl.getAccountByAccountType(accountType,product.getContactAccountId(),adsHelp);
+					AccountUitl.getAccountByAccountTypes(product.getContactAccountId(),adsHelp);
 			if (accountInfo != null) {
-				product.setContactEmployeeCode(Long.parseLong(accountInfo.getPsEmployeeCode()));
+				product.setContactEmployeeCode(StringUtil.getLongValue(accountInfo.getPsEmployeeCode()));
 				product.setContactEmployeeName(accountInfo.getName());
 				product.setContactFullDeptPath(accountInfo.getPsDeptFullName());
 			}
@@ -230,12 +231,12 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 					for (int i = 1; i < split.length; i++) {
 						String loginName = split[i];
 						AccountLongfor accountInfo =
-								AccountUitl.getAccountByAccountType(accountType,loginName,adsHelp);
+								AccountUitl.getAccountByAccountTypes(loginName,adsHelp);
 						if (accountInfo != null) {
 							ProductEmployee productEmployee = new ProductEmployee();
 							productEmployee.setProductId(product.getId());
 							productEmployee.setAccountId(loginName);
-							productEmployee.setEmployeeCode(Long.parseLong(accountInfo.getPsEmployeeCode()));
+							productEmployee.setEmployeeCode(StringUtil.getLongValue(accountInfo.getPsEmployeeCode()));
 							productEmployee.setEmployeeName(accountInfo.getName());
 							productEmployee.setFullDeptPath(accountInfo.getPsDeptFullName());
 							productEmployee.setStatus(AvaStatusEnum.AVA.getCode());

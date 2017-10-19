@@ -17,6 +17,7 @@ import com.longfor.itserver.entity.BugInfo;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ps.PsBugInfoDetail;
+import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.helper.APIHelper;
 import org.json.JSONException;
 import org.springframework.stereotype.Controller;
@@ -240,7 +241,7 @@ public class APIBugInfoController extends BaseController {
         Map<String, String> paramsMap = (Map<String, String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
         //人员信息有效性验证
-        AccountLongfor accountLongfor = this.getAdsService().getAccountLongfor(paramsMap.get("callonAccountId"));
+        AccountLongfor accountLongfor = AccountUitl.getAccountByAccountTypes(paramsMap.get("callonAccountId"),getAdsHelper());
         if(accountLongfor != null){
             this.getBugInfoService().updateCallon(paramsMap);
 
