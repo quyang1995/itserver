@@ -52,7 +52,7 @@ public class OperationLogController extends BaseController {
 		String type = paramsMap.get("type");//操作类型：0-产品，1-项目，2-需求，3-bug
 		int pageNum = Integer.parseInt(paramsMap.get("pageNum"));
         int pageSize = Integer.parseInt(paramsMap.get("pageSize"));
-        PageHelper.startPage(pageNum, pageSize, true);
+//        PageHelper.startPage(pageNum, pageSize, true);
 
 		paramsMap.put("operateTime",operateTime);
 
@@ -96,7 +96,12 @@ public class OperationLogController extends BaseController {
 		if(list.size()>0){
 			Collections.sort(list);
 			if(list.size() > pageSize){
-				list = list.subList((pageNum-1)*pageSize,pageNum*pageSize);
+				try{
+					list = list.subList((pageNum-1)*pageSize,pageNum*pageSize);
+				}catch (Exception e){
+					list = list.subList((pageNum-1)*pageSize,list.size());
+				}
+
 			}
 		}
 		map.put("list", list);
