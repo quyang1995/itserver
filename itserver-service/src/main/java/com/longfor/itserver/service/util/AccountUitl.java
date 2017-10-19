@@ -47,6 +47,7 @@ public class AccountUitl {
         if(buddyAccount==null)return null;
         accountLongfor = new AccountLongfor();
         accountLongfor.setName(buddyAccount.getName());
+        accountLongfor.setLoginName(buddyAccount.getLoginName());
         return accountLongfor;
     }
 }
