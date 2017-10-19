@@ -12,7 +12,9 @@ import com.longfor.itserver.mapper.BugCommentMapper;
 import com.longfor.itserver.mapper.BugInfoMapper;
 import com.longfor.itserver.service.IBugCommentService;
 import com.longfor.itserver.service.base.AdminBaseService;
+import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.TimeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,9 +49,10 @@ public class BugCommentServiceImpl extends AdminBaseService<BugComment> implemen
     public Map<String,Object> add(Map<String,String> paramsMap) {
         JSONObject jsonObject = (JSONObject) JSONObject.toJSON(paramsMap);
         BugComment bugComment = JSONObject.toJavaObject(jsonObject,BugComment.class);
-
+        Integer accountType = Integer.parseInt(jsonObject.getString("accountType"));
         //回复人验证
-        AccountLongfor accountLongfor =  adsHelper.getAccountLongforByLoginName(bugComment.getAccountId());
+        AccountLongfor accountLongfor =
+                AccountUitl.getAccountByAccountType(accountType,bugComment.getAccountId(),adsHelper);
         if(accountLongfor == null) {
             return CommonUtils.getResultMapByBizEnum(BizEnum.E1017,"该回复人");
         }
@@ -82,7 +85,9 @@ public class BugCommentServiceImpl extends AdminBaseService<BugComment> implemen
 //            bugCommentMapper.updateByPrimaryKeySelective(bugCommentParent);
 //        }
 
-        bugComment.setEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
+        if(accountLongfor!=null && StringUtils.isNotBlank(accountLongfor.getPsEmployeeCode())){
+            bugComment.setEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
+        }
         bugComment.setEmployeeName(accountLongfor.getName());
         bugComment.setFullDeptPath(accountLongfor.getPsDeptFullName());
         bugComment.setLevelNum(levelNum);

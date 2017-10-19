@@ -16,6 +16,7 @@ import com.longfor.itserver.mapper.ProgramEmployeeMapper;
 import com.longfor.itserver.mapper.ProgramMapper;
 import com.longfor.itserver.service.IProgramService;
 import com.longfor.itserver.service.base.AdminBaseService;
+import com.longfor.itserver.service.util.AccountUitl;
 import jodd.datetime.TimeUtil;
 import net.mayee.commons.TimeUtils;
 import org.apache.commons.codec.binary.Hex;
@@ -75,6 +76,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	@Transactional
 	public boolean addProgram(Map map) {
 		JSONObject json = (JSONObject) JSONObject.toJSON(map);
+		Integer accountType = Integer.parseInt(json.getString("accountType"));
 		Program program = JSONObject.toJavaObject(json, Program.class);
 		Product product = productMapper.selectByPrimaryKey(program.getProductId());
 		if(product == null){
@@ -84,67 +86,70 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		program.setProductCode(product.getCode());
 		program.setCreateTime(TimeUtils.getTodayByDateTime());
 		program.setModifiedTime(TimeUtils.getTodayByDateTime());
+		program.setAccountType(accountType);
 		programMapper.insert(program);
 
 		// 项目责任人
 		String jsonArrPl = json.get("personLiableList").toString();
 		if (!"".equals(jsonArrPl)) {
-			getAccountLongfor(program, jsonArrPl, "0");
+			getAccountLongfor(program, jsonArrPl, "0",accountType);
 		}
 		// 产品经理
 		String jsonArrPm = json.get("productManagerList").toString();
 		if (!"".equals(jsonArrPm)) {
-			getAccountLongfor(program, jsonArrPm, "1");
+			getAccountLongfor(program, jsonArrPm, "1",accountType);
 
 		}
 		// 项目经理
 		String jsonArrPMl = json.get("programManagerList").toString();
 		if (!"".equals(jsonArrPMl)) {
-			getAccountLongfor(program, jsonArrPMl, "2");
+			getAccountLongfor(program, jsonArrPMl, "2",accountType);
 		}
 		// 开发人员
 		String jsonArrDe = json.get("developerList").toString();
 		if (!"".equals(jsonArrDe)) {
-			getAccountLongfor(program, jsonArrDe, "3");
+			getAccountLongfor(program, jsonArrDe, "3",accountType);
 		}
 		// UED人员
 		String jsonArrUed = json.get("uedList").toString();
 		if (!"".equals(jsonArrUed)) {
-			getAccountLongfor(program, jsonArrUed, "4");
+			getAccountLongfor(program, jsonArrUed, "4",accountType);
 		}
 		// 测试人员
 		String jsonArrTest = json.get("testingList").toString();
 		if (!"".equals(jsonArrTest)) {
-			getAccountLongfor(program, jsonArrTest, "5");
+			getAccountLongfor(program, jsonArrTest, "5",accountType);
 		}
 		// 业务人员
 		String jsonArrBusiness = json.get("businessList").toString();
 		if (!"".equals(jsonArrBusiness)) {
-			getAccountLongfor(program, jsonArrBusiness, "6");
+			getAccountLongfor(program, jsonArrBusiness, "6",accountType);
 		}
 
-        //先生成变动日志
-        List<String> changeLogTextList = getChangeLogText(null, program);
+		//先生成变动日志
+		List<String> changeLogTextList = getChangeLogText(null, program);
         /*添加日志*/
-        for(String text : changeLogTextList){
-            ProgramEmployeeChangeLog employeeChangeLog = new ProgramEmployeeChangeLog();
-            employeeChangeLog.setProgramId(program.getId());
-            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
-            employeeChangeLog.setActionChangeInfo(text);
-            employeeChangeLog.setModifiedAccountId(program.getModifiedAccountId());
-            employeeChangeLog.setModifiedName(program.getModifiedName());
-            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
-            employeeChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
-            programEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
-        }
+		for(String text : changeLogTextList){
+			ProgramEmployeeChangeLog employeeChangeLog = new ProgramEmployeeChangeLog();
+			employeeChangeLog.setProgramId(program.getId());
+			employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+			employeeChangeLog.setActionChangeInfo(text);
+			employeeChangeLog.setModifiedAccountId(program.getModifiedAccountId());
+			employeeChangeLog.setModifiedName(program.getModifiedName());
+			employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+			employeeChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+			employeeChangeLog.setAccountType(accountType);
+			programEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
+		}
 		return true;
 	}
 
-	public boolean getAccountLongfor(Program program, String str, String id) {
+	public boolean getAccountLongfor(Program program, String str, String id,Integer accountType) {
 		String[] strArr = str.split(",");
 		for (int i = 0; i < strArr.length; i++) {
 			String loginName = strArr[i].toString();
-			AccountLongfor accountLongfor = adsHelper.getAccountLongforByLoginName(loginName);
+			AccountLongfor accountLongfor =
+					AccountUitl.getAccountByAccountType(accountType,loginName,adsHelper);
 			if (accountLongfor != null) {
 				ProgramEmployee pe = new ProgramEmployee();
 				pe.setProgramId(program.getId());
@@ -206,7 +211,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 	/**
 	 * 删除操作
-	 * 
+	 *
 	 * @param type
 	 * @param program
 	 * @param program
@@ -227,9 +232,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		JSONObject json = (JSONObject) JSONObject.toJSON(map);
 		Program program = JSONObject.toJavaObject(json, Program.class);
 		Program selectOneProgram = programMapper.selectByPrimaryKey(program.getId());
-
-        //先生成变动日志
-        List<String> changeLogTextList = getChangeLogText(selectOneProgram, program);
+		Integer accountType = Integer.parseInt(json.getString("accountType"));
+		//先生成变动日志
+		List<String> changeLogTextList = getChangeLogText(selectOneProgram, program);
 
 		if (null == selectOneProgram) {
 			return false;
@@ -245,7 +250,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		selectOneProgram.setLikeProgram(program.getLikeProgram());
 		selectOneProgram.setType(program.getType());
 		selectOneProgram.setProgramStatus(program.getProgramStatus());
-
+		selectOneProgram.setAccountType(accountType);
 		selectOneProgram.setModifiedTime(TimeUtils.getTodayByDateTime());
 		programMapper.updateByPrimaryKey(selectOneProgram);
 
@@ -253,57 +258,58 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		String jsonArrPl = json.get("personLiableList").toString();
 		if (!"".equals(jsonArrPl)) {
 			deleteByParam(1, 0, program);
-			getAccountLongfor(program, jsonArrPl, "0");
+			getAccountLongfor(program, jsonArrPl, "0",accountType);
 		}
 		// 产品经理
 		String jsonArrPm = json.get("productManagerList").toString();
 		if (!"".equals(jsonArrPm)) {
 			deleteByParam(2, 1, program);
-			getAccountLongfor(program, jsonArrPm, "1");
+			getAccountLongfor(program, jsonArrPm, "1",accountType);
 		}
 		// 项目经理
 		String jsonArrPMl = json.get("programManagerList").toString();
 		if (!"".equals(jsonArrPMl)) {
 			deleteByParam(2, 2, program);
-			getAccountLongfor(program, jsonArrPMl, "2");
+			getAccountLongfor(program, jsonArrPMl, "2",accountType);
 		}
 		// 开发人员
 		String jsonArrDe = json.get("developerList").toString();
 		if (!"".equals(jsonArrDe)) {
 			deleteByParam(2, 3, program);
-			getAccountLongfor(program, jsonArrDe, "3");
+			getAccountLongfor(program, jsonArrDe, "3",accountType);
 		}
 		// UED人员
 		String jsonArrUed = json.get("uedList").toString();
 		if (!"".equals(jsonArrUed)) {
 			deleteByParam(2, 4, program);
-			getAccountLongfor(program, jsonArrUed, "4");
+			getAccountLongfor(program, jsonArrUed, "4",accountType);
 		}
 		// 测试人员
 		String jsonArrTest = json.get("testingList").toString();
 		if (!"".equals(jsonArrTest)) {
 			deleteByParam(2, 5, program);
-			getAccountLongfor(program, jsonArrTest, "5");
+			getAccountLongfor(program, jsonArrTest, "5",accountType);
 		}
 		// 业务人员
 		String jsonArrBusiness = json.get("businessList").toString();
 		if (!"".equals(jsonArrBusiness)) {
 			deleteByParam(2, 6, program);
-			getAccountLongfor(program, jsonArrBusiness, "6");
+			getAccountLongfor(program, jsonArrBusiness, "6",accountType);
 		}
 
 		/*添加日志*/
-        for(String text : changeLogTextList){
-            ProgramEmployeeChangeLog employeeChangeLog = new ProgramEmployeeChangeLog();
-            employeeChangeLog.setProgramId(program.getId());
-            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
-            employeeChangeLog.setActionChangeInfo(text);
-            employeeChangeLog.setModifiedAccountId(program.getModifiedAccountId());
-            employeeChangeLog.setModifiedName(program.getModifiedName());
-            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
-            employeeChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
-            programEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
-        }
+		for(String text : changeLogTextList){
+			ProgramEmployeeChangeLog employeeChangeLog = new ProgramEmployeeChangeLog();
+			employeeChangeLog.setProgramId(program.getId());
+			employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+			employeeChangeLog.setActionChangeInfo(text);
+			employeeChangeLog.setModifiedAccountId(program.getModifiedAccountId());
+			employeeChangeLog.setModifiedName(program.getModifiedName());
+			employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+			employeeChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+			employeeChangeLog.setAccountType(accountType);
+			programEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
+		}
 
 		return true;
 	}
@@ -319,9 +325,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			return textList;
 		}
 
-        if(newProgram == null){
-            return textList;
-        }
+		if(newProgram == null){
+			return textList;
+		}
 
 		if(!Objects.equals(oldProgram.getProgramStatus(), newProgram.getProgramStatus())
 				|| !Objects.equals(oldProgram.getType(), newProgram.getType())){
@@ -352,27 +358,27 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		}
 
 		//立项时间
-        if(!TimeUtils.sameDate(oldProgram.getCommitDate(), newProgram.getCommitDate())){
-            StringBuilder sb = new StringBuilder();
-            sb.append(newProgram.getModifiedName());
-            sb.append(" 将 立项时间 从 [")
-                    .append(TimeUtils.getTime(oldProgram.getCommitDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-                    .append("] 更新为 [")
-                    .append(TimeUtils.getTime(newProgram.getCommitDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-                    .append("]");
-            textList.add(sb.toString());
-        }
-        //启动时间
-        if(!TimeUtils.sameDate(oldProgram.getStartDate(), newProgram.getStartDate())){
-            StringBuilder sb = new StringBuilder();
-            sb.append(newProgram.getModifiedName());
-            sb.append(" 将 启动时间 从 [")
-                    .append(TimeUtils.getTime(oldProgram.getStartDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-                    .append("] 更新为 [")
-                    .append(TimeUtils.getTime(newProgram.getStartDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-                    .append("]");
-            textList.add(sb.toString());
-        }
+		if(!TimeUtils.sameDate(oldProgram.getCommitDate(), newProgram.getCommitDate())){
+			StringBuilder sb = new StringBuilder();
+			sb.append(newProgram.getModifiedName());
+			sb.append(" 将 立项时间 从 [")
+					.append(TimeUtils.getTime(oldProgram.getCommitDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+					.append("] 更新为 [")
+					.append(TimeUtils.getTime(newProgram.getCommitDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+					.append("]");
+			textList.add(sb.toString());
+		}
+		//启动时间
+		if(!TimeUtils.sameDate(oldProgram.getStartDate(), newProgram.getStartDate())){
+			StringBuilder sb = new StringBuilder();
+			sb.append(newProgram.getModifiedName());
+			sb.append(" 将 启动时间 从 [")
+					.append(TimeUtils.getTime(oldProgram.getStartDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+					.append("] 更新为 [")
+					.append(TimeUtils.getTime(newProgram.getStartDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+					.append("]");
+			textList.add(sb.toString());
+		}
 		//UED评审时间
 		if(!TimeUtils.sameDate(oldProgram.getUedDate(), newProgram.getUedDate())){
 			StringBuilder sb = new StringBuilder();
@@ -395,28 +401,28 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 					.append("]");
 			textList.add(sb.toString());
 		}
-        //灰度时间
-        if(!TimeUtils.sameDate(oldProgram.getGrayReleaseDate(), newProgram.getGrayReleaseDate())){
-            StringBuilder sb = new StringBuilder();
-            sb.append(newProgram.getModifiedName());
-            sb.append(" 将 灰度时间 从 [")
-                    .append(TimeUtils.getTime(oldProgram.getGrayReleaseDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-                    .append("] 更新为 [")
-                    .append(TimeUtils.getTime(newProgram.getGrayReleaseDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-                    .append("]");
-            textList.add(sb.toString());
-        }
-        //发布时间
-        if(!TimeUtils.sameDate(oldProgram.getReleaseDate(), newProgram.getReleaseDate())){
-            StringBuilder sb = new StringBuilder();
-            sb.append(newProgram.getModifiedName());
-            sb.append(" 将 发布时间 从 [")
-                    .append(TimeUtils.getTime(oldProgram.getReleaseDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-                    .append("] 更新为 [")
-                    .append(TimeUtils.getTime(newProgram.getReleaseDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-                    .append("]");
-            textList.add(sb.toString());
-        }
+		//灰度时间
+		if(!TimeUtils.sameDate(oldProgram.getGrayReleaseDate(), newProgram.getGrayReleaseDate())){
+			StringBuilder sb = new StringBuilder();
+			sb.append(newProgram.getModifiedName());
+			sb.append(" 将 灰度时间 从 [")
+					.append(TimeUtils.getTime(oldProgram.getGrayReleaseDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+					.append("] 更新为 [")
+					.append(TimeUtils.getTime(newProgram.getGrayReleaseDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+					.append("]");
+			textList.add(sb.toString());
+		}
+		//发布时间
+		if(!TimeUtils.sameDate(oldProgram.getReleaseDate(), newProgram.getReleaseDate())){
+			StringBuilder sb = new StringBuilder();
+			sb.append(newProgram.getModifiedName());
+			sb.append(" 将 发布时间 从 [")
+					.append(TimeUtils.getTime(oldProgram.getReleaseDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+					.append("] 更新为 [")
+					.append(TimeUtils.getTime(newProgram.getReleaseDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+					.append("]");
+			textList.add(sb.toString());
+		}
 
 		if(!Objects.equals(oldProgram.getName(), newProgram.getName())
 				|| !Objects.equals(oldProgram.getLikeProduct(), newProgram.getLikeProduct())
@@ -479,11 +485,13 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			log.setModifiedName((String) paramsMap.get("modifiedName"));
 			log.setCreateTime(TimeUtils.getTodayByDateTime());
 			log.setModifiedTime(TimeUtils.getTodayByDateTime());
+			log.setAccountType(Integer.valueOf((String) jsonObject.get("accountType")));
 			programEmployeeChangeLogMapper.insertUseGeneratedKeys(log);
 		}
 
 		oldProgram.setProgramStatus(newProgram.getProgramStatus());
 		oldProgram.setModifiedTime(TimeUtils.getTodayByDateTime());
+		oldProgram.setAccountType(Integer.valueOf((String) jsonObject.get("accountType")));
 		programMapper.updateByPrimaryKey(oldProgram);
 		return true;
 	}

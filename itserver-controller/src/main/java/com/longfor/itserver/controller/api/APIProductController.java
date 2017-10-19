@@ -283,6 +283,7 @@ public class APIProductController extends BaseController {
         String productId = (String) paramsMap.get("productId");
         Product product = this.getProductService().selectById(Long.valueOf(productId));
         String accountId = (String) paramsMap.get("accountId");
+        String accountType = (String)paramsMap.get("accountId");
         if (accountId.equals(product.getContactAccountId())) {
             return CommonUtils.getResultMapByBizEnum(BizEnum.E1027, " 接口人");
         }
@@ -299,14 +300,14 @@ public class APIProductController extends BaseController {
             int persionaLiableCount =  this.getProductEmployeeService().selectCount(productEmployee);
             if (persionaLiableCount > 1) {
                 //删除当前用户
-                this.getProductEmployeeService().delEmployee(employee);
+                this.getProductEmployeeService().delEmployee(employee,accountType);
             } else {
                 return CommonUtils.getResultMapByBizEnum(BizEnum.E1027, " 唯一责任人");
             }
         } else {
             //删除成员
             employee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
-            this.getProductEmployeeService().delEmployee(employee);
+            this.getProductEmployeeService().delEmployee(employee,accountType);
         }
             
         return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);

@@ -282,6 +282,7 @@ public class APIProgramController extends BaseController {
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		String programId = (String) paramsMap.get("programId");
 		String accountId = (String) paramsMap.get("accountId");
+		String accountType = (String) paramsMap.get("accountType");
 		ProgramEmployee employee = new ProgramEmployee();
 		employee.setAccountId(accountId);
 		employee.setProgramId(Long.valueOf(programId));
@@ -295,14 +296,14 @@ public class APIProgramController extends BaseController {
 			int persionaLiableCount =  this.getProgramEmployeeService().selectCount(programEmployee);
 			if (persionaLiableCount > 1) {
 				//删除当前用户
-				this.getProgramEmployeeService().delEmployee(employee);
+				this.getProgramEmployeeService().delEmployee(employee,accountType);
 			} else {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1027, " 唯一责任人");
 			}
 		} else {
 			//删除成员
 			employee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
-			this.getProgramEmployeeService().delEmployee(employee);
+			this.getProgramEmployeeService().delEmployee(employee,accountType);
 		}
 
 		return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);

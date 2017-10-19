@@ -22,6 +22,7 @@ import com.longfor.itserver.mapper.FeedBackMapper;
 import com.longfor.itserver.service.IDemandService;
 import com.longfor.itserver.service.base.AdminBaseService;
 
+import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.TimeUtils;
 import net.mayee.commons.helper.APIHelper;
 
@@ -63,19 +64,26 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		Demand demand = JSONObject.toJavaObject(json, Demand.class);
 		//获取状态信息(默认待处理)
 		demand.setStatus(DemandStatusEnum.PENDING.getCode());
+		Integer accountType = Integer.parseInt(json.getString("accountType"));
 		//获取发起人信息
-		AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getModifiedAccountId());
+		AccountLongfor draftedAccountLongfor =
+				AccountUitl.getAccountByAccountType(accountType,demand.getModifiedAccountId(),adsHelper);
 		if(draftedAccountLongfor!=null){
 			demand.setDraftedAccountId(demand.getModifiedAccountId());
-			demand.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
+			if(StringUtils.isNotBlank(draftedAccountLongfor.getPsEmployeeCode())){
+				demand.setDraftedEmployeeCode(Long.parseLong(draftedAccountLongfor.getPsEmployeeCode()));
+			}
 			demand.setDraftedEmployeeName(draftedAccountLongfor.getName());
 			demand.setDraftedFullDeptPath(draftedAccountLongfor.getPsDeptFullName());
 		}
 		//获取指派人信息
-		AccountLongfor callonAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getCallonAccountId());
+		AccountLongfor callonAccountLongfor =
+				AccountUitl.getAccountByAccountType(accountType,demand.getCallonAccountId(),adsHelper);
 		if (callonAccountLongfor!=null){
 			demand.setCallonEmployeeName(callonAccountLongfor.getName());
-			demand.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
+			if(StringUtils.isNotBlank(callonAccountLongfor.getPsEmployeeCode())){
+				demand.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
+			}
 			demand.setCallonFullDeptPath(callonAccountLongfor.getPsDeptFullName());
 		}
 
@@ -111,6 +119,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			log.setModifiedAccountId(demand.getModifiedAccountId());
 			log.setCreateTime(TimeUtils.getTodayByDateTime());
 			log.setModifiedTime(TimeUtils.getTodayByDateTime());
+			log.setAccountType(accountType);
 			demandChangeLogMapper.insert(log);
 		}
 
@@ -132,19 +141,23 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		if (selectDemandOne==null){
 			return false;
 		}
-
+		Integer accountType = Integer.parseInt(jsonObject.getString("accountType"));
 		//获取最后修改人
-		AccountLongfor draftedAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getModifiedAccountId());
+		AccountLongfor draftedAccountLongfor =
+				AccountUitl.getAccountByAccountType(accountType,demand.getModifiedAccountId(),adsHelper);
 		if (draftedAccountLongfor != null) {
 			demand.setModifiedAccountId(demand.getModifiedAccountId());
 			demand.setModifiedName(draftedAccountLongfor.getName());
 			demand.setModifiedTime(TimeUtils.getTodayByDateTime());
 		}
 		//获取指派人信息
-		AccountLongfor callonAccountLongfor = adsHelper.getAccountLongforByLoginName(demand.getCallonAccountId());
+		AccountLongfor callonAccountLongfor =
+				AccountUitl.getAccountByAccountType(accountType,demand.getCallonAccountId(),adsHelper);
 		if (callonAccountLongfor != null) {
 			selectDemandOne.setCallonAccountId(demand.getCallonAccountId());
-			selectDemandOne.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
+			if(StringUtils.isNotBlank(callonAccountLongfor.getPsEmployeeCode())){
+				selectDemandOne.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
+			}
 			selectDemandOne.setCallonEmployeeName(callonAccountLongfor.getName());
 			selectDemandOne.setCallonFullDeptPath(callonAccountLongfor.getPsDeptFullName());
 		}
@@ -186,6 +199,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			log.setModifiedAccountId(demand.getModifiedAccountId());
 			log.setCreateTime(TimeUtils.getTodayByDateTime());
 			log.setModifiedTime(TimeUtils.getTodayByDateTime());
+			log.setAccountType(accountType);
 			logList.add(log);
 		}
 		if(logList.size() > 0){
@@ -349,7 +363,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		Demand oldDemand = demandMapper.selectByPrimaryKey(demandId);
 		Demand newDemand = new Demand();
 		newDemand.setStatus(status);
-
+		Integer accountType = Integer.parseInt(jsonObject.getString("accountType"));
         /*添加需求修改日志*/
 		String log = statusLog(oldDemand,newDemand);
 		if(StringUtils.isNotBlank(log)) {
@@ -362,6 +376,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			demandChangeLog.setModifiedAccountId(modifiedAccountId);
 			demandChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
 			demandChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+			demandChangeLog.setAccountType(accountType);
 			demandChangeLogMapper.insertUseGeneratedKeys(demandChangeLog);
 		}
 
@@ -388,11 +403,15 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		String modifiedName =  jsonObject.getString("modifiedName");
 		Long demandId = Long.valueOf(jsonObject.getString("demandId"));
 		String callonAccountId =  jsonObject.getString("callonAccountId");
+		Integer accountType = Integer.parseInt(jsonObject.getString("accountType"));
 		Demand oldDemand = demandMapper.selectByPrimaryKey(demandId);
 		Demand newDemand = new Demand();
-		AccountLongfor accountLongfor =  adsHelper.getAccountLongforByLoginName(callonAccountId);
+		AccountLongfor accountLongfor =
+				AccountUitl.getAccountByAccountType(accountType,callonAccountId,adsHelper);
 		newDemand.setCallonAccountId(callonAccountId);
-		newDemand.setCallonEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
+		if(accountLongfor!=null&&StringUtils.isNotBlank(accountLongfor.getPsEmployeeCode())){
+			newDemand.setCallonEmployeeCode(Long.valueOf(accountLongfor.getPsEmployeeCode()));
+		}
 		newDemand.setCallonEmployeeName(accountLongfor.getName());
 		newDemand.setCallonFullDeptPath(accountLongfor.getPsDeptFullName());
 
@@ -408,6 +427,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			demandChangeLog.setModifiedAccountId(modifiedAccountId);
 			demandChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
 			demandChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+			demandChangeLog.setAccountType(accountType);
 			demandChangeLogMapper.insertUseGeneratedKeys(demandChangeLog);
 		}
 
@@ -416,6 +436,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		oldDemand.setCallonEmployeeName(accountLongfor.getName());
 		oldDemand.setCallonFullDeptPath(accountLongfor.getPsDeptFullName());
 		oldDemand.setModifiedTime(TimeUtils.getTodayByDateTime());
+		oldDemand.setAccountType(accountType);
 		demandMapper.updateByPrimaryKey(oldDemand);
 
 		FeedBack feedBack = feedBackMapper.selectByPrimaryKey(oldDemand.getFeedBackId());
