@@ -335,7 +335,7 @@ public class APIProductController extends BaseController {
 
             int code = Integer.parseInt((String)paramsMap.get("status"));
             ProductStatusEnum productStatusEnum  =  ProductStatusEnum.getByCode(code);
-            if(productStatusEnum != null ){
+            if(productStatusEnum == null ){
                 return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
             }
 
