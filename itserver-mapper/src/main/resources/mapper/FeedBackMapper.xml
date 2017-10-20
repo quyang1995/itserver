@@ -60,6 +60,9 @@
       <if test='feedbackPhone != "" and feedbackPhone != null and (accountId == "" or accountId == null)'>
           and feedback_phone = #{feedbackPhone}
       </if>
+    <if test='type != "" and type != null  and type != -1'>
+      and type = #{type}
+    </if>
     <if test='status != "" and status != null  and status != -1'>
       and status = #{status}
     </if>

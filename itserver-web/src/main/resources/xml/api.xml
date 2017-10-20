@@ -352,6 +352,7 @@
             <property name="accountId" type="string" required="false" maxLength="30"/>
             <property name="feedbackPhone" ref="mobileNo" />
             <property name="status" type="int" required="true" area="-1,0,1,2,3,4"/>
+            <property name="type" type="int" required="false" area="-1,0,1"/>
             <property name="channel" type="int" required="false" area="-1,0,1,2,3"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
         </request>
