@@ -205,13 +205,15 @@ public class APIProgramController extends BaseController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public Map programAdd(HttpServletResponse response, HttpServletRequest request) throws IOException, JSONException {
-
-		/* 获得已经验证过的参数map */
-		@SuppressWarnings("unchecked")
-		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-		this.getProgramService().addProgram(paramsMap);
-		// 返回报文
-		return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
+		try{
+			Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			this.getProgramService().addProgram(paramsMap);
+			// 返回报文
+			return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
+		}catch (Exception e){
+			e.printStackTrace();
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
 	}
 
 	/**
@@ -224,36 +226,37 @@ public class APIProgramController extends BaseController {
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map programUpdate(HttpServletResponse response, HttpServletRequest request)
-			throws IOException, JSONException {
-
-		/* 获得已经验证过的参数map */
-		@SuppressWarnings("unchecked")
-		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+	public Map programUpdate(HttpServletResponse response, HttpServletRequest request){
+		try{
+			Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		/* 责任人 */
-		Map map = new HashMap();
-		map.put("programId", paramsMap.get("id"));
-		boolean isAllow = false;
-		map.put("employeeType", AvaStatusEnum.LIABLEAVA.getCode());
-		List<ProgramEmployee> personLiableList = this.getProgramEmployeeService().selectTypeList(map);
-		if(!"".equals(paramsMap.get("modifiedAccountId"))){
-			for(ProgramEmployee programEmployee : personLiableList){
-				if(programEmployee.getAccountId().equals(paramsMap.get("modifiedAccountId"))){
-					isAllow = true;
-					break;
+			Map map = new HashMap();
+			map.put("programId", paramsMap.get("id"));
+			boolean isAllow = false;
+			map.put("employeeType", AvaStatusEnum.LIABLEAVA.getCode());
+			List<ProgramEmployee> personLiableList = this.getProgramEmployeeService().selectTypeList(map);
+			if(!"".equals(paramsMap.get("modifiedAccountId"))){
+				for(ProgramEmployee programEmployee : personLiableList){
+					if(programEmployee.getAccountId().equals(paramsMap.get("modifiedAccountId"))){
+						isAllow = true;
+						break;
+					}
 				}
+			}else {
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E9993,"modifiedAccountId");
 			}
-		}else {
-			return CommonUtils.getResultMapByBizEnum(BizEnum.E9993,"modifiedAccountId");
-		}
-		if(isAllow){
+			if(isAllow){
             /*更新操作*/
-			this.getProgramService().updateProgram(paramsMap);
-			// 返回报文
-			return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
-		}else{
-			// 返回报文
-			return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+				this.getProgramService().updateProgram(paramsMap);
+				// 返回报文
+				return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
+			}else{
+				// 返回报文
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
 		}
 	}
 
@@ -279,34 +282,39 @@ public class APIProgramController extends BaseController {
 	@RequestMapping(value = "/delEmployee", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public Map delEmp(HttpServletRequest request, HttpServletResponse response) {
-		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-		String programId = (String) paramsMap.get("programId");
-		String accountId = (String) paramsMap.get("accountId");
-		String accountType = (String) paramsMap.get("accountType");
-		ProgramEmployee employee = new ProgramEmployee();
-		employee.setAccountId(accountId);
-		employee.setProgramId(Long.valueOf(programId));
-		employee.setEmployeeType(AvaStatusEnum.LIABLEAVA.getCode());
-		ProgramEmployee persionaLiable = this.getProgramEmployeeService().selectOne(employee);
-		if (persionaLiable != null) {
-			//是责任人
-			ProgramEmployee programEmployee = new ProgramEmployee();
-			programEmployee.setProgramId(Long.valueOf(programId));
-			programEmployee.setEmployeeType(AvaStatusEnum.LIABLEAVA.getCode());
-			int persionaLiableCount =  this.getProgramEmployeeService().selectCount(programEmployee);
-			if (persionaLiableCount > 1) {
-				//删除当前用户
-				this.getProgramEmployeeService().delEmployee(employee,accountType);
+		try{
+			Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			String programId = (String) paramsMap.get("programId");
+			String accountId = (String) paramsMap.get("accountId");
+			String accountType = (String) paramsMap.get("accountType");
+			ProgramEmployee employee = new ProgramEmployee();
+			employee.setAccountId(accountId);
+			employee.setProgramId(Long.valueOf(programId));
+			employee.setEmployeeType(AvaStatusEnum.LIABLEAVA.getCode());
+			ProgramEmployee persionaLiable = this.getProgramEmployeeService().selectOne(employee);
+			if (persionaLiable != null) {
+				//是责任人
+				ProgramEmployee programEmployee = new ProgramEmployee();
+				programEmployee.setProgramId(Long.valueOf(programId));
+				programEmployee.setEmployeeType(AvaStatusEnum.LIABLEAVA.getCode());
+				int persionaLiableCount =  this.getProgramEmployeeService().selectCount(programEmployee);
+				if (persionaLiableCount > 1) {
+					//删除当前用户
+					this.getProgramEmployeeService().delEmployee(employee,accountType);
+				} else {
+					return CommonUtils.getResultMapByBizEnum(BizEnum.E1027, " 唯一责任人");
+				}
 			} else {
-				return CommonUtils.getResultMapByBizEnum(BizEnum.E1027, " 唯一责任人");
+				//删除成员
+				employee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
+				this.getProgramEmployeeService().delEmployee(employee,accountType);
 			}
-		} else {
-			//删除成员
-			employee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
-			this.getProgramEmployeeService().delEmployee(employee,accountType);
-		}
 
-		return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+			return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		}catch (Exception e){
+			e.printStackTrace();
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
 	}
 
 
@@ -330,17 +338,22 @@ public class APIProgramController extends BaseController {
 	@RequestMapping(value = "/update/status",method = RequestMethod.POST,produces = {"application/json;charset=utf-8"})
 	@ResponseBody
 	public Map updateStatus(HttpServletRequest request,HttpServletResponse response){
-		Map paramsMap= (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-		//状态值有效性验证
-		int code = Integer.parseInt((String) paramsMap.get("status"));
-		ProgramStatusEnum programStatusEnum = ProgramStatusEnum.getByCode(code);
-		if(programStatusEnum != null){
-			this.getProgramService().updateStatus(paramsMap);
-			Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
-			resultMap.put("newStatusText", programStatusEnum.getText());
-			return resultMap;
-		}else{
-			return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+		try{
+			Map paramsMap= (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			//状态值有效性验证
+			int code = Integer.parseInt((String) paramsMap.get("status"));
+			ProgramStatusEnum programStatusEnum = ProgramStatusEnum.getByCode(code);
+			if(programStatusEnum != null){
+				this.getProgramService().updateStatus(paramsMap);
+				Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
+				resultMap.put("newStatusText", programStatusEnum.getText());
+				return resultMap;
+			}else{
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
 		}
 	}
 }

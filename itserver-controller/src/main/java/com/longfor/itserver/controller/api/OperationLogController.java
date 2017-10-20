@@ -45,24 +45,23 @@ public class OperationLogController extends BaseController {
 	@RequestMapping(value = "/list", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public Map list(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-
-		String operateTime = StringUtils.isBlank(paramsMap.get("operateTime"))
-				? DateUtil.date2String(new Date(),"yyyy-MM-dd") : paramsMap.get("operateTime");
-		String type = paramsMap.get("type");//操作类型：0-产品，1-项目，2-需求，3-bug
-		int pageNum = Integer.parseInt(paramsMap.get("pageNum"));
-        int pageSize = Integer.parseInt(paramsMap.get("pageSize"));
-//        PageHelper.startPage(pageNum, pageSize, true);
-
-		paramsMap.put("operateTime",operateTime);
-
-		BuddyAccount buddyAccount = AdsServiceImpl.buddyAccountGetByLoginName(paramsMap.get("loginName"));
-		if(buddyAccount==null){
-			return CommonUtils.getResultMapByBizEnum(BizEnum.E1001);
-		}
-
-		List<OperationLogVo> list = new ArrayList();
 		try{
+			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+
+			String operateTime = StringUtils.isBlank(paramsMap.get("operateTime"))
+					? DateUtil.date2String(new Date(),"yyyy-MM-dd") : paramsMap.get("operateTime");
+			String type = paramsMap.get("type");//操作类型：0-产品，1-项目，2-需求，3-bug
+			int pageNum = Integer.parseInt(paramsMap.get("pageNum"));
+			int pageSize = Integer.parseInt(paramsMap.get("pageSize"));
+
+			paramsMap.put("operateTime",operateTime);
+
+			BuddyAccount buddyAccount = AdsServiceImpl.buddyAccountGetByLoginName(paramsMap.get("loginName"));
+			if(buddyAccount==null){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1001);
+			}
+
+			List<OperationLogVo> list = new ArrayList();
 			if("0".equals(type)){
 				list.addAll(this.convertProduct2OperationLogVo(
 						getProductEmployeeChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),PRODUCT_LIST,buddyAccount.getName()));
@@ -85,31 +84,29 @@ public class OperationLogController extends BaseController {
 				list.addAll(this.convertProduct2OperationLogVo(
 						getBugChangeLogService().paraQuery(paramsMap),buddyAccount.getCompanyName(),BUG_LIST,buddyAccount.getName()));
 			}
+			Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+			map.put(APIHelper.TOTAL, new PageInfo(list).getTotal());
+			if(list.size()>0){
+				Collections.sort(list);
+				if(list.size() > pageSize){
+					try{
+						list = list.subList((pageNum-1)*pageSize,pageNum*pageSize);
+					}catch (Exception e){
+						list = list.subList((pageNum-1)*pageSize,list.size());
+					}
+
+				}
+			}
+			map.put("list", list);
+
+			map.put(APIHelper.PAGE_NUM, pageNum);
+			map.put(APIHelper.PAGE_SIZE, pageSize);
+
+			return map;
 		} catch (Exception e){
 			e.printStackTrace();
 			return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
 		}
-
-        /*返回数据*/
-		Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-		map.put(APIHelper.TOTAL, new PageInfo(list).getTotal());
-		if(list.size()>0){
-			Collections.sort(list);
-			if(list.size() > pageSize){
-				try{
-					list = list.subList((pageNum-1)*pageSize,pageNum*pageSize);
-				}catch (Exception e){
-					list = list.subList((pageNum-1)*pageSize,list.size());
-				}
-
-			}
-		}
-		map.put("list", list);
-
-		map.put(APIHelper.PAGE_NUM, pageNum);
-		map.put(APIHelper.PAGE_SIZE, pageSize);
-
-		return map;
 	}
 
 	private <T> List<OperationLogVo> convertProduct2OperationLogVo

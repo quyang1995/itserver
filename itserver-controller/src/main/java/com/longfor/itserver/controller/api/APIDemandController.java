@@ -68,12 +68,15 @@ public class APIDemandController extends BaseController {
     @ResponseBody
     public Map demandAdd(HttpServletRequest request,HttpServletResponse response)
             throws IOException, JSONException {
-        //获取已经验证的参数map
-        @SuppressWarnings("unchecked")
-        Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-        this.getDemandService().addDemand(paramsMap);
-        //返回成功信息
-        return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
+        try{
+            Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+            this.getDemandService().addDemand(paramsMap);
+            //返回成功信息
+            return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
+        }catch (Exception e){
+            e.printStackTrace();
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+        }
     }
 
     /**
@@ -84,30 +87,15 @@ public class APIDemandController extends BaseController {
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
     @ResponseBody
-    public Map demandUpdate(HttpServletResponse response, HttpServletRequest request)
-            throws IOException, JSONException {
-
-        //获取已经验证的参数map
-        @SuppressWarnings("unchecked")
-        Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-//        Demand demand = this.getDemandService().getDemandById(Long.parseLong(paramsMap.get("id").toString()));
-//        boolean isAllow = false;
-//        if(!"".equals(paramsMap.get("modifiedAccountId"))){
-//            if(demand.getModifiedAccountId().equals(paramsMap.get("modifiedAccountId"))){
-//                isAllow = true;
-//            }
-//        }else {
-//            return CommonUtils.getResultMapByBizEnum(BizEnum.E9993,"modifiedAccountId");
-//        }
-//        if(isAllow){
-            /*更新操作*/
+    public Map demandUpdate(HttpServletResponse response, HttpServletRequest request){
+        try{
+            Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
             this.getDemandService().updateDemand(paramsMap);
-            // 返回报文
             return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
-//        }else{
-//            // 返回报文
-//            return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
-//        }
+        }catch (Exception e){
+            e.printStackTrace();
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+        }
     }
 
     /**
@@ -187,17 +175,21 @@ public class APIDemandController extends BaseController {
     @RequestMapping(value = "/update/status" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
     @ResponseBody
     public Map updateStatus(HttpServletRequest request ,HttpServletResponse response){
-        Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-        //状态值有效性验证
-        int code = Integer.parseInt((String) paramsMap.get("status"));
-        DemandStatusEnum demandStatusEnum = DemandStatusEnum.getByCode(code);
-        if(demandStatusEnum != null){
+        try{
+            Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+            //状态值有效性验证
+            int code = Integer.parseInt((String) paramsMap.get("status"));
+            DemandStatusEnum demandStatusEnum = DemandStatusEnum.getByCode(code);
+            if(demandStatusEnum == null){
+                return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+            }
             this.getDemandService().updateStatus(paramsMap);
             Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
             resultMap.put("newStatusText", demandStatusEnum.getText());
             return resultMap;
-        }else{
-            return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+        }catch (Exception e){
+            e.printStackTrace();
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
         }
     }
 
@@ -210,10 +202,14 @@ public class APIDemandController extends BaseController {
     @RequestMapping(value = "/update/callon" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
     @ResponseBody
     public Map updateCallon(HttpServletRequest request ,HttpServletResponse response){
-        Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-        //人员信息有效性验证
-        AccountLongfor accountLongfor = AccountUitl.getAccountByAccountTypes((String) paramsMap.get("callonAccountId"),getAdsHelper());
-        if(accountLongfor != null){
+        try{
+            Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+            //人员信息有效性验证
+            AccountLongfor accountLongfor = AccountUitl.getAccountByAccountTypes((String) paramsMap.get("callonAccountId"),getAdsHelper());
+            if(accountLongfor == null){
+                return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+            }
+
             if(!this.getDemandService().updateCallon(paramsMap)){
                 return CommonUtils.getResultMapByBizEnum(BizEnum.E1029);
             }
@@ -221,8 +217,9 @@ public class APIDemandController extends BaseController {
             Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
             resultMap.put("newCallonEmployeeText", accountLongfor.getName());
             return resultMap;
-        }else{
-            return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+        }catch (Exception e){
+            e.printStackTrace();
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
         }
     }
 
