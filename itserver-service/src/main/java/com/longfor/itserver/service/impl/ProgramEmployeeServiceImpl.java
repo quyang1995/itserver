@@ -34,7 +34,7 @@ public class ProgramEmployeeServiceImpl extends AdminBaseService<ProgramEmployee
     }
 
     @Override
-    public boolean delEmployee(ProgramEmployee employee) {
+    public boolean delEmployee(ProgramEmployee employee,String accountType) {
 
 
         List<ProgramEmployee> employeeList = programEmployeeMapper.select(employee);
@@ -50,6 +50,7 @@ public class ProgramEmployeeServiceImpl extends AdminBaseService<ProgramEmployee
         changeLog.setActionChangeInfo(log.toString());
         changeLog.setCreateTime(TimeUtils.getTodayByDateTime());
         changeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+        changeLog.setAccountType(Integer.parseInt(accountType));
         changeLogMapper.insertUseGeneratedKeys(changeLog);
 
         programEmployeeMapper.delete(employee);

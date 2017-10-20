@@ -13,7 +13,9 @@ import com.longfor.itserver.mapper.DemandCommentMapper;
 import com.longfor.itserver.mapper.DemandMapper;
 import com.longfor.itserver.service.IDemandCommentService;
 import com.longfor.itserver.service.base.AdminBaseService;
+import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.TimeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +46,10 @@ public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> im
     public Map<String, Object> add(Map<String,String> paramsMap){
         JSONObject jsonObject = (JSONObject) JSONObject.toJSON(paramsMap);
         DemandComment demandComment = JSONObject.toJavaObject(jsonObject,DemandComment.class);
-
+        Integer accountType = Integer.parseInt(jsonObject.getString("accountType"));
         //回复人验证
-        AccountLongfor accountLongfor =  adsHelper.getAccountLongforByLoginName(demandComment.getAccountId());
+        AccountLongfor accountLongfor =
+                AccountUitl.getAccountByAccountType(accountType,demandComment.getAccountId(),adsHelper);
         if(accountLongfor == null) {
             return CommonUtils.getResultMapByBizEnum(BizEnum.E1017,"该回复人");
         }
@@ -64,7 +67,9 @@ public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> im
             levelNum = lastBugComment.getLevelNum() + 1;
         }
 
-        demandComment.setEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
+        if(accountLongfor!=null&&StringUtils.isNotBlank(accountLongfor.getPsEmployeeCode())){
+            demandComment.setEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
+        }
         demandComment.setEmployeeName(accountLongfor.getName());
         demandComment.setFullDeptPath(accountLongfor.getPsDeptFullName());
         demandComment.setLevelNum(levelNum);

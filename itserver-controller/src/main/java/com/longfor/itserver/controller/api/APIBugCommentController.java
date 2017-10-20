@@ -59,11 +59,15 @@ public class APIBugCommentController extends BaseController {
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
     public Map add(HttpServletRequest request, HttpServletResponse response) {
-        @SuppressWarnings("unchecked")
-        Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        try{
+            @SuppressWarnings("unchecked")
+            Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
-        this.getBugCommentService().add(paramsMap);
-
+            this.getBugCommentService().add(paramsMap);
+        }catch (Exception e){
+            e.printStackTrace();
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+        }
         return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
 
     }

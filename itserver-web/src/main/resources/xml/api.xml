@@ -151,6 +151,7 @@
             <property name="businessList" type="string" required="false"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50" />
             <property name="modifiedName" type="string" required="true" maxLength="50" />
+            <property name="accountType" type="string" required="true" />
         </request>
     </item>
 
@@ -179,6 +180,7 @@
             <property name="businessList" type="string" required="false"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50" />
             <property name="modifiedName" type="string" required="true" maxLength="50" />
+            <property name="accountType" type="string" required="true" />
         </request>
     </item>
 
@@ -282,6 +284,7 @@
             <property name="uedList" type="string" required="false"/>
             <property name="testingList" type="string" required="false"/>
             <property name="businessList" type="string" required="false"/>
+            <property name="accountType" type="string" required="true" />
         </request>
     </item>
 
@@ -310,6 +313,7 @@
             <property name="uedList" type="string" required="false"/>
             <property name="testingList" type="string" required="false"/>
             <property name="businessList" type="string" required="false"/>
+            <property name="accountType" type="string" required="true" />
         </request>
     </item>
 
@@ -449,6 +453,7 @@
             <property name="modifiedName" type="string" required="false" maxLength="50"/>
             <property name="channel" type="int" required="true" area="0,1,2,3" />
             <property name="fileList" type="string" required="false" />
+            <property name="accountType" type="string"  required="true"/>
         </request>
     </item>
 
@@ -478,6 +483,7 @@
             <property name="modifiedName" type="string" required="false" maxLength="50"/>
             <property name="channel" type="int" required="true" area="0,1,2,3" />
             <property name="fileList" type="string" required="false" />
+            <property name="accountType" type="string"  required="true"/>
         </request>
     </item>
 
@@ -506,6 +512,7 @@
             <property name="parentId" type="long" required="true" />
             <property name="content" type="string" required="true" maxLength="1500"  />
             <property name="ip" type="string"  required="false" maxLength="32"/>
+            <property name="accountType" type="string"  required="true"/>
         </request>
     </item >
 
@@ -524,6 +531,7 @@
             <property name="parentId" type="int" required="true" />
             <property name="content" type="string"  required="false" maxLength="1500"/>
             <property name="ip" type="string" required="false" maxLength="32" />
+            <property name="accountType" type="string" required="true" />
         </request>
     </item >
 
@@ -570,6 +578,7 @@
             <property name="modifiedName" type="string" required="false" maxLength="50"/>
             <property name="channel" type="int" required="true" area="0,1,2,3" />
             <property name="fileList" type="string" required="false" />
+            <property name="accountType" type="string" required="true" />
         </request>
     </item>
 
@@ -596,6 +605,7 @@
             <property name="modifiedName" type="string" required="false" maxLength="50"/>
             <property name="channel" type="int" required="true" area="0,1,2,3" />
             <property name="fileList" type="string" required="false" />
+            <property name="accountType" type="string" required="true" />
         </request>
     </item>
 
@@ -713,6 +723,7 @@
         <request>
             <property name="productId" type="int" required="true" />
             <property name="accountId" type="string" required="true" maxLength="50" />
+            <property name="accountType" type="string" required="true" />
         </request>
     </item>
 
@@ -727,6 +738,7 @@
         <request>
             <property name="programId" type="int" required="true" />
             <property name="accountId" type="string" required="true" maxLength="50" />
+            <property name="accountType" type="string" required="true" />
         </request>
     </item>
 
@@ -743,6 +755,7 @@
             <property name="status" type="int" required="true" area="0,1,2,3,4"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="true" maxLength="50"/>
+            <property name="accountType" type="string"  required="true"/>
         </request>
     </item>
 
@@ -758,6 +771,7 @@
             <property name="callonAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="true" maxLength="50"/>
+            <property name="accountType" type="string"  required="true"/>
         </request>
     </item>
 
@@ -773,6 +787,7 @@
             <property name="status" type="int" required="true" area="0,1,2,3,4"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="true" maxLength="50"/>
+            <property name="accountType" type="string" required="true" />
         </request>
     </item>
 
@@ -788,6 +803,7 @@
             <property name="callonAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="true" maxLength="50"/>
+            <property name="accountType" type="string" required="true" />
         </request>
     </item>
 
@@ -849,6 +865,7 @@
             <property name="status" type="int" required="true" area="0,1,2"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="true" maxLength="50"/>
+            <property name="accountType" type="string" required="true" />
         </request>
     </item>
 
@@ -900,6 +917,7 @@
             <property name="status" type="int" required="true" area="0,1"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="true" maxLength="50"/>
+            <property name="accountType" type="string" required="true" />
         </request>
     </item>
 

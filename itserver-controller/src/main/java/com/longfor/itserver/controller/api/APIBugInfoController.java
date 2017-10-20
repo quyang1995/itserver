@@ -1,10 +1,8 @@
 package com.longfor.itserver.controller.api;
 
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.longfor.ads.entity.AccountLongfor;
-import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.enums.BugStatusEnum;
@@ -17,6 +15,7 @@ import com.longfor.itserver.entity.BugInfo;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ps.PsBugInfoDetail;
+import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.helper.APIHelper;
 import org.json.JSONException;
 import org.springframework.stereotype.Controller;
@@ -145,13 +144,15 @@ public class APIBugInfoController extends BaseController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public Map bugAdd(HttpServletResponse response, HttpServletRequest request) throws IOException, JSONException {
-
-		/* 获得已经验证过的参数map */
-		@SuppressWarnings("unchecked")
-		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-		this.getBugInfoService().addBug(paramsMap);
-		// 返回报文
-		return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
+		try{
+			Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			this.getBugInfoService().addBug(paramsMap);
+			// 返回报文
+			return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
+		}catch (Exception e){
+			e.printStackTrace();
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
 	}
 
 	/**
@@ -164,32 +165,19 @@ public class APIBugInfoController extends BaseController {
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map bugUpdate(HttpServletResponse response, HttpServletRequest request)
-			throws IOException, JSONException {
+	public Map bugUpdate(HttpServletResponse response, HttpServletRequest request){
+		try{
+			/* 获得已经验证过的参数map */
+			Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
-		/* 获得已经验证过的参数map */
-		@SuppressWarnings("unchecked")
-		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-
-//		BugInfo bugInfo = this.getBugInfoService().getBugId(Long.parseLong(paramsMap.get("id").toString()));
-//		boolean isAllow = false;
-//		if(!"".equals(paramsMap.get("modifiedAccountId"))){
-//			if(bugInfo.getModifiedAccountId().equals(paramsMap.get("modifiedAccountId"))){
-//				isAllow = true;
-//			}
-//		}else {
-//			return CommonUtils.getResultMapByBizEnum(BizEnum.E9993,"modifiedAccountId");
-//		}
-
-//		if(isAllow){
             /*更新操作*/
 			this.getBugInfoService().updateBug(paramsMap);
 			// 返回报文
 			return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
-//		}else{
-			// 返回报文
-//			return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
-//		}
+		}catch (Exception e){
+			e.printStackTrace();
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
 	}
 
 
@@ -210,21 +198,23 @@ public class APIBugInfoController extends BaseController {
 	@RequestMapping(value = "/update/status" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
 	@ResponseBody
 	public Map updateStatus(HttpServletRequest request ,HttpServletResponse response){
-        @SuppressWarnings("unchecked")
-		Map<String, String> paramsMap = (Map<String, String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		try{
+			Map<String, String> paramsMap = (Map<String, String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			//状态值有效性验证
+			int code = Integer.parseInt(paramsMap.get("status"));
+			BugStatusEnum bugStatusEnum = BugStatusEnum.getByCode(code);
+			if(bugStatusEnum == null){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+			}
 
-        //状态值有效性验证
-        int code = Integer.parseInt(paramsMap.get("status"));
-        BugStatusEnum bugStatusEnum = BugStatusEnum.getByCode(code);
-        if(bugStatusEnum != null){
-            this.getBugInfoService().updateStatus(paramsMap);
-
-            Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-            resultMap.put("newStatusText", bugStatusEnum.getText());
-            return resultMap;
-        }else{
-            return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
-        }
+			this.getBugInfoService().updateStatus(paramsMap);
+			Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+			resultMap.put("newStatusText", bugStatusEnum.getText());
+			return resultMap;
+		}catch (Exception e){
+			e.printStackTrace();
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
 	}
 
 	/**
@@ -236,20 +226,24 @@ public class APIBugInfoController extends BaseController {
 	@RequestMapping(value = "/update/callon" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
 	@ResponseBody
 	public Map updateCallon(HttpServletRequest request ,HttpServletResponse response){
-        @SuppressWarnings("unchecked")
-        Map<String, String> paramsMap = (Map<String, String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		try{
+			Map<String, String> paramsMap = (Map<String, String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			//人员信息有效性验证
+			AccountLongfor accountLongfor =
+					AccountUitl.getAccountByAccountTypes(paramsMap.get("callonAccountId"),getAdsHelper());
+			if(accountLongfor == null){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+			}
 
-        //人员信息有效性验证
-        AccountLongfor accountLongfor = this.getAdsService().getAccountLongfor(paramsMap.get("callonAccountId"));
-        if(accountLongfor != null){
-            this.getBugInfoService().updateCallon(paramsMap);
-
-            Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-            resultMap.put("newCallonEmployeeText", accountLongfor.getName());
+			this.getBugInfoService().updateCallon(paramsMap);
+			Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+			resultMap.put("newCallonEmployeeText", accountLongfor.getName());
 			return resultMap;
-        }else{
-            return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
-        }
+		}catch (Exception e){
+			e.printStackTrace();
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+
 	}
 
 	/**
