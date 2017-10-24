@@ -46,7 +46,7 @@ public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> im
     public Map<String, Object> add(Map<String,String> paramsMap){
         JSONObject jsonObject = (JSONObject) JSONObject.toJSON(paramsMap);
         DemandComment demandComment = JSONObject.toJavaObject(jsonObject,DemandComment.class);
-        Integer accountType = Integer.parseInt(jsonObject.getString("accountType"));
+        Integer accountType = AccountUitl.getAccountType(paramsMap);
         //回复人验证
         AccountLongfor accountLongfor =
                 AccountUitl.getAccountByAccountType(accountType,demandComment.getAccountId(),adsHelper);

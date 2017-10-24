@@ -93,7 +93,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         JSONObject json = (JSONObject) JSONObject.toJSON(map);
         BugInfo bugInfo = JSONObject.toJavaObject(json, BugInfo.class);
         bugInfo.setStatus(BugStatusEnum.PENDING.getCode());
-        Integer accountType = Integer.parseInt(json.getString("accountType"));
+        Integer accountType = AccountUitl.getAccountType(map);
 
         //获取发起人信息
         AccountLongfor draftedAccountLongfor =
@@ -168,7 +168,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         if (null == selectOneBugInfo) {
             return false;
         }
-        Integer accountType = Integer.parseInt(json.getString("accountType"));
+        Integer accountType = AccountUitl.getAccountType(map);
 
         //获取最后修改人
         AccountLongfor draftedAccountLongfor =
@@ -359,7 +359,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         String modifiedName = jsonObject.getString("modifiedName");
         Long bugId = Long.valueOf(jsonObject.getString("bugId"));
         Integer status = Integer.valueOf(jsonObject.getString("status"));
-        Integer accountType = Integer.valueOf(jsonObject.getString("accountType"));
+        Integer accountType = AccountUitl.getAccountType(paramsMap);
         BugInfo oldBug = bugInfoMapper.selectByPrimaryKey(bugId);
         BugInfo newBug = new BugInfo();
         newBug.setModifiedAccountId(modifiedAccountId);
@@ -403,7 +403,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         String modifiedName = jsonObject.getString("modifiedName");
         Long bugId = Long.valueOf(jsonObject.getString("bugId"));
         String callonAccountId = jsonObject.getString("callonAccountId");
-        Integer accountType = Integer.parseInt(jsonObject.getString("accountType"));
+        Integer accountType = AccountUitl.getAccountType(paramsMap);
         //更新前对象
         BugInfo oldBug = bugInfoMapper.selectByPrimaryKey(bugId);
         //指派人更改后对象 用于更新

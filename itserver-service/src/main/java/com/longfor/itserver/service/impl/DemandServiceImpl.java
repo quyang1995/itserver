@@ -64,7 +64,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		Demand demand = JSONObject.toJavaObject(json, Demand.class);
 		//获取状态信息(默认待处理)
 		demand.setStatus(DemandStatusEnum.PENDING.getCode());
-		Integer accountType = Integer.parseInt(json.getString("accountType"));
+		Integer accountType = AccountUitl.getAccountType(map);
 		//获取发起人信息
 		AccountLongfor draftedAccountLongfor =
 				AccountUitl.getAccountByAccountType(accountType,demand.getModifiedAccountId(),adsHelper);
@@ -141,7 +141,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		if (selectDemandOne==null){
 			return false;
 		}
-		Integer accountType = Integer.parseInt(jsonObject.getString("accountType"));
+		Integer accountType = AccountUitl.getAccountType(map);
 		//获取最后修改人
 		AccountLongfor draftedAccountLongfor =
 				AccountUitl.getAccountByAccountType(accountType,demand.getModifiedAccountId(),adsHelper);
@@ -363,7 +363,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		Demand oldDemand = demandMapper.selectByPrimaryKey(demandId);
 		Demand newDemand = new Demand();
 		newDemand.setStatus(status);
-		Integer accountType = Integer.parseInt(jsonObject.getString("accountType"));
+		Integer accountType = AccountUitl.getAccountType(paramsMap);
         /*添加需求修改日志*/
 		String log = statusLog(oldDemand,newDemand);
 		if(StringUtils.isNotBlank(log)) {
@@ -403,7 +403,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		String modifiedName =  jsonObject.getString("modifiedName");
 		Long demandId = Long.valueOf(jsonObject.getString("demandId"));
 		String callonAccountId =  jsonObject.getString("callonAccountId");
-		Integer accountType = Integer.parseInt(jsonObject.getString("accountType"));
+		Integer accountType = AccountUitl.getAccountType(paramsMap);
 		Demand oldDemand = demandMapper.selectByPrimaryKey(demandId);
 		Demand newDemand = new Demand();
 		AccountLongfor accountLongfor =

@@ -77,7 +77,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	@Transactional
 	public boolean addProgram(Map map) {
 		JSONObject json = (JSONObject) JSONObject.toJSON(map);
-		Integer accountType = Integer.parseInt(json.getString("accountType"));
+		Integer accountType = AccountUitl.getAccountType(map);
 		Program program = JSONObject.toJavaObject(json, Program.class);
 		Product product = productMapper.selectByPrimaryKey(program.getProductId());
 		if(product == null){
@@ -233,7 +233,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		JSONObject json = (JSONObject) JSONObject.toJSON(map);
 		Program program = JSONObject.toJavaObject(json, Program.class);
 		Program selectOneProgram = programMapper.selectByPrimaryKey(program.getId());
-		Integer accountType = Integer.parseInt(json.getString("accountType"));
+		Integer accountType = AccountUitl.getAccountType(map);
 		//先生成变动日志
 		List<String> changeLogTextList = getChangeLogText(selectOneProgram, program);
 
@@ -486,13 +486,13 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			log.setModifiedName((String) paramsMap.get("modifiedName"));
 			log.setCreateTime(TimeUtils.getTodayByDateTime());
 			log.setModifiedTime(TimeUtils.getTodayByDateTime());
-			log.setAccountType(Integer.valueOf((String) jsonObject.get("accountType")));
+			log.setAccountType(AccountUitl.getAccountType(paramsMap));
 			programEmployeeChangeLogMapper.insertUseGeneratedKeys(log);
 		}
 
 		oldProgram.setProgramStatus(newProgram.getProgramStatus());
 		oldProgram.setModifiedTime(TimeUtils.getTodayByDateTime());
-		oldProgram.setAccountType(Integer.valueOf((String) jsonObject.get("accountType")));
+		oldProgram.setAccountType(AccountUitl.getAccountType(paramsMap));
 		programMapper.updateByPrimaryKey(oldProgram);
 		return true;
 	}

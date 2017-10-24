@@ -16,6 +16,7 @@ import com.longfor.itserver.entity.ProductEmployee;
 import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ProgramEmployee;
 import com.longfor.itserver.entity.ps.PsProductAll;
+import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.helper.APIHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -291,7 +292,7 @@ public class APIProductController extends BaseController {
             String productId = (String) paramsMap.get("productId");
             Product product = this.getProductService().selectById(Long.valueOf(productId));
             String accountId = (String) paramsMap.get("accountId");
-            String accountType = (String)paramsMap.get("accountId");
+            String accountType = String.valueOf(AccountUitl.getAccountType(paramsMap));
             if (accountId.equals(product.getContactAccountId())) {
                 return CommonUtils.getResultMapByBizEnum(BizEnum.E1027, " 接口人");
             }

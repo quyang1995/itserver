@@ -77,7 +77,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		product.setStatus(Integer.parseInt(jsonObject.getString("status")));
 		product.setContactAccountId(jsonObject.getString("contactAccountId"));
 		product.setLikeProgram(jsonObject.getString("likeProgram"));
-		Integer accountType = Integer.parseInt(jsonObject.getString("accountType"));
+		Integer accountType = AccountUitl.getAccountType(map);
 		/* 接口人相关信息 */
 		getAccountInfo(0, product, null);
 		/* 添加产品 */
@@ -136,7 +136,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 	@Override
 	public boolean updateProduct(Map map) {
 		JSONObject jsonObject = (JSONObject) JSONObject.toJSON(map);
-		Integer accountType = Integer.parseInt(jsonObject.getString("accountType"));
+		Integer accountType = AccountUitl.getAccountType(map);
 		Product newProduct = JSONObject.toJavaObject(jsonObject, Product.class);
 		Product oldProduct = productMapper.selectByPrimaryKey(newProduct.getId());
 
@@ -285,7 +285,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		int status =  Integer.parseInt((String)paramsMap.get("status"));
 		String modifiedName = (String)paramsMap.get("modifiedName");
 		String modifiedAccountId = (String)paramsMap.get("modifiedAccountId");
-		int accountType =  Integer.parseInt((String)paramsMap.get("accountType"));
+		Integer accountType = AccountUitl.getAccountType(paramsMap);
 
 		Product oldProduct =  productMapper.selectByPrimaryKey(productId);
 		String text = statusLog(oldProduct , paramsMap);

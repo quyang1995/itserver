@@ -16,6 +16,7 @@ import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ProgramEmployee;
 import com.longfor.itserver.entity.ps.PsProgramDetail;
+import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.helper.APIHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
@@ -286,7 +287,7 @@ public class APIProgramController extends BaseController {
 			Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 			String programId = (String) paramsMap.get("programId");
 			String accountId = (String) paramsMap.get("accountId");
-			String accountType = (String) paramsMap.get("accountType");
+			String accountType = String.valueOf(AccountUitl.getAccountType(paramsMap));
 			ProgramEmployee employee = new ProgramEmployee();
 			employee.setAccountId(accountId);
 			employee.setProgramId(Long.valueOf(programId));
