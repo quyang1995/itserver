@@ -1,9 +1,12 @@
 package com.longfor.itserver.service.util;
 
+import com.alibaba.fastjson.JSONObject;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.entity.BuddyAccount;
 import com.longfor.ads.helper.ADSHelper;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Map;
 
 /**
  * Created by sunyanhui on 2017/10/18.
@@ -49,5 +52,13 @@ public class AccountUitl {
         accountLongfor.setName(buddyAccount.getName());
         accountLongfor.setLoginName(loginName);
         return accountLongfor;
+    }
+
+    public static Integer getAccountType(Map<String,String> paramsMap){
+        String accountTypeStr = paramsMap.get("accountType");
+        if(StringUtils.isBlank(accountTypeStr)){
+            return 0;
+        }
+        return Integer.parseInt(accountTypeStr);
     }
 }
