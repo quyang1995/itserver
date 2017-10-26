@@ -133,6 +133,20 @@ public class FeedBack {
     @Column(name = "feedback_name")
     private String feedbackName;
 
+    /**
+     * 账户类型：0或者null或者空位内部账号，1-供方账号
+     */
+    @Column(name = "account_type")
+    private Integer accountType;
+
+    public Integer getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(Integer accountType) {
+        this.accountType = accountType;
+    }
+
     public String getFeedbackPhone() {
         return feedbackPhone;
     }

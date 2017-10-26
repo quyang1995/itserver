@@ -8,11 +8,13 @@ import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.*;
 import com.longfor.itserver.common.util.CommonUtils;
+import com.longfor.itserver.common.util.StringUtil;
 import com.longfor.itserver.entity.*;
 import com.longfor.itserver.entity.ps.PsFeedBackStatus;
 import com.longfor.itserver.mapper.*;
 import com.longfor.itserver.service.IFeedBackService;
 import com.longfor.itserver.service.base.AdminBaseService;
+import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.TimeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,20 +74,28 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
         AccountLongfor accountLongfor = new AccountLongfor();
         String modifiedAccountId = feedBack.getModifiedAccountId();
         String feedbackPhone = feedBack.getFeedbackPhone();
+
+        Integer accountType = AccountUitl.getAccountType(map);
+
         //二者不可都为空
         if (StringUtils.isBlank(modifiedAccountId) && StringUtils.isBlank(feedbackPhone)) {
             return CommonUtils.getResultMapByBizEnum(BizEnum.E1201, "modifiedAccountId", "feedbackPhone");
-        } else if (StringUtils.isNotBlank(modifiedAccountId)) {
+        }
+        if (StringUtils.isNotBlank(modifiedAccountId)) {
             //通过账户ID查询账户基本信息
-            accountLongfor = adsHelper.getAccountLongforByLoginName(feedBack.getModifiedAccountId());
-            if (accountLongfor != null) {
-                feedBack.setModifiedEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
-                feedBack.setModifiedName(accountLongfor.getName());
-                feedBack.setModifiedFullDeptPath(accountLongfor.getPsDeptFullName());
-            } else {
-                //账户不存在
+            //获取发起人信息
+            accountLongfor =
+                    AccountUitl.getAccountByAccountType(accountType,feedBack.getModifiedAccountId(),adsHelper);
+//            accountLongfor = adsHelper.getAccountLongforByLoginName(feedBack.getModifiedAccountId());
+            if (accountLongfor == null) {//账户不存在
                 return CommonUtils.getResultMapByBizEnum(BizEnum.E1001);
             }
+            if(StringUtils.isNotBlank(accountLongfor.getPsEmployeeCode())){
+                feedBack.setModifiedEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
+            }
+            feedBack.setModifiedName(accountLongfor.getName());
+            feedBack.setModifiedFullDeptPath(accountLongfor.getPsDeptFullName());
+
         } else if (StringUtils.isNotBlank(feedbackPhone)) { //外部反馈
             //如果是外部反馈，除了提供手机号，还要提供姓名
             if (StringUtils.isBlank(feedBack.getFeedbackName())) {
@@ -116,6 +126,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
         feedBack.setModifiedTime(TimeUtils.getTodayByDateTime());
         //状态
         feedBack.setStatus(FeedBackStatusEnum.PENDING.getCode());
+        feedBack.setAccountType(accountType);
         //合并BUG描述和复现步骤
         if (feedBack.getType().equals(0)) {
             String descp = "";
@@ -159,7 +170,9 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
             //起草人
             if (hadAccount) {
                 bugInfo.setDraftedAccountId(accountLongfor.getLoginName());
-                bugInfo.setDraftedEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
+                if(StringUtils.isNotBlank(accountLongfor.getPsEmployeeCode())){
+                    bugInfo.setDraftedEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
+                }
                 bugInfo.setDraftedEmployeeName(accountLongfor.getName());
                 bugInfo.setDraftedFullDeptPath(accountLongfor.getPsDeptFullName());
             }
@@ -172,6 +185,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
             bugInfo.setModifiedTime(TimeUtils.getTodayByDateTime());
             bugInfo.setFeedbackPhone(feedBack.getFeedbackPhone());
             bugInfo.setFeedbackName(feedBack.getFeedbackName());
+            bugInfo.setAccountType(accountType);
             bugInfoMapper.insert(bugInfo);
 
             //添加文件
@@ -198,6 +212,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
                 bugChangeLog.setModifiedAccountId(bugInfo.getModifiedAccountId());
                 bugChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
                 bugChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+                bugChangeLog.setAccountType(accountType);
                 bugChangeLogMapper.insert(bugChangeLog);
             }
         } else if (feedBack.getType().equals(1)) {
@@ -219,7 +234,9 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
             //起草人
             if (hadAccount) {
                 demand.setDraftedAccountId(accountLongfor.getLoginName());
-                demand.setDraftedEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
+                if(StringUtils.isNotBlank(accountLongfor.getPsEmployeeCode())){
+                    demand.setDraftedEmployeeCode(Long.parseLong(accountLongfor.getPsEmployeeCode()));
+                }
                 demand.setDraftedEmployeeName(accountLongfor.getName());
                 demand.setDraftedFullDeptPath(accountLongfor.getPsDeptFullName());
             }
@@ -231,6 +248,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
             demand.setModifiedTime(TimeUtils.getTodayByDateTime());
             demand.setFeedbackPhone(feedBack.getFeedbackPhone());
             demand.setFeedbackName(feedBack.getFeedbackName());
+            demand.setAccountType(accountType);
             demandMapper.insert(demand);
             //添加文件
             List<DemandFile> demamdFileList = JSONArray.parseArray(json.getString("fileList"), DemandFile.class);
@@ -255,6 +273,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
                 demandChangeLog.setModifiedAccountId(demand.getModifiedAccountId());
                 demandChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
                 demandChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+                demandChangeLog.setAccountType(accountType);
                 demandChangeLogMapper.insert(demandChangeLog);
             }
         }
