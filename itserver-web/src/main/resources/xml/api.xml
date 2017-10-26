@@ -339,6 +339,7 @@
             <property name="channel" type="int" required="true" area="0,1,2,3"/>
             <property name="filePath" type="string" required="false" maxLength="3000"/>
             <property name="fileList" type="string" required="false"/>
+            <property name="accountType" type="string" required="false" />
         </request>
     </item>
 
@@ -636,6 +637,7 @@
             <property name="parentId" type="int" required="true" />
             <property name="content" type="string" maxLength="1500" required="false" />
             <property name="ip" type="string" required="false" maxLength="32" />
+            <property name="accountType" type="string" required="false" />
         </request>
     </item >
 
