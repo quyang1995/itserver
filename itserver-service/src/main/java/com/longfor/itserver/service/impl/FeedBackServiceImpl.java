@@ -164,7 +164,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
                 bugInfo.setDraftedFullDeptPath(accountLongfor.getPsDeptFullName());
             }
 
-            bugInfo.setLevel(BugLevelEnum.HIGH_LEVEL.getCode());
+            bugInfo.setLevel(BugLevelEnum.MID_LEVEL.getCode());
             bugInfo.setStatus(feedBack.getStatus());
             bugInfo.setModifiedAccountId(feedBack.getModifiedAccountId());
             bugInfo.setModifiedName(feedBack.getModifiedName());
@@ -223,7 +223,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
                 demand.setDraftedEmployeeName(accountLongfor.getName());
                 demand.setDraftedFullDeptPath(accountLongfor.getPsDeptFullName());
             }
-            demand.setLevel(DemandLevelEnum.HIGH_LEVEL.getCode());
+            demand.setLevel(DemandLevelEnum.MID_LEVEL.getCode());
             demand.setStatus(feedBack.getStatus());
             demand.setModifiedAccountId(feedBack.getModifiedAccountId());
             demand.setModifiedName(feedBack.getModifiedName());
