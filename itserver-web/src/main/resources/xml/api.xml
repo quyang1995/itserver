@@ -336,7 +336,7 @@
             <property name="feedbackPhone" ref="mobileNo" />
             <property name="feedbackName" type="string" required="false" maxLength="20"/>
             <property name="type" type="int" required="true" area="0,1"/>
-            <property name="channel" type="int" required="true" area="0,1,2,3"/>
+            <property name="channel" type="int" required="true" area="0,1,2,3,4"/>
             <property name="filePath" type="string" required="false" maxLength="3000"/>
             <property name="fileList" type="string" required="false"/>
             <property name="accountType" type="string" required="false" />
@@ -358,7 +358,7 @@
             <property name="feedbackPhone" ref="mobileNo" />
             <property name="status" type="int" required="true" area="-1,0,1,2,3,4"/>
             <property name="type" type="int" required="false" area="-1,0,1"/>
-            <property name="channel" type="int" required="false" area="-1,0,1,2,3"/>
+            <property name="channel" type="int" required="false" area="-1,0,1,2,3,4"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
         </request>
     </item>
@@ -408,7 +408,7 @@
             <property name="accountId" type="string" required="true" maxLength="30"/>
             <property name="status" type="int" required="true" area="-1,0,1,2,3,4"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
-            <property name="channel" type="int" required="false" area="-1,0,1,2,3" />
+            <property name="channel" type="int" required="false" area="-1,0,1,2,3,4" />
             <property name="productId" type="int" required="false" />
             <property name="programId" type="int" required="false" />
             <property name="isPart" type="int" required="false" area="0,1,2"/>
@@ -452,7 +452,7 @@
             <property name="level" type="int" required="true" area="0,1,2,3"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="false" maxLength="50"/>
-            <property name="channel" type="int" required="true" area="0,1,2,3" />
+            <property name="channel" type="int" required="true" area="0,1,2,3,4" />
             <property name="fileList" type="string" required="false" />
             <property name="accountType" type="string"  required="false"/>
         </request>
@@ -482,7 +482,7 @@
             <property name="level" type="int" required="true" area="0,1,2,3"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="false" maxLength="50"/>
-            <property name="channel" type="int" required="true" area="0,1,2,3" />
+            <property name="channel" type="int" required="true" area="0,1,2,3,4" />
             <property name="fileList" type="string" required="false" />
             <property name="accountType" type="string"  required="false"/>
         </request>

@@ -126,7 +126,6 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
         feedBack.setModifiedTime(TimeUtils.getTodayByDateTime());
         //状态
         feedBack.setStatus(FeedBackStatusEnum.PENDING.getCode());
-        feedBack.setAccountType(accountType);
         //合并BUG描述和复现步骤
         if (feedBack.getType().equals(0)) {
             String descp = "";
@@ -135,7 +134,12 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
             feedBack.setProblemDescp(descp);
             feedBack.setReproductionStep(null);
         }
-
+        if("4".equals(feedBack.getChannel())){
+            feedBack.setType(0);
+            feedBack.setAccountType(2);
+        }else{
+            feedBack.setAccountType(accountType);
+        }
         feedBackMapper.insert(feedBack);
 
         //添加文件
