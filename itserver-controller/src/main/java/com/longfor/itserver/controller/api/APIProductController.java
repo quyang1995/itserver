@@ -14,7 +14,9 @@ import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.ProductEmployee;
 import com.longfor.itserver.entity.Program;
+import com.longfor.itserver.entity.ProgramEmployee;
 import com.longfor.itserver.entity.ps.PsProductAll;
+import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.helper.APIHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -163,10 +165,10 @@ public class APIProductController extends BaseController {
         List<ProductEmployee> personLiableList = this.getProductEmployeeService()
                 .searchTypeList(new Long(id), AvaStatusEnum.LIABLEAVA.getCode(), null);
         /*产品经理*/
-        List<ProductEmployee> programManagerList = this.getProductEmployeeService()
+        List<ProductEmployee> productManagerList = this.getProductEmployeeService()
                 .searchTypeList(new Long(id), AvaStatusEnum.MEMBERAVA.getCode(), new Long(AvaStatusEnum.PRODAVA.getCode()));
         /*项目经理*/
-        List<ProductEmployee> productManagerList = this.getProductEmployeeService()
+        List<ProductEmployee> programManagerList = this.getProductEmployeeService()
                 .searchTypeList(new Long(id), AvaStatusEnum.MEMBERAVA.getCode(), new Long(AvaStatusEnum.PROGAVA.getCode()));
         /*开发人员*/
         List<ProductEmployee> developerList = this.getProductEmployeeService()
@@ -174,6 +176,13 @@ public class APIProductController extends BaseController {
         /*UED人员*/
         List<ProductEmployee> uedList = this.getProductEmployeeService()
                 .searchTypeList(new Long(id), AvaStatusEnum.MEMBERAVA.getCode(), new Long(AvaStatusEnum.UEDAVA.getCode()));
+        /* 测试人员 */
+        List<ProductEmployee> testingList = this.getProductEmployeeService()
+                .searchTypeList(new Long(id), AvaStatusEnum.MEMBERAVA.getCode(), new Long(AvaStatusEnum.TESTINGAVA.getCode()));
+         /* 业务人员 */
+        List<ProductEmployee> businessList = this.getProductEmployeeService()
+                .searchTypeList(new Long(id), AvaStatusEnum.MEMBERAVA.getCode(), new Long(AvaStatusEnum.BUSINESSAVA.getCode()));
+
 
         /*产品关联项目*/
         String likeProgram = psProduct.getLikeProgram();
@@ -188,6 +197,8 @@ public class APIProductController extends BaseController {
         psProduct.setProgramManagerList(programManagerList);
         psProduct.setDeveloperList(developerList);
         psProduct.setUedList(uedList);
+        psProduct.setTestingList(testingList);
+        psProduct.setBusinessList(businessList);
         /*返回数据*/
         Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         resultMap.put("pro", psProduct);
@@ -203,11 +214,13 @@ public class APIProductController extends BaseController {
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
     public Map addProduct(HttpServletRequest request, HttpServletResponse response) {
-        /* 获得已经验证过的参数map*/
-        @SuppressWarnings("unchecked")
-        Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-        /*新增产品信息*/
-        return this.getProductService().addProduct(paramsMap);
+        try{
+            Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+            return this.getProductService().addProduct(paramsMap);
+        }catch (Exception e){
+            e.printStackTrace();
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+        }
     }
 
     /**
@@ -219,33 +232,38 @@ public class APIProductController extends BaseController {
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
     public Map updateProduct(HttpServletRequest request, HttpServletResponse response) {
-        /* 获得已经验证过的参数map*/
-        Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-        String id = paramsMap.get("id");
+        try{
+/* 获得已经验证过的参数map*/
+            Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+            String id = paramsMap.get("id");
         /*责任人*/
-        boolean isAllow = false;
-        List<ProductEmployee> personLiableList = this.getProductEmployeeService()
-                .searchTypeList(new Long(id), AvaStatusEnum.LIABLEAVA.getCode(), null);
-        if (!"".equals(paramsMap.get("modifiedAccountId"))) {
-            for (ProductEmployee productEmployee : personLiableList) {
-                if (productEmployee.getAccountId().equals(paramsMap.get("modifiedAccountId"))) {
-                    isAllow = true;
-                    break;
+            boolean isAllow = false;
+            List<ProductEmployee> personLiableList = this.getProductEmployeeService()
+                    .searchTypeList(new Long(id), AvaStatusEnum.LIABLEAVA.getCode(), null);
+            if (!"".equals(paramsMap.get("modifiedAccountId"))) {
+                for (ProductEmployee productEmployee : personLiableList) {
+                    if (productEmployee.getAccountId().equals(paramsMap.get("modifiedAccountId"))) {
+                        isAllow = true;
+                        break;
+                    }
                 }
+            } else {
+                return CommonUtils.getResultMapByBizEnum(BizEnum.E9993, "modifiedAccountId");
             }
-        } else {
-            return CommonUtils.getResultMapByBizEnum(BizEnum.E9993, "modifiedAccountId");
-        }
 
-        Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
-        if (isAllow) {
+            Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
+            if (isAllow) {
             /*更新操作*/
-            this.getProductService().updateProduct(paramsMap);
-        } else {
-            map = CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
-        }
+                this.getProductService().updateProduct(paramsMap);
+            } else {
+                map = CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+            }
         /*返回数据*/
-        return map;
+            return map;
+        }catch (Exception e){
+            e.printStackTrace();
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+        }
     }
 
 
@@ -269,37 +287,43 @@ public class APIProductController extends BaseController {
     @RequestMapping(value = "/delEmployee", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
     public Map delEmp(HttpServletRequest request, HttpServletResponse response) {
-        Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-        String productId = (String) paramsMap.get("productId");
-        Product product = this.getProductService().selectById(Long.valueOf(productId));
-        String accountId = (String) paramsMap.get("accountId");
-        if (accountId.equals(product.getContactAccountId())) {
-            return CommonUtils.getResultMapByBizEnum(BizEnum.E1027, " 接口人");
-        }
-        ProductEmployee employee = new ProductEmployee();
-        employee.setAccountId(accountId);
-        employee.setProductId(Long.valueOf(productId));
-        employee.setEmployeeType(AvaStatusEnum.LIABLEAVA.getCode());
-        ProductEmployee persionaLiable = this.getProductEmployeeService().selectOne(employee);
-        if (persionaLiable != null) {
-            //是责任人
-            ProductEmployee productEmployee = new ProductEmployee();
-            productEmployee.setProductId(Long.valueOf(productId));
-            productEmployee.setEmployeeType(AvaStatusEnum.LIABLEAVA.getCode());
-            int persionaLiableCount =  this.getProductEmployeeService().selectCount(productEmployee);
-            if (persionaLiableCount > 1) {
-                //删除当前用户
-                this.getProductEmployeeService().delEmployee(employee);
-            } else {
-                return CommonUtils.getResultMapByBizEnum(BizEnum.E1027, " 唯一责任人");
+        try{
+            Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+            String productId = (String) paramsMap.get("productId");
+            Product product = this.getProductService().selectById(Long.valueOf(productId));
+            String accountId = (String) paramsMap.get("accountId");
+            String accountType = String.valueOf(AccountUitl.getAccountType(paramsMap));
+            if (accountId.equals(product.getContactAccountId())) {
+                return CommonUtils.getResultMapByBizEnum(BizEnum.E1027, " 接口人");
             }
-        } else {
-            //删除成员
-            employee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
-            this.getProductEmployeeService().delEmployee(employee);
+            ProductEmployee employee = new ProductEmployee();
+            employee.setAccountId(accountId);
+            employee.setProductId(Long.valueOf(productId));
+            employee.setEmployeeType(AvaStatusEnum.LIABLEAVA.getCode());
+            ProductEmployee persionaLiable = this.getProductEmployeeService().selectOne(employee);
+            if (persionaLiable != null) {
+                //是责任人
+                ProductEmployee productEmployee = new ProductEmployee();
+                productEmployee.setProductId(Long.valueOf(productId));
+                productEmployee.setEmployeeType(AvaStatusEnum.LIABLEAVA.getCode());
+                int persionaLiableCount =  this.getProductEmployeeService().selectCount(productEmployee);
+                if (persionaLiableCount > 1) {
+                    //删除当前用户
+                    this.getProductEmployeeService().delEmployee(employee,accountType);
+                } else {
+                    return CommonUtils.getResultMapByBizEnum(BizEnum.E1027, " 唯一责任人");
+                }
+            } else {
+                //删除成员
+                employee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
+                this.getProductEmployeeService().delEmployee(employee,accountType);
+            }
+
+            return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        }catch (Exception e){
+            e.printStackTrace();
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
         }
-            
-        return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
     }
 
 
@@ -307,17 +331,22 @@ public class APIProductController extends BaseController {
     @RequestMapping(value = "/update/status" , method = RequestMethod.POST , produces = {"application/json;charset=utf-8"})
     @ResponseBody
     public Map updateStatus(HttpServletRequest request , HttpServletResponse response){
-        Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        try{
+            Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
-        int code = Integer.parseInt((String)paramsMap.get("status"));
-        ProductStatusEnum productStatusEnum  =  ProductStatusEnum.getByCode(code);
-        if(productStatusEnum != null ){
+            int code = Integer.parseInt((String)paramsMap.get("status"));
+            ProductStatusEnum productStatusEnum  =  ProductStatusEnum.getByCode(code);
+            if(productStatusEnum == null ){
+                return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+            }
+
             this.getProductService().updateStatus(paramsMap);
             Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
             resultMap.put("newStatusText", productStatusEnum.getText());
             return resultMap;
-        }else{
-            return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
+        }catch (Exception e){
+            e.printStackTrace();
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
         }
     }
 }

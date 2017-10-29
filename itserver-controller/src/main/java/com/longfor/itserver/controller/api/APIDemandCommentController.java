@@ -56,9 +56,13 @@ public class APIDemandCommentController extends BaseController{
     @RequestMapping(value="/add",method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
     @ResponseBody
     public Map add(HttpServletRequest request,HttpServletResponse response) {
-        Map paramMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-
-        return this.getDemandCommentService().add(paramMap);
+        try{
+            Map paramMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+            return this.getDemandCommentService().add(paramMap);
+        }catch (Exception e){
+            e.printStackTrace();
+            return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+        }
     }
 
 }

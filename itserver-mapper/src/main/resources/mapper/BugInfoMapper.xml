@@ -100,16 +100,69 @@
         <if test='isPart == 2'>
             and drafted_account_id = #{accountId, jdbcType=VARCHAR}
         </if>
-        <if test='productId !="" and productId != null and productId != -1 and (programId == "" or programId == -1) '>
-            and relation_type = 1 AND relation_id = #{productId}
-            <if test='programId == -1'>
-              OR (
-                relation_type = 2 AND relation_id IN (SELECT id FROM program WHERE product_id = #{productId})
+        <!--非管理员账户执行 选择了产品-->
+        <if test="isAdmin == 0">
+            <if test='productId !="" and productId != null and productId != -1 and (programId == 0 or programId == -1) '>
+                and
+                <if test='programId == -1'>
+                    (
+                </if>
+                (relation_type = 1 AND relation_id IN
+                (
+                SELECT ta.id FROM product ta LEFT JOIN product_employee tb ON ta.id = tb.product_id
+                WHERE (tb.account_id = #{accountId, jdbcType=VARCHAR} OR ta.contact_account_id = #{accountId, jdbcType=VARCHAR} OR ta.type=1)
+                AND product_id = #{productId}
+                ))
+                <if test='programId == -1'>
+                    OR (
+                    relation_type = 2 AND relation_id IN (
+                        SELECT DISTINCT p.id FROM program p JOIN program_employee pe ON p.id = pe.program_id WHERE (pe.account_id = #{accountId, jdbcType=VARCHAR} OR p.type = 1)
+                        AND product_id = #{productId}
+                      )
+                    ))
+                </if>
+            </if>
+            <if test='productId !="" and productId != null and productId != -1 and programId !=0 and programId != null and programId != -1'>
+                and  relation_type = 2 AND relation_id IN (
+                SELECT DISTINCT p.id FROM program p JOIN program_employee pe ON p.id = pe.program_id WHERE (pe.account_id = #{accountId, jdbcType=VARCHAR} OR p.type = 1)
+                AND product_id = #{productId} AND relation_id = #{programId}
+                )
+            </if>
+            <if test='productId == -1 and isPart == 0'>
+                and ((
+                relation_type = 1 AND relation_id IN
+                    (
+                    SELECT ta.id FROM product ta LEFT JOIN product_employee tb ON ta.id = tb.product_id
+                    WHERE (tb.account_id = #{accountId, jdbcType=VARCHAR} OR ta.contact_account_id =
+                    #{accountId, jdbcType=VARCHAR} OR ta.type=1)
+                    )
+                )
+                OR (
+                relation_type = 2 AND relation_id IN (
+                SELECT DISTINCT p.id FROM program p JOIN program_employee pe ON p.id = pe.program_id WHERE (pe.account_id =
+                #{accountId, jdbcType=VARCHAR} OR p.type = 1)
+                ))
+                OR callon_account_id = #{accountId, jdbcType=VARCHAR} OR drafted_account_id = #{accountId, jdbcType=VARCHAR}
                 )
             </if>
         </if>
-        <if test='productId !="" and productId != null and productId != -1 and programId !="" and programId != null and programId != -1'>
-            and  relation_type = 2 AND relation_id = #{programId}
+        <!--管理员账户执行-->
+        <if test="isAdmin == 1">
+            <if test='productId !="" and productId != null and productId != -1 and (programId == 0 or programId == -1) '>
+                and
+                <if test='programId == -1'>
+                    (
+                </if>
+                (relation_type = 1 AND relation_id = #{productId})
+                <if test='programId == -1'>
+                  OR (
+                    relation_type = 2 AND relation_id IN (SELECT id FROM program WHERE product_id = #{productId})
+                    ))
+                </if>
+            </if>
+            <if test='productId !="" and productId != null and productId != -1 and programId !=0 and programId != null and programId != -1'>
+                and  relation_type = 2 AND relation_id = #{programId}
+            </if>
         </if>
         <if test='searchText != "" and searchText != null'>
             and (name like concat(concat('%',#{searchText}),'%') OR callon_employee_name like

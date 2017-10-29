@@ -7,6 +7,7 @@ import com.longfor.itserver.mapper.ProgramEmployeeMapper;
 import com.longfor.itserver.mapper.ProgramMapper;
 import com.longfor.itserver.service.IProgramEmployeeService;
 import com.longfor.itserver.service.base.AdminBaseService;
+import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class ProgramEmployeeServiceImpl extends AdminBaseService<ProgramEmployee
     }
 
     @Override
-    public boolean delEmployee(ProgramEmployee employee) {
+    public boolean delEmployee(ProgramEmployee employee,String accountType) {
 
 
         List<ProgramEmployee> employeeList = programEmployeeMapper.select(employee);
@@ -50,6 +51,7 @@ public class ProgramEmployeeServiceImpl extends AdminBaseService<ProgramEmployee
         changeLog.setActionChangeInfo(log.toString());
         changeLog.setCreateTime(TimeUtils.getTodayByDateTime());
         changeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+        changeLog.setAccountType(Integer.parseInt(accountType));
         changeLogMapper.insertUseGeneratedKeys(changeLog);
 
         programEmployeeMapper.delete(employee);

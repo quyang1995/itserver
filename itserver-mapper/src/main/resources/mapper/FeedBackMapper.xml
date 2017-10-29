@@ -60,6 +60,9 @@
       <if test='feedbackPhone != "" and feedbackPhone != null and (accountId == "" or accountId == null)'>
           and feedback_phone = #{feedbackPhone}
       </if>
+    <if test='type != "" and type != null  and type != -1'>
+      and type = #{type}
+    </if>
     <if test='status != "" and status != null  and status != -1'>
       and status = #{status}
     </if>
@@ -89,7 +92,13 @@
             IFNULL(sum(f.`status` = 3),0) AS "working",
             IFNULL(sum(f.`status` = 4),0) AS "completed"
         FROM feed_back f
-        WHERE modified_account_id = #{accountId}
+        WHERE 1 = 1
+        <if test='accountId != "" and accountId != null'>
+            and modified_account_id = #{accountId}
+        </if>
+        <if test='feedbackPhone != "" and feedbackPhone != null and (accountId == "" or accountId == null)'>
+            and feedback_phone = #{feedbackPhone}
+        </if>
     </select>
 
 </mapper>

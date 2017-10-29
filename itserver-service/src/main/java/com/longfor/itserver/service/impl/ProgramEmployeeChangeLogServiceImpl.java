@@ -35,4 +35,9 @@ public class ProgramEmployeeChangeLogServiceImpl extends AdminBaseService<Progra
 
         return resultMap;
     }
+
+    @Override
+    public  List<ProgramEmployeeChangeLog> paraQuery(Map<String, String> paramsMap){
+        return programEmployeeChangeLogMapper.paraQuery(paramsMap);
+    }
 }

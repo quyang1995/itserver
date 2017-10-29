@@ -2,6 +2,7 @@ package com.longfor.itserver.esi;
 
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.entity.AccountLongforLike;
+import com.longfor.ads.entity.BuddyAccount;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public interface IAdsService {
     boolean isAvaAccount(String loginName);
 
     AccountLongfor getAccountLongfor(String loginName);
+
+    BuddyAccount getBuddyAccountByLoginName(String loginName);
 }

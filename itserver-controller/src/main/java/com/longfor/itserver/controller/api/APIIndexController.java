@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
+import com.longfor.itserver.common.helper.DataPermissionHelper;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
@@ -80,5 +81,30 @@ public class APIIndexController extends BaseController {
 		return resultMap;
 	}
 
+
+	/**
+	 * 验证是否是admin
+	 *
+	 * @author lovex
+	 * @create 2017/8/5 下午2:25
+	 *
+	 * @version v1.0
+	 */
+	@RequestMapping(value = "/isAdmin", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public Map isAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		/* 获得已经验证过的参数map */
+		@SuppressWarnings("unchecked")
+		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+
+		/* 返回报文 */
+		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		/* 查询数据 and admin权限判断 */
+		String accountId = paramsMap.get("accountId").toString();
+		resultMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
+
+		return resultMap;
+	}
 
 }

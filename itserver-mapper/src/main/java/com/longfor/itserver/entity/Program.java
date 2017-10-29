@@ -4,15 +4,28 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.mayee.commons.CustomDateSerializer;
 import net.mayee.commons.CustomFullDateSerializer;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "program")
-public class Program {
+public class Program implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    /**
+     * 账户类型：0或者null或者空位内部账号，1-供方账号
+     */
+    @Column(name = "account_type")
+    private Integer accountType;
 
+    public Integer getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(Integer accountType) {
+        this.accountType = accountType;
+    }
     /**
      * 归属产品
      */
@@ -42,28 +55,28 @@ public class Program {
      * 立项日期
      */
     @Column(name = "commit_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date commitDate;
 
     /**
      * 启动日期
      */
     @Column(name = "start_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date startDate;
 
     /**
      * 灰度日期
      */
     @Column(name = "gray_release_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date grayReleaseDate;
 
     /**
      * 发布日期
      */
     @Column(name = "release_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date releaseDate;
 
     @Column(name = "ued_date")

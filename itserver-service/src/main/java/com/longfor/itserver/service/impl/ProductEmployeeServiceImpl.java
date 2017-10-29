@@ -44,7 +44,7 @@ public class ProductEmployeeServiceImpl extends AdminBaseService<ProductEmployee
     }
 
     @Override
-    public boolean delEmployee(ProductEmployee employee) {
+    public boolean delEmployee(ProductEmployee employee,String accountType) {
         List<ProductEmployee>employeeList =  productEmployeeMapper.select(employee);
         //添加日志
         ProductEmployeeChangeLog changeLog = new ProductEmployeeChangeLog();
@@ -58,6 +58,7 @@ public class ProductEmployeeServiceImpl extends AdminBaseService<ProductEmployee
         changeLog.setActionChangeInfo(log.toString());
         changeLog.setCreateTime(TimeUtils.getTodayByDateTime());
         changeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+        changeLog.setAccountType(Integer.getInteger(accountType));
         changeLogMapper.insertUseGeneratedKeys(changeLog);
 
         //删除人员

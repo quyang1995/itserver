@@ -34,6 +34,10 @@ public class PsProgramDetail extends Program implements Serializable {
 
     @Transient
     private List<ProgramEmployee> uedList;
+    @Transient
+    private List<ProgramEmployee> testingList;
+    @Transient
+    private List<ProgramEmployee> businessList;
 
     public List<Product> getProductList() {
         return productList;
@@ -81,5 +85,21 @@ public class PsProgramDetail extends Program implements Serializable {
 
     public void setProductManagerList(List<ProgramEmployee> productManagerList) {
         this.productManagerList = productManagerList;
+    }
+
+    public List<ProgramEmployee> getTestingList() {
+        return testingList;
+    }
+
+    public void setTestingList(List<ProgramEmployee> testingList) {
+        this.testingList = testingList;
+    }
+
+    public List<ProgramEmployee> getBusinessList() {
+        return businessList;
+    }
+
+    public void setBusinessList(List<ProgramEmployee> businessList) {
+        this.businessList = businessList;
     }
 }
