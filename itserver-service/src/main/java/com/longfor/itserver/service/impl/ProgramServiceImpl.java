@@ -245,6 +245,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		selectOneProgram.setDescp(program.getDescp());
 		selectOneProgram.setCommitDate(program.getCommitDate());
 		selectOneProgram.setStartDate(program.getStartDate());
+		selectOneProgram.setUedDate(program.getUedDate());
+		selectOneProgram.setArchitectureDate(program.getArchitectureDate());
 		selectOneProgram.setGrayReleaseDate(program.getGrayReleaseDate());
 		selectOneProgram.setReleaseDate(program.getReleaseDate());
 		selectOneProgram.setLikeProduct(program.getLikeProduct());
@@ -381,26 +383,31 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			textList.add(sb.toString());
 		}
 		//UED评审时间
-		if(!TimeUtils.sameDate(oldProgram.getUedDate(), newProgram.getUedDate())){
-			StringBuilder sb = new StringBuilder();
-			sb.append(newProgram.getModifiedName());
-			sb.append(" 将 UED评审时间 从 [")
-					.append(TimeUtils.getTime(oldProgram.getUedDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-					.append("] 更新为 [")
-					.append(TimeUtils.getTime(newProgram.getUedDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-					.append("]");
-			textList.add(sb.toString());
+		if(!"".equals(oldProgram.getUedDate()) && oldProgram.getUedDate() != null){
+			if(!TimeUtils.sameDate(oldProgram.getUedDate(), newProgram.getUedDate())){
+				StringBuilder sb = new StringBuilder();
+				sb.append(newProgram.getModifiedName());
+				sb.append(" 将 UED评审时间 从 [")
+						.append(TimeUtils.getTime(oldProgram.getUedDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+						.append("] 更新为 [")
+						.append(TimeUtils.getTime(newProgram.getUedDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+						.append("]");
+				textList.add(sb.toString());
+			}
 		}
+
 		//架构评审时间
-		if(!TimeUtils.sameDate(oldProgram.getArchitectureDate(), newProgram.getArchitectureDate())){
-			StringBuilder sb = new StringBuilder();
-			sb.append(newProgram.getModifiedName());
-			sb.append(" 将 架构评审时间 从 [")
-					.append(TimeUtils.getTime(oldProgram.getArchitectureDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-					.append("] 更新为 [")
-					.append(TimeUtils.getTime(newProgram.getArchitectureDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-					.append("]");
-			textList.add(sb.toString());
+		if(!"".equals(oldProgram.getArchitectureDate()) && oldProgram.getArchitectureDate() != null) {
+			if (!TimeUtils.sameDate(oldProgram.getArchitectureDate(), newProgram.getArchitectureDate())) {
+				StringBuilder sb = new StringBuilder();
+				sb.append(newProgram.getModifiedName());
+				sb.append(" 将 架构评审时间 从 [")
+						.append(TimeUtils.getTime(oldProgram.getArchitectureDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+						.append("] 更新为 [")
+						.append(TimeUtils.getTime(newProgram.getArchitectureDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+						.append("]");
+				textList.add(sb.toString());
+			}
 		}
 		//灰度时间
 		if(!TimeUtils.sameDate(oldProgram.getGrayReleaseDate(), newProgram.getGrayReleaseDate())){
