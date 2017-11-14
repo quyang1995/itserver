@@ -66,3 +66,19 @@ use=true
 key=bad57711ec31f2148faa4a9d75ae1800
 name=x-authentication-token
 ##———————————————————————————————————————————
+
+
+
+
+#
+#  附件存储地址
+#
+[filePath<development>]
+path=/mnt/ITPlusnas/ITPlus
+
+[filePath<uat>]
+path=/mnt/ITPlusnas/ITPlus
+
+[filePath<production>]
+path=/lhdata/itplus/upload
+##———————————————————————————————————————————

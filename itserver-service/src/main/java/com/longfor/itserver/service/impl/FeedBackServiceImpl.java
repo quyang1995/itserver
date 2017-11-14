@@ -134,7 +134,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
             feedBack.setProblemDescp(descp);
             feedBack.setReproductionStep(null);
         }
-        if("4".equals(feedBack.getChannel())){
+        if("4".equals((feedBack.getChannel()).toString())){
             feedBack.setType(0);
             feedBack.setAccountType(2);
         }else{
@@ -189,7 +189,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
             bugInfo.setModifiedTime(TimeUtils.getTodayByDateTime());
             bugInfo.setFeedbackPhone(feedBack.getFeedbackPhone());
             bugInfo.setFeedbackName(feedBack.getFeedbackName());
-            bugInfo.setAccountType(accountType);
+            bugInfo.setAccountType(feedBack.getAccountType());
             bugInfoMapper.insert(bugInfo);
 
             //添加文件
@@ -252,7 +252,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
             demand.setModifiedTime(TimeUtils.getTodayByDateTime());
             demand.setFeedbackPhone(feedBack.getFeedbackPhone());
             demand.setFeedbackName(feedBack.getFeedbackName());
-            demand.setAccountType(accountType);
+            demand.setAccountType(feedBack.getAccountType());
             demandMapper.insert(demand);
             //添加文件
             List<DemandFile> demamdFileList = JSONArray.parseArray(json.getString("fileList"), DemandFile.class);
