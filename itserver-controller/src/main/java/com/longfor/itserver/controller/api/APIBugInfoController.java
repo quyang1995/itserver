@@ -75,6 +75,34 @@ public class APIBugInfoController extends BaseController {
 	}
 
 	/**
+	 * 导出BUG列表
+	 *
+	 * @author lovex
+	 * @create 2017/8/23 上午9:00
+	 *
+	 * @version v1.0
+	 */
+	@RequestMapping(value = "/export", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public Map bugExportList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		/* 获得已经验证过的参数map */
+		@SuppressWarnings("unchecked")
+		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+
+		/* 查询数据 and admin权限判断 */
+		String accountId = String.valueOf(paramsMap.get("accountId"));
+		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
+		List<BugInfo> bugList = this.getBugInfoService().bugList(paramsMap);
+
+
+		/* 返回报文 */
+		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		resultMap.put("list", bugList);
+		resultMap.put(APIHelper.TOTAL, new PageInfo(bugList).getTotal());
+		return resultMap;
+	}
+
+	/**
 	 * 通过ID获取BUG基本信息
 	 *
 	 * @author lovex

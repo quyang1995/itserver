@@ -5,11 +5,13 @@ import com.github.pagehelper.PageInfo;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.helper.DataPermissionHelper;
+import com.longfor.itserver.common.helper.JoddHelper;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.*;
 import com.longfor.itserver.entity.ps.PsFeedBackDetail;
+import jodd.props.Props;
 import net.mayee.commons.helper.APIHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
@@ -223,7 +225,8 @@ public class APIFeedBackController extends BaseController {
 	@ResponseBody
 	public Map fileCAjax(HttpServletResponse response, HttpServletRequest request) throws Exception {
 		Map<String,String> paramsMap = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-		String filePath = ConfigConsts.FILE_ADDRESS;
+		Props props = JoddHelper.getInstance().getJoddProps();
+		String filePath = props.getValue("filePath.path");
 		File tmpDir = new File(filePath);
 		if (!tmpDir.exists()) {
 			tmpDir.mkdirs();

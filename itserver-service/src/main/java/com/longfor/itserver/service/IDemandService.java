@@ -19,6 +19,13 @@ public interface IDemandService extends IAdminService<Demand> {
 	public Map<String, Object> getPageDemandList(Map<String, Object>paramsMap,ELExample example);
 
 	/**
+	 * 获取所有list
+	 * @param paramsMap
+	 * @return
+	 */
+	public Map<String, Object> getExcelDemandList(Map<String, Object>paramsMap);
+
+	/**
 	 *  新增需求信息
 	 * @param map
 	 * @return

@@ -9,10 +9,8 @@ import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.entity.BuddyAccount;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.constant.ConfigConsts;
-import com.longfor.itserver.common.enums.AvaStatusEnum;
-import com.longfor.itserver.common.enums.BizEnum;
-import com.longfor.itserver.common.enums.BugLevelEnum;
-import com.longfor.itserver.common.enums.BugStatusEnum;
+import com.longfor.itserver.common.enums.*;
+import com.longfor.itserver.common.helper.JoddHelper;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.common.util.StringUtil;
@@ -20,6 +18,7 @@ import com.longfor.itserver.entity.BugChangeLog;
 import com.longfor.itserver.entity.BugFile;
 import com.longfor.itserver.entity.BugInfo;
 import com.longfor.itserver.entity.FeedBack;
+import com.longfor.itserver.esi.impl.LongforServiceImpl;
 import com.longfor.itserver.mapper.BugChangeLogMapper;
 import com.longfor.itserver.mapper.BugFileMapper;
 import com.longfor.itserver.mapper.BugInfoMapper;
@@ -27,6 +26,7 @@ import com.longfor.itserver.mapper.FeedBackMapper;
 import com.longfor.itserver.service.IBugInfoService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import com.longfor.itserver.service.util.AccountUitl;
+import jodd.props.Props;
 import net.mayee.commons.TimeUtils;
 import net.mayee.commons.helper.APIHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -55,6 +55,8 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
     private BugFileMapper bugFileMapper;
     @Autowired
     private FeedBackMapper feedBackMapper;
+    @Autowired
+    private LongforServiceImpl longforServiceImpl;
 
     /**
      * bug列表
@@ -133,6 +135,20 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                 bugFileMapper.insertList(fileList);
             }
         }
+
+        /*新增BUG消息提醒*/
+        if(!bugInfo.getDraftedAccountId().equals(bugInfo.getCallonAccountId())) {
+            Map paramMap = longforServiceImpl.param();
+            Props props = JoddHelper.getInstance().getJoddProps();
+            String openUrl = props.getValue("openUrl.bugPath");
+            paramMap.put("ruser", bugInfo.getCallonAccountId());
+            JSONObject paramMapCont = (JSONObject) paramMap.get("content");
+            paramMapCont.put("topTitle", "BUG提醒");
+            paramMapCont.put("centerWords", "您收到一条BUG：【" + bugInfo.getName() + "】");
+            paramMapCont.put("openUrl", openUrl + "?reqid=" + bugInfo.getId() + "&isweb=true" + "&accountId=" + bugInfo.getCallonAccountId());
+            longforServiceImpl.msgcenter(paramMap);
+        }
+
         /*添加BUG修改日志*/
         Map<String, Object> logMap = getChangeLog(null, bugInfo);
         List<String> textList = (List) logMap.get("logList");
@@ -168,6 +184,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         if (null == selectOneBugInfo) {
             return false;
         }
+        Map<String, Object> logMap = getChangeLog(selectOneBugInfo, bugInfo);
         Integer accountType = AccountUitl.getAccountType(map);
 
         //获取最后修改人
@@ -217,8 +234,6 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         }
 
         /*添加BUG修改日志*/
-
-        Map<String, Object> logMap = getChangeLog(selectOneBugInfo, bugInfo);
         List<String> textList = (List) logMap.get("logList");
         List<BugChangeLog> logList = new ArrayList<>();
         for (String log : textList) {
@@ -260,6 +275,18 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                         append(" 修改了bug描述信息");
                 textList.add(log.toString());
                 map.put("type", 1);
+                /*修改需求描述消息提醒*/
+                if(!newBug.getModifiedAccountId().equals(newBug.getCallonAccountId())) {
+                    Map paramMap = longforServiceImpl.param();
+                    Props props = JoddHelper.getInstance().getJoddProps();
+                    String openUrl = props.getValue("openUrl.bugPath");
+                    paramMap.put("ruser", newBug.getCallonAccountId());
+                    JSONObject paramMapCont = (JSONObject) paramMap.get("content");
+                    paramMapCont.put("topTitle", "BUG提醒");
+                    paramMapCont.put("centerWords", "您跟进的BUG发生变更：【" + newBug.getName() + "】");
+                    paramMapCont.put("openUrl", openUrl + "?reqid=" + newBug.getId() + "&isweb=true" + "&accountId=" + newBug.getCallonAccountId());
+                    longforServiceImpl.msgcenter(paramMap);
+                }
             }
             if (    !Objects.equals(oldBug.getLevel(), newBug.getLevel())
 //                    ||
@@ -303,6 +330,20 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                             append(newBug.getCallonEmployeeName()).
                             append("]");
                     textList.add(log.toString());
+
+                    /*更新BUG指派给消息提醒*/
+                    if(!newBug.getModifiedAccountId().equals(newBug.getCallonAccountId())) {
+                        Map paramMap = longforServiceImpl.param();
+                        Props props = JoddHelper.getInstance().getJoddProps();
+                        String openUrl = props.getValue("openUrl.bugPath");
+                        paramMap.put("ruser", newBug.getCallonAccountId());
+                        JSONObject paramMapCont = (JSONObject) paramMap.get("content");
+                        paramMapCont.put("topTitle", "BUG提醒");
+                        paramMapCont.put("centerWords", "您收到一条BUG：【" + newBug.getName() + "】");
+                        paramMapCont.put("openUrl", openUrl + "?reqid=" + newBug.getId() + "&isweb=true" + "&accountId=" + newBug.getCallonAccountId());
+                        longforServiceImpl.msgcenter(paramMap);
+                    }
+
                 }
 
                 map.put("type", 2);
@@ -336,6 +377,19 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                     append("]更改为[").
                     append(BugStatusEnum.getByCode(newBug.getStatus()).getText()).
                     append("]");
+
+            /*更新需求状态消息提醒*/
+            if(!newBug.getModifiedAccountId().equals(oldBug.getDraftedAccountId())) {
+                Map paramMap = longforServiceImpl.param();
+                Props props = JoddHelper.getInstance().getJoddProps();
+                String openUrl = props.getValue("openUrl.bugPath");
+                paramMap.put("ruser", oldBug.getDraftedAccountId());
+                JSONObject paramMapCont = (JSONObject) paramMap.get("content");
+                paramMapCont.put("topTitle", "BUG提醒");
+                paramMapCont.put("centerWords", "您提交的BUG：【" + oldBug.getName() + "】处理状态从[" + DemandStatusEnum.getByCode(oldBug.getStatus()).getText() + "]变更为[" + DemandStatusEnum.getByCode(newBug.getStatus()).getText() + "]");
+                paramMapCont.put("openUrl", openUrl + "?reqid=" + oldBug.getId() + "&isweb=true" + "&accountId=" + oldBug.getDraftedAccountId());
+                longforServiceImpl.msgcenter(paramMap);
+            }
         }
 
         else if (newBug.getCallonAccountId() != null&& !Objects.equals(oldBug.getCallonAccountId(), newBug.getCallonAccountId())) {
@@ -345,6 +399,19 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                     append("]更改为[").
                     append(newBug.getCallonEmployeeName()).
                     append("]");
+
+            /*更新BUG指派给消息提醒*/
+            if(!newBug.getModifiedAccountId().equals(newBug.getCallonAccountId())){
+                Map paramMap = longforServiceImpl.param();
+                Props props = JoddHelper.getInstance().getJoddProps();
+                String openUrl = props.getValue("openUrl.bugPath");
+                paramMap.put("ruser",newBug.getCallonAccountId());
+                JSONObject paramMapCont = (JSONObject) paramMap.get("content");
+                paramMapCont.put("topTitle","BUG提醒");
+                paramMapCont.put("centerWords","您收到一条BUG：【"+ oldBug.getName() +"】");
+                paramMapCont.put("openUrl",openUrl + "?reqid="+oldBug.getId()+"&isweb=true"+"&accountId="+newBug.getCallonAccountId());
+                longforServiceImpl.msgcenter(paramMap);
+            }
         }
 
         return  log.toString();
@@ -416,6 +483,8 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         newBug.setCallonFullDeptPath(accountLongfor.getPsDeptFullName());
         newBug.setModifiedName(modifiedName);
         newBug.setModifiedAccountId(modifiedAccountId);
+
+
         /*添加BUG修改日志*/
         String log = statusLog(oldBug, newBug);
         if(StringUtils.isNotBlank(log)) {

@@ -59,6 +59,25 @@ public class APIDemandController extends BaseController {
     }
 
     /**
+     * 导出需求列表
+     *
+     * @param response
+     * @param request
+     * @return map
+     */
+    @RequestMapping(value = "/export", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Map exportList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+          /*  获得已经验证过的参数map */
+        @SuppressWarnings("unchecked")
+        Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        /*查询数据*/
+        Map<String, Object> map= this.getDemandService().getExcelDemandList(paramsMap);
+        return map;
+    }
+
+    /**
      *  添加需求
      * @param request
      * @param response

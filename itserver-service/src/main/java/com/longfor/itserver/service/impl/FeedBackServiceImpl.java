@@ -7,14 +7,17 @@ import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.*;
+import com.longfor.itserver.common.helper.JoddHelper;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.StringUtil;
 import com.longfor.itserver.entity.*;
 import com.longfor.itserver.entity.ps.PsFeedBackStatus;
+import com.longfor.itserver.esi.impl.LongforServiceImpl;
 import com.longfor.itserver.mapper.*;
 import com.longfor.itserver.service.IFeedBackService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import com.longfor.itserver.service.util.AccountUitl;
+import jodd.props.Props;
 import net.mayee.commons.TimeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +60,8 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
     private BugFileMapper bugFileMapper;
     @Autowired
     private DemandFileMapper demandFileMapper;
+    @Autowired
+    private LongforServiceImpl longforServiceImpl;
 
 
     @Override
@@ -202,6 +207,20 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
                 bugFileMapper.insertList(bugFileList);
             }
 
+
+            /*新增BUG消息提醒*/
+            if(!modifiedAccountId.equals(bugInfo.getCallonAccountId())){
+                Map paramMap = longforServiceImpl.param();
+                Props props = JoddHelper.getInstance().getJoddProps();
+                String openUrl = props.getValue("openUrl.bugPath");
+                paramMap.put("ruser",bugInfo.getCallonAccountId());
+                JSONObject paramMapCont = (JSONObject) paramMap.get("content");
+                paramMapCont.put("topTitle","BUG提醒");
+                paramMapCont.put("centerWords","您收到一条BUG：【"+ bugInfo.getName() +"】");
+                paramMapCont.put("openUrl",openUrl + "?reqid="+bugInfo.getId()+"&isweb=true"+"&accountId="+bugInfo.getCallonAccountId());
+                longforServiceImpl.msgcenter(paramMap);
+            }
+
             //添加日志
             Map<String, Object> logMap = getChangeLog(null, bugInfo);
             @SuppressWarnings("unchecked")
@@ -263,6 +282,21 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
                 }
                 demandFileMapper.insertList(demamdFileList);
             }
+
+
+            /*新增需求消息提醒*/
+            if(!modifiedAccountId.equals(demand.getCallonAccountId())) {
+                Map paramMap = longforServiceImpl.param();
+                Props props = JoddHelper.getInstance().getJoddProps();
+                String openUrl = props.getValue("openUrl.demandPath");
+                paramMap.put("ruser", demand.getCallonAccountId());
+                JSONObject paramMapCont = (JSONObject) paramMap.get("content");
+                paramMapCont.put("topTitle", "需求提醒");
+                paramMapCont.put("centerWords", "您收到一条需求：【" + demand.getName() + "】");
+                paramMapCont.put("openUrl", openUrl + "?reqid=" + demand.getId() + "&isweb=true" + "&accountId=" + demand.getCallonAccountId());
+                longforServiceImpl.msgcenter(paramMap);
+            }
+
             //添加日志
             Map<String, Object> logMap = getChangeLog(demand, null);
             @SuppressWarnings("unchecked")

@@ -166,7 +166,7 @@
             and (name like concat(concat('%',#{searchText}),'%') OR callon_employee_name like
             concat(concat('%',#{searchText}),'%'))
         </if>
-        ORDER BY create_time DESC
+        ORDER BY field(status,2,3,4,1,0),modified_time DESC
     </select>
 
 

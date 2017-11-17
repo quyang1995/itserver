@@ -1,5 +1,6 @@
 package com.longfor.itserver.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
@@ -11,10 +12,12 @@ import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.enums.DemandLevelEnum;
 import com.longfor.itserver.common.enums.DemandStatusEnum;
 import com.longfor.itserver.common.helper.DataPermissionHelper;
+import com.longfor.itserver.common.helper.JoddHelper;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.entity.*;
 import com.longfor.itserver.entity.ps.PsIndex;
+import com.longfor.itserver.esi.impl.LongforServiceImpl;
 import com.longfor.itserver.mapper.DemandChangeLogMapper;
 import com.longfor.itserver.mapper.DemandFileMapper;
 import com.longfor.itserver.mapper.DemandMapper;
@@ -23,6 +26,7 @@ import com.longfor.itserver.service.IDemandService;
 import com.longfor.itserver.service.base.AdminBaseService;
 
 import com.longfor.itserver.service.util.AccountUitl;
+import jodd.props.Props;
 import net.mayee.commons.TimeUtils;
 import net.mayee.commons.helper.APIHelper;
 
@@ -51,6 +55,8 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 	private DemandFileMapper demandFileMapper;
 	@Autowired
 	private FeedBackMapper feedBackMapper;
+	@Autowired
+	private LongforServiceImpl longforServiceImpl;
 
 	/**
 	 * 	新增需求信息
@@ -105,6 +111,20 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			}
 		}
 
+		/*新增需求消息提醒*/
+		if(!demand.getDraftedAccountId().equals(demand.getCallonAccountId())){
+			Map paramMap = longforServiceImpl.param();
+			Props props = JoddHelper.getInstance().getJoddProps();
+			String openUrl = props.getValue("openUrl.demandPath");
+			paramMap.put("ruser",demand.getCallonAccountId());
+			JSONObject paramMapCont = (JSONObject) paramMap.get("content");
+			paramMapCont.put("topTitle","需求提醒");
+			paramMapCont.put("centerWords","您收到一条需求：【"+ demand.getName() +"】");
+			paramMapCont.put("openUrl",openUrl + "?reqid="+demand.getId()+"&isweb=true"+"&accountId="+demand.getCallonAccountId());
+			longforServiceImpl.msgcenter(paramMap);
+		}
+
+
 		/*新增需求更新日志*/
 		demand.setModifiedTime(TimeUtils.getTodayByDateTime());
 		Map<String,Object> logMap = getChangeLog(null,demand);
@@ -141,6 +161,8 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		if (selectDemandOne==null){
 			return false;
 		}
+		demand.setModifiedTime(TimeUtils.getTodayByDateTime());
+		Map<String,Object> logMap = getChangeLog(selectDemandOne,demand);
 		Integer accountType = AccountUitl.getAccountType(map);
 		//获取最后修改人
 		AccountLongfor draftedAccountLongfor =
@@ -185,8 +207,6 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		}
 
 		/*新增需求更新日志*/
-		demand.setModifiedTime(TimeUtils.getTodayByDateTime());
-		Map<String,Object> logMap = getChangeLog(selectDemandOne,demand);
 		List<String> textList = (List)logMap.get("logList");
 		List<DemandChangeLog> logList = new ArrayList<>();
 		for (String demandChangeLog:textList){
@@ -234,6 +254,20 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 	}
 
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public Map<String, Object> getExcelDemandList(Map<String, Object> paramsMap) {
+		/* 查询数据 and admin权限判断 */
+		String accountId = String.valueOf(paramsMap.get("accountId"));
+		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
+		List<Demand> demands = demandMapper.searchList(paramsMap);
+		/* 返回数据 */
+		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		resultMap.put("demandList", demands);
+		resultMap.put(APIHelper.TOTAL, new PageInfo(demands).getTotal());
+		return resultMap;
+	}
+
 	@Override
 	public List<PsIndex> countPending(String id) {
 		List<PsIndex> pendingList = demandMapper.countPending(id);
@@ -261,6 +295,20 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 						append(" 修改了需求描述信息");
 				textList.add(log.toString());
 				map.put("type",1);
+
+				/*修改需求描述消息提醒*/
+				if(!newDemand.getModifiedAccountId().equals(newDemand.getCallonAccountId())) {
+					Map paramMap = longforServiceImpl.param();
+					Props props = JoddHelper.getInstance().getJoddProps();
+					String openUrl = props.getValue("openUrl.demandPath");
+					paramMap.put("ruser", newDemand.getCallonAccountId());
+					JSONObject paramMapCont = (JSONObject) paramMap.get("content");
+					paramMapCont.put("topTitle", "需求提醒");
+					paramMapCont.put("centerWords", "您跟进的需求发生变更：【" + newDemand.getName() + "】");
+					paramMapCont.put("openUrl", openUrl + "?reqid=" + newDemand.getId() + "&isweb=true" + "&accountId=" + newDemand.getCallonAccountId());
+					longforServiceImpl.msgcenter(paramMap);
+				}
+
 			}
 			if(!Objects.equals(oldDemand.getLevel(),newDemand.getLevel())
 //					||
@@ -304,6 +352,19 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 							append(newDemand.getCallonEmployeeName()).
 							append("]");
 					textList.add(log.toString());
+
+					/*更新需求指派给消息提醒*/
+					if(!newDemand.getModifiedAccountId().equals(newDemand.getCallonAccountId())) {
+						Map paramMap = longforServiceImpl.param();
+						Props props = JoddHelper.getInstance().getJoddProps();
+						String openUrl = props.getValue("openUrl.demandPath");
+						paramMap.put("ruser", newDemand.getCallonAccountId());
+						JSONObject paramMapCont = (JSONObject) paramMap.get("content");
+						paramMapCont.put("topTitle", "需求提醒");
+						paramMapCont.put("centerWords", "您收到一条需求：【" + newDemand.getName() + "】");
+						paramMapCont.put("openUrl", openUrl + "?reqid=" + newDemand.getId() + "&isweb=true" + "&accountId=" + newDemand.getCallonAccountId());
+						longforServiceImpl.msgcenter(paramMap);
+					}
 				}
 				map.put("type",2);
 			}
@@ -330,22 +391,48 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		StringBuilder log = new StringBuilder();
 		if (newDemand.getStatus()!=null && !Objects.equals(oldDemand.getStatus(),newDemand.getStatus())){
 
-			log.append(oldDemand.getModifiedName()).
+			log.append(newDemand.getModifiedName()).
 					append(" 将 状态 由[").
 					append(DemandStatusEnum.getByCode(oldDemand.getStatus()).getText()).
 					append("]更改为[").
 					append(DemandStatusEnum.getByCode(newDemand.getStatus()).getText()).
 					append("]");
+
+			/*更新需求状态消息提醒*/
+			if(!newDemand.getModifiedAccountId().equals(oldDemand.getDraftedAccountId())) {
+				Map paramMap = longforServiceImpl.param();
+				Props props = JoddHelper.getInstance().getJoddProps();
+				String openUrl = props.getValue("openUrl.demandPath");
+				paramMap.put("ruser", oldDemand.getDraftedAccountId());
+				JSONObject paramMapCont = (JSONObject) paramMap.get("content");
+				paramMapCont.put("topTitle", "需求提醒");
+				paramMapCont.put("centerWords", "您提交的需求：【" + oldDemand.getName() + "】处理状态从[" + DemandStatusEnum.getByCode(oldDemand.getStatus()).getText() + "]变更为[" + DemandStatusEnum.getByCode(newDemand.getStatus()).getText() + "]");
+				paramMapCont.put("openUrl", openUrl + "?reqid=" + oldDemand.getId() + "&isweb=true" + "&accountId=" + oldDemand.getDraftedAccountId());
+				longforServiceImpl.msgcenter(paramMap);
+			}
 		}
 
 		if(newDemand.getCallonAccountId()!=null && !Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())){
 
-			log.append(oldDemand.getModifiedName()).
+			log.append(newDemand.getModifiedName()).
 					append(" 将 指派给 由[").
 					append(oldDemand.getCallonEmployeeName()).
 					append("]更改为[").
 					append(newDemand.getCallonEmployeeName()).
 					append("]");
+
+			/*更新需求指派给消息提醒*/
+			if(!newDemand.getModifiedAccountId().equals(newDemand.getCallonAccountId())) {
+				Map paramMap = longforServiceImpl.param();
+				Props props = JoddHelper.getInstance().getJoddProps();
+				String openUrl = props.getValue("openUrl.demandPath");
+				paramMap.put("ruser", newDemand.getCallonAccountId());
+				JSONObject paramMapCont = (JSONObject) paramMap.get("content");
+				paramMapCont.put("topTitle", "需求提醒");
+				paramMapCont.put("centerWords", "您收到一条需求：【" + oldDemand.getName() + "】");
+				paramMapCont.put("openUrl", openUrl + "?reqid=" + oldDemand.getId() + "&isweb=true" + "&accountId=" + newDemand.getCallonAccountId());
+				longforServiceImpl.msgcenter(paramMap);
+			}
 		}
 		return log.toString();
 	}
@@ -362,6 +449,8 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		Integer status = Integer.valueOf( jsonObject.getString("status"));
 		Demand oldDemand = demandMapper.selectByPrimaryKey(demandId);
 		Demand newDemand = new Demand();
+		newDemand.setModifiedAccountId(modifiedAccountId);
+		newDemand.setModifiedName(modifiedName);
 		newDemand.setStatus(status);
 		Integer accountType = AccountUitl.getAccountType(paramsMap);
         /*添加需求修改日志*/
@@ -417,6 +506,8 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		}
 		newDemand.setCallonEmployeeName(accountLongfor.getName());
 		newDemand.setCallonFullDeptPath(accountLongfor.getPsDeptFullName());
+		newDemand.setModifiedName(modifiedName);
+		newDemand.setModifiedAccountId(modifiedAccountId);
 
         /*添加B需求修改日志*/
 		String log = statusLog(oldDemand,newDemand);
@@ -443,6 +534,8 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		oldDemand.setModifiedTime(TimeUtils.getTodayByDateTime());
 		oldDemand.setAccountType(accountType);
 		demandMapper.updateByPrimaryKey(oldDemand);
+
+
 
 		FeedBack feedBack = feedBackMapper.selectByPrimaryKey(oldDemand.getFeedBackId());
 		//如果需求对应的反馈建议不为空，更新反馈建议接口人信息

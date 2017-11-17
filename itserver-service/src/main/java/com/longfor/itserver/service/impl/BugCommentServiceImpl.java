@@ -5,14 +5,17 @@ import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
+import com.longfor.itserver.common.helper.JoddHelper;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.entity.BugComment;
 import com.longfor.itserver.entity.BugInfo;
+import com.longfor.itserver.esi.impl.LongforServiceImpl;
 import com.longfor.itserver.mapper.BugCommentMapper;
 import com.longfor.itserver.mapper.BugInfoMapper;
 import com.longfor.itserver.service.IBugCommentService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import com.longfor.itserver.service.util.AccountUitl;
+import jodd.props.Props;
 import net.mayee.commons.TimeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -42,6 +45,8 @@ public class BugCommentServiceImpl extends AdminBaseService<BugComment> implemen
 
     @Autowired
     private ADSHelper adsHelper;
+    @Autowired
+    private LongforServiceImpl longforServiceImpl;
 
 
     @Transactional
@@ -98,6 +103,31 @@ public class BugCommentServiceImpl extends AdminBaseService<BugComment> implemen
         bugComment.setModifiedTime(TimeUtils.getTodayByDateTime());
         bugCommentMapper.insert(bugComment);
 
+        /*新增BUG评论提醒指派给*/
+        if(!bugComment.getAccountId().equals(bugInfo.getCallonAccountId())) {
+            Map paramMap = longforServiceImpl.param();
+            Props props = JoddHelper.getInstance().getJoddProps();
+            String openUrl = props.getValue("openUrl.bugPath");
+            paramMap.put("ruser", bugInfo.getCallonAccountId());
+            JSONObject paramMapCont = (JSONObject) paramMap.get("content");
+            paramMapCont.put("topTitle", "BUG提醒");
+            paramMapCont.put("centerWords", "您跟进的BUG有新评论：【" + bugInfo.getName() + "】");
+            paramMapCont.put("openUrl", openUrl + "?reqid=" + bugInfo.getId() + "&isweb=true" + "&accountId=" + bugInfo.getCallonAccountId());
+            longforServiceImpl.msgcenter(paramMap);
+        }
+
+        /*新增BUG评论提醒发起人*/
+        if(!bugComment.getAccountId().equals(bugInfo.getDraftedAccountId())) {
+            Map paramMap = longforServiceImpl.param();
+            Props props = JoddHelper.getInstance().getJoddProps();
+            String openUrl = props.getValue("openUrl.bugPath");
+            paramMap.put("ruser", bugInfo.getDraftedAccountId());
+            JSONObject paramMapCont = (JSONObject) paramMap.get("content");
+            paramMapCont.put("topTitle", "BUG提醒");
+            paramMapCont.put("centerWords", "您跟进的BUG有新评论：【" + bugInfo.getName() + "】");
+            paramMapCont.put("openUrl", openUrl + "?reqid=" + bugInfo.getId() + "&isweb=true" + "&accountId=" + bugInfo.getDraftedAccountId());
+            longforServiceImpl.msgcenter(paramMap);
+        }
         return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
     }
 }
