@@ -16,6 +16,7 @@ import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ps.PsDemandDetail;
 import com.longfor.itserver.service.util.AccountUitl;
 import org.json.JSONException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -289,5 +290,14 @@ public class APIDemandController extends BaseController {
         this.getDemandFileService().deleteById(Long.valueOf((String)paramsMap.get("id")));
 
         return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_D);
+    }
+
+    /**
+     * 定时任务 超过1天（24小时）未处理／处理中：通知被指派人
+     */
+    @Scheduled(cron = "0 0 9 ? * *")
+    public void demandTask(){
+        this.getDemandService().demandTask();
+        System.out.println("Annotation：is show run");
     }
 }

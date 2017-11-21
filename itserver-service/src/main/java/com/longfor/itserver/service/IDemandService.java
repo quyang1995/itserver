@@ -3,6 +3,7 @@ package com.longfor.itserver.service;
 
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.entity.Demand;
+import com.longfor.itserver.entity.ps.PsDemandTimeTask;
 import com.longfor.itserver.entity.ps.PsIndex;
 import com.longfor.itserver.service.base.IAdminService;
 
@@ -63,4 +64,10 @@ public interface IDemandService extends IAdminService<Demand> {
 	boolean updateCallon(Map<String,String> paramsMap);
 
 	Map statusList(HttpServletRequest request,Map<String, String> paramsMap);
+
+	/**
+	 * 定时任务
+	 * @return
+	 */
+	List<PsDemandTimeTask> demandTask();
 }

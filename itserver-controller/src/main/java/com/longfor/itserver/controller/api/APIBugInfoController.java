@@ -15,9 +15,11 @@ import com.longfor.itserver.entity.BugInfo;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ps.PsBugInfoDetail;
+import com.longfor.itserver.entity.ps.PsBugTimeTask;
 import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.helper.APIHelper;
 import org.json.JSONException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -313,5 +315,14 @@ public class APIBugInfoController extends BaseController {
 		this.getBugFileService().deleteById(Long.parseLong((String)paramsMap.get("id")));
 
 		return  CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_D);
+	}
+
+	/**
+	 * 定时任务 超过1天（24小时）未处理／处理中：通知被指派人
+	 */
+	@Scheduled(cron = "0 0 9 ? * *")
+	public void bugTask(){
+		this.getBugInfoService().bugTask();
+		System.out.println("Annotation：is show run");
 	}
 }

@@ -2,6 +2,7 @@ package com.longfor.itserver.mapper;
 
 
 import com.longfor.itserver.entity.BugInfo;
+import com.longfor.itserver.entity.ps.PsBugTimeTask;
 import com.longfor.itserver.mapper.base.BeeMapper;
 
 import java.util.List;
@@ -18,5 +19,7 @@ public interface BugInfoMapper extends BeeMapper<BugInfo> {
     boolean updateBug(Map map);
 
     List<BugInfo> statusList(Map paramsMap);
+
+    List<PsBugTimeTask> bugTask();
 
 }

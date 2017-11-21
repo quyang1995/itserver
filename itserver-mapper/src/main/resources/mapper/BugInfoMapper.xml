@@ -13,6 +13,7 @@
         <result column="descp" property="descp" jdbcType="VARCHAR"/>
         <result column="reproduction_step" property="reproductionStep" jdbcType="VARCHAR"/>
         <result column="brower" property="brower" jdbcType="VARCHAR"/>
+        <result column="brower_info" property="browerInfo" jdbcType="VARCHAR"/>
         <result column="hope_date" property="hopeDate" jdbcType="TIMESTAMP"/>
         <result column="callon_account_id" property="callonAccountId" jdbcType="VARCHAR"/>
         <result column="callon_employee_code" property="callonEmployeeCode" jdbcType="BIGINT"/>
@@ -39,12 +40,16 @@
                type="com.longfor.itserver.entity.ps.PsBugInfoDetail">
 
     </resultMap>
+    <resultMap id="BugTaskResultMap" type="com.longfor.itserver.entity.ps.PsBugTimeTask">
+        <result column="amount" property="amount" jdbcType="BIGINT"/>
+        <result column="callon_account_id" property="callonAccountId" jdbcType="VARCHAR"/>
+    </resultMap>
 
     <sql id="Base_Column_List">
         <!--
           WARNING - @mbggenerated
         -->
-        id, feed_back_id, relation_id, relation_type, name, descp, reproduction_step, brower,
+        id, feed_back_id, relation_id, relation_type, name, descp, reproduction_step, brower, brower_info,
         hope_date, callon_account_id, callon_employee_code, callon_employee_name, callon_full_dept_path,
         drafted_account_id, drafted_employee_code, drafted_employee_name, drafted_full_dept_path,
         cc_account, like_product, like_program, level, status, channel, modified_account_id,
@@ -198,6 +203,13 @@
         AND status IN (2,3)
         ORDER BY
         modified_time  DESC
+    </select>
+
+    <!-- BUG消息提醒 超过1天（24小时）未处理／处理中：通知被指派人 -->
+    <select id="bugTask" parameterType="string" resultMap="BugTaskResultMap">
+        SELECT COUNT(*) amount,callon_account_id FROM bug_info
+        WHERE `status` in(2,3) and sysdate() >= date_sub(hope_date,interval -1 day)
+        GROUP BY callon_account_id
     </select>
 
 </mapper>

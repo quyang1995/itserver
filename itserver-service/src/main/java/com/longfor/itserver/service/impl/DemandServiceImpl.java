@@ -16,6 +16,8 @@ import com.longfor.itserver.common.helper.JoddHelper;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.entity.*;
+import com.longfor.itserver.entity.ps.PsBugTimeTask;
+import com.longfor.itserver.entity.ps.PsDemandTimeTask;
 import com.longfor.itserver.entity.ps.PsIndex;
 import com.longfor.itserver.esi.impl.LongforServiceImpl;
 import com.longfor.itserver.mapper.DemandChangeLogMapper;
@@ -566,5 +568,25 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		resultMap.put(APIHelper.PAGE_SIZE, elExample.getPageSize());
 		resultMap.put(APIHelper.TOTAL, new PageInfo(list).getTotal());
 		return resultMap;
+	}
+
+	@Override
+	public List<PsDemandTimeTask> demandTask(){
+		List<PsDemandTimeTask> demandList = demandMapper.demandTask();
+		for(int i = 0; i < demandList.size(); i++){
+			PsDemandTimeTask bt = demandList.get(i);
+			if(bt.getAmount() > 0){
+				Map paramMap = longforServiceImpl.param();
+				Props props = JoddHelper.getInstance().getJoddProps();
+				String openUrl = props.getValue("openUrl.demandListPath");
+				paramMap.put("ruser",bt.getCallonAccountId());
+				JSONObject paramMapCont = (JSONObject) paramMap.get("content");
+				paramMapCont.put("topTitle","BUG提醒");
+				paramMapCont.put("centerWords","您还有"+ bt.getAmount() +"个未完成的需求");
+				paramMapCont.put("openUrl","");
+				longforServiceImpl.msgcenter(paramMap);
+			}
+		}
+		return demandList;
 	}
 }

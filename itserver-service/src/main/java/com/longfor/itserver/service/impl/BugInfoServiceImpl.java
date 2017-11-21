@@ -18,6 +18,7 @@ import com.longfor.itserver.entity.BugChangeLog;
 import com.longfor.itserver.entity.BugFile;
 import com.longfor.itserver.entity.BugInfo;
 import com.longfor.itserver.entity.FeedBack;
+import com.longfor.itserver.entity.ps.PsBugTimeTask;
 import com.longfor.itserver.esi.impl.LongforServiceImpl;
 import com.longfor.itserver.mapper.BugChangeLogMapper;
 import com.longfor.itserver.mapper.BugFileMapper;
@@ -537,6 +538,24 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         return resultMap;
     }
 
-
+    @Override
+    public List<PsBugTimeTask> bugTask(){
+        List<PsBugTimeTask> bugList = bugInfoMapper.bugTask();
+        for(int i = 0; i < bugList.size(); i++){
+            PsBugTimeTask bt = bugList.get(i);
+            if(bt.getAmount() > 0){
+                Map paramMap = longforServiceImpl.param();
+                Props props = JoddHelper.getInstance().getJoddProps();
+                String openUrl = props.getValue("openUrl.bugListPath");
+                paramMap.put("ruser",bt.getCallonAccountId());
+                JSONObject paramMapCont = (JSONObject) paramMap.get("content");
+                paramMapCont.put("topTitle","BUG提醒");
+                paramMapCont.put("centerWords","您还有"+ bt.getAmount() +"个未完成的BUG");
+                paramMapCont.put("openUrl","");
+                longforServiceImpl.msgcenter(paramMap);
+            }
+        }
+        return bugList;
+    }
 
 }
