@@ -161,40 +161,85 @@ CREATE TABLE IF NOT EXISTS `itplus`.`product_comment` (
 --
 --
 -- -----------------------------------------------------
--- Table `itplus`.`program` 项目
+-- Table `itplus`.`program` 项目(2.0修改)
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `itplus`.`program` (
-  `id`                  BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `product_id`          BIGINT          NOT NULL
+  `id`                   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `product_id`           BIGINT          NOT NULL
   COMMENT '归属产品',
-  `product_name`        VARCHAR(100)    NOT NULL
+  `product_name`         VARCHAR(100)    NOT NULL
   COMMENT '归属产品名称',
-  `product_code`        VARCHAR(100)    NOT NULL
+  `product_code`         VARCHAR(100)    NOT NULL
   COMMENT '产品CODE',
-  `name`                VARCHAR(100)    NOT NULL
+  `name`                 VARCHAR(100)    NOT NULL
   COMMENT '项目名称',
-  `descp`               VARCHAR(3000)   NULL
+  `descp`                VARCHAR(3000)   NULL
   COMMENT '项目描述',
-  `commit_date`         DATETIME        NOT NULL
+
+  `commit_date`          DATETIME        NULL
   COMMENT '立项日期',
-  `start_date`          DATETIME        NOT NULL
-  COMMENT '启动日期',
-  `gray_release_date`   DATETIME        NOT NULL
-  COMMENT '灰度日期',
-  `release_date`        DATETIME        NOT NULL
-  COMMENT '发布日期',
-  `ued_date`            DATETIME        NULL
-  COMMENT 'UED日期',
-  `architecture_date`   DATETIME        NULL
-  COMMENT '架构日期',
-  `like_product`        VARCHAR(500)    NULL
+  `demo_approval_date`   DATETIME        NULL
+  COMMENT 'Demo评审日期',
+  `bidding_date`         DATETIME        NULL
+  COMMENT '招标日期',
+  `winning_bid_date`     DATETIME        NULL
+  COMMENT '中标日期',
+  `prod_approval_date`   DATETIME        NULL
+  COMMENT '产品评审日期',
+  `dev_approval_date`    DATETIME        NULL
+  COMMENT '开发评审日期',
+  `test_approval_date`   DATETIME        NULL
+  COMMENT '测试评审日期',
+  `online_plan_date`     DATETIME        NULL
+  COMMENT '上线计划日期',
+  `gray_release_date`    DATETIME        NULL
+  COMMENT '灰度发布日期',
+
+  `like_product`         VARCHAR(500)    NULL
   COMMENT '关联产品id字符串，e.g. 1,2,3,...',
-  `like_program`        VARCHAR(500)    NULL
+  `like_program`         VARCHAR(500)    NULL
   COMMENT '关联项目id字符串，e.g. 1,2,3,...',
-  `type`                INT             NOT NULL
+  `type`                 INT             NOT NULL
   COMMENT '公开类型：0=私有，1=公开',
+  `dev_type`             INT             NULL
+  COMMENT '研发方式：1=招投标，2=自研',
+  `analyzing_conditions` INT             NULL
+  COMMENT '判断条件：1=地产，2=商业，3=数据，4=冠寓，5=养老，6=产城，7=基础中心',
+
+  `dev_workload`         INT             NULL
+  COMMENT '研发工作量预估',
+  `overall_cost`         DECIMAL(11, 2)  NULL
+  COMMENT '整体费用预估',
+  `bid_dev_workload`     INT             NULL
+  COMMENT '研发工作量',
+  `bid_overall_cost`     DECIMAL(11, 2)  NULL
+  COMMENT '整体费用',
+
+  `program_status`       INT             NOT NULL
+  COMMENT '项目状态：100=未立项，110=立项，120=Demo评审，130=招投标申请，140=中标申请，150=产品评审，160=开发评审，170=测试评审，180=上线计划，190=灰度发布，200=延期上线，210=需求变更，900=完成，999=终止',
+  `approval_status`      INT             NULL
+  COMMENT '审批状态：100=审核中，110=审核通过，120=审核驳回，130=变更审核中，140=变更审核驳回',
+  `modified_account_id`  VARCHAR(50)     NULL
+  COMMENT '最后修改人账户id',
+  `modified_name`        VARCHAR(50)     NULL
+  COMMENT '最后修改人名称',
+  `create_time`          TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
+  `modified_time`        TIMESTAMP                DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `itplus`.`program_change_log` 项目-变更日志(2.0新增)
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `itplus`.`program_change_log` (
+  `id`                  BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `program_id`          BIGINT          NOT NULL
+  COMMENT '项目id',
   `program_status`      INT             NOT NULL
-  COMMENT '状态：0=未开始，1=进行中，2=已完成',
+  COMMENT '项目状态：100=未立项，110=立项，120=Demo评审，130=招投标申请，140=中标申请，150=产品评审，160=开发评审，170=测试评审，180=上线计划，190=灰度发布，200=延期上线，210=需求变更，900=完成，999=终止',
+  `action_change_info`  VARCHAR(500)    NULL
+  COMMENT '日志信息',
   `modified_account_id` VARCHAR(50)     NULL
   COMMENT '最后修改人账户id',
   `modified_name`       VARCHAR(50)     NULL
@@ -205,10 +250,25 @@ CREATE TABLE IF NOT EXISTS `itplus`.`program` (
 )
   ENGINE = InnoDB;
 
-INSERT INTO itplus.program (product_id, product_name, product_code, name, descp, commit_date, start_date, gray_release_date, release_date, ued_date, architecture_date, like_product, like_program, type, program_status, modified_account_id, modified_name, create_time, modified_time)
-VALUES
-  (1, 'IT+平台', NULL, 'IT+1.0', '平台搭建，提供产品项目管理功能。', '2017-07-19 00:00:00', '2017-08-07 00:00:00', '2017-09-07 00:00:00',
-      '2017-09-11 00:00:00', '2017-09-12 00:00:00','2017-09-13 00:00:00','', NULL, 1, 1, 'wenting', '闻婷', '2017-09-07 11:55:30', '2017-09-07 11:55:30');
+-- -----------------------------------------------------
+-- Table `itplus`.`program_file` 项目附件(2.0新增)
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `itplus`.`program_file` (
+  `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `program_id`  BIGINT          NOT NULL
+  COMMENT '项目id',
+  `file_name`   VARCHAR(500)    NULL
+  COMMENT '文件名称',
+  `file_suffix` VARCHAR(50)     NULL
+  COMMENT '文件扩展名',
+  `file_size`   VARCHAR(50)     NULL
+  COMMENT '文件大小',
+  `file_path`   TEXT            NULL
+  COMMENT '文件绝对路径',
+  `create_time` TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `itplus`.`program_employee` 项目-人员
@@ -216,7 +276,7 @@ VALUES
 CREATE TABLE IF NOT EXISTS `itplus`.`program_employee` (
   `id`                 BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `program_id`         BIGINT          NOT NULL
-  COMMENT '项目uuid',
+  COMMENT '项目id',
   `account_id`         VARCHAR(50)     NOT NULL
   COMMENT '账户id',
   `employee_code`      BIGINT          NOT NULL
@@ -295,6 +355,85 @@ CREATE TABLE IF NOT EXISTS `itplus`.`program_comment` (
 )
   ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `itplus`.`program_approval_snapshot` 项目审批快照(2.0新增)
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `itplus`.`program_approval_snapshot` (
+  `id`                     BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+
+  -- 特有字段
+  `program_id`             BIGINT          NOT NULL
+  COMMENT '项目id',
+  `approval_target_status` INT             NOT NULL
+  COMMENT '项目状态：100=未立项，110=立项，120=Demo评审，130=招投标申请，140=中标申请，150=产品评审，160=开发评审，170=测试评审，180=上线计划，190=灰度发布，200=延期上线，210=需求变更，900=完成，999=终止',
+  `approval_result_status` INT             NULL
+  COMMENT '审批结果状态：100=审核中，110=审核通过，120=审核驳回，130=变更审核中，140=变更审核驳回',
+  `bpm_code`               VARCHAR(100)    NOT NULL
+  COMMENT 'BPM code',
+  `remark`                 VARCHAR(3000)   NOT NULL
+  COMMENT '内容摘要',
+
+  -- program表原有字段
+  `product_id`             BIGINT          NOT NULL
+  COMMENT '归属产品',
+  `product_name`           VARCHAR(100)    NOT NULL
+  COMMENT '归属产品名称',
+  `product_code`           VARCHAR(100)    NOT NULL
+  COMMENT '产品CODE',
+  `name`                   VARCHAR(100)    NOT NULL
+  COMMENT '项目名称',
+  `descp`                  VARCHAR(3000)   NULL
+  COMMENT '项目描述',
+
+  `commit_date`            DATETIME        NULL
+  COMMENT '立项日期',
+  `demo_approval_date`     DATETIME        NULL
+  COMMENT 'Demo评审日期',
+  `bidding_date`           DATETIME        NULL
+  COMMENT '招标日期',
+  `winning_bid_date`       DATETIME        NULL
+  COMMENT '中标日期',
+  `prod_approval_date`     DATETIME        NULL
+  COMMENT '产品评审日期',
+  `dev_approval_date`      DATETIME        NULL
+  COMMENT '开发评审日期',
+  `test_approval_date`     DATETIME        NULL
+  COMMENT '测试评审日期',
+  `online_plan_date`       DATETIME        NULL
+  COMMENT '上线计划日期',
+  `gray_release_date`      DATETIME        NULL
+  COMMENT '灰度发布日期',
+
+  `like_product`           VARCHAR(500)    NULL
+  COMMENT '关联产品id字符串，e.g. 1,2,3,...',
+  `like_program`           VARCHAR(500)    NULL
+  COMMENT '关联项目id字符串，e.g. 1,2,3,...',
+  `type`                   INT             NOT NULL
+  COMMENT '公开类型：0=私有，1=公开',
+  `dev_type`               INT             NULL
+  COMMENT '研发方式：1=招投标，2=自研',
+  `analyzing_conditions`   INT             NULL
+  COMMENT '判断条件：1=地产，2=商业，3=数据，4=冠寓，5=养老，6=产城，7=基础中心',
+
+  `dev_workload`           INT             NULL
+  COMMENT '研发工作量预估',
+  `overall_cost`           DECIMAL(11, 2)  NULL
+  COMMENT '整体费用预估',
+  `bid_dev_workload`       INT             NULL
+  COMMENT '研发工作量',
+  `bid_overall_cost`       DECIMAL(11, 2)  NULL
+  COMMENT '整体费用',
+
+  `modified_account_id`    VARCHAR(50)     NULL
+  COMMENT '最后修改人账户id',
+  `modified_name`          VARCHAR(50)     NULL
+  COMMENT '最后修改人名称',
+  `create_time`            TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
+  `modified_time`          TIMESTAMP                DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = InnoDB;
+
 --
 --
 --
@@ -344,9 +483,9 @@ CREATE TABLE IF NOT EXISTS `itplus`.`demand` (
   COMMENT '状态：0=已取消，1=已关闭，2=待处理，3=处理中，4=已完成',
   `channel`                INT             NOT NULL
   COMMENT '渠道: 0=PC，1=OA，2=龙信，3=龙客',
-  `feedback_phone`     VARCHAR(20)     NULL
+  `feedback_phone`         VARCHAR(20)     NULL
   COMMENT '反馈人电话',
-  `feedback_name`     VARCHAR(20)     NULL
+  `feedback_name`          VARCHAR(20)     NULL
   COMMENT '反馈人姓名',
   `modified_account_id`    VARCHAR(50)     NULL
   COMMENT '最后修改人账户id',
@@ -487,9 +626,9 @@ CREATE TABLE IF NOT EXISTS `itplus`.`bug_info` (
   COMMENT '状态：0=已取消，1=已关闭，2=待处理，3=处理中，4=已完成',
   `channel`                INT             NOT NULL
   COMMENT '渠道: 0=PC，1=OA，2=龙信，3=龙客',
-  `feedback_phone`     VARCHAR(20)     NULL
+  `feedback_phone`         VARCHAR(20)     NULL
   COMMENT '反馈人电话',
-  `feedback_name`     VARCHAR(20)     NULL
+  `feedback_name`          VARCHAR(20)     NULL
   COMMENT '反馈人姓名',
   `modified_account_id`    VARCHAR(50)     NULL
   COMMENT '最后修改人账户id',
@@ -618,11 +757,11 @@ CREATE TABLE IF NOT EXISTS `itplus`.`feed_back` (
   COMMENT '提交人名称',
   `modified_full_dept_path` VARCHAR(100)    NULL
   COMMENT '提交人部门完整路径',
-  `feedback_phone`     VARCHAR(20)     NULL
+  `feedback_phone`          VARCHAR(20)     NULL
   COMMENT '反馈人电话',
-  `feedback_name`     VARCHAR(20)     NULL
+  `feedback_name`           VARCHAR(20)     NULL
   COMMENT '反馈人姓名',
-  `file_path`               TEXT   NULL
+  `file_path`               TEXT            NULL
   COMMENT '上传文件路径',
   `create_time`             TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
   `modified_time`           TIMESTAMP                DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -630,27 +769,25 @@ CREATE TABLE IF NOT EXISTS `itplus`.`feed_back` (
 )
   ENGINE = InnoDB;
 
-
 -- -----------------------------------------------------
 -- Table `itplus`.`feed_back_file` 反馈附件
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `itplus`.`feed_back_file` (
-  `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `feed_back_id`      BIGINT    NULL
+  `id`           BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `feed_back_id` BIGINT          NULL
   COMMENT '反馈',
-  `file_name`   VARCHAR(500)    NULL
+  `file_name`    VARCHAR(500)    NULL
   COMMENT '文件名称',
-  `file_suffix` VARCHAR(50)     NULL
+  `file_suffix`  VARCHAR(50)     NULL
   COMMENT '文件扩展名',
-  `file_size`   VARCHAR(50)     NULL
+  `file_size`    VARCHAR(50)     NULL
   COMMENT '文件大小',
-  `file_path`   TEXT            NULL
+  `file_path`    TEXT            NULL
   COMMENT '文件绝对路径',
-  `create_time` TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
+  `create_time`  TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB;
-
 
 
 
