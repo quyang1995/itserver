@@ -6,14 +6,17 @@ import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
+import com.longfor.itserver.common.helper.JoddHelper;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.entity.Demand;
 import com.longfor.itserver.entity.DemandComment;
+import com.longfor.itserver.esi.impl.LongforServiceImpl;
 import com.longfor.itserver.mapper.DemandCommentMapper;
 import com.longfor.itserver.mapper.DemandMapper;
 import com.longfor.itserver.service.IDemandCommentService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import com.longfor.itserver.service.util.AccountUitl;
+import jodd.props.Props;
 import net.mayee.commons.TimeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -40,6 +43,8 @@ public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> im
     private ADSHelper adsHelper;
     @Autowired
     private DemandMapper demandMapper;
+    @Autowired
+    private LongforServiceImpl longforServiceImpl;
 
 
     @Override
@@ -79,6 +84,33 @@ public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> im
         demandComment.setCreateTime(TimeUtils.getTodayByDateTime());
         demandComment.setModifiedTime(TimeUtils.getTodayByDateTime());
         demandCommentMapper.insert(demandComment);
+
+        /*新增需求评论提醒指派给*/
+        if(!demandComment.getAccountId().equals(demand.getCallonAccountId())){
+            Map paramMap = longforServiceImpl.param();
+            Props props = JoddHelper.getInstance().getJoddProps();
+            String openUrl = props.getValue("openUrl.demandPath");
+            paramMap.put("ruser",demand.getCallonAccountId());
+            JSONObject paramMapCont = (JSONObject) paramMap.get("content");
+            paramMapCont.put("topTitle","需求提醒");
+            paramMapCont.put("centerWords","您跟进的需求有新评论：【"+ demand.getName() +"】");
+            paramMapCont.put("openUrl",openUrl + "?reqid="+demand.getId()+"&isweb=true"+"&accountId="+demand.getCallonAccountId());
+            longforServiceImpl.msgcenter(paramMap);
+        }
+
+
+        /*新增需求评论提醒发起人*/
+        if(!demandComment.getAccountId().equals(demand.getDraftedAccountId())) {
+            Map paramMap = longforServiceImpl.param();
+            Props props = JoddHelper.getInstance().getJoddProps();
+            String openUrl = props.getValue("openUrl.demandPath");
+            paramMap.put("ruser", demand.getDraftedAccountId());
+            JSONObject paramMapCont = (JSONObject) paramMap.get("content");
+            paramMapCont.put("topTitle", "需求提醒");
+            paramMapCont.put("centerWords", "您跟进的需求有新评论：【" + demand.getName() + "】");
+            paramMapCont.put("openUrl", openUrl + "?reqid=" + demand.getId() + "&isweb=true" + "&accountId=" + demand.getDraftedAccountId());
+            longforServiceImpl.msgcenter(paramMap);
+        }
 
         return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
 

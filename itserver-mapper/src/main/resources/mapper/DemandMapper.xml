@@ -42,6 +42,11 @@
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="value" property="value" jdbcType="VARCHAR"/>
     </resultMap>
+
+    <resultMap id="DemandTaskResultMap" type="com.longfor.itserver.entity.ps.PsDemandTimeTask">
+        <result column="amount" property="amount" jdbcType="BIGINT"/>
+        <result column="callon_account_id" property="callonAccountId" jdbcType="VARCHAR"/>
+    </resultMap>
     <sql id="Base_Column_List">
         <!--
           WARNING - @mbggenerated
@@ -166,7 +171,7 @@
             and (name like concat(concat('%',#{searchText}),'%') OR callon_employee_name like
             concat(concat('%',#{searchText}),'%'))
         </if>
-        ORDER BY create_time DESC
+        ORDER BY field(status,2,3,4,1,0),modified_time DESC
     </select>
 
 
@@ -235,5 +240,12 @@
         AND status in (2,3)
         ORDER BY
         modified_time DESC
+    </select>
+
+    <!-- DEMAND消息提醒 超过1天（24小时）未处理／处理中：通知被指派人 -->
+    <select id="demandTask" parameterType="string" resultMap="DemandTaskResultMap">
+        SELECT COUNT(*) amount,callon_account_id FROM demand
+        WHERE `status` in(2,3) and sysdate() >= date_sub(hope_date,interval -1 day)
+        GROUP BY callon_account_id
     </select>
 </mapper>

@@ -55,36 +55,36 @@ public class Program implements Serializable {
      * 立项日期
      */
     @Column(name = "commit_date")
-    @JsonSerialize(using = CustomFullDateSerializer.class)
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date commitDate;
 
     /**
      * 启动日期
      */
     @Column(name = "start_date")
-    @JsonSerialize(using = CustomFullDateSerializer.class)
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date startDate;
 
     /**
      * 灰度日期
      */
     @Column(name = "gray_release_date")
-    @JsonSerialize(using = CustomFullDateSerializer.class)
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date grayReleaseDate;
 
     /**
      * 发布日期
      */
     @Column(name = "release_date")
-    @JsonSerialize(using = CustomFullDateSerializer.class)
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date releaseDate;
 
     @Column(name = "ued_date")
-    @JsonSerialize(using = CustomFullDateSerializer.class)
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date uedDate;
 
     @Column(name = "architecture_date")
-    @JsonSerialize(using = CustomFullDateSerializer.class)
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date architectureDate;
 
     /**

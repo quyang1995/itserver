@@ -16,6 +16,7 @@ import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ps.PsDemandDetail;
 import com.longfor.itserver.service.util.AccountUitl;
 import org.json.JSONException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -55,6 +56,25 @@ public class APIDemandController extends BaseController {
         ELExample elExample = new ELExample(request, Demand.class);
         /*查询数据*/
         Map<String, Object> map= this.getDemandService().getPageDemandList(paramsMap,elExample);
+        return map;
+    }
+
+    /**
+     * 导出需求列表
+     *
+     * @param response
+     * @param request
+     * @return map
+     */
+    @RequestMapping(value = "/export", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Map exportList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+          /*  获得已经验证过的参数map */
+        @SuppressWarnings("unchecked")
+        Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        /*查询数据*/
+        Map<String, Object> map= this.getDemandService().getExcelDemandList(paramsMap);
         return map;
     }
 
@@ -270,5 +290,14 @@ public class APIDemandController extends BaseController {
         this.getDemandFileService().deleteById(Long.valueOf((String)paramsMap.get("id")));
 
         return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_D);
+    }
+
+    /**
+     * 定时任务 超过1天（24小时）未处理／处理中：通知被指派人
+     */
+    @Scheduled(cron = "0 0 9 ? * *")
+    public void demandTask(){
+        this.getDemandService().demandTask();
+        System.out.println("Annotation：is show run");
     }
 }

@@ -415,6 +415,24 @@
         </request>
     </item>
 
+    <!--
+        URL:
+        /api/bug/export
+
+        说明:获取BUG列表信息
+
+    -->
+    <item id="api_bug_export" description="导出BUG列表信息">
+        <request>
+            <property name="accountId" type="string" required="true" maxLength="30"/>
+            <property name="status" type="int" required="true" area="-1,0,1,2,3,4"/>
+            <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
+            <property name="productId" type="int" required="false" />
+            <property name="programId" type="int" required="false" />
+            <property name="isPart" type="int" required="false" area="0,1,2"/>
+        </request>
+    </item>
+
 
     <!--
         URL:
@@ -444,6 +462,7 @@
             <property name="descp" type="string" required="false" maxLength="3000"/>
             <property name="reproductionStep" type="string" required="false" maxLength="3000"/>
             <property name="brower" type="string" required="false" maxLength="50"/>
+            <property name="browerInfo" type="string" required="false" maxLength="100"/>
             <property name="hopeDate" type="string" required="true" maxLength="20"/>
             <property name="callonAccountId" type="string" required="true" maxLength="50"/>
             <property name="ccAccount" type="string" required="false" />
@@ -551,6 +570,24 @@
             <property name="status" type="int" required="true" area="-1,0,1,2,3,4"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
             <property name="channel" type="int" required="false" area="-1,0,1,2,3" />
+            <property name="productId" type="int" required="false" />
+            <property name="programId" type="int" required="false" />
+            <property name="isPart" type="int" required="false" area="0,1,2"/>
+        </request>
+    </item >
+
+    <!--
+    URL:
+
+    /api/demand/export
+
+    说明：获取需求列表信息
+    -->
+    <item id="api_demand_export" description="导出需求列表信息">
+        <request>
+            <property name="accountId" type="string" required="true" maxLength="30"/>
+            <property name="status" type="int" required="true" area="-1,0,1,2,3,4"/>
+            <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
             <property name="productId" type="int" required="false" />
             <property name="programId" type="int" required="false" />
             <property name="isPart" type="int" required="false" area="0,1,2"/>

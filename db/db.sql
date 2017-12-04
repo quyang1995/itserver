@@ -596,6 +596,8 @@ CREATE TABLE IF NOT EXISTS `itplus`.`bug_info` (
   COMMENT '复现步骤',
   `brower`                 VARCHAR(50)     NULL
   COMMENT '浏览器',
+  `browerInfo`                 VARCHAR(100)     NULL
+  COMMENT '浏览器及版本号',
   `hope_date`              DATETIME        NOT NULL
   COMMENT '期望完成日期',
   `callon_account_id`      VARCHAR(50)     NOT NULL

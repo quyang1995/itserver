@@ -64,6 +64,12 @@ public class BugInfo {
     private String brower;
 
     /**
+     * 浏览器版本
+     */
+    @Column(name = "brower_info")
+    private String browerInfo;
+
+    /**
      * 期望完成日期
      */
     @Column(name = "hope_date")
@@ -677,5 +683,13 @@ public class BugInfo {
      */
     public void setFeedbackName(String feedbackName) {
         this.feedbackName = feedbackName == null ? null : feedbackName.trim();
+    }
+
+    public String getBrowerInfo() {
+        return browerInfo;
+    }
+
+    public void setBrowerInfo(String browerInfo) {
+        this.browerInfo = browerInfo;
     }
 }

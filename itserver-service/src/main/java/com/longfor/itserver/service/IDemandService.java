@@ -3,6 +3,7 @@ package com.longfor.itserver.service;
 
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.entity.Demand;
+import com.longfor.itserver.entity.ps.PsDemandTimeTask;
 import com.longfor.itserver.entity.ps.PsIndex;
 import com.longfor.itserver.service.base.IAdminService;
 
@@ -17,6 +18,13 @@ public interface IDemandService extends IAdminService<Demand> {
 	 * @return
 	 */
 	public Map<String, Object> getPageDemandList(Map<String, Object>paramsMap,ELExample example);
+
+	/**
+	 * 获取所有list
+	 * @param paramsMap
+	 * @return
+	 */
+	public Map<String, Object> getExcelDemandList(Map<String, Object>paramsMap);
 
 	/**
 	 *  新增需求信息
@@ -56,4 +64,10 @@ public interface IDemandService extends IAdminService<Demand> {
 	boolean updateCallon(Map<String,String> paramsMap);
 
 	Map statusList(HttpServletRequest request,Map<String, String> paramsMap);
+
+	/**
+	 * 定时任务
+	 * @return
+	 */
+	List<PsDemandTimeTask> demandTask();
 }

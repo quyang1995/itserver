@@ -2,6 +2,7 @@ package com.longfor.itserver.service;
 
 
 import com.longfor.itserver.entity.BugInfo;
+import com.longfor.itserver.entity.ps.PsBugTimeTask;
 import com.longfor.itserver.service.base.IAdminService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,4 +30,10 @@ public interface IBugInfoService extends IAdminService<BugInfo> {
     boolean updateCallon(Map<String,String> paramsMap);
 
     Map statusList(HttpServletRequest request,Map<String, String> paramsMap);
+
+    /**
+     * 定时任务
+     * @return
+     */
+    List<PsBugTimeTask> bugTask();
 }
