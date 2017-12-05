@@ -122,7 +122,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			JSONObject paramMapCont = (JSONObject) paramMap.get("content");
 			paramMapCont.put("topTitle","需求提醒");
 			paramMapCont.put("centerWords","您收到一条需求：【"+ demand.getName() +"】");
-			paramMapCont.put("openUrl",openUrl + "?reqid="+demand.getId()+"&isweb=true"+"&accountId="+demand.getCallonAccountId());
+			paramMapCont.put("openUrl",openUrl + "?VIEWSHOW_NOHEAD&reqid="+demand.getId()+"&isweb=true"+"&accountId="+demand.getCallonAccountId());
 			longforServiceImpl.msgcenter(paramMap);
 		}
 
@@ -164,8 +164,19 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			return false;
 		}
 		demand.setModifiedTime(TimeUtils.getTodayByDateTime());
-		Map<String,Object> logMap = getChangeLog(selectDemandOne,demand);
 		Integer accountType = AccountUitl.getAccountType(map);
+		//获取指派人信息
+		AccountLongfor callonAccountLongfor =
+				AccountUitl.getAccountByAccountTypes(demand.getCallonAccountId(),adsHelper);
+		if (callonAccountLongfor != null) {
+			if(StringUtils.isNotBlank(callonAccountLongfor.getPsEmployeeCode())){
+				demand.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
+			}
+			demand.setCallonEmployeeName(callonAccountLongfor.getName());
+			demand.setCallonFullDeptPath(callonAccountLongfor.getPsDeptFullName());
+		}
+		Map<String,Object> logMap = getChangeLog(selectDemandOne,demand);
+
 		//获取最后修改人
 		AccountLongfor draftedAccountLongfor =
 				AccountUitl.getAccountByAccountType(accountType,demand.getModifiedAccountId(),adsHelper);
@@ -175,8 +186,6 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			demand.setModifiedTime(TimeUtils.getTodayByDateTime());
 		}
 		//获取指派人信息
-		AccountLongfor callonAccountLongfor =
-				AccountUitl.getAccountByAccountTypes(demand.getCallonAccountId(),adsHelper);
 		if (callonAccountLongfor != null) {
 			selectDemandOne.setCallonAccountId(demand.getCallonAccountId());
 			if(StringUtils.isNotBlank(callonAccountLongfor.getPsEmployeeCode())){
@@ -193,6 +202,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		selectDemandOne.setHopeDate(demand.getHopeDate());
 		selectDemandOne.setLikeProduct(demand.getLikeProduct());
 		selectDemandOne.setLikeProgram(demand.getLikeProgram());
+		selectDemandOne.setModifiedTime(TimeUtils.getTodayByDateTime());
 		demandMapper.updateByPrimaryKey(selectDemandOne);
 
 		/*更新文件 不删除原有文件，在原有文件的基础上添加新文件*/
@@ -307,27 +317,15 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 					JSONObject paramMapCont = (JSONObject) paramMap.get("content");
 					paramMapCont.put("topTitle", "需求提醒");
 					paramMapCont.put("centerWords", "您跟进的需求发生变更：【" + newDemand.getName() + "】");
-					paramMapCont.put("openUrl", openUrl + "?reqid=" + newDemand.getId() + "&isweb=true" + "&accountId=" + newDemand.getCallonAccountId());
+					paramMapCont.put("openUrl", openUrl + "?VIEWSHOW_NOHEAD&reqid=" + newDemand.getId() + "&isweb=true" + "&accountId=" + newDemand.getCallonAccountId());
 					longforServiceImpl.msgcenter(paramMap);
 				}
 
 			}
 			if(!Objects.equals(oldDemand.getLevel(),newDemand.getLevel())
-//					||
-//					!Objects.equals(oldDemand.getStatus(),newDemand.getStatus())||
-//					!Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())
-					){
+				|| !Objects.equals(oldDemand.getCallonAccountId(),newDemand.getCallonAccountId())
+				){
 				StringBuilder log = new StringBuilder();
-//				if (!Objects.equals(oldDemand.getStatus(),newDemand.getStatus())){
-//
-//					log.append(newDemand.getModifiedName()).
-//							append("将 状态 由[").
-//							append(DemandStatusEnum.getByCode(oldDemand.getStatus()).getText()).
-//							append("]更改为[").
-//							append(DemandStatusEnum.getByCode(newDemand.getStatus()).getText()).
-//							append("]");
-//					textList.add(log.toString());
-//				}
 				if(!Objects.equals(oldDemand.getLevel(),newDemand.getLevel())){
 					if (StringUtils.isNotBlank(log)){
 						log.append(",");
@@ -364,7 +362,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 						JSONObject paramMapCont = (JSONObject) paramMap.get("content");
 						paramMapCont.put("topTitle", "需求提醒");
 						paramMapCont.put("centerWords", "您收到一条需求：【" + newDemand.getName() + "】");
-						paramMapCont.put("openUrl", openUrl + "?reqid=" + newDemand.getId() + "&isweb=true" + "&accountId=" + newDemand.getCallonAccountId());
+						paramMapCont.put("openUrl", openUrl + "?VIEWSHOW_NOHEAD&reqid=" + newDemand.getId() + "&isweb=true" + "&accountId=" + newDemand.getCallonAccountId());
 						longforServiceImpl.msgcenter(paramMap);
 					}
 				}
@@ -375,6 +373,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 					&&Objects.equals(oldDemand.getLikeProgram(),newDemand.getLikeProgram())
 					&&Objects.equals(oldDemand.getCcAccount(),newDemand.getCcAccount())
 					&&Objects.equals(oldDemand.getName(),newDemand.getName())
+					&&Objects.equals(oldDemand.getHopeDate(),newDemand.getHopeDate())
 					&&Objects.equals(oldDemand.getRelationId(),newDemand.getRelationId())
 					&&Objects.equals(oldDemand.getRelationType(),newDemand.getRelationType()))
 					){
@@ -409,7 +408,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 				JSONObject paramMapCont = (JSONObject) paramMap.get("content");
 				paramMapCont.put("topTitle", "需求提醒");
 				paramMapCont.put("centerWords", "您提交的需求：【" + oldDemand.getName() + "】处理状态从[" + DemandStatusEnum.getByCode(oldDemand.getStatus()).getText() + "]变更为[" + DemandStatusEnum.getByCode(newDemand.getStatus()).getText() + "]");
-				paramMapCont.put("openUrl", openUrl + "?reqid=" + oldDemand.getId() + "&isweb=true" + "&accountId=" + oldDemand.getDraftedAccountId());
+				paramMapCont.put("openUrl", openUrl + "?VIEWSHOW_NOHEAD&reqid=" + oldDemand.getId() + "&isweb=true" + "&accountId=" + oldDemand.getDraftedAccountId());
 				longforServiceImpl.msgcenter(paramMap);
 			}
 		}
@@ -432,7 +431,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 				JSONObject paramMapCont = (JSONObject) paramMap.get("content");
 				paramMapCont.put("topTitle", "需求提醒");
 				paramMapCont.put("centerWords", "您收到一条需求：【" + oldDemand.getName() + "】");
-				paramMapCont.put("openUrl", openUrl + "?reqid=" + oldDemand.getId() + "&isweb=true" + "&accountId=" + newDemand.getCallonAccountId());
+				paramMapCont.put("openUrl", openUrl + "?VIEWSHOW_NOHEAD&reqid=" + oldDemand.getId() + "&isweb=true" + "&accountId=" + newDemand.getCallonAccountId());
 				longforServiceImpl.msgcenter(paramMap);
 			}
 		}
@@ -581,9 +580,9 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 				String openUrl = props.getValue("openUrl.demandListPath");
 				paramMap.put("ruser",bt.getCallonAccountId());
 				JSONObject paramMapCont = (JSONObject) paramMap.get("content");
-				paramMapCont.put("topTitle","BUG提醒");
+				paramMapCont.put("topTitle","需求提醒");
 				paramMapCont.put("centerWords","您还有"+ bt.getAmount() +"个未完成的需求");
-				paramMapCont.put("openUrl","");
+				paramMapCont.put("openUrl",openUrl);
 				longforServiceImpl.msgcenter(paramMap);
 			}
 		}

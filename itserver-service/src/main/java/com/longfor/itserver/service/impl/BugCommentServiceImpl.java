@@ -112,7 +112,7 @@ public class BugCommentServiceImpl extends AdminBaseService<BugComment> implemen
             JSONObject paramMapCont = (JSONObject) paramMap.get("content");
             paramMapCont.put("topTitle", "BUG提醒");
             paramMapCont.put("centerWords", "您跟进的BUG有新评论：【" + bugInfo.getName() + "】");
-            paramMapCont.put("openUrl", openUrl + "?reqid=" + bugInfo.getId() + "&isweb=true" + "&accountId=" + bugInfo.getCallonAccountId());
+            paramMapCont.put("openUrl", openUrl + "?VIEWSHOW_NOHEAD&bugid=" + bugInfo.getId() + "&isweb=true" + "&accountId=" + bugInfo.getCallonAccountId());
             longforServiceImpl.msgcenter(paramMap);
         }
 
@@ -125,7 +125,7 @@ public class BugCommentServiceImpl extends AdminBaseService<BugComment> implemen
             JSONObject paramMapCont = (JSONObject) paramMap.get("content");
             paramMapCont.put("topTitle", "BUG提醒");
             paramMapCont.put("centerWords", "您跟进的BUG有新评论：【" + bugInfo.getName() + "】");
-            paramMapCont.put("openUrl", openUrl + "?reqid=" + bugInfo.getId() + "&isweb=true" + "&accountId=" + bugInfo.getDraftedAccountId());
+            paramMapCont.put("openUrl", openUrl + "?VIEWSHOW_NOHEAD&bugid=" + bugInfo.getId() + "&isweb=true" + "&accountId=" + bugInfo.getDraftedAccountId());
             longforServiceImpl.msgcenter(paramMap);
         }
         return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);

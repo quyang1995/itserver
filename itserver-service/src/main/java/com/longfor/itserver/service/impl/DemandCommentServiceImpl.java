@@ -94,7 +94,7 @@ public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> im
             JSONObject paramMapCont = (JSONObject) paramMap.get("content");
             paramMapCont.put("topTitle","需求提醒");
             paramMapCont.put("centerWords","您跟进的需求有新评论：【"+ demand.getName() +"】");
-            paramMapCont.put("openUrl",openUrl + "?reqid="+demand.getId()+"&isweb=true"+"&accountId="+demand.getCallonAccountId());
+            paramMapCont.put("openUrl",openUrl + "?VIEWSHOW_NOHEAD&reqid="+demand.getId()+"&isweb=true"+"&accountId="+demand.getCallonAccountId());
             longforServiceImpl.msgcenter(paramMap);
         }
 
@@ -108,7 +108,7 @@ public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> im
             JSONObject paramMapCont = (JSONObject) paramMap.get("content");
             paramMapCont.put("topTitle", "需求提醒");
             paramMapCont.put("centerWords", "您跟进的需求有新评论：【" + demand.getName() + "】");
-            paramMapCont.put("openUrl", openUrl + "?reqid=" + demand.getId() + "&isweb=true" + "&accountId=" + demand.getDraftedAccountId());
+            paramMapCont.put("openUrl", openUrl + "?VIEWSHOW_NOHEAD&reqid=" + demand.getId() + "&isweb=true" + "&accountId=" + demand.getDraftedAccountId());
             longforServiceImpl.msgcenter(paramMap);
         }
 

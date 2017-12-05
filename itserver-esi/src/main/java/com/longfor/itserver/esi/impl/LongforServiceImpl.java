@@ -45,7 +45,6 @@ public class LongforServiceImpl implements ILongforService {
     //龙信消息提醒
     @Override
     public JSONObject msgcenter(Map<String, String> paramMap) {
-
         String reJSONStr = HttpRequest
                 .post(URL + LONGFOR_MSGCENTER)
                 .bodyText(JSON.toJSONString(paramMap), ConfigConsts.MEDIA_TYPE, ConfigConsts.UTF8).send().bodyText();

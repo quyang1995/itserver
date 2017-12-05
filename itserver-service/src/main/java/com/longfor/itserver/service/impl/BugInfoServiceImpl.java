@@ -146,7 +146,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
             JSONObject paramMapCont = (JSONObject) paramMap.get("content");
             paramMapCont.put("topTitle", "BUG提醒");
             paramMapCont.put("centerWords", "您收到一条BUG：【" + bugInfo.getName() + "】");
-            paramMapCont.put("openUrl", openUrl + "?reqid=" + bugInfo.getId() + "&isweb=true" + "&accountId=" + bugInfo.getCallonAccountId());
+            paramMapCont.put("openUrl", openUrl + "?VIEWSHOW_NOHEAD&bugid=" + bugInfo.getId() + "&isweb=true" + "&accountId=" + bugInfo.getCallonAccountId());
             longforServiceImpl.msgcenter(paramMap);
         }
 
@@ -185,8 +185,18 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         if (null == selectOneBugInfo) {
             return false;
         }
-        Map<String, Object> logMap = getChangeLog(selectOneBugInfo, bugInfo);
         Integer accountType = AccountUitl.getAccountType(map);
+        //获取指派人信息
+        AccountLongfor callonAccountLongfor =
+                AccountUitl.getAccountByAccountTypes(bugInfo.getCallonAccountId(),adsHelper);
+        if (callonAccountLongfor != null) {
+            if(StringUtils.isNotBlank(callonAccountLongfor.getPsEmployeeCode())){
+                bugInfo.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
+            }
+            bugInfo.setCallonEmployeeName(callonAccountLongfor.getName());
+            bugInfo.setCallonFullDeptPath(callonAccountLongfor.getPsDeptFullName());
+        }
+        Map<String, Object> logMap = getChangeLog(selectOneBugInfo, bugInfo);
 
         //获取最后修改人
         AccountLongfor draftedAccountLongfor =
@@ -197,8 +207,6 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
             bugInfo.setModifiedTime(TimeUtils.getTodayByDateTime());
         }
         //获取指派人信息
-        AccountLongfor callonAccountLongfor =
-                AccountUitl.getAccountByAccountTypes(bugInfo.getCallonAccountId(),adsHelper);
         if (callonAccountLongfor != null) {
             selectOneBugInfo.setCallonAccountId(bugInfo.getCallonAccountId());
             if(StringUtils.isNotBlank(callonAccountLongfor.getPsEmployeeCode())){
@@ -212,6 +220,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         selectOneBugInfo.setName(bugInfo.getName());
         selectOneBugInfo.setDescp(bugInfo.getDescp());
         selectOneBugInfo.setBrower(bugInfo.getBrower());
+        selectOneBugInfo.setBrowerInfo(bugInfo.getBrowerInfo());
         selectOneBugInfo.setRelationType(bugInfo.getRelationType());
         selectOneBugInfo.setRelationId(bugInfo.getRelationId());
         selectOneBugInfo.setLevel(bugInfo.getLevel());
@@ -219,6 +228,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         selectOneBugInfo.setLikeProduct(bugInfo.getLikeProduct());
         selectOneBugInfo.setLikeProgram(bugInfo.getLikeProgram());
         selectOneBugInfo.setAccountType(bugInfo.getAccountType());
+        selectOneBugInfo.setModifiedTime(TimeUtils.getTodayByDateTime());
         bugInfoMapper.updateByPrimaryKey(selectOneBugInfo);
 
         /*修改文件*/
@@ -285,26 +295,14 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                     JSONObject paramMapCont = (JSONObject) paramMap.get("content");
                     paramMapCont.put("topTitle", "BUG提醒");
                     paramMapCont.put("centerWords", "您跟进的BUG发生变更：【" + newBug.getName() + "】");
-                    paramMapCont.put("openUrl", openUrl + "?reqid=" + newBug.getId() + "&isweb=true" + "&accountId=" + newBug.getCallonAccountId());
+                    paramMapCont.put("openUrl", openUrl + "?VIEWSHOW_NOHEAD&bugid=" + newBug.getId() + "&isweb=true" + "&accountId=" + newBug.getCallonAccountId());
                     longforServiceImpl.msgcenter(paramMap);
                 }
             }
             if (    !Objects.equals(oldBug.getLevel(), newBug.getLevel())
-//                    ||
-//                    !Objects.equals(oldBug.getStatus(), newBug.getStatus()) ||
-//                    !Objects.equals(oldBug.getCallonAccountId(), newBug.getCallonAccountId())
+                    || !Objects.equals(oldBug.getCallonAccountId(), newBug.getCallonAccountId())
                     ) {
                 StringBuilder log = new StringBuilder();
-//                if (!Objects.equals(oldBug.getStatus(), newBug.getStatus())) {
-//
-//                    log.append(newBug.getModifiedName()).
-//                            append("将 状态 由[").
-//                            append(BugStatusEnum.getByCode(oldBug.getStatus()).getText()).
-//                            append("]更改为[").
-//                            append(BugStatusEnum.getByCode(newBug.getStatus()).getText()).
-//                            append("]");
-//                    textList.add(log.toString());
-//                }
                 if (!Objects.equals(oldBug.getLevel(), newBug.getLevel())) {
                     if (StringUtils.isNotBlank(log)) {
                         log.append(",");
@@ -341,7 +339,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                         JSONObject paramMapCont = (JSONObject) paramMap.get("content");
                         paramMapCont.put("topTitle", "BUG提醒");
                         paramMapCont.put("centerWords", "您收到一条BUG：【" + newBug.getName() + "】");
-                        paramMapCont.put("openUrl", openUrl + "?reqid=" + newBug.getId() + "&isweb=true" + "&accountId=" + newBug.getCallonAccountId());
+                        paramMapCont.put("openUrl", openUrl + "?VIEWSHOW_NOHEAD&bugid=" + newBug.getId() + "&isweb=true" + "&accountId=" + newBug.getCallonAccountId());
                         longforServiceImpl.msgcenter(paramMap);
                     }
 
@@ -355,9 +353,9 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                     && Objects.equals(oldBug.getLikeProgram(), newBug.getLikeProgram())
                     && Objects.equals(oldBug.getCcAccount(), newBug.getCcAccount())
                     && Objects.equals(oldBug.getName(), newBug.getName())
+                    &&Objects.equals(oldBug.getHopeDate(),newBug.getHopeDate())
                     && Objects.equals(oldBug.getRelationId(), newBug.getRelationId())
-                    && Objects.equals(oldBug.getRelationType(), newBug.getRelationType())
-                    && Objects.equals(oldBug.getReproductionStep(), newBug.getReproductionStep()))) {
+                    && Objects.equals(oldBug.getRelationType(), newBug.getRelationType()))) {
                 StringBuilder log = new StringBuilder();
                 log.append(newBug.getModifiedName()).
                         append(" 修改了bug基础信息");
@@ -388,7 +386,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                 JSONObject paramMapCont = (JSONObject) paramMap.get("content");
                 paramMapCont.put("topTitle", "BUG提醒");
                 paramMapCont.put("centerWords", "您提交的BUG：【" + oldBug.getName() + "】处理状态从[" + DemandStatusEnum.getByCode(oldBug.getStatus()).getText() + "]变更为[" + DemandStatusEnum.getByCode(newBug.getStatus()).getText() + "]");
-                paramMapCont.put("openUrl", openUrl + "?reqid=" + oldBug.getId() + "&isweb=true" + "&accountId=" + oldBug.getDraftedAccountId());
+                paramMapCont.put("openUrl", openUrl + "?VIEWSHOW_NOHEAD&bugid=" + oldBug.getId() + "&isweb=true" + "&accountId=" + oldBug.getDraftedAccountId());
                 longforServiceImpl.msgcenter(paramMap);
             }
         }
@@ -410,7 +408,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                 JSONObject paramMapCont = (JSONObject) paramMap.get("content");
                 paramMapCont.put("topTitle","BUG提醒");
                 paramMapCont.put("centerWords","您收到一条BUG：【"+ oldBug.getName() +"】");
-                paramMapCont.put("openUrl",openUrl + "?reqid="+oldBug.getId()+"&isweb=true"+"&accountId="+newBug.getCallonAccountId());
+                paramMapCont.put("openUrl",openUrl + "?VIEWSHOW_NOHEAD&bugid="+oldBug.getId()+"&isweb=true"+"&accountId="+newBug.getCallonAccountId());
                 longforServiceImpl.msgcenter(paramMap);
             }
         }
@@ -551,7 +549,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
                 JSONObject paramMapCont = (JSONObject) paramMap.get("content");
                 paramMapCont.put("topTitle","BUG提醒");
                 paramMapCont.put("centerWords","您还有"+ bt.getAmount() +"个未完成的BUG");
-                paramMapCont.put("openUrl","");
+                paramMapCont.put("openUrl",openUrl);
                 longforServiceImpl.msgcenter(paramMap);
             }
         }
