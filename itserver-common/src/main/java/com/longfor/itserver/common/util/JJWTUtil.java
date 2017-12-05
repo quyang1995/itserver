@@ -28,15 +28,15 @@ public class JJWTUtil {
     //eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJpdHBsdXNwcm9kIiwiaWF0IjoxNTA0NzU2NTU4LCJzdWIiOiJpdHBsdXNwcm9kIiwiaXNzIjoiaXRwbHVzcHJvZCJ9.Bv3Z4NPX8VPnBt1WiNJMUm0RQPJBpbZyPmHT8m8UZpM
 
     public static void main(String[] args) throws IOException {
-//        System.out.println(Hex.encodeToString(JudiEncrypt.generateAesKey()));
-        String projectId = "itplusprod";
-        String token = CommonUtils.createJWT(
-                projectId,
-                "itplusprod",
-                projectId,//getSsoAccessKey
-                -1,
-                key);
-        System.out.println("Token: " + token);
+        System.out.println(Hex.encodeToString(JudiEncrypt.generateAesKey()));
+//        String projectId = "itplusprod";
+//        String token = CommonUtils.createJWT(
+//                projectId,
+//                "itplusprod",
+//                projectId,//getSsoAccessKey
+//                -1,
+//                key);
+//        System.out.println("Token: " + token);
 
     }
 
