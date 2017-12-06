@@ -374,6 +374,8 @@ CREATE TABLE IF NOT EXISTS `itplus`.`program_approval_snapshot` (
   COMMENT 'BPM code',
   `remark`                 VARCHAR(3000)   NOT NULL
   COMMENT '内容摘要',
+    `approval_view`                 VARCHAR(3000)   NULL
+  COMMENT '审核意见',
 
   -- program表原有字段
   `product_id`             BIGINT          NOT NULL
