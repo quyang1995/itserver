@@ -167,6 +167,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
             bugInfo.setDescp(feedBack.getProblemDescp());
 //			bugInfo.setReproductionStep(feedBack.getReproductionStep());
             bugInfo.setBrower(feedBack.getSysEnvironment());
+            bugInfo.setBrowerInfo(feedBack.getBrowerInfo());
             bugInfo.setHopeDate(new Date());
             bugInfo.setChannel(feedBack.getChannel());
 
@@ -217,7 +218,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
                 JSONObject paramMapCont = (JSONObject) paramMap.get("content");
                 paramMapCont.put("topTitle","BUG提醒");
                 paramMapCont.put("centerWords","您收到一条BUG：【"+ bugInfo.getName() +"】");
-                paramMapCont.put("openUrl",openUrl + "?reqid="+bugInfo.getId()+"&isweb=true"+"&accountId="+bugInfo.getCallonAccountId());
+                paramMapCont.put("openUrl",openUrl + "?VIEWSHOW_NOHEAD&bugid="+bugInfo.getId()+"&isweb=true"+"&accountId="+bugInfo.getCallonAccountId());
                 longforServiceImpl.msgcenter(paramMap);
             }
 
@@ -293,7 +294,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
                 JSONObject paramMapCont = (JSONObject) paramMap.get("content");
                 paramMapCont.put("topTitle", "需求提醒");
                 paramMapCont.put("centerWords", "您收到一条需求：【" + demand.getName() + "】");
-                paramMapCont.put("openUrl", openUrl + "?reqid=" + demand.getId() + "&isweb=true" + "&accountId=" + demand.getCallonAccountId());
+                paramMapCont.put("openUrl", openUrl + "?VIEWSHOW_NOHEAD&reqid=" + demand.getId() + "&isweb=true" + "&accountId=" + demand.getCallonAccountId());
                 longforServiceImpl.msgcenter(paramMap);
             }
 

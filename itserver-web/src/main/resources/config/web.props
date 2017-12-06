@@ -91,22 +91,22 @@ path=/lhdata/itplus/upload
 #
 [openUrl<development>]
 demandPath=http://111.207.120.1:9091/requireDetail
-demandListPath=
+demandListPath=http://111.207.120.1:9091/itallList?VIEWSHOW_NOHEAD&index=3
 bugPath=http://111.207.120.1:9091/bugDetail
-bugListPath=
+bugListPath=http://111.207.120.1:9091/itallList?VIEWSHOW_NOHEAD&index=4
 longforPath=http://114.251.168.251:8090
 
 [openUrl<uat>]
 demandPath=http://111.207.120.1:9091/requireDetail
-demandListPath=
+demandListPath=http://111.207.120.1:9091/itallList?VIEWSHOW_NOHEAD&index=3
 bugPath=http://111.207.120.1:9091/bugDetail
-bugListPath=
-longforPath=http://114.251.168.251:8090
+bugListPath=http://111.207.120.1:9091/itallList?VIEWSHOW_NOHEAD&index=4
+longforPath=http://192.168.33.45:8090
 
 [openUrl<production>]
-demandPath=https://mop.longfor.com:27245/requireDetail
-demandListPath=
-bugPath=https://mop.longfor.com:27245/bugDetail
-bugListPath=
+demandPath=https://mop.longfor.com:27242/requireDetail
+demandListPath=https://mop.longfor.com:27242/itallList?VIEWSHOW_NOHEAD&index=3
+bugPath=https://mop.longfor.com:27242/bugDetail
+bugListPath=https://mop.longfor.com:27242/itallList?VIEWSHOW_NOHEAD&index=4
 longforPath=https://mop.longfor.com:27234
 ##———————————————————————————————————————————

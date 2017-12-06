@@ -51,6 +51,11 @@ public class FeedBack {
     private String sysEnvironment;
 
     /**
+     * 浏览器版本
+     */
+    @Column(name = "brower_info")
+    private String browerInfo;
+    /**
      * 接口人账户id
      */
     @Column(name = "contact_account_id")
@@ -297,6 +302,14 @@ public class FeedBack {
      */
     public void setSysEnvironment(String sysEnvironment) {
         this.sysEnvironment = sysEnvironment == null ? null : sysEnvironment.trim();
+    }
+
+    public String getBrowerInfo() {
+        return browerInfo;
+    }
+
+    public void setBrowerInfo(String browerInfo) {
+        this.browerInfo = browerInfo;
     }
 
     /**

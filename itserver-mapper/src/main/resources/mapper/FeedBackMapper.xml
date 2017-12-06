@@ -13,6 +13,7 @@
         <result column="problem_descp" property="problemDescp" jdbcType="VARCHAR"/>
         <result column="reproduction_step" property="reproductionStep" jdbcType="VARCHAR"/>
         <result column="sys_environment" property="sysEnvironment" jdbcType="VARCHAR"/>
+        <result column="brower_info" property="browerInfo" jdbcType="VARCHAR"/>
         <result column="contact_account_id" property="contactAccountId" jdbcType="VARCHAR"/>
         <result column="contact_employee_code" property="contactEmployeeCode" jdbcType="BIGINT"/>
         <result column="contact_employee_name" property="contactEmployeeName" jdbcType="VARCHAR"/>
@@ -41,7 +42,7 @@
         <!--
           WARNING - @mbggenerated
         -->
-        id, product_id, product_code, name, problem_title, problem_descp, reproduction_step, sys_environment,
+        id, product_id, product_code, name, problem_title, problem_descp, reproduction_step, sys_environment, brower_info,
         contact_account_id, contact_employee_code, contact_employee_name, contact_full_dept_path,
         type, status, channel, modified_account_id, modified_employee_code, modified_name,
         modified_full_dept_path, file_path, create_time, modified_time, feedback_phone,
