@@ -1,0 +1,8 @@
+[bpm<development>]
+url=http://192.168.33.118:8010/portal
+
+[bpm<uat>]
+url=http://192.168.33.118:8010/portal
+
+[bpm<production>]
+url=http://192.168.33.118:8010/portal

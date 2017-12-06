@@ -263,6 +263,8 @@ CREATE TABLE IF NOT EXISTS `itplus`.`program_file` (
   COMMENT '文件扩展名',
   `file_size`   VARCHAR(50)     NULL
   COMMENT '文件大小',
+   `type`      INT             NULL
+  COMMENT '流程类型：1-立项申请，2-Demo评审，3-招标文件，4-中标通知，5-产品评审，6-进入开发，7-测试部署，8-上线计划，9-灰度发布，10-延期上线，11-变更需求，12-终止项目',
   `file_path`   TEXT            NULL
   COMMENT '文件绝对路径',
   `create_time` TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
