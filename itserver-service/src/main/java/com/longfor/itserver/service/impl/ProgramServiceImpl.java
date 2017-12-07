@@ -1,32 +1,31 @@
 package com.longfor.itserver.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Lists;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
-import com.longfor.itserver.common.enums.ProductStatusEnum;
+import com.longfor.itserver.common.enums.ProgramDevTypeEnum;
 import com.longfor.itserver.common.enums.ProgramStatusEnum;
 import com.longfor.itserver.common.enums.PublicTypeEnum;
+import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.common.util.StringUtil;
 import com.longfor.itserver.entity.*;
-import com.longfor.itserver.mapper.ProductMapper;
-import com.longfor.itserver.mapper.ProgramEmployeeChangeLogMapper;
-import com.longfor.itserver.mapper.ProgramEmployeeMapper;
-import com.longfor.itserver.mapper.ProgramMapper;
+import com.longfor.itserver.mapper.*;
 import com.longfor.itserver.service.IProgramService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import com.longfor.itserver.service.util.AccountUitl;
-import jodd.datetime.TimeUtil;
 import net.mayee.commons.TimeUtils;
-import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author wax Created on 2017/8/3 下午7:15
@@ -49,6 +48,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 	@Autowired
 	private ProgramEmployeeChangeLogMapper programEmployeeChangeLogMapper;
+
+	@Autowired
+	private ProgramApprovalSnapshotMapper programApprovalSnapshotMapper;
 
 	@Override
 	public List<Program> programList(Map map) {
@@ -502,5 +504,47 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		oldProgram.setAccountType(AccountUitl.getAccountType(paramsMap));
 		programMapper.updateByPrimaryKey(oldProgram);
 		return true;
+	}
+
+	/***
+	 * 提交立项申请
+	 */
+	@Override
+	@Transactional(value="transactionManager")
+	public void apply(Map<String, String> paramsMap,Program program) {
+		try{
+			//调用bpm接口:创建流程接口获取流程id
+			String bpmCode = "";
+
+			//program表
+			program.setDevType(Integer.parseInt(paramsMap.get("devType")));//研发方式
+			program.setAnalyzingConditions(Integer.parseInt(paramsMap.get("analyzingConditions")));//判断条件
+			program.setDevWorkload(Integer.parseInt(paramsMap.get("devWorkload")));//研发工作量预估
+			program.setOverallCost(new BigDecimal(paramsMap.get("devWorkload")));//整体费用预估
+			program.setCommitDate(DateUtil.string2Date(paramsMap.get("commitDate"),DateUtil.PATTERN_TIMESTAMP));
+			program.setDemoApprovalDate(DateUtil.string2Date(paramsMap.get("demoApprovalDate"),DateUtil.PATTERN_TIMESTAMP));
+			program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("grayReleaseDate"),DateUtil.PATTERN_TIMESTAMP));
+			if(program.getDevType() == ProgramDevTypeEnum.ZTB.getCode()){//招投标需要设置招标和中标时间
+				program.setBiddingDate(DateUtil.string2Date(paramsMap.get("biddingDate"),DateUtil.PATTERN_TIMESTAMP));//招标时间
+				program.setWinningBidDate(DateUtil.string2Date(paramsMap.get("winningBidDate"),DateUtil.PATTERN_TIMESTAMP));//中标时间
+			}
+			programMapper.updateByPrimaryKey(program);
+
+			//program快照表
+			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+			BeanUtils.copyProperties(program,programApprovalSnapshot);
+			programApprovalSnapshot.setBpmCode(bpmCode);
+			programApprovalSnapshot.setRemark(paramsMap.get("remark"));
+			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+			//附件表
+
+
+
+
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("发生异常");
+		}
 	}
 }

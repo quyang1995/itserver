@@ -1,8 +1,19 @@
 [bpm<development>]
 url=http://192.168.33.118:8010/portal
+clientTempCode=ITplus_ITxmlx
+systemCode=ITplus_
 
 [bpm<uat>]
 url=http://192.168.33.118:8010/portal
+clientTempCode=ITplus_ITxmlx
+systemCode=ITplus_
 
 [bpm<production>]
 url=http://192.168.33.118:8010/portal
+clientTempCode=ITplus_ITxmlx
+systemCode=ITplus_
+
+
+审批节点需要自动传人的：节点参数approval301Node
+集团审批2判断条件：textCondition参数,值包含"商业、冠寓、数据、养老相关"；
+textCondition参数，值包含"地产、基础架构、技术管理相关"时

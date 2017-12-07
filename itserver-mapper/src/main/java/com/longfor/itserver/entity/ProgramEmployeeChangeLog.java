@@ -8,6 +8,10 @@ import javax.persistence.*;
 
 @Table(name = "program_employee_change_log")
 public class ProgramEmployeeChangeLog {
+    @Column(name = "program_status")
+    private int programStatus;
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -168,5 +172,13 @@ public class ProgramEmployeeChangeLog {
      */
     public void setModifiedTime(Date modifiedTime) {
         this.modifiedTime = modifiedTime;
+    }
+
+    public int getProgramStatus() {
+        return programStatus;
+    }
+
+    public void setProgramStatus(int programStatus) {
+        this.programStatus = programStatus;
     }
 }

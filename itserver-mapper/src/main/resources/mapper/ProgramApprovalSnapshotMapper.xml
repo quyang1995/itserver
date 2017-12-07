@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.longfor.itserver.mapper.ProgramApprovalSnapshotMapper" >
+  <resultMap id="BaseResultMap" type="com.longfor.itserver.entity.ProgramApprovalSnapshot" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="product_id" property="productId" jdbcType="BIGINT" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="product_code" property="productCode" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="descp" property="descp" jdbcType="VARCHAR" />
+    <result column="commit_date" property="commitDate" jdbcType="TIMESTAMP" />
+    <result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+    <result column="gray_release_date" property="grayReleaseDate" jdbcType="TIMESTAMP" />
+    <result column="release_date" property="releaseDate" jdbcType="TIMESTAMP" />
+    <result column="ued_date" property="uedDate" jdbcType="TIMESTAMP" />
+    <result column="architecture_date" property="architectureDate" jdbcType="TIMESTAMP" />
+    <result column="like_product" property="likeProduct" jdbcType="VARCHAR" />
+    <result column="like_program" property="likeProgram" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="program_status" property="programStatus" jdbcType="INTEGER" />
+    <result column="modified_account_id" property="modifiedAccountId" jdbcType="VARCHAR" />
+    <result column="modified_name" property="modifiedName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+    <result column="account_type" property="accountType" jdbcType="INTEGER" />
+    <result column="demo_approval_date" property="demoApprovalDate" jdbcType="TIMESTAMP" />
+    <result column="bidding_date" property="biddingDate" jdbcType="TIMESTAMP" />
+    <result column="winning_bid_date" property="winningBidDate" jdbcType="TIMESTAMP" />
+    <result column="prod_approval_date" property="prodApprovalDate" jdbcType="TIMESTAMP" />
+    <result column="dev_approval_date" property="devApprovalDate" jdbcType="TIMESTAMP" />
+    <result column="test_approval_date" property="testApprovalDate" jdbcType="TIMESTAMP" />
+    <result column="online_plan_date" property="onlinePlanDate" jdbcType="TIMESTAMP" />
+    <result column="dev_type" property="devType" jdbcType="INTEGER" />
+    <result column="analyzing_conditions" property="analyzingConditions" jdbcType="INTEGER" />
+    <result column="dev_workload" property="devWorkload" jdbcType="INTEGER" />
+    <result column="overall_cost" property="overallCost" jdbcType="DECIMAL" />
+    <result column="bid_dev_workload" property="bidDevWorkload" jdbcType="INTEGER" />
+    <result column="bid_overall_cost" property="bidOverallCost" jdbcType="DECIMAL" />
+    <result column="approval_status" property="approvalStatus" jdbcType="INTEGER" />
+    <result column="bpm_code" property="bpmCode" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="approval_view" property="approvalView" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, product_id, product_name, product_code, name, descp, commit_date, start_date, 
+    gray_release_date, release_date, ued_date, architecture_date, like_product, like_program, 
+    type, program_status, modified_account_id, modified_name, create_time, modified_time, 
+    account_type, demo_approval_date, bidding_date, winning_bid_date, prod_approval_date, 
+    dev_approval_date, test_approval_date, online_plan_date, dev_type, analyzing_conditions, 
+    dev_workload, overall_cost, bid_dev_workload, bid_overall_cost, approval_status, 
+    bpm_code, remark, approval_view
+  </sql>
+
+</mapper>

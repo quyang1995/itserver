@@ -25,6 +25,21 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
         <result column="product_name" jdbcType="VARCHAR" property="productName"/>
+
+        <result column="demo_approval_date" jdbcType="TIMESTAMP" property="demoApprovalDate"/>
+        <result column="bidding_date" jdbcType="TIMESTAMP" property="biddingDate"/>
+        <result column="winning_bid_date" jdbcType="TIMESTAMP" property="winningBidDate"/>
+        <result column="prod_approval_date" jdbcType="TIMESTAMP" property="prodApprovalDate"/>
+        <result column="dev_approval_date" jdbcType="TIMESTAMP" property="devApprovalDate"/>
+        <result column="test_approval_date" jdbcType="TIMESTAMP" property="testApprovalDate"/>
+        <result column="online_plan_date" jdbcType="TIMESTAMP" property="onlinePlanDate"/>
+        <result column="dev_type" jdbcType="INTEGER" property="devType"/>
+        <result column="analyzing_conditions" jdbcType="INTEGER" property="analyzingConditions"/>
+        <result column="dev_workload" jdbcType="INTEGER" property="devWorkload"/>
+        <result column="overall_cost" jdbcType="DECIMAL" property="overallCost"/>
+        <result column="bid_dev_workload" jdbcType="INTEGER" property="bidDevWorkload"/>
+        <result column="bid_overall_cost" jdbcType="DECIMAL" property="bidOverallCost"/>
+        <result column="approval_status" jdbcType="BigDecimal" property="approvalStatus"/>
     </resultMap>
 
     <resultMap id="ProgramResultMap" type="com.longfor.itserver.entity.ps.PsProgram">
@@ -53,7 +68,9 @@
         -->
         id, product_id, product_name, product_code, name, descp, commit_date, start_date, gray_release_date, release_date,
         ued_date, architecture_date, like_product, like_program, type, program_status, modified_account_id, modified_name,
-        create_time, modified_time
+        create_time, modified_time,demo_approval_date,bidding_date,winning_bid_date,prod_approval_date,dev_approval_date
+        ,test_approval_date,online_plan_date,dev_type,analyzing_conditions,dev_workload,overall_cost,bid_dev_workload
+        ,bid_overall_cost,approval_status
     </sql>
 
     <!-- 项目列表 -->
