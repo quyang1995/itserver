@@ -47,8 +47,8 @@ public class BpmUtils {
     /**
      * 创建流程
      * @param instanceCode 流程实例编码
-     * @param userCode 发起用户
-     * @param finishStart
+     * @param userCode 发起用户 oa账号
+     * @param finishStart  false
      * @param jsonDataItems 参数类型需要为json格式
      * @param jsonAppendPerson 流程加载人，传null，自动计算审批人
      * @return
@@ -230,6 +230,13 @@ public class BpmUtils {
         return retMsg;
     }
 
+    /***
+     * 驳回  syh
+     * @param userCode
+     * @param workItemId
+     * @param commentText
+     * @return
+     */
     public static String returnWorkflowToStart(String userCode, String workItemId, String commentText){
         BPMServiceSoap_BindingStub bpmServiceStub = getBpmStub("ReturnWorkflowToStart");
         String resultMessage = null;
