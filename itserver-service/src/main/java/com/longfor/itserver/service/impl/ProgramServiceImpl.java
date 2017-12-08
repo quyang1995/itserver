@@ -564,7 +564,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 			//激活流程
 			ProgramBpmUtil.applySumbmitWorkItem(
-					paramsMap.get("modifiedOaAccount"),applyCreateResultVo.getWorkItemID());
+					paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
 
 		}catch (Exception e){
 			e.printStackTrace();
@@ -598,7 +598,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 			//提交流程
 			ProgramBpmUtil.applySumbmitWorkItem(
-					paramsMap.get("modifiedOaAccount"),paramsMap.get("workItemId"));
+					paramsMap.get("modifiedAccountId"),paramsMap.get("workItemId"));
 
 		}catch (Exception e){
 			e.printStackTrace();
@@ -632,7 +632,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 			//提交流程
 			ProgramBpmUtil.applySumbmitWorkItem(
-					paramsMap.get("modifiedOaAccount"),paramsMap.get("workItemId"));
+					paramsMap.get("modifiedAccountId"),paramsMap.get("workItemId"));
 
 		}catch (Exception e){
 			e.printStackTrace();
