@@ -44,7 +44,7 @@ public class ProgramBpmUtil
         String para = jsonArray.toString();
         String clientTempCode = JoddHelper.getInstance().getJoddProps().getValue("bpm.clientTempCode");
         String result = BpmUtils.startWorkFlow(
-                clientTempCode,paramsMap.get("modifiedOaAccount"),false,para,null);
+                clientTempCode,paramsMap.get("modifiedAccountId"),false,para,null);
         return JSONObject.parseObject(result,ApplyCreateResultVo.class);
     }
 
