@@ -55,8 +55,6 @@ public class APIProgramController extends BaseController {
 	@RequestMapping(value = "/list", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public Map programList(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		/* 获得已经验证过的参数map */
-		@SuppressWarnings("unchecked")
 		Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
 		/* 生成查询用Example */
