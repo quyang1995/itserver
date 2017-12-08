@@ -45,7 +45,7 @@ public class Program implements Serializable {
     @Column(name = "bid_overall_cost")
     private BigDecimal bidOverallCost;
     @Column(name = "approval_status")
-    private BigDecimal approvalStatus;
+    private int approvalStatus;
 
 
     @Id
@@ -608,11 +608,11 @@ public class Program implements Serializable {
         this.bidOverallCost = bidOverallCost;
     }
 
-    public BigDecimal getApprovalStatus() {
+    public int getApprovalStatus() {
         return approvalStatus;
     }
 
-    public void setApprovalStatus(BigDecimal approvalStatus) {
+    public void setApprovalStatus(int approvalStatus) {
         this.approvalStatus = approvalStatus;
     }
 }

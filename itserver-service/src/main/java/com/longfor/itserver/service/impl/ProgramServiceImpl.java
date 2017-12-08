@@ -1,15 +1,16 @@
 package com.longfor.itserver.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
-import com.longfor.itserver.common.enums.AvaStatusEnum;
-import com.longfor.itserver.common.enums.ProgramDevTypeEnum;
-import com.longfor.itserver.common.enums.ProgramStatusEnum;
-import com.longfor.itserver.common.enums.PublicTypeEnum;
+import com.longfor.itserver.common.enums.*;
 import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.common.util.StringUtil;
+import com.longfor.itserver.common.vo.programBpm.common.ApplyCreateResultVo;
+import com.longfor.itserver.common.vo.programBpm.common.FileVo;
 import com.longfor.itserver.entity.*;
+import com.longfor.itserver.esi.bpm.ProgramBpmUtil;
 import com.longfor.itserver.mapper.*;
 import com.longfor.itserver.service.IProgramService;
 import com.longfor.itserver.service.base.AdminBaseService;
@@ -22,10 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author wax Created on 2017/8/3 下午7:15
@@ -51,7 +49,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 	@Autowired
 	private ProgramApprovalSnapshotMapper programApprovalSnapshotMapper;
-
+	@Autowired
+	private ProgramFileMapper programFileMapper;
 	@Override
 	public List<Program> programList(Map map) {
 //		List<Program> programList = Lists.newArrayList();
@@ -513,8 +512,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	@Transactional(value="transactionManager")
 	public void apply(Map<String, String> paramsMap,Program program) {
 		try{
-			//调用bpm接口:创建流程接口获取流程id
-			String bpmCode = "";
+			//创建流程
+			ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
+			if(!applyCreateResultVo.isSuccess()){
+				throw new RuntimeException("创建流程失败");
+			}
+
+			int approvalStatus = ProgramApprovalStatusEnum.SHZ.getCode();
+			int programStatus = ProgramStatusNewEnum.LX.getCode();
 
 			//program表
 			program.setDevType(Integer.parseInt(paramsMap.get("devType")));//研发方式
@@ -528,19 +533,106 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 				program.setBiddingDate(DateUtil.string2Date(paramsMap.get("biddingDate"),DateUtil.PATTERN_TIMESTAMP));//招标时间
 				program.setWinningBidDate(DateUtil.string2Date(paramsMap.get("winningBidDate"),DateUtil.PATTERN_TIMESTAMP));//中标时间
 			}
+			program.setApprovalStatus(approvalStatus);
+			program.setProgramStatus(programStatus);
 			programMapper.updateByPrimaryKey(program);
 
 			//program快照表
 			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-			BeanUtils.copyProperties(program,programApprovalSnapshot);
-			programApprovalSnapshot.setBpmCode(bpmCode);
+			BeanUtils.copyProperties(programApprovalSnapshot,program);
+			programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
 			programApprovalSnapshot.setRemark(paramsMap.get("remark"));
 			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
 			//附件表
+			String fileStr = paramsMap.get("fileList");
+			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
+				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
+				String a = fileList.get(0).getFileName();
+				for(FileVo fileVo:fileList){
+					ProgramFile programFile = new ProgramFile();
+					programFile.setProgramId(program.getId());
+					programFile.setFileName(fileVo.getFileName());
+					programFile.setFileSuffix(fileVo.getFileSuffix());
+					programFile.setFileSize(fileVo.getFileSize());
+					programFile.setType(ProgramStatusNewEnum.LX.getCode());
+					programFile.setCreateTime(new Date());
+					programFile.setFilePath(fileVo.getFilePath());
+					programFileMapper.insert(programFile);
+				}
+			}
 
+			//激活流程
+			ProgramBpmUtil.applySumbmitWorkItem(
+					paramsMap.get("modifiedOaAccount"),applyCreateResultVo.getWorkItemID());
 
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("发生异常");
+		}
+	}
 
+	/***
+	 * 审核通过
+	 */
+	@Override
+	@Transactional(value="transactionManager")
+	public void approvalPass(Map<String, String> paramsMap,Program program) {
+		try{
+			//更新项目表
+			program.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
+			programMapper.updateByPrimaryKey(program);
+
+			//program快照表
+			//获取bpmcode
+			ProgramApprovalSnapshot programApprovalSnapshotTmp = new ProgramApprovalSnapshot();
+			programApprovalSnapshotTmp.setId(program.getId());
+			programApprovalSnapshotTmp.setProgramStatus(program.getProgramStatus());
+			programApprovalSnapshotTmp = programApprovalSnapshotMapper.selectByExample(programApprovalSnapshotTmp).get(0);
+			String bpmCode = programApprovalSnapshotTmp.getBpmCode();
+
+			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+			BeanUtils.copyProperties(programApprovalSnapshot,program);
+			programApprovalSnapshot.setBpmCode(bpmCode);
+			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+			//提交流程
+			ProgramBpmUtil.applySumbmitWorkItem(
+					paramsMap.get("modifiedOaAccount"),paramsMap.get("workItemId"));
+
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("发生异常");
+		}
+	}
+
+	/***
+	 * 审核驳回
+	 */
+	@Override
+	@Transactional(value="transactionManager")
+	public void approvalRebut(Map<String, String> paramsMap,Program program) {
+		try{
+			//更新项目表
+			program.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
+			programMapper.updateByPrimaryKey(program);
+
+			//program快照表
+			//获取bpmcode
+			ProgramApprovalSnapshot programApprovalSnapshotTmp = new ProgramApprovalSnapshot();
+			programApprovalSnapshotTmp.setId(program.getId());
+			programApprovalSnapshotTmp.setProgramStatus(program.getProgramStatus());
+			programApprovalSnapshotTmp = programApprovalSnapshotMapper.selectByExample(programApprovalSnapshotTmp).get(0);
+			String bpmCode = programApprovalSnapshotTmp.getBpmCode();
+
+			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+			BeanUtils.copyProperties(programApprovalSnapshot,program);
+			programApprovalSnapshot.setBpmCode(bpmCode);
+			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+			//提交流程
+			ProgramBpmUtil.applySumbmitWorkItem(
+					paramsMap.get("modifiedOaAccount"),paramsMap.get("workItemId"));
 
 		}catch (Exception e){
 			e.printStackTrace();

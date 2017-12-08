@@ -37,24 +37,64 @@ public class APIProgramBpmController extends BaseController {
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 			LOG.info("------apply:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 
-			Long programId = Long.parseLong(paramsMap.get("programId"));
-			Program program = getProgramService().getProgramId(programId);
+			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
 
 			getProgramService().apply(paramsMap,program);
-
-
-
-
-
 		}catch (Exception e){
 			e.printStackTrace();
 			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
 		}
 		return resultMap;
-
-
-
 	}
 
+	/**
+	 * 审核通过
+	 */
+	@RequestMapping(value = "/approvalPass", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public Map approvalPass(HttpServletRequest request) throws IOException {
+		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try{
+			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------approvalPass:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+
+			Program program = this.getProgram(paramsMap);
+			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
+
+			getProgramService().approvalPass(paramsMap,program);
+		}catch (Exception e){
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return resultMap;
+	}
+
+	/**
+	 * 审核驳回
+	 */
+	@RequestMapping(value = "/approvalRebut", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public Map approvalRebut(HttpServletRequest request) throws IOException {
+		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try{
+			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------approvalRebut:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+
+			Program program = this.getProgram(paramsMap);
+			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
+
+			getProgramService().approvalRebut(paramsMap,program);
+		}catch (Exception e){
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return resultMap;
+	}
+
+	private Program getProgram(Map<String, String> paramsMap){
+		Long programId = Long.parseLong(paramsMap.get("programId"));
+		Program program = getProgramService().getProgramId(programId);
+		return program;
+	}
 }

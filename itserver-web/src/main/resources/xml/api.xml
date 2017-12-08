@@ -1038,16 +1038,48 @@
             <property name="devType" type="int" required="true"/>
             <property name="analyzingConditions" type="int" required="true"/>
             <property name="devWorkload" type="int" required="true"/>
-            <property name="overallCost" type="BigDecimal" required="true"/>
+            <property name="overallCost" type="String" required="true"/>
             <property name="commitDate" type="string" required="true"/>
             <property name="demoApprovalDate" type="string" required="true"/>
             <property name="biddingDate" type="string" required="true"/>
-            <property name="winningBidDate" type="int" required="true"/>
-            <property name="grayReleaseDate" type="int" required="true"/>
+            <property name="winningBidDate" type="string" required="true"/>
+            <property name="grayReleaseDate" type="string" required="true"/>
             <property name="counterSigners" type="string" required="false"/>
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
+            <property name="tApproval" type="int" required="true"/>
+            <property name="modifiedOaAccount" type="string" required="true"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
+        /api/program/bpm/approvalPass
+        说明:审核通过
+    -->
+    <item id="api_program_bpm_approvalPass" description="审核通过">
+        <request>
+            <property name="programId" type="string" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true"/>
+            <property name="modifiedName" type="string" required="true"/>
+            <property name="modifiedOaAccount" type="string" required="true"/>
+            <property name="workItemId" type="string" required="true"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
+        /api/program/bpm/approvalRebut
+        说明:审核驳回
+    -->
+    <item id="api_program_bpm_approvalRebut" description="审核驳回">
+        <request>
+            <property name="programId" type="string" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true"/>
+            <property name="modifiedName" type="string" required="true"/>
+            <property name="modifiedOaAccount" type="string" required="true"/>
+            <property name="workItemId" type="string" required="true"/>
         </request>
     </item>
 </api>

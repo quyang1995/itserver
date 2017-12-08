@@ -6,8 +6,7 @@ import javax.persistence.*;
 
 @Table(name = "program_approval_snapshot")
 public class ProgramApprovalSnapshot {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     /**

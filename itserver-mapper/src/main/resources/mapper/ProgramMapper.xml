@@ -39,7 +39,7 @@
         <result column="overall_cost" jdbcType="DECIMAL" property="overallCost"/>
         <result column="bid_dev_workload" jdbcType="INTEGER" property="bidDevWorkload"/>
         <result column="bid_overall_cost" jdbcType="DECIMAL" property="bidOverallCost"/>
-        <result column="approval_status" jdbcType="BigDecimal" property="approvalStatus"/>
+        <result column="approval_status" jdbcType="DECIMAL" property="approvalStatus"/>
     </resultMap>
 
     <resultMap id="ProgramResultMap" type="com.longfor.itserver.entity.ps.PsProgram">

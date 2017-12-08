@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `itplus`.`program_file` (
   ENGINE = InnoDB;
 
 CREATE TABLE program_approval_snapshot (
-    id                  	bigint(20) UNSIGNED AUTO_INCREMENT NOT NULL,
+    id                  	bigint(20)  NOT NULL,
     product_id          	bigint(20) COMMENT '归属产品'  NOT NULL,
     product_name        	varchar(100) COMMENT '归属产品名称'  NOT NULL,
     product_code        	varchar(100) NULL,
@@ -53,8 +53,8 @@ CREATE TABLE program_approval_snapshot (
     program_status      	int(11) NULL,
     modified_account_id 	varchar(50) COMMENT '最后修改人账户id'  NULL,
     modified_name       	varchar(50) COMMENT '最后修改人名称'  NULL,
-    create_time         	timestamp NULL ,
-    modified_time       	timestamp  NULL ,
+    create_time         	timestamp NULL,
+    modified_time       	timestamp NULL,
     account_type        	int(11) COMMENT '账户类型：0或者null或者空位内部账号，1-供方账号'  NULL,
     demo_approval_date  	datetime COMMENT 'Demo评审日期'  NULL,
     bidding_date        	datetime COMMENT '招标日期'  NULL,
@@ -70,12 +70,9 @@ CREATE TABLE program_approval_snapshot (
     bid_dev_workload    	int(11) COMMENT '研发工作量'  NULL,
     bid_overall_cost    	decimal(11,2) COMMENT '整体费用'  NULL,
     approval_status     	int(11) COMMENT '审批状态：100=审核中，110=审核通过，120=审核驳回，130=变更审核中，140=变更审核驳回'  NULL,
-    `bpm_code`               VARCHAR(100)    NULL,
-     `remark`                 VARCHAR(3000)   NOT NULL COMMENT '内容摘要',
-    `approval_view`                 VARCHAR(3000)   NULL COMMENT '审核意见',
-    PRIMARY KEY(id)
+    bpm_code            	varchar(100) NULL,
+    remark              	varchar(3000) COMMENT '内容摘要'  NOT NULL,
+    approval_view       	varchar(3000) COMMENT '审核意见'  NULL
 )
-ENGINE = InnoDB
-AUTO_INCREMENT = 86
-GO
+ENGINE = InnoDB;
 

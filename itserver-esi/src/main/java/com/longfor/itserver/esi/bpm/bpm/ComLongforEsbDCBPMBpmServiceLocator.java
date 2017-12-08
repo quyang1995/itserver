@@ -25,8 +25,8 @@ public class ComLongforEsbDCBPMBpmServiceLocator extends org.apache.axis.client.
     }
 
     // Use to get a proxy class for BPMServiceSoap
-//    private String BPMServiceSoap_address = JoddHelper.getInstance().getJoddProps().getValue("bpm.url");
-    private String BPMServiceSoap_address = "http://192.168.33.118:8010/portal";
+    private String BPMServiceSoap_address = JoddHelper.getInstance().getJoddProps().getValue("bpm.url");
+//    private String BPMServiceSoap_address = "http://192.168.33.95:9090/com.longfor.esb.DC.BPM.bpmService";
 
 
     public String getBPMServiceSoapAddress() {

@@ -4,13 +4,13 @@ package com.longfor.itserver.common.vo.programBpm.common;
  * 会签人VO
  */
 public class CounterSigner {
-    private String oaAccount;
+    private String guid;
 
-    public String getOaAccount() {
-        return oaAccount;
+    public String getGuid() {
+        return guid;
     }
 
-    public void setOaAccount(String oaAccount) {
-        this.oaAccount = oaAccount;
+    public void setGuid(String guid) {
+        this.guid = guid;
     }
 }
