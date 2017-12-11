@@ -76,7 +76,11 @@ public class ConfigConsts {
         public static final long DEF_VALIDATEIMG_ACTION_TIME = 20000;
         /* 默认登录图片验证码保存路径 */
         public static final String DEF_VALIDATEIMG_SAVEPATH_LOGIN = "validate" + File.separator + "login" + File.separator;
+    }
 
-
+    public static final class programBpm {
+        //提交立项-审批节点2
+        public static final String apply_approval2_1 = "地产、基础架构、技术管理相关";
+        public static final String apply_approval2_2 = "商业、冠寓、数据、养老相关";
     }
 }

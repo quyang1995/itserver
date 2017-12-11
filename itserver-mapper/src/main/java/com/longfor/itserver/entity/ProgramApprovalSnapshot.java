@@ -1,69 +1,14 @@
 package com.longfor.itserver.entity;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import net.mayee.commons.CustomDateSerializer;
-import net.mayee.commons.CustomFullDateSerializer;
-
-import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.persistence.*;
 
-@Table(name = "program")
-public class Program implements Serializable {
-    @Column(name = "demo_approval_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
-    private Date demoApprovalDate;
-    @Column(name = "bidding_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
-    private Date biddingDate;
-    @Column(name = "winning_bid_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
-    private Date winningBidDate;
-    @Column(name = "prod_approval_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
-    private Date prodApprovalDate;
-    @Column(name = "dev_approval_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
-    private Date devApprovalDate;
-    @Column(name = "test_approval_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
-    private Date testApprovalDate;
-    @Column(name = "online_plan_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
-    private Date onlinePlanDate;
-    @Column(name = "dev_type")
-    private int devType;
-    @Column(name = "analyzing_conditions")
-    private int analyzingConditions;
-    @Column(name = "dev_workload")
-    private int devWorkload;
-    @Column(name = "overall_cost")
-    private BigDecimal overallCost;
-    @Column(name = "bid_dev_workload")
-    private int bidDevWorkload;
-    @Column(name = "bid_overall_cost")
-    private BigDecimal bidOverallCost;
-    @Column(name = "approval_status")
-    private int approvalStatus;
-
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Table(name = "program_approval_snapshot")
+public class ProgramApprovalSnapshot {
+    @Column(name = "id")
     private Long id;
-    /**
-     * 账户类型：0或者null或者空位内部账号，1-供方账号
-     */
-    @Column(name = "account_type")
-    private Integer accountType;
 
-    public Integer getAccountType() {
-        return accountType;
-    }
-
-    public void setAccountType(Integer accountType) {
-        this.accountType = accountType;
-    }
     /**
      * 归属产品
      */
@@ -79,9 +24,6 @@ public class Program implements Serializable {
     @Column(name = "product_code")
     private String productCode;
 
-    /**
-     * 项目名称
-     */
     private String name;
 
     /**
@@ -89,40 +31,22 @@ public class Program implements Serializable {
      */
     private String descp;
 
-    /**
-     * 立项日期
-     */
     @Column(name = "commit_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
     private Date commitDate;
 
-    /**
-     * 启动日期
-     */
     @Column(name = "start_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
     private Date startDate;
 
-    /**
-     * 灰度日期
-     */
     @Column(name = "gray_release_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
     private Date grayReleaseDate;
 
-    /**
-     * 发布日期
-     */
     @Column(name = "release_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
     private Date releaseDate;
 
     @Column(name = "ued_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
     private Date uedDate;
 
     @Column(name = "architecture_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
     private Date architectureDate;
 
     /**
@@ -137,14 +61,8 @@ public class Program implements Serializable {
     @Column(name = "like_program")
     private String likeProgram;
 
-    /**
-     * 公开类型：0=私有，1=公开
-     */
     private Integer type;
 
-    /**
-     * 状态：0=未开始，1=进行中，2=已完成
-     */
     @Column(name = "program_status")
     private Integer programStatus;
 
@@ -161,12 +79,114 @@ public class Program implements Serializable {
     private String modifiedName;
 
     @Column(name = "create_time")
-    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date createTime;
 
     @Column(name = "modified_time")
-    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date modifiedTime;
+
+    /**
+     * 账户类型：0或者null或者空位内部账号，1-供方账号
+     */
+    @Column(name = "account_type")
+    private Integer accountType;
+
+    /**
+     * Demo评审日期
+     */
+    @Column(name = "demo_approval_date")
+    private Date demoApprovalDate;
+
+    /**
+     * 招标日期
+     */
+    @Column(name = "bidding_date")
+    private Date biddingDate;
+
+    /**
+     * 中标日期
+     */
+    @Column(name = "winning_bid_date")
+    private Date winningBidDate;
+
+    /**
+     * 产品评审日期
+     */
+    @Column(name = "prod_approval_date")
+    private Date prodApprovalDate;
+
+    /**
+     * 开发评审日期
+     */
+    @Column(name = "dev_approval_date")
+    private Date devApprovalDate;
+
+    /**
+     * 测试评审日期
+     */
+    @Column(name = "test_approval_date")
+    private Date testApprovalDate;
+
+    /**
+     * 上线计划日期
+     */
+    @Column(name = "online_plan_date")
+    private Date onlinePlanDate;
+
+    /**
+     * 研发方式：1=招投标，2=自研
+     */
+    @Column(name = "dev_type")
+    private Integer devType;
+
+    /**
+     * 判断条件：1=地产，2=商业，3=数据，4=冠寓，5=养老，6=产城，7=基础中心
+     */
+    @Column(name = "analyzing_conditions")
+    private Integer analyzingConditions;
+
+    /**
+     * 研发工作量预估
+     */
+    @Column(name = "dev_workload")
+    private Integer devWorkload;
+
+    /**
+     * 整体费用预估
+     */
+    @Column(name = "overall_cost")
+    private BigDecimal overallCost;
+
+    /**
+     * 研发工作量
+     */
+    @Column(name = "bid_dev_workload")
+    private Integer bidDevWorkload;
+
+    /**
+     * 整体费用
+     */
+    @Column(name = "bid_overall_cost")
+    private BigDecimal bidOverallCost;
+
+    /**
+     * 审批状态：100=审核中，110=审核通过，120=审核驳回，130=变更审核中，140=变更审核驳回
+     */
+    @Column(name = "approval_status")
+    private Integer approvalStatus;
+
+    @Column(name = "bpm_code")
+    private String bpmCode;
+
+    /**
+     * 内容摘要
+     */
+    private String remark;
+
+    /**
+     * 审核意见
+     */
+    @Column(name = "approval_view")
+    private String approvalView;
 
     /**
      * @return id
@@ -233,18 +253,14 @@ public class Program implements Serializable {
     }
 
     /**
-     * 获取项目名称
-     *
-     * @return name - 项目名称
+     * @return name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * 设置项目名称
-     *
-     * @param name 项目名称
+     * @param name
      */
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
@@ -269,72 +285,56 @@ public class Program implements Serializable {
     }
 
     /**
-     * 获取立项日期
-     *
-     * @return commit_date - 立项日期
+     * @return commit_date
      */
     public Date getCommitDate() {
         return commitDate;
     }
 
     /**
-     * 设置立项日期
-     *
-     * @param commitDate 立项日期
+     * @param commitDate
      */
     public void setCommitDate(Date commitDate) {
         this.commitDate = commitDate;
     }
 
     /**
-     * 获取启动日期
-     *
-     * @return start_date - 启动日期
+     * @return start_date
      */
     public Date getStartDate() {
         return startDate;
     }
 
     /**
-     * 设置启动日期
-     *
-     * @param startDate 启动日期
+     * @param startDate
      */
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
     /**
-     * 获取灰度日期
-     *
-     * @return gray_release_date - 灰度日期
+     * @return gray_release_date
      */
     public Date getGrayReleaseDate() {
         return grayReleaseDate;
     }
 
     /**
-     * 设置灰度日期
-     *
-     * @param grayReleaseDate 灰度日期
+     * @param grayReleaseDate
      */
     public void setGrayReleaseDate(Date grayReleaseDate) {
         this.grayReleaseDate = grayReleaseDate;
     }
 
     /**
-     * 获取发布日期
-     *
-     * @return release_date - 发布日期
+     * @return release_date
      */
     public Date getReleaseDate() {
         return releaseDate;
     }
 
     /**
-     * 设置发布日期
-     *
-     * @param releaseDate 发布日期
+     * @param releaseDate
      */
     public void setReleaseDate(Date releaseDate) {
         this.releaseDate = releaseDate;
@@ -405,36 +405,28 @@ public class Program implements Serializable {
     }
 
     /**
-     * 获取公开类型：0=私有，1=公开
-     *
-     * @return type - 公开类型：0=私有，1=公开
+     * @return type
      */
     public Integer getType() {
         return type;
     }
 
     /**
-     * 设置公开类型：0=私有，1=公开
-     *
-     * @param type 公开类型：0=私有，1=公开
+     * @param type
      */
     public void setType(Integer type) {
         this.type = type;
     }
 
     /**
-     * 获取状态：0=未开始，1=进行中，2=已完成
-     *
-     * @return program_status - 状态：0=未开始，1=进行中，2=已完成
+     * @return program_status
      */
     public Integer getProgramStatus() {
         return programStatus;
     }
 
     /**
-     * 设置状态：0=未开始，1=进行中，2=已完成
-     *
-     * @param programStatus 状态：0=未开始，1=进行中，2=已完成
+     * @param programStatus
      */
     public void setProgramStatus(Integer programStatus) {
         this.programStatus = programStatus;
@@ -504,115 +496,323 @@ public class Program implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
+    /**
+     * 获取账户类型：0或者null或者空位内部账号，1-供方账号
+     *
+     * @return account_type - 账户类型：0或者null或者空位内部账号，1-供方账号
+     */
+    public Integer getAccountType() {
+        return accountType;
+    }
+
+    /**
+     * 设置账户类型：0或者null或者空位内部账号，1-供方账号
+     *
+     * @param accountType 账户类型：0或者null或者空位内部账号，1-供方账号
+     */
+    public void setAccountType(Integer accountType) {
+        this.accountType = accountType;
+    }
+
+    /**
+     * 获取Demo评审日期
+     *
+     * @return demo_approval_date - Demo评审日期
+     */
     public Date getDemoApprovalDate() {
         return demoApprovalDate;
     }
 
+    /**
+     * 设置Demo评审日期
+     *
+     * @param demoApprovalDate Demo评审日期
+     */
     public void setDemoApprovalDate(Date demoApprovalDate) {
         this.demoApprovalDate = demoApprovalDate;
     }
 
+    /**
+     * 获取招标日期
+     *
+     * @return bidding_date - 招标日期
+     */
     public Date getBiddingDate() {
         return biddingDate;
     }
 
+    /**
+     * 设置招标日期
+     *
+     * @param biddingDate 招标日期
+     */
     public void setBiddingDate(Date biddingDate) {
         this.biddingDate = biddingDate;
     }
 
+    /**
+     * 获取中标日期
+     *
+     * @return winning_bid_date - 中标日期
+     */
     public Date getWinningBidDate() {
         return winningBidDate;
     }
 
+    /**
+     * 设置中标日期
+     *
+     * @param winningBidDate 中标日期
+     */
     public void setWinningBidDate(Date winningBidDate) {
         this.winningBidDate = winningBidDate;
     }
 
+    /**
+     * 获取产品评审日期
+     *
+     * @return prod_approval_date - 产品评审日期
+     */
     public Date getProdApprovalDate() {
         return prodApprovalDate;
     }
 
+    /**
+     * 设置产品评审日期
+     *
+     * @param prodApprovalDate 产品评审日期
+     */
     public void setProdApprovalDate(Date prodApprovalDate) {
         this.prodApprovalDate = prodApprovalDate;
     }
 
+    /**
+     * 获取开发评审日期
+     *
+     * @return dev_approval_date - 开发评审日期
+     */
     public Date getDevApprovalDate() {
         return devApprovalDate;
     }
 
+    /**
+     * 设置开发评审日期
+     *
+     * @param devApprovalDate 开发评审日期
+     */
     public void setDevApprovalDate(Date devApprovalDate) {
         this.devApprovalDate = devApprovalDate;
     }
 
+    /**
+     * 获取测试评审日期
+     *
+     * @return test_approval_date - 测试评审日期
+     */
     public Date getTestApprovalDate() {
         return testApprovalDate;
     }
 
+    /**
+     * 设置测试评审日期
+     *
+     * @param testApprovalDate 测试评审日期
+     */
     public void setTestApprovalDate(Date testApprovalDate) {
         this.testApprovalDate = testApprovalDate;
     }
 
+    /**
+     * 获取上线计划日期
+     *
+     * @return online_plan_date - 上线计划日期
+     */
     public Date getOnlinePlanDate() {
         return onlinePlanDate;
     }
 
+    /**
+     * 设置上线计划日期
+     *
+     * @param onlinePlanDate 上线计划日期
+     */
     public void setOnlinePlanDate(Date onlinePlanDate) {
         this.onlinePlanDate = onlinePlanDate;
     }
 
-    public int getDevType() {
+    /**
+     * 获取研发方式：1=招投标，2=自研
+     *
+     * @return dev_type - 研发方式：1=招投标，2=自研
+     */
+    public Integer getDevType() {
         return devType;
     }
 
-    public void setDevType(int devType) {
+    /**
+     * 设置研发方式：1=招投标，2=自研
+     *
+     * @param devType 研发方式：1=招投标，2=自研
+     */
+    public void setDevType(Integer devType) {
         this.devType = devType;
     }
 
-    public int getAnalyzingConditions() {
+    /**
+     * 获取判断条件：1=地产，2=商业，3=数据，4=冠寓，5=养老，6=产城，7=基础中心
+     *
+     * @return analyzing_conditions - 判断条件：1=地产，2=商业，3=数据，4=冠寓，5=养老，6=产城，7=基础中心
+     */
+    public Integer getAnalyzingConditions() {
         return analyzingConditions;
     }
 
-    public void setAnalyzingConditions(int analyzingConditions) {
+    /**
+     * 设置判断条件：1=地产，2=商业，3=数据，4=冠寓，5=养老，6=产城，7=基础中心
+     *
+     * @param analyzingConditions 判断条件：1=地产，2=商业，3=数据，4=冠寓，5=养老，6=产城，7=基础中心
+     */
+    public void setAnalyzingConditions(Integer analyzingConditions) {
         this.analyzingConditions = analyzingConditions;
     }
 
-    public int getDevWorkload() {
+    /**
+     * 获取研发工作量预估
+     *
+     * @return dev_workload - 研发工作量预估
+     */
+    public Integer getDevWorkload() {
         return devWorkload;
     }
 
-    public void setDevWorkload(int devWorkload) {
+    /**
+     * 设置研发工作量预估
+     *
+     * @param devWorkload 研发工作量预估
+     */
+    public void setDevWorkload(Integer devWorkload) {
         this.devWorkload = devWorkload;
     }
 
+    /**
+     * 获取整体费用预估
+     *
+     * @return overall_cost - 整体费用预估
+     */
     public BigDecimal getOverallCost() {
         return overallCost;
     }
 
+    /**
+     * 设置整体费用预估
+     *
+     * @param overallCost 整体费用预估
+     */
     public void setOverallCost(BigDecimal overallCost) {
         this.overallCost = overallCost;
     }
 
-    public int getBidDevWorkload() {
+    /**
+     * 获取研发工作量
+     *
+     * @return bid_dev_workload - 研发工作量
+     */
+    public Integer getBidDevWorkload() {
         return bidDevWorkload;
     }
 
-    public void setBidDevWorkload(int bidDevWorkload) {
+    /**
+     * 设置研发工作量
+     *
+     * @param bidDevWorkload 研发工作量
+     */
+    public void setBidDevWorkload(Integer bidDevWorkload) {
         this.bidDevWorkload = bidDevWorkload;
     }
 
+    /**
+     * 获取整体费用
+     *
+     * @return bid_overall_cost - 整体费用
+     */
     public BigDecimal getBidOverallCost() {
         return bidOverallCost;
     }
 
+    /**
+     * 设置整体费用
+     *
+     * @param bidOverallCost 整体费用
+     */
     public void setBidOverallCost(BigDecimal bidOverallCost) {
         this.bidOverallCost = bidOverallCost;
     }
 
-    public int getApprovalStatus() {
+    /**
+     * 获取审批状态：100=审核中，110=审核通过，120=审核驳回，130=变更审核中，140=变更审核驳回
+     *
+     * @return approval_status - 审批状态：100=审核中，110=审核通过，120=审核驳回，130=变更审核中，140=变更审核驳回
+     */
+    public Integer getApprovalStatus() {
         return approvalStatus;
     }
 
-    public void setApprovalStatus(int approvalStatus) {
+    /**
+     * 设置审批状态：100=审核中，110=审核通过，120=审核驳回，130=变更审核中，140=变更审核驳回
+     *
+     * @param approvalStatus 审批状态：100=审核中，110=审核通过，120=审核驳回，130=变更审核中，140=变更审核驳回
+     */
+    public void setApprovalStatus(Integer approvalStatus) {
         this.approvalStatus = approvalStatus;
+    }
+
+    /**
+     * @return bpm_code
+     */
+    public String getBpmCode() {
+        return bpmCode;
+    }
+
+    /**
+     * @param bpmCode
+     */
+    public void setBpmCode(String bpmCode) {
+        this.bpmCode = bpmCode == null ? null : bpmCode.trim();
+    }
+
+    /**
+     * 获取内容摘要
+     *
+     * @return remark - 内容摘要
+     */
+    public String getRemark() {
+        return remark;
+    }
+
+    /**
+     * 设置内容摘要
+     *
+     * @param remark 内容摘要
+     */
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
+    }
+
+    /**
+     * 获取审核意见
+     *
+     * @return approval_view - 审核意见
+     */
+    public String getApprovalView() {
+        return approvalView;
+    }
+
+    /**
+     * 设置审核意见
+     *
+     * @param approvalView 审核意见
+     */
+    public void setApprovalView(String approvalView) {
+        this.approvalView = approvalView == null ? null : approvalView.trim();
     }
 }

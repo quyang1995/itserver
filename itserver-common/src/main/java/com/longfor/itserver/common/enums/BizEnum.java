@@ -63,7 +63,10 @@ public enum BizEnum {
     /* FEEDBACK E12开头 */
     E1201("E1201", "[ {?} ] 与 [ {?} ] 不可都为空"),
     E1202("E1202", "请输入正确的手机号"),
-    E1203("E1203", "feedbackPhone不为空的时候也必须提供feedbackName");
+    E1203("E1203", "feedbackPhone不为空的时候也必须提供feedbackName"),
+
+    /* 项目 E13开头 */
+    E1301("E1301", "项目不存在");
 
 
     /* 枚举码 */

@@ -1,31 +1,28 @@
 package com.longfor.itserver.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Lists;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
-import com.longfor.itserver.common.enums.AvaStatusEnum;
-import com.longfor.itserver.common.enums.ProductStatusEnum;
-import com.longfor.itserver.common.enums.ProgramStatusEnum;
-import com.longfor.itserver.common.enums.PublicTypeEnum;
+import com.longfor.itserver.common.enums.*;
+import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.common.util.StringUtil;
+import com.longfor.itserver.common.vo.programBpm.common.ApplyCreateResultVo;
+import com.longfor.itserver.common.vo.programBpm.common.FileVo;
 import com.longfor.itserver.entity.*;
-import com.longfor.itserver.mapper.ProductMapper;
-import com.longfor.itserver.mapper.ProgramEmployeeChangeLogMapper;
-import com.longfor.itserver.mapper.ProgramEmployeeMapper;
-import com.longfor.itserver.mapper.ProgramMapper;
+import com.longfor.itserver.esi.bpm.ProgramBpmUtil;
+import com.longfor.itserver.mapper.*;
 import com.longfor.itserver.service.IProgramService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import com.longfor.itserver.service.util.AccountUitl;
-import jodd.datetime.TimeUtil;
 import net.mayee.commons.TimeUtils;
-import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -50,6 +47,10 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	@Autowired
 	private ProgramEmployeeChangeLogMapper programEmployeeChangeLogMapper;
 
+	@Autowired
+	private ProgramApprovalSnapshotMapper programApprovalSnapshotMapper;
+	@Autowired
+	private ProgramFileMapper programFileMapper;
 	@Override
 	public List<Program> programList(Map map) {
 //		List<Program> programList = Lists.newArrayList();
@@ -502,5 +503,140 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		oldProgram.setAccountType(AccountUitl.getAccountType(paramsMap));
 		programMapper.updateByPrimaryKey(oldProgram);
 		return true;
+	}
+
+	/***
+	 * 提交立项申请
+	 */
+	@Override
+	@Transactional(value="transactionManager")
+	public void apply(Map<String, String> paramsMap,Program program) {
+		try{
+			//创建流程
+			ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
+			if(!applyCreateResultVo.isSuccess()){
+				throw new RuntimeException("创建流程失败");
+			}
+
+			int approvalStatus = ProgramApprovalStatusEnum.SHZ.getCode();
+			int programStatus = ProgramStatusNewEnum.LX.getCode();
+
+			//program表
+			program.setDevType(Integer.parseInt(paramsMap.get("devType")));//研发方式
+			program.setAnalyzingConditions(Integer.parseInt(paramsMap.get("analyzingConditions")));//判断条件
+			program.setDevWorkload(Integer.parseInt(paramsMap.get("devWorkload")));//研发工作量预估
+			program.setOverallCost(new BigDecimal(paramsMap.get("devWorkload")));//整体费用预估
+			program.setCommitDate(DateUtil.string2Date(paramsMap.get("commitDate"),DateUtil.PATTERN_TIMESTAMP));
+			program.setDemoApprovalDate(DateUtil.string2Date(paramsMap.get("demoApprovalDate"),DateUtil.PATTERN_TIMESTAMP));
+			program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("grayReleaseDate"),DateUtil.PATTERN_TIMESTAMP));
+			if(program.getDevType() == ProgramDevTypeEnum.ZTB.getCode()){//招投标需要设置招标和中标时间
+				program.setBiddingDate(DateUtil.string2Date(paramsMap.get("biddingDate"),DateUtil.PATTERN_TIMESTAMP));//招标时间
+				program.setWinningBidDate(DateUtil.string2Date(paramsMap.get("winningBidDate"),DateUtil.PATTERN_TIMESTAMP));//中标时间
+			}
+			program.setApprovalStatus(approvalStatus);
+			program.setProgramStatus(programStatus);
+			programMapper.updateByPrimaryKey(program);
+
+			//program快照表
+			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+			BeanUtils.copyProperties(programApprovalSnapshot,program);
+			programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
+			programApprovalSnapshot.setRemark(paramsMap.get("remark"));
+			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+			//附件表
+			String fileStr = paramsMap.get("fileList");
+			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
+				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
+				String a = fileList.get(0).getFileName();
+				for(FileVo fileVo:fileList){
+					ProgramFile programFile = new ProgramFile();
+					programFile.setProgramId(program.getId());
+					programFile.setFileName(fileVo.getFileName());
+					programFile.setFileSuffix(fileVo.getFileSuffix());
+					programFile.setFileSize(fileVo.getFileSize());
+					programFile.setType(ProgramStatusNewEnum.LX.getCode());
+					programFile.setCreateTime(new Date());
+					programFile.setFilePath(fileVo.getFilePath());
+					programFileMapper.insert(programFile);
+				}
+			}
+
+			//激活流程
+			ProgramBpmUtil.applySumbmitWorkItem(
+					paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
+
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("发生异常");
+		}
+	}
+
+	/***
+	 * 审核通过
+	 */
+	@Override
+	@Transactional(value="transactionManager")
+	public void approvalPass(Map<String, String> paramsMap,Program program) {
+		try{
+			//更新项目表
+			program.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
+			programMapper.updateByPrimaryKey(program);
+
+			//program快照表
+			//获取bpmcode
+			ProgramApprovalSnapshot programApprovalSnapshotTmp = new ProgramApprovalSnapshot();
+			programApprovalSnapshotTmp.setId(program.getId());
+			programApprovalSnapshotTmp.setProgramStatus(program.getProgramStatus());
+			programApprovalSnapshotTmp = programApprovalSnapshotMapper.selectByExample(programApprovalSnapshotTmp).get(0);
+			String bpmCode = programApprovalSnapshotTmp.getBpmCode();
+
+			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+			BeanUtils.copyProperties(programApprovalSnapshot,program);
+			programApprovalSnapshot.setBpmCode(bpmCode);
+			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+			//提交流程
+			ProgramBpmUtil.applySumbmitWorkItem(
+					paramsMap.get("modifiedAccountId"),paramsMap.get("workItemId"));
+
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("发生异常");
+		}
+	}
+
+	/***
+	 * 审核驳回
+	 */
+	@Override
+	@Transactional(value="transactionManager")
+	public void approvalRebut(Map<String, String> paramsMap,Program program) {
+		try{
+			//更新项目表
+			program.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
+			programMapper.updateByPrimaryKey(program);
+
+			//program快照表
+			//获取bpmcode
+			ProgramApprovalSnapshot programApprovalSnapshotTmp = new ProgramApprovalSnapshot();
+			programApprovalSnapshotTmp.setId(program.getId());
+			programApprovalSnapshotTmp.setProgramStatus(program.getProgramStatus());
+			programApprovalSnapshotTmp = programApprovalSnapshotMapper.selectByExample(programApprovalSnapshotTmp).get(0);
+			String bpmCode = programApprovalSnapshotTmp.getBpmCode();
+
+			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+			BeanUtils.copyProperties(programApprovalSnapshot,program);
+			programApprovalSnapshot.setBpmCode(bpmCode);
+			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+			//提交流程
+			ProgramBpmUtil.applySumbmitWorkItem(
+					paramsMap.get("modifiedAccountId"),paramsMap.get("workItemId"));
+
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("发生异常");
+		}
 	}
 }

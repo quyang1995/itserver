@@ -101,10 +101,11 @@
         <table tableName="feed_back" domainObjectName="FeedBack">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
-        <table tableName="feed_back_file" domainObjectName="FeedBackFile">
+        -->
+        <table tableName="program_file" domainObjectName="ProgramFile">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
--->
+
     </context>
 
 </generatorConfiguration>

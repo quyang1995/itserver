@@ -25,4 +25,10 @@ public interface IProgramService extends IAdminService<Program> {
     List<Program> productIdAllList(Map parsmsMap);
 
     boolean updateStatus(Map paramsMap);
+
+    void apply(Map<String, String> paramsMap,Program program);
+
+    void approvalPass(Map<String, String> paramsMap,Program program);
+
+    void approvalRebut(Map<String, String> paramsMap,Program program);
 }
