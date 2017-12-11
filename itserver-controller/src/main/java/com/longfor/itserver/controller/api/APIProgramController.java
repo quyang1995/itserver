@@ -167,11 +167,11 @@ public class APIProgramController extends BaseController {
 		map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
 		map.put("employeeTypeId", new Long(AvaStatusEnum.PRODAVA.getCode()));
 		List<ProgramEmployee> programManagerList = this.getProgramEmployeeService().selectTypeList(map);
-		program.setProgramManagerList(programManagerList);
+		program.setProductManagerList(programManagerList);
 		/* 项目经理 */
 		map.put("employeeTypeId", new Long(AvaStatusEnum.PROGAVA.getCode()));
 		List<ProgramEmployee> productManagerList = this.getProgramEmployeeService().selectTypeList(map);
-		program.setProductManagerList(productManagerList);
+		program.setProgramManagerList(productManagerList);
 		/* 开发人员 */
 		map.put("employeeTypeId", new Long(AvaStatusEnum.DEVEAVA.getCode()));
 		List<ProgramEmployee> developerList = this.getProgramEmployeeService().selectTypeList(map);
