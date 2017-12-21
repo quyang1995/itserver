@@ -512,6 +512,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	@Transactional(value="transactionManager")
 	public void apply(Map<String, String> paramsMap,Program program) {
 		try{
+			Date now = new Date();
 			//创建流程
 			ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
 			if(!applyCreateResultVo.isSuccess()){
@@ -526,12 +527,12 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			program.setAnalyzingConditions(Integer.parseInt(paramsMap.get("analyzingConditions")));//判断条件
 			program.setDevWorkload(Integer.parseInt(paramsMap.get("devWorkload")));//研发工作量预估
 			program.setOverallCost(new BigDecimal(paramsMap.get("devWorkload")));//整体费用预估
-			program.setCommitDate(DateUtil.string2Date(paramsMap.get("commitDate"),DateUtil.PATTERN_TIMESTAMP));
-			program.setDemoApprovalDate(DateUtil.string2Date(paramsMap.get("demoApprovalDate"),DateUtil.PATTERN_TIMESTAMP));
-			program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("grayReleaseDate"),DateUtil.PATTERN_TIMESTAMP));
+			program.setCommitDate(DateUtil.string2Date(paramsMap.get("commitDate"),DateUtil.PATTERN_DATE));
+			program.setDemoApprovalDate(DateUtil.string2Date(paramsMap.get("demoApprovalDate"),DateUtil.PATTERN_DATE));
+			program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("grayReleaseDate"),DateUtil.PATTERN_DATE));
 			if(program.getDevType() == ProgramDevTypeEnum.ZTB.getCode()){//招投标需要设置招标和中标时间
-				program.setBiddingDate(DateUtil.string2Date(paramsMap.get("biddingDate"),DateUtil.PATTERN_TIMESTAMP));//招标时间
-				program.setWinningBidDate(DateUtil.string2Date(paramsMap.get("winningBidDate"),DateUtil.PATTERN_TIMESTAMP));//中标时间
+				program.setBiddingDate(DateUtil.string2Date(paramsMap.get("biddingDate"),DateUtil.PATTERN_DATE));//招标时间
+				program.setWinningBidDate(DateUtil.string2Date(paramsMap.get("winningBidDate"),DateUtil.PATTERN_DATE));//中标时间
 			}
 			program.setApprovalStatus(approvalStatus);
 			program.setProgramStatus(programStatus);
@@ -542,6 +543,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			BeanUtils.copyProperties(programApprovalSnapshot,program);
 			programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
 			programApprovalSnapshot.setRemark(paramsMap.get("remark"));
+			programApprovalSnapshot.setCreateTime(now);
+			programApprovalSnapshot.setModifiedTime(now);
 			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
 			//附件表
@@ -579,6 +582,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	@Transactional(value="transactionManager")
 	public void approvalPass(Map<String, String> paramsMap,Program program) {
 		try{
+			Date now = new Date();
 			//更新项目表
 			program.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
 			programMapper.updateByPrimaryKey(program);
@@ -594,6 +598,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
 			BeanUtils.copyProperties(programApprovalSnapshot,program);
 			programApprovalSnapshot.setBpmCode(bpmCode);
+			programApprovalSnapshot.setCreateTime(now);
+			programApprovalSnapshot.setModifiedTime(now);
 			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
 			//提交流程

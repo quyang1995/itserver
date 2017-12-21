@@ -11,6 +11,7 @@ import java.util.Date;
 public class DateUtil {
 
     public static final String PATTERN_TIMESTAMP = "yyyy-MM-dd hh:mm:ss";
+    public static final String PATTERN_DATE = "yyyy-MM-dd";
 
     /**
      * 获取过去第几天的日期
