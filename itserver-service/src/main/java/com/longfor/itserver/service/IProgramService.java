@@ -33,5 +33,25 @@ public interface IProgramService extends IAdminService<Program> {
 
     void approvalRebut(Map<String, String> paramsMap,Program program);
 
+    void demoReview(Map<String, String> paramsMap,Program program);
+
+    void tenderFile(Map<String, String> paramsMap,Program program);
+
+    void bidNotice(Map<String, String> paramsMap,Program program);
+
+    void productReview(Map<String, String> paramsMap,Program program);
+
+    void development(Map<String, String> paramsMap,Program program);
+
+    void deploy(Map<String, String> paramsMap,Program program);
+
+    void planOnline(Map<String, String> paramsMap,Program program);
+
+    void release(Map<String, String> paramsMap,Program program);
+
+    void delay(Map<String, String> paramsMap,Program program);
+
+    void demandChange(Map<String, String> paramsMap,Program program);
+
     ApplyViewVo applyView(Map<String, String> paramsMap, Program program) throws Exception;
 }
