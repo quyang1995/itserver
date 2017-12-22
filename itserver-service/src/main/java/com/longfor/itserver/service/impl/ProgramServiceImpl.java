@@ -645,4 +645,473 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			throw new RuntimeException("发生异常");
 		}
 	}
+
+
+	/***
+	 * 提交立项申请
+	 */
+	@Override
+	@Transactional(value="transactionManager")
+	public void demoReview(Map<String, String> paramsMap,Program program) {
+		try{
+			Date now = new Date();
+			//program表
+			program.setProgramStatus(ProgramStatusNewEnum.DPS.getCode());
+			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
+			program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
+			program.setModifiedName(paramsMap.get("modifiedName"));
+			programMapper.updateByPrimaryKey(program);
+
+			//program快照表
+			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+			BeanUtils.copyProperties(programApprovalSnapshot,program);
+			programApprovalSnapshot.setRemark(paramsMap.get("remark"));
+			programApprovalSnapshot.setCreateTime(now);
+			programApprovalSnapshot.setModifiedTime(now);
+			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+			//附件表
+			String fileStr = paramsMap.get("fileList");
+			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
+				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
+				String a = fileList.get(0).getFileName();
+				for(FileVo fileVo:fileList){
+					ProgramFile programFile = new ProgramFile();
+					programFile.setProgramId(program.getId());
+					programFile.setFileName(fileVo.getFileName());
+					programFile.setFileSuffix(fileVo.getFileSuffix());
+					programFile.setFileSize(fileVo.getFileSize());
+					programFile.setType(ProgramStatusNewEnum.DPS.getCode());
+					programFile.setCreateTime(new Date());
+					programFile.setFilePath(fileVo.getFilePath());
+					programFileMapper.insert(programFile);
+				}
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("发生异常");
+		}
+	}
+
+	/***
+	 * 招标文件
+	 */
+	@Override
+	@Transactional(value="transactionManager")
+	public void tenderFile(Map<String, String> paramsMap,Program program) {
+		try{
+			Date now = new Date();
+			//program表
+			program.setProgramStatus(ProgramStatusNewEnum.ZTBSQ.getCode());
+			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
+			program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
+			program.setModifiedName(paramsMap.get("modifiedName"));
+			programMapper.updateByPrimaryKey(program);
+
+			//program快照表
+			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+			BeanUtils.copyProperties(programApprovalSnapshot,program);
+			programApprovalSnapshot.setRemark(paramsMap.get("remark"));
+			programApprovalSnapshot.setCreateTime(now);
+			programApprovalSnapshot.setModifiedTime(now);
+			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+			//附件表
+			String fileStr = paramsMap.get("fileList");
+			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
+				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
+				String a = fileList.get(0).getFileName();
+				for(FileVo fileVo:fileList){
+					ProgramFile programFile = new ProgramFile();
+					programFile.setProgramId(program.getId());
+					programFile.setFileName(fileVo.getFileName());
+					programFile.setFileSuffix(fileVo.getFileSuffix());
+					programFile.setFileSize(fileVo.getFileSize());
+					programFile.setType(ProgramStatusNewEnum.ZTBSQ.getCode());
+					programFile.setCreateTime(new Date());
+					programFile.setFilePath(fileVo.getFilePath());
+					programFileMapper.insert(programFile);
+				}
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("发生异常");
+		}
+	}
+
+	/***
+	 * 中标通知
+	 */
+	@Override
+	@Transactional(value="transactionManager")
+	public void bidNotice(Map<String, String> paramsMap,Program program) {
+		try{
+			Date now = new Date();
+			//program表
+			program.setProgramStatus(ProgramStatusNewEnum.ZBSQ.getCode());
+			program.setOverallCost(new BigDecimal(paramsMap.get("overallCost")));
+			program.setCommitDate(DateUtil.string2Date(paramsMap.get("commitDate"),DateUtil.PATTERN_DATE));
+			program.setDemoApprovalDate(DateUtil.string2Date(paramsMap.get("demoApprovalDate"),DateUtil.PATTERN_DATE));
+			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
+			program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
+			program.setModifiedName(paramsMap.get("modifiedName"));
+			programMapper.updateByPrimaryKey(program);
+
+			//program快照表
+			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+			BeanUtils.copyProperties(programApprovalSnapshot,program);
+			programApprovalSnapshot.setRemark(paramsMap.get("remark"));
+			programApprovalSnapshot.setCreateTime(now);
+			programApprovalSnapshot.setModifiedTime(now);
+			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+			//附件表
+			String fileStr = paramsMap.get("fileList");
+			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
+				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
+				String a = fileList.get(0).getFileName();
+				for(FileVo fileVo:fileList){
+					ProgramFile programFile = new ProgramFile();
+					programFile.setProgramId(program.getId());
+					programFile.setFileName(fileVo.getFileName());
+					programFile.setFileSuffix(fileVo.getFileSuffix());
+					programFile.setFileSize(fileVo.getFileSize());
+					programFile.setType(ProgramStatusNewEnum.ZBSQ.getCode());
+					programFile.setCreateTime(new Date());
+					programFile.setFilePath(fileVo.getFilePath());
+					programFileMapper.insert(programFile);
+				}
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("发生异常");
+		}
+	}
+
+	/***
+	 * 产品评审
+	 */
+	@Override
+	@Transactional(value="transactionManager")
+	public void productReview(Map<String, String> paramsMap,Program program) {
+		try{
+			Date now = new Date();
+			//program表
+			program.setProgramStatus(ProgramStatusNewEnum.CPPS.getCode());
+
+			program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("productReviewDate"),DateUtil.PATTERN_DATE));
+			program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("researchDate"),DateUtil.PATTERN_DATE));
+			program.setTestApprovalDate(DateUtil.string2Date(paramsMap.get("testDate"),DateUtil.PATTERN_DATE));
+			program.setOnlinePlanDate(DateUtil.string2Date(paramsMap.get("onlineDate"),DateUtil.PATTERN_DATE));
+
+			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
+			program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
+			program.setModifiedName(paramsMap.get("modifiedName"));
+			programMapper.updateByPrimaryKey(program);
+
+			//program快照表
+			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+			BeanUtils.copyProperties(programApprovalSnapshot,program);
+			programApprovalSnapshot.setRemark(paramsMap.get("remark"));
+			programApprovalSnapshot.setCreateTime(now);
+			programApprovalSnapshot.setModifiedTime(now);
+			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+			//附件表
+			String fileStr = paramsMap.get("fileList");
+			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
+				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
+				String a = fileList.get(0).getFileName();
+				for(FileVo fileVo:fileList){
+					ProgramFile programFile = new ProgramFile();
+					programFile.setProgramId(program.getId());
+					programFile.setFileName(fileVo.getFileName());
+					programFile.setFileSuffix(fileVo.getFileSuffix());
+					programFile.setFileSize(fileVo.getFileSize());
+					programFile.setType(ProgramStatusNewEnum.CPPS.getCode());
+					programFile.setCreateTime(new Date());
+					programFile.setFilePath(fileVo.getFilePath());
+					programFileMapper.insert(programFile);
+				}
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("发生异常");
+		}
+	}
+
+	/***
+	 * 进入开发
+	 */
+	@Override
+	@Transactional(value="transactionManager")
+	public void development(Map<String, String> paramsMap,Program program) {
+		try{
+			Date now = new Date();
+			//program表
+			program.setProgramStatus(ProgramStatusNewEnum.KFPS.getCode());
+			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
+			program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
+			program.setModifiedName(paramsMap.get("modifiedName"));
+			programMapper.updateByPrimaryKey(program);
+
+			//program快照表
+			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+			BeanUtils.copyProperties(programApprovalSnapshot,program);
+			programApprovalSnapshot.setRemark(paramsMap.get("remark"));
+			programApprovalSnapshot.setCreateTime(now);
+			programApprovalSnapshot.setModifiedTime(now);
+			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+			//附件表
+			String fileStr = paramsMap.get("fileList");
+			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
+				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
+				String a = fileList.get(0).getFileName();
+				for(FileVo fileVo:fileList){
+					ProgramFile programFile = new ProgramFile();
+					programFile.setProgramId(program.getId());
+					programFile.setFileName(fileVo.getFileName());
+					programFile.setFileSuffix(fileVo.getFileSuffix());
+					programFile.setFileSize(fileVo.getFileSize());
+					programFile.setType(ProgramStatusNewEnum.KFPS.getCode());
+					programFile.setCreateTime(new Date());
+					programFile.setFilePath(fileVo.getFilePath());
+					programFileMapper.insert(programFile);
+				}
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("发生异常");
+		}
+	}
+
+	/***
+	 * 测试部署
+	 */
+	@Override
+	@Transactional(value="transactionManager")
+	public void deploy(Map<String, String> paramsMap,Program program) {
+		try{
+			Date now = new Date();
+			//program表
+			program.setProgramStatus(ProgramStatusNewEnum.CSPS.getCode());
+			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
+			program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
+			program.setModifiedName(paramsMap.get("modifiedName"));
+			programMapper.updateByPrimaryKey(program);
+
+			//program快照表
+			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+			BeanUtils.copyProperties(programApprovalSnapshot,program);
+			programApprovalSnapshot.setRemark(paramsMap.get("remark"));
+			programApprovalSnapshot.setCreateTime(now);
+			programApprovalSnapshot.setModifiedTime(now);
+			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+			//附件表
+			String fileStr = paramsMap.get("fileList");
+			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
+				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
+				String a = fileList.get(0).getFileName();
+				for(FileVo fileVo:fileList){
+					ProgramFile programFile = new ProgramFile();
+					programFile.setProgramId(program.getId());
+					programFile.setFileName(fileVo.getFileName());
+					programFile.setFileSuffix(fileVo.getFileSuffix());
+					programFile.setFileSize(fileVo.getFileSize());
+					programFile.setType(ProgramStatusNewEnum.CSPS.getCode());
+					programFile.setCreateTime(new Date());
+					programFile.setFilePath(fileVo.getFilePath());
+					programFileMapper.insert(programFile);
+				}
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("发生异常");
+		}
+	}
+
+	/***
+	 * 上线计划
+	 */
+	@Override
+	@Transactional(value="transactionManager")
+	public void planOnline(Map<String, String> paramsMap,Program program) {
+		try{
+			Date now = new Date();
+			//program表
+			program.setProgramStatus(ProgramStatusNewEnum.SXPS.getCode());
+			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
+			program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
+			program.setModifiedName(paramsMap.get("modifiedName"));
+			programMapper.updateByPrimaryKey(program);
+
+			//program快照表
+			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+			BeanUtils.copyProperties(programApprovalSnapshot,program);
+			programApprovalSnapshot.setRemark(paramsMap.get("remark"));
+			programApprovalSnapshot.setCreateTime(now);
+			programApprovalSnapshot.setModifiedTime(now);
+			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+			//附件表
+			String fileStr = paramsMap.get("fileList");
+			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
+				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
+				String a = fileList.get(0).getFileName();
+				for(FileVo fileVo:fileList){
+					ProgramFile programFile = new ProgramFile();
+					programFile.setProgramId(program.getId());
+					programFile.setFileName(fileVo.getFileName());
+					programFile.setFileSuffix(fileVo.getFileSuffix());
+					programFile.setFileSize(fileVo.getFileSize());
+					programFile.setType(ProgramStatusNewEnum.SXPS.getCode());
+					programFile.setCreateTime(new Date());
+					programFile.setFilePath(fileVo.getFilePath());
+					programFileMapper.insert(programFile);
+				}
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("发生异常");
+		}
+	}
+
+	/***
+	 * 灰度发布
+	 */
+	@Override
+	@Transactional(value="transactionManager")
+	public void release(Map<String, String> paramsMap,Program program) {
+		try{
+			Date now = new Date();
+			//program表
+			program.setProgramStatus(ProgramStatusNewEnum.HDFB.getCode());
+			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
+			program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
+			program.setModifiedName(paramsMap.get("modifiedName"));
+			programMapper.updateByPrimaryKey(program);
+
+			//program快照表
+			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+			BeanUtils.copyProperties(programApprovalSnapshot,program);
+			programApprovalSnapshot.setRemark(paramsMap.get("remark"));
+			programApprovalSnapshot.setCreateTime(now);
+			programApprovalSnapshot.setModifiedTime(now);
+			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+			//附件表
+			String fileStr = paramsMap.get("fileList");
+			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
+				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
+				String a = fileList.get(0).getFileName();
+				for(FileVo fileVo:fileList){
+					ProgramFile programFile = new ProgramFile();
+					programFile.setProgramId(program.getId());
+					programFile.setFileName(fileVo.getFileName());
+					programFile.setFileSuffix(fileVo.getFileSuffix());
+					programFile.setFileSize(fileVo.getFileSize());
+					programFile.setType(ProgramStatusNewEnum.HDFB.getCode());
+					programFile.setCreateTime(new Date());
+					programFile.setFilePath(fileVo.getFilePath());
+					programFileMapper.insert(programFile);
+				}
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("发生异常");
+		}
+	}
+
+	/***
+	 * 延期上线
+	 */
+	@Override
+	@Transactional(value="transactionManager")
+	public void delay(Map<String, String> paramsMap,Program program) {
+		try{
+			Date now = new Date();
+			//program表
+			program.setProgramStatus(ProgramStatusNewEnum.YQSX.getCode());
+
+			program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("releaseDate"),DateUtil.PATTERN_DATE));
+			program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("demandDate"),DateUtil.PATTERN_DATE));
+			program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("developmentDate"),DateUtil.PATTERN_DATE));
+			program.setTestApprovalDate(DateUtil.string2Date(paramsMap.get("testReviewDate"),DateUtil.PATTERN_DATE));
+			program.setOnlinePlanDate(DateUtil.string2Date(paramsMap.get("onlineDate"),DateUtil.PATTERN_DATE));
+
+			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
+			program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
+			program.setModifiedName(paramsMap.get("modifiedName"));
+			programMapper.updateByPrimaryKey(program);
+
+			//program快照表
+			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+			BeanUtils.copyProperties(programApprovalSnapshot,program);
+			programApprovalSnapshot.setRemark(paramsMap.get("remark"));
+			programApprovalSnapshot.setCreateTime(now);
+			programApprovalSnapshot.setModifiedTime(now);
+			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("发生异常");
+		}
+	}
+
+	/***
+	 * 需求变更
+	 */
+	@Override
+	@Transactional(value="transactionManager")
+	public void demandChange(Map<String, String> paramsMap,Program program) {
+		try{
+			Date now = new Date();
+			//program表
+			program.setProgramStatus(ProgramStatusNewEnum.XQBG.getCode());
+
+			program.setDevWorkload(Integer.parseInt(paramsMap.get("devWorkloadChange")));
+			program.setOverallCost(new BigDecimal(paramsMap.get("overallCost")));
+			program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("releaseDate"),DateUtil.PATTERN_DATE));
+			program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("demandDate"),DateUtil.PATTERN_DATE));
+			program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("developmentDate"),DateUtil.PATTERN_DATE));
+			program.setTestApprovalDate(DateUtil.string2Date(paramsMap.get("testReviewDate"),DateUtil.PATTERN_DATE));
+			program.setOnlinePlanDate(DateUtil.string2Date(paramsMap.get("onlineDate"),DateUtil.PATTERN_DATE));
+
+			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
+			program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
+			program.setModifiedName(paramsMap.get("modifiedName"));
+			programMapper.updateByPrimaryKey(program);
+
+			//program快照表
+			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+			BeanUtils.copyProperties(programApprovalSnapshot,program);
+			programApprovalSnapshot.setRemark(paramsMap.get("remark"));
+			programApprovalSnapshot.setCreateTime(now);
+			programApprovalSnapshot.setModifiedTime(now);
+			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+			//附件表
+			String fileStr = paramsMap.get("fileList");
+			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
+				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
+				String a = fileList.get(0).getFileName();
+				for(FileVo fileVo:fileList){
+					ProgramFile programFile = new ProgramFile();
+					programFile.setProgramId(program.getId());
+					programFile.setFileName(fileVo.getFileName());
+					programFile.setFileSuffix(fileVo.getFileSuffix());
+					programFile.setFileSize(fileVo.getFileSize());
+					programFile.setType(ProgramStatusNewEnum.XQBG.getCode());
+					programFile.setCreateTime(new Date());
+					programFile.setFilePath(fileVo.getFilePath());
+					programFileMapper.insert(programFile);
+				}
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("发生异常");
+		}
+	}
 }
