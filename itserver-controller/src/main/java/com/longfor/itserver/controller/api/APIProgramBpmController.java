@@ -3,7 +3,9 @@ package com.longfor.itserver.controller.api;
 import com.alibaba.fastjson.JSON;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
+import com.longfor.itserver.common.enums.ProgramStatusNewEnum;
 import com.longfor.itserver.common.util.CommonUtils;
+import com.longfor.itserver.common.vo.programBpm.ApplyViewVo;
 import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.Program;
 import org.slf4j.Logger;
@@ -25,6 +27,31 @@ import java.util.Map;
 @Controller
 public class APIProgramBpmController extends BaseController {
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+
+	/**
+	 * 查看立项申请
+	 */
+	@RequestMapping(value = "/applyView", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public Map applyView(HttpServletRequest request) throws IOException {
+		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try{
+			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------applyView:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+
+			Program program = this.getProgram(paramsMap);
+			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
+			if(program.getProgramStatus() == ProgramStatusNewEnum.WLX.getCode())
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
+
+			ApplyViewVo applyViewVo = getProgramService().applyView(paramsMap,program);
+			resultMap.put("data",applyViewVo);
+		}catch (Exception e){
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return resultMap;
+	}
 
 	/**
 	 * 提交立项申请

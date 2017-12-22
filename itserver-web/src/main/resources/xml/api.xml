@@ -1080,4 +1080,18 @@
             <property name="workItemId" type="string" required="true"/>
         </request>
     </item>
+
+    <!--
+        URL:
+        /api/program/bpm/applyView
+        说明:查看立项申请
+    -->
+    <item id="api_program_bpm_applyView" description="查看立项申请 ">
+        <request>
+            <property name="programId" type="string" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true"/>
+            <property name="modifiedName" type="string" required="true"/>
+            <property name="accountType" type="int" required="true"/>
+        </request>
+    </item>
 </api>
