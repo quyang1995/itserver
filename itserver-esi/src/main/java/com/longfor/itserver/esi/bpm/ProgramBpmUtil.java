@@ -66,8 +66,9 @@ public class ProgramBpmUtil
      * @param workItemId
      * @return
      */
-    public static boolean returnWorkflowToStart(String oaAccount,String workItemId){
+    public static ApplySubmitResultVo returnWorkflowToStart(String oaAccount,String workItemId){
         String result = BpmUtils.returnWorkflowToStart(oaAccount,workItemId,null);
-        return JSONObject.parseObject(result, ApplySubmitResultVo.class).isSuccess();
+        ApplySubmitResultVo pplySubmitResultVo = JSONObject.parseObject(result, ApplySubmitResultVo.class);
+        return pplySubmitResultVo;
     }
 }
