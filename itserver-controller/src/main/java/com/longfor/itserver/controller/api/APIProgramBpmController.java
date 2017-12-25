@@ -8,6 +8,7 @@ import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.vo.programBpm.ApplyViewVo;
 import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.Program;
+import com.longfor.itserver.entity.ProgramApprovalSnapshot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,8 +46,8 @@ public class APIProgramBpmController extends BaseController {
 			if(program.getProgramStatus() == ProgramStatusNewEnum.WLX.getCode())
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
 
-			ApplyViewVo applyViewVo = getProgramService().applyView(paramsMap,program);
-			resultMap.put("data",applyViewVo);
+//			ApplyViewVo applyViewVo = getProgramService().applyView(paramsMap,program);
+//			resultMap.put("data",applyViewVo);
 		}catch (Exception e){
 			e.printStackTrace();
 			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
@@ -344,4 +346,29 @@ public class APIProgramBpmController extends BaseController {
 		}
 		return resultMap;
 	}
+
+	/**
+	 * 查看
+	 */
+	@RequestMapping(value = "/lookNodes", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public Map lookNodes(HttpServletRequest request) throws IOException {
+		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try{
+			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------lookNodes:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+
+			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+			programApprovalSnapshot.setProductId(Long.parseLong(paramsMap.get("productId")));
+			programApprovalSnapshot.setProgramStatus(Integer.parseInt(paramsMap.get("programStatus")));
+			List<ProgramApprovalSnapshot>  shotList= this.getProgramService().lookNodes(programApprovalSnapshot);
+			resultMap.put("list",shotList);
+		}catch (Exception e){
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return resultMap;
+	}
+
+
 }

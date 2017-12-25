@@ -58,4 +58,40 @@
     bpm_code, remark, approval_view
   </sql>
 
+  <select id="getListByProgramIdAndStatus" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from program_approval_snapshot
+    <where>
+      <if test=" productId != null and productId != '' ">
+          and product_id = #{productId}
+      </if>
+      <if test=" programStatus != null and programStatus != '' ">
+          and program_status = #{programStatus}
+      </if>
+    </where>
+    ORDER  BY  create_time DESC
+  </select>
+
+  <select id="grayLevelList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from program_approval_snapshot
+    <where>
+      <if test=" productId != null and productId != '' ">
+        and product_id = #{productId}
+      </if>
+      <if test=" productId != null and productId != '' ">
+        and approval_status= #{approvalStatus}
+      </if>
+      <if test=" programStatusList != null ">
+        and program_status in
+        <foreach item="item" index="index" collection="programStatusList" open="(" separator="," close=")">
+                #{item}
+        </foreach>
+      </if>
+    </where>
+    ORDER  BY  create_time DESC
+  </select>
+
 </mapper>

@@ -7,19 +7,10 @@ import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProgramFileMapper extends BeeMapper<ProgramFile> {
-    int countByExample(ProgramFileExample example);
 
-    int deleteByExample(ProgramFileExample example);
+    List<ProgramFile> getListByMap(Map<String,Object> map);
 
-    List<ProgramFile> selectByExampleWithBLOBs(ProgramFileExample example);
-
-    List<ProgramFile> selectByExample(ProgramFileExample example);
-
-    int updateByExampleSelective(@Param("record") ProgramFile record, @Param("example") ProgramFileExample example);
-
-    int updateByExampleWithBLOBs(@Param("record") ProgramFile record, @Param("example") ProgramFileExample example);
-
-    int updateByExample(@Param("record") ProgramFile record, @Param("example") ProgramFileExample example);
 }

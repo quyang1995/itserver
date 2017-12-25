@@ -2,6 +2,7 @@ package com.longfor.itserver.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 @Table(name = "program_approval_snapshot")
@@ -176,6 +177,28 @@ public class ProgramApprovalSnapshot {
 
     @Column(name = "bpm_code")
     private String bpmCode;
+
+    @Transient
+    private List<ProgramFile> fileList;
+
+    @Transient
+    private List<ProgramEmployee> empList;
+
+    public List<ProgramEmployee> getEmpList() {
+        return empList;
+    }
+
+    public void setEmpList(List<ProgramEmployee> empList) {
+        this.empList = empList;
+    }
+
+    public List<ProgramFile> getFileList() {
+        return fileList;
+    }
+
+    public void setFileList(List<ProgramFile> fileList) {
+        this.fileList = fileList;
+    }
 
     /**
      * 内容摘要

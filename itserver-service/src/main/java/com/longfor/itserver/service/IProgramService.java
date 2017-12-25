@@ -2,6 +2,7 @@ package com.longfor.itserver.service;
 
 import com.longfor.itserver.common.vo.programBpm.ApplyViewVo;
 import com.longfor.itserver.entity.Program;
+import com.longfor.itserver.entity.ProgramApprovalSnapshot;
 import com.longfor.itserver.service.base.IAdminService;
 
 import java.util.List;
@@ -26,6 +27,8 @@ public interface IProgramService extends IAdminService<Program> {
     List<Program> productIdAllList(Map parsmsMap);
 
     boolean updateStatus(Map paramsMap);
+
+    List<ProgramApprovalSnapshot> lookNodes(ProgramApprovalSnapshot programApprovalSnapshot);
 
     void apply(Map<String, String> paramsMap,Program program);
 
@@ -53,5 +56,5 @@ public interface IProgramService extends IAdminService<Program> {
 
     void demandChange(Map<String, String> paramsMap,Program program);
 
-    ApplyViewVo applyView(Map<String, String> paramsMap, Program program) throws Exception;
+//    ApplyViewVo applyView(Map<String, String> paramsMap, Program program) throws Exception;
 }
