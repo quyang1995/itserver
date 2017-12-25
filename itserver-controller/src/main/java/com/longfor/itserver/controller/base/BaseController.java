@@ -62,6 +62,8 @@ public class BaseController {
     @Autowired
     private IProgramService programService;
     @Autowired
+    private IProgramApprovalSnapshotService programApprovalSnapshotService;
+    @Autowired
     private IFeedBackService feedBackService;
     @Autowired
     private IPsProductService psProductService;
@@ -145,6 +147,10 @@ public class BaseController {
 
     public IProgramService getProgramService() {
         return programService;
+    }
+
+    public IProgramApprovalSnapshotService getProgramApprovalSnapshotService() {
+        return programApprovalSnapshotService;
     }
 
     public IDemandFileService getDemandFileService() {

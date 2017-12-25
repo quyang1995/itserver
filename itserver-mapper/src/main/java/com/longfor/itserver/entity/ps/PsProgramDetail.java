@@ -2,6 +2,7 @@ package com.longfor.itserver.entity.ps;
 
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.Program;
+import com.longfor.itserver.entity.ProgramApprovalSnapshot;
 import com.longfor.itserver.entity.ProgramEmployee;
 
 import javax.persistence.Transient;
@@ -38,6 +39,26 @@ public class PsProgramDetail extends Program implements Serializable {
     private List<ProgramEmployee> testingList;
     @Transient
     private List<ProgramEmployee> businessList;
+    @Transient
+    private List<ProgramApprovalSnapshot> grayLevelList;
+    @Transient
+    private List<ProgramApprovalSnapshot> costRecord;
+
+    public List<ProgramApprovalSnapshot> getCostRecord() {
+        return costRecord;
+    }
+
+    public void setCostRecord(List<ProgramApprovalSnapshot> costRecord) {
+        this.costRecord = costRecord;
+    }
+
+    public List<ProgramApprovalSnapshot> getGrayLevelList() {
+        return grayLevelList;
+    }
+
+    public void setGrayLevelList(List<ProgramApprovalSnapshot> grayLevelList) {
+        this.grayLevelList = grayLevelList;
+    }
 
     public List<Product> getProductList() {
         return productList;

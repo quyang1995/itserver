@@ -1,6 +1,7 @@
 package com.longfor.itserver.service;
 
 import com.longfor.itserver.entity.Program;
+import com.longfor.itserver.entity.ProgramApprovalSnapshot;
 import com.longfor.itserver.service.base.IAdminService;
 
 import java.util.List;
@@ -25,6 +26,8 @@ public interface IProgramService extends IAdminService<Program> {
     List<Program> productIdAllList(Map parsmsMap);
 
     boolean updateStatus(Map paramsMap);
+
+    List<ProgramApprovalSnapshot> lookNodes(ProgramApprovalSnapshot programApprovalSnapshot);
 
     void apply(Map<String, String> paramsMap,Program program);
 

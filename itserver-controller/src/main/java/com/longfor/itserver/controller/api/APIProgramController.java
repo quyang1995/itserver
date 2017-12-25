@@ -3,18 +3,12 @@ package com.longfor.itserver.controller.api;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.longfor.itserver.common.constant.ConfigConsts;
-import com.longfor.itserver.common.enums.AvaStatusEnum;
-import com.longfor.itserver.common.enums.BizEnum;
-import com.longfor.itserver.common.enums.BugStatusEnum;
-import com.longfor.itserver.common.enums.ProgramStatusEnum;
+import com.longfor.itserver.common.enums.*;
 import com.longfor.itserver.common.helper.DataPermissionHelper;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
-import com.longfor.itserver.entity.EmployeeType;
-import com.longfor.itserver.entity.Product;
-import com.longfor.itserver.entity.Program;
-import com.longfor.itserver.entity.ProgramEmployee;
+import com.longfor.itserver.entity.*;
 import com.longfor.itserver.entity.ps.PsProgramDetail;
 import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.helper.APIHelper;
@@ -28,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -186,11 +182,56 @@ public class APIProgramController extends BaseController {
 		map.put("employeeTypeId", new Long(AvaStatusEnum.BUSINESSAVA.getCode()));
 		List<ProgramEmployee> businessList = this.getProgramEmployeeService().selectTypeList(map);
 		program.setBusinessList(businessList);
-
+		/*根據id获取项目快照list*/
+		Map grayLevelMap = new HashMap();
+		grayLevelMap.put("productId", new Long(id));
+		List<ProgramApprovalSnapshot> productList =  this.getProgramApprovalSnapshotService().grayLevelList(grayLevelMap);
+		/* 灰度时间变更记录 */
+		List<ProgramApprovalSnapshot> grayLevelList =  this.getGrayLevelList(productList);
+		program.setGrayLevelList(grayLevelList);
+		/*项目费用记录*/
+		List<ProgramApprovalSnapshot> costRecordList =  this.grayLevelList(productList);
+		program.setGrayLevelList(costRecordList);
 		/* 返回报文 */
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		resultMap.put("data", program);
 		return resultMap;
+	}
+
+	/* 项目费用记录 */
+	private List<ProgramApprovalSnapshot> grayLevelList(List<ProgramApprovalSnapshot> productList){
+		List<ProgramApprovalSnapshot> resultList = new ArrayList<ProgramApprovalSnapshot>();
+		Integer changeDay = 0;
+		BigDecimal bignum = new BigDecimal("0");
+		if (productList != null && !productList.isEmpty()) {
+			for(ProgramApprovalSnapshot model:productList){
+				if (model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+						&& (model.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
+						|| model.getProgramStatus()==ProgramStatusNewEnum.ZBSQ.getCode()
+						|| model.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode())) {
+					changeDay += model.getDevWorkload();
+					bignum.add(model.getOverallCost());
+					resultList.add(model);
+				}
+			}
+		}
+		return  resultList;
+	}
+
+	/* 灰度时间变更记录 */
+	private List<ProgramApprovalSnapshot> getGrayLevelList(List<ProgramApprovalSnapshot> productList){
+		List<ProgramApprovalSnapshot> resultList = new ArrayList<ProgramApprovalSnapshot>();
+		if (productList != null && !productList.isEmpty()) {
+			for(ProgramApprovalSnapshot model:productList){
+				if (model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+						&& (model.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
+								|| model.getProgramStatus()==ProgramStatusNewEnum.YQSX.getCode()
+								|| model.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode())) {
+					resultList.add(model);
+				}
+			}
+		}
+		return  resultList;
 	}
 
 	/**

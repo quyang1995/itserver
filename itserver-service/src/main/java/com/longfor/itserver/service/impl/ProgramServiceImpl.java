@@ -75,6 +75,24 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	}
 
 	@Override
+	public List<ProgramApprovalSnapshot> lookNodes(ProgramApprovalSnapshot programApprovalSnapshot) {
+		List<ProgramApprovalSnapshot> resultList =programApprovalSnapshotMapper.getListByProgramIdAndStatus(programApprovalSnapshot);
+		if (resultList != null && !resultList.isEmpty()) {
+			for (ProgramApprovalSnapshot model:resultList) {
+				Map map = new HashMap();
+				map.put("programId",programApprovalSnapshot.getProductId());
+				map.put("type",programApprovalSnapshot.getProgramStatus());
+				List<ProgramFile> fileList = programFileMapper.getListByMap(map);
+				model.setFileList(fileList);
+				map.put("employeeType","1");
+				List<ProgramEmployee> empList  = programEmployeeMapper.selectTypeList(map);
+				model.setEmpList(empList);
+			}
+		}
+		return resultList;
+	}
+
+	@Override
 	@Transactional
 	public boolean addProgram(Map map) {
 		JSONObject json = (JSONObject) JSONObject.toJSON(map);
@@ -548,22 +566,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
 			//附件表
-			String fileStr = paramsMap.get("fileList");
-			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
-				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
-				String a = fileList.get(0).getFileName();
-				for(FileVo fileVo:fileList){
-					ProgramFile programFile = new ProgramFile();
-					programFile.setProgramId(program.getId());
-					programFile.setFileName(fileVo.getFileName());
-					programFile.setFileSuffix(fileVo.getFileSuffix());
-					programFile.setFileSize(fileVo.getFileSize());
-					programFile.setType(ProgramStatusNewEnum.LX.getCode());
-					programFile.setCreateTime(new Date());
-					programFile.setFilePath(fileVo.getFilePath());
-					programFileMapper.insert(programFile);
-				}
-			}
+			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.LX.getCode());
 
 			//激活流程
 			ProgramBpmUtil.applySumbmitWorkItem(
@@ -671,22 +674,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
 			//附件表
-			String fileStr = paramsMap.get("fileList");
-			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
-				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
-				String a = fileList.get(0).getFileName();
-				for(FileVo fileVo:fileList){
-					ProgramFile programFile = new ProgramFile();
-					programFile.setProgramId(program.getId());
-					programFile.setFileName(fileVo.getFileName());
-					programFile.setFileSuffix(fileVo.getFileSuffix());
-					programFile.setFileSize(fileVo.getFileSize());
-					programFile.setType(ProgramStatusNewEnum.DPS.getCode());
-					programFile.setCreateTime(new Date());
-					programFile.setFilePath(fileVo.getFilePath());
-					programFileMapper.insert(programFile);
-				}
-			}
+			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.DPS.getCode());
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("发生异常");
@@ -717,22 +705,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
 			//附件表
-			String fileStr = paramsMap.get("fileList");
-			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
-				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
-				String a = fileList.get(0).getFileName();
-				for(FileVo fileVo:fileList){
-					ProgramFile programFile = new ProgramFile();
-					programFile.setProgramId(program.getId());
-					programFile.setFileName(fileVo.getFileName());
-					programFile.setFileSuffix(fileVo.getFileSuffix());
-					programFile.setFileSize(fileVo.getFileSize());
-					programFile.setType(ProgramStatusNewEnum.ZTBSQ.getCode());
-					programFile.setCreateTime(new Date());
-					programFile.setFilePath(fileVo.getFilePath());
-					programFileMapper.insert(programFile);
-				}
-			}
+			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.ZTBSQ.getCode());
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("发生异常");
@@ -766,22 +739,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
 			//附件表
-			String fileStr = paramsMap.get("fileList");
-			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
-				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
-				String a = fileList.get(0).getFileName();
-				for(FileVo fileVo:fileList){
-					ProgramFile programFile = new ProgramFile();
-					programFile.setProgramId(program.getId());
-					programFile.setFileName(fileVo.getFileName());
-					programFile.setFileSuffix(fileVo.getFileSuffix());
-					programFile.setFileSize(fileVo.getFileSize());
-					programFile.setType(ProgramStatusNewEnum.ZBSQ.getCode());
-					programFile.setCreateTime(new Date());
-					programFile.setFilePath(fileVo.getFilePath());
-					programFileMapper.insert(programFile);
-				}
-			}
+			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.ZBSQ.getCode());
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("发生异常");
@@ -818,22 +776,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
 			//附件表
-			String fileStr = paramsMap.get("fileList");
-			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
-				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
-				String a = fileList.get(0).getFileName();
-				for(FileVo fileVo:fileList){
-					ProgramFile programFile = new ProgramFile();
-					programFile.setProgramId(program.getId());
-					programFile.setFileName(fileVo.getFileName());
-					programFile.setFileSuffix(fileVo.getFileSuffix());
-					programFile.setFileSize(fileVo.getFileSize());
-					programFile.setType(ProgramStatusNewEnum.CPPS.getCode());
-					programFile.setCreateTime(new Date());
-					programFile.setFilePath(fileVo.getFilePath());
-					programFileMapper.insert(programFile);
-				}
-			}
+			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.CPPS.getCode());
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("发生异常");
@@ -864,22 +807,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
 			//附件表
-			String fileStr = paramsMap.get("fileList");
-			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
-				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
-				String a = fileList.get(0).getFileName();
-				for(FileVo fileVo:fileList){
-					ProgramFile programFile = new ProgramFile();
-					programFile.setProgramId(program.getId());
-					programFile.setFileName(fileVo.getFileName());
-					programFile.setFileSuffix(fileVo.getFileSuffix());
-					programFile.setFileSize(fileVo.getFileSize());
-					programFile.setType(ProgramStatusNewEnum.KFPS.getCode());
-					programFile.setCreateTime(new Date());
-					programFile.setFilePath(fileVo.getFilePath());
-					programFileMapper.insert(programFile);
-				}
-			}
+			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.KFPS.getCode());
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("发生异常");
@@ -910,22 +838,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
 			//附件表
-			String fileStr = paramsMap.get("fileList");
-			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
-				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
-				String a = fileList.get(0).getFileName();
-				for(FileVo fileVo:fileList){
-					ProgramFile programFile = new ProgramFile();
-					programFile.setProgramId(program.getId());
-					programFile.setFileName(fileVo.getFileName());
-					programFile.setFileSuffix(fileVo.getFileSuffix());
-					programFile.setFileSize(fileVo.getFileSize());
-					programFile.setType(ProgramStatusNewEnum.CSPS.getCode());
-					programFile.setCreateTime(new Date());
-					programFile.setFilePath(fileVo.getFilePath());
-					programFileMapper.insert(programFile);
-				}
-			}
+			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.CSPS.getCode());
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("发生异常");
@@ -956,22 +869,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
 			//附件表
-			String fileStr = paramsMap.get("fileList");
-			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
-				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
-				String a = fileList.get(0).getFileName();
-				for(FileVo fileVo:fileList){
-					ProgramFile programFile = new ProgramFile();
-					programFile.setProgramId(program.getId());
-					programFile.setFileName(fileVo.getFileName());
-					programFile.setFileSuffix(fileVo.getFileSuffix());
-					programFile.setFileSize(fileVo.getFileSize());
-					programFile.setType(ProgramStatusNewEnum.SXPS.getCode());
-					programFile.setCreateTime(new Date());
-					programFile.setFilePath(fileVo.getFilePath());
-					programFileMapper.insert(programFile);
-				}
-			}
+			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.SXPS.getCode());
+
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("发生异常");
@@ -1002,22 +901,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
 			//附件表
-			String fileStr = paramsMap.get("fileList");
-			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
-				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
-				String a = fileList.get(0).getFileName();
-				for(FileVo fileVo:fileList){
-					ProgramFile programFile = new ProgramFile();
-					programFile.setProgramId(program.getId());
-					programFile.setFileName(fileVo.getFileName());
-					programFile.setFileSuffix(fileVo.getFileSuffix());
-					programFile.setFileSize(fileVo.getFileSize());
-					programFile.setType(ProgramStatusNewEnum.HDFB.getCode());
-					programFile.setCreateTime(new Date());
-					programFile.setFilePath(fileVo.getFilePath());
-					programFileMapper.insert(programFile);
-				}
-			}
+			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.HDFB.getCode());
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("发生异常");
@@ -1093,25 +977,29 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
 			//附件表
-			String fileStr = paramsMap.get("fileList");
-			if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
-				List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
-				String a = fileList.get(0).getFileName();
-				for(FileVo fileVo:fileList){
-					ProgramFile programFile = new ProgramFile();
-					programFile.setProgramId(program.getId());
-					programFile.setFileName(fileVo.getFileName());
-					programFile.setFileSuffix(fileVo.getFileSuffix());
-					programFile.setFileSize(fileVo.getFileSize());
-					programFile.setType(ProgramStatusNewEnum.XQBG.getCode());
-					programFile.setCreateTime(new Date());
-					programFile.setFilePath(fileVo.getFilePath());
-					programFileMapper.insert(programFile);
-				}
-			}
+			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.XQBG.getCode());
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("发生异常");
 		}
 	}
+
+	private void dealFileList(String fileStr,Long programId , int programStatus){
+		if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
+			List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
+			String a = fileList.get(0).getFileName();
+			for(FileVo fileVo:fileList){
+				ProgramFile programFile = new ProgramFile();
+				programFile.setProgramId(programId);
+				programFile.setFileName(fileVo.getFileName());
+				programFile.setFileSuffix(fileVo.getFileSuffix());
+				programFile.setFileSize(fileVo.getFileSize());
+				programFile.setType(programStatus);
+				programFile.setCreateTime(new Date());
+				programFile.setFilePath(fileVo.getFilePath());
+				programFileMapper.insert(programFile);
+			}
+		}
+	}
+
 }
