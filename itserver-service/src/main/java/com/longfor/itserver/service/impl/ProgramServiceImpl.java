@@ -7,7 +7,10 @@ import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.*;
 import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.common.util.StringUtil;
+import com.longfor.itserver.common.vo.programBpm.ApplyViewVo;
+import com.longfor.itserver.common.vo.programBpm.ProgramManagerVo;
 import com.longfor.itserver.common.vo.programBpm.common.ApplyCreateResultVo;
+import com.longfor.itserver.common.vo.programBpm.common.ApplySubmitResultVo;
 import com.longfor.itserver.common.vo.programBpm.common.FileVo;
 import com.longfor.itserver.entity.*;
 import com.longfor.itserver.esi.bpm.ProgramBpmUtil;
@@ -18,6 +21,8 @@ import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.TimeUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +36,7 @@ import java.util.*;
  */
 @Service("ProgramService")
 public class ProgramServiceImpl extends AdminBaseService<Program> implements IProgramService {
-
+	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	private ProgramMapper programMapper;
 
@@ -534,6 +539,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			//创建流程
 			ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
 			if(!applyCreateResultVo.isSuccess()){
+				LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
 				throw new RuntimeException("创建流程失败");
 			}
 
@@ -569,8 +575,13 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.LX.getCode());
 
 			//激活流程
-			ProgramBpmUtil.applySumbmitWorkItem(
+			ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
 					paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
+
+			if(!pplySubmitResultVo.isSuccess()){
+				LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("激活流程失败");
+			}
 
 		}catch (Exception e){
 			e.printStackTrace();
@@ -585,6 +596,17 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	@Transactional(value="transactionManager")
 	public void approvalPass(Map<String, String> paramsMap,Program program) {
 		try{
+			//提交流程
+			ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
+					paramsMap.get("modifiedAccountId"),paramsMap.get("workItemId"));
+			if(!pplySubmitResultVo.isSuccess()){
+				LOG.error("提交流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("提交流程失败");
+			}
+			if("NEXT_STAGE".equals(pplySubmitResultVo.getInstanceState())){
+				return;
+			}
+
 			Date now = new Date();
 			//更新项目表
 			program.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
@@ -604,10 +626,6 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			programApprovalSnapshot.setCreateTime(now);
 			programApprovalSnapshot.setModifiedTime(now);
 			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
-
-			//提交流程
-			ProgramBpmUtil.applySumbmitWorkItem(
-					paramsMap.get("modifiedAccountId"),paramsMap.get("workItemId"));
 
 		}catch (Exception e){
 			e.printStackTrace();
@@ -999,7 +1017,60 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 				programFile.setFilePath(fileVo.getFilePath());
 				programFileMapper.insert(programFile);
 			}
+
+
+	/***
+	 * 查看提交立项申请
+	 */
+	@Override
+	public ApplyViewVo applyView(Map<String, String> paramsMap, Program program) throws Exception{
+		ApplyViewVo applyViewVo = new ApplyViewVo();
+		applyViewVo.setProgramName(program.getName());
+
+		//项目经理
+		ProgramEmployee programEmployee = new ProgramEmployee();
+		programEmployee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
+		programEmployee.setEmployeeTypeId(new Long(AvaStatusEnum.PROGAVA.getCode()));
+		programEmployee.setProgramId(program.getId());
+		List<ProgramEmployee> programEmployeeList = programEmployeeMapper.select(programEmployee);
+		List<ProgramManagerVo> programManagerList = new ArrayList<>();
+		for(ProgramEmployee programEmployeeTmp:programEmployeeList){
+			ProgramManagerVo programManagerVo = new ProgramManagerVo();
+			programManagerVo.setProgramManagerName(programEmployeeTmp.getEmployeeName());
+			programManagerList.add(programManagerVo);
 		}
+		applyViewVo.setProgramManagerList(programManagerList);
+
+		//查询所有快照
+		ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+		programApprovalSnapshot.setId(program.getId());
+		programApprovalSnapshot.setProgramStatus(ProgramStatusNewEnum.LX.getCode());
+		List<ProgramApprovalSnapshot> programApprovalSnapshotList =
+				programApprovalSnapshotMapper.select(programApprovalSnapshot);
+
+		applyViewVo.setRemark(programApprovalSnapshotList.get(0).getRemark());
+
+		//附件
+		List<FileVo> fileVoList = new ArrayList<>();
+		ProgramFile programFile = new ProgramFile();
+		programFile.setProgramId(program.getId());
+		programFile.setType(ProgramStatusNewEnum.LX.getCode());
+		List<ProgramFile> programFileList = programFileMapper.select(programFile);
+		for(ProgramFile programFileTmp:programFileList){
+			FileVo fileVo = new FileVo();
+			fileVo.setFileName(programFileTmp.getFileName());
+			fileVo.setFilePath(programFileTmp.getFilePath());
+			fileVoList.add(fileVo);
+		}
+		applyViewVo.setFileList(fileVoList);
+		return applyViewVo;
 	}
 
+//	private int getApprovelStatus(List<ProgramApprovalSnapshot> programApprovalSnapshotList){
+//		for(ProgramApprovalSnapshot programApprovalSnapshot:programApprovalSnapshotList){
+//			programApprovalSnapshot.getApprovalStatus();
+//			ProgramApprovalStatusEnum.SHTG
+//
+//		}
+//	}
 }

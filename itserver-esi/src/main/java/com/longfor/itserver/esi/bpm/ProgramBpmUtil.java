@@ -54,9 +54,10 @@ public class ProgramBpmUtil
      * @param workItemId
      * @return
      */
-    public static boolean applySumbmitWorkItem(String oaAccount,String workItemId){
+    public static ApplySubmitResultVo applySumbmitWorkItem(String oaAccount,String workItemId){
         String result = BpmUtils.submitWorkItem(oaAccount,workItemId,null,null);
-        return JSONObject.parseObject(result, ApplySubmitResultVo.class).isSuccess();
+        ApplySubmitResultVo pplySubmitResultVo = JSONObject.parseObject(result, ApplySubmitResultVo.class);
+        return pplySubmitResultVo;
     }
 
     /***
