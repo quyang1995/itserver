@@ -1293,7 +1293,7 @@
     -->
     <item id="api_program_bpm_lookNodes" description="查看节点信息">
         <request>
-            <property name="productId" type="string" required="true"/>
+            <property name="id" type="string" required="true"/>
             <property name="programStatus" type="string" required="true"/>
         </request>
     </item>
