@@ -40,6 +40,7 @@
         <result column="bid_dev_workload" jdbcType="INTEGER" property="bidDevWorkload"/>
         <result column="bid_overall_cost" jdbcType="DECIMAL" property="bidOverallCost"/>
         <result column="approval_status" jdbcType="DECIMAL" property="approvalStatus"/>
+        <result column="bid_oversingle_cost" property="bidOversingleCost" jdbcType="DECIMAL" />
     </resultMap>
 
     <resultMap id="ProgramResultMap" type="com.longfor.itserver.entity.ps.PsProgram">
@@ -70,7 +71,7 @@
         ued_date, architecture_date, like_product, like_program, type, program_status, modified_account_id, modified_name,
         create_time, modified_time,demo_approval_date,bidding_date,winning_bid_date,prod_approval_date,dev_approval_date
         ,test_approval_date,online_plan_date,dev_type,analyzing_conditions,dev_workload,overall_cost,bid_dev_workload
-        ,bid_overall_cost,approval_status
+        ,bid_overall_cost,approval_status,bid_oversingle_cost
     </sql>
 
     <!-- 项目列表 -->

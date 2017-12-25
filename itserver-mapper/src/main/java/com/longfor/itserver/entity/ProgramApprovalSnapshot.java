@@ -157,6 +157,9 @@ public class ProgramApprovalSnapshot {
     @Column(name = "overall_cost")
     private BigDecimal overallCost;
 
+    @Column(name = "bid_oversingle_cost")
+    private BigDecimal bidOversingleCost;
+
     /**
      * 研发工作量
      */
@@ -733,6 +736,14 @@ public class ProgramApprovalSnapshot {
      */
     public void setOverallCost(BigDecimal overallCost) {
         this.overallCost = overallCost;
+    }
+
+    public BigDecimal getBidOversingleCost() {
+        return bidOversingleCost;
+    }
+
+    public void setBidOversingleCost(BigDecimal bidOversingleCost) {
+        this.bidOversingleCost = bidOversingleCost;
     }
 
     /**

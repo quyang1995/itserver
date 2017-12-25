@@ -44,6 +44,8 @@ public class Program implements Serializable {
     private int bidDevWorkload;
     @Column(name = "bid_overall_cost")
     private BigDecimal bidOverallCost;
+    @Column(name = "bid_oversingle_cost")
+    private BigDecimal bidOversingleCost;
     @Column(name = "approval_status")
     private int approvalStatus;
 
@@ -167,6 +169,14 @@ public class Program implements Serializable {
     @Column(name = "modified_time")
     @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date modifiedTime;
+
+    public BigDecimal getBidOversingleCost() {
+        return bidOversingleCost;
+    }
+
+    public void setBidOversingleCost(BigDecimal bidOversingleCost) {
+        this.bidOversingleCost = bidOversingleCost;
+    }
 
     /**
      * @return id

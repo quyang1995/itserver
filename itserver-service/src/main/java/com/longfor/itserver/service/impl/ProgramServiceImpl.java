@@ -741,8 +741,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			//program表
 			program.setProgramStatus(ProgramStatusNewEnum.ZBSQ.getCode());
 			program.setOverallCost(new BigDecimal(paramsMap.get("overallCost")));
-			program.setCommitDate(DateUtil.string2Date(paramsMap.get("commitDate"),DateUtil.PATTERN_DATE));
-			program.setDemoApprovalDate(DateUtil.string2Date(paramsMap.get("demoApprovalDate"),DateUtil.PATTERN_DATE));
+			program.setBidDevWorkload(Integer.parseInt(paramsMap.get("overallCost")));
+			program.setBidOversingleCost(new BigDecimal(paramsMap.get("bidOversingleCost")));
 			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
 			program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
 			program.setModifiedName(paramsMap.get("modifiedName"));

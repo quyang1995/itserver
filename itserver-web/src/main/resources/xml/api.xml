@@ -1140,8 +1140,8 @@
             <property name="remark" type="string" required="true"/>
             <property name="fileList" type="string" required="false"/>
             <property name="overallCost" type="string" required="true"/>
-            <property name="commitDate" type="string" required="false"/>
-            <property name="demoApprovalDate" type="string" required="false"/>
+            <property name="bidDevWorkload" type="string" required="false"/>
+            <property name="bidOversingleCost" type="string" required="false"/>
             <property name="counterSigners" type="string" required="false"/>
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
