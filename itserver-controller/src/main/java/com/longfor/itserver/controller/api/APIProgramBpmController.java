@@ -46,8 +46,8 @@ public class APIProgramBpmController extends BaseController {
 			if(program.getProgramStatus() == ProgramStatusNewEnum.WLX.getCode())
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
 
-			ApplyViewVo applyViewVo = getProgramService().applyView(paramsMap,program);
-			resultMap.put("data",applyViewVo);
+//			ApplyViewVo applyViewVo = getProgramService().applyView(paramsMap,program);
+//			resultMap.put("data",applyViewVo);
 		}catch (Exception e){
 			e.printStackTrace();
 			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);

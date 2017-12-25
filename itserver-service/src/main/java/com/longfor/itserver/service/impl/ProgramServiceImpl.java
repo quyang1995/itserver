@@ -1002,11 +1002,11 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		}
 	}
 
-	private void dealFileList(String fileStr,Long programId , int programStatus){
-		if(org.apache.commons.lang.StringUtils.isNotBlank(fileStr)){
-			List<FileVo> fileList = JSON.parseArray(fileStr,FileVo.class);
+	private void dealFileList(String fileStr,Long programId , int programStatus) {
+		if (org.apache.commons.lang.StringUtils.isNotBlank(fileStr)) {
+			List<FileVo> fileList = JSON.parseArray(fileStr, FileVo.class);
 			String a = fileList.get(0).getFileName();
-			for(FileVo fileVo:fileList){
+			for (FileVo fileVo : fileList) {
 				ProgramFile programFile = new ProgramFile();
 				programFile.setProgramId(programId);
 				programFile.setFileName(fileVo.getFileName());
@@ -1017,54 +1017,55 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 				programFile.setFilePath(fileVo.getFilePath());
 				programFileMapper.insert(programFile);
 			}
-
+		}
+	}
 
 	/***
 	 * 查看提交立项申请
 	 */
-	@Override
-	public ApplyViewVo applyView(Map<String, String> paramsMap, Program program) throws Exception{
-		ApplyViewVo applyViewVo = new ApplyViewVo();
-		applyViewVo.setProgramName(program.getName());
-
-		//项目经理
-		ProgramEmployee programEmployee = new ProgramEmployee();
-		programEmployee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
-		programEmployee.setEmployeeTypeId(new Long(AvaStatusEnum.PROGAVA.getCode()));
-		programEmployee.setProgramId(program.getId());
-		List<ProgramEmployee> programEmployeeList = programEmployeeMapper.select(programEmployee);
-		List<ProgramManagerVo> programManagerList = new ArrayList<>();
-		for(ProgramEmployee programEmployeeTmp:programEmployeeList){
-			ProgramManagerVo programManagerVo = new ProgramManagerVo();
-			programManagerVo.setProgramManagerName(programEmployeeTmp.getEmployeeName());
-			programManagerList.add(programManagerVo);
-		}
-		applyViewVo.setProgramManagerList(programManagerList);
-
-		//查询所有快照
-		ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-		programApprovalSnapshot.setId(program.getId());
-		programApprovalSnapshot.setProgramStatus(ProgramStatusNewEnum.LX.getCode());
-		List<ProgramApprovalSnapshot> programApprovalSnapshotList =
-				programApprovalSnapshotMapper.select(programApprovalSnapshot);
-
-		applyViewVo.setRemark(programApprovalSnapshotList.get(0).getRemark());
-
-		//附件
-		List<FileVo> fileVoList = new ArrayList<>();
-		ProgramFile programFile = new ProgramFile();
-		programFile.setProgramId(program.getId());
-		programFile.setType(ProgramStatusNewEnum.LX.getCode());
-		List<ProgramFile> programFileList = programFileMapper.select(programFile);
-		for(ProgramFile programFileTmp:programFileList){
-			FileVo fileVo = new FileVo();
-			fileVo.setFileName(programFileTmp.getFileName());
-			fileVo.setFilePath(programFileTmp.getFilePath());
-			fileVoList.add(fileVo);
-		}
-		applyViewVo.setFileList(fileVoList);
-		return applyViewVo;
-	}
+//	@Override
+//	public ApplyViewVo applyView(Map<String, String> paramsMap, Program program) throws Exception{
+//		ApplyViewVo applyViewVo = new ApplyViewVo();
+//		applyViewVo.setProgramName(program.getName());
+//
+//		//项目经理
+//		ProgramEmployee programEmployee = new ProgramEmployee();
+//		programEmployee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
+//		programEmployee.setEmployeeTypeId(new Long(AvaStatusEnum.PROGAVA.getCode()));
+//		programEmployee.setProgramId(program.getId());
+//		List<ProgramEmployee> programEmployeeList = programEmployeeMapper.select(programEmployee);
+//		List<ProgramManagerVo> programManagerList = new ArrayList<>();
+//		for(ProgramEmployee programEmployeeTmp:programEmployeeList){
+//			ProgramManagerVo programManagerVo = new ProgramManagerVo();
+//			programManagerVo.setProgramManagerName(programEmployeeTmp.getEmployeeName());
+//			programManagerList.add(programManagerVo);
+//		}
+//		applyViewVo.setProgramManagerList(programManagerList);
+//
+//		//查询所有快照
+//		ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+//		programApprovalSnapshot.setId(program.getId());
+//		programApprovalSnapshot.setProgramStatus(ProgramStatusNewEnum.LX.getCode());
+//		List<ProgramApprovalSnapshot> programApprovalSnapshotList =
+//				programApprovalSnapshotMapper.select(programApprovalSnapshot);
+//
+//		applyViewVo.setRemark(programApprovalSnapshotList.get(0).getRemark());
+//
+//		//附件
+//		List<FileVo> fileVoList = new ArrayList<>();
+//		ProgramFile programFile = new ProgramFile();
+//		programFile.setProgramId(program.getId());
+//		programFile.setType(ProgramStatusNewEnum.LX.getCode());
+//		List<ProgramFile> programFileList = programFileMapper.select(programFile);
+//		for(ProgramFile programFileTmp:programFileList){
+//			FileVo fileVo = new FileVo();
+//			fileVo.setFileName(programFileTmp.getFileName());
+//			fileVo.setFilePath(programFileTmp.getFilePath());
+//			fileVoList.add(fileVo);
+//		}
+//		applyViewVo.setFileList(fileVoList);
+//		return applyViewVo;
+//	}
 
 //	private int getApprovelStatus(List<ProgramApprovalSnapshot> programApprovalSnapshotList){
 //		for(ProgramApprovalSnapshot programApprovalSnapshot:programApprovalSnapshotList){
@@ -1074,3 +1075,4 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 //		}
 //	}
 }
+
