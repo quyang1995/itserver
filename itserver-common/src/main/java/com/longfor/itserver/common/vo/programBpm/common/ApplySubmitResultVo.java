@@ -4,7 +4,7 @@ package com.longfor.itserver.common.vo.programBpm.common;
 import java.util.List;
 
 public class ApplySubmitResultVo {
-    private boolean  IsSuccess;
+    private String  IsSuccess;
     private String WorkItemUrl;
     private List<NextPersonVo> NextPersons;
     private String InstanceState;
@@ -43,11 +43,11 @@ public class ApplySubmitResultVo {
         ErrorMessage = errorMessage;
     }
 
-    public boolean isSuccess() {
+    public String getIsSuccess() {
         return IsSuccess;
     }
 
-    public void setSuccess(boolean success) {
-        IsSuccess = success;
+    public void setIsSuccess(String isSuccess) {
+        IsSuccess = isSuccess;
     }
 }

@@ -575,7 +575,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
 					paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
 
-			if(!pplySubmitResultVo.isSuccess()){
+			if(pplySubmitResultVo.getIsSuccess().equals("false")){
 				LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
 				throw new RuntimeException("激活流程失败");
 			}
@@ -596,11 +596,11 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			//提交流程
 			ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
 					paramsMap.get("modifiedAccountId"),paramsMap.get("workItemId"));
-			if(!pplySubmitResultVo.isSuccess()){
+			if(pplySubmitResultVo.getIsSuccess().equals("false")){
 				LOG.error("提交流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
 				throw new RuntimeException("提交流程失败");
 			}
-			if("NEXT_STAGE".equals(pplySubmitResultVo.getInstanceState())){
+			if(!"ALLEND".equals(pplySubmitResultVo.getInstanceState())){
 				return;
 			}
 
@@ -637,6 +637,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	@Transactional(value="transactionManager")
 	public void approvalRebut(Map<String, String> paramsMap,Program program) {
 		try{
+			//提交流程
+			ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.returnWorkflowToStart(
+					paramsMap.get("modifiedAccountId"),paramsMap.get("workItemId"));
+			if(pplySubmitResultVo.getIsSuccess().equals("false")){
+				LOG.error("提交流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("提交流程失败");
+			}
+
 			//更新项目表
 			program.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
 			programMapper.updateByPrimaryKey(program);
@@ -653,10 +661,6 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			BeanUtils.copyProperties(programApprovalSnapshot,program);
 			programApprovalSnapshot.setBpmCode(bpmCode);
 			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
-
-			//提交流程
-			ProgramBpmUtil.applySumbmitWorkItem(
-					paramsMap.get("modifiedAccountId"),paramsMap.get("workItemId"));
 
 		}catch (Exception e){
 			e.printStackTrace();
