@@ -62,5 +62,7 @@ public interface IProgramService extends IAdminService<Program> {
 
     void demandChange(Map<String, String> paramsMap,Program program);
 
+    void stopProgram(Map<String, String> paramsMap,Program program);
+
 //    ApplyViewVo applyView(Map<String, String> paramsMap, Program program) throws Exception;
 }

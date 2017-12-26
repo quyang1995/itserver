@@ -1249,6 +1249,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 			//program快照表
 			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+			programApprovalSnapshot.setProgramStatus(ProgramStatusNewEnum.XQBG.getCode());
 			BeanUtils.copyProperties(programApprovalSnapshot,program);
 			programApprovalSnapshot.setRemark(paramsMap.get("remark"));
 			programApprovalSnapshot.setCreateTime(now);
@@ -1265,6 +1266,40 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 				LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
 				throw new RuntimeException("激活流程失败");
 			}
+
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("发生异常");
+		}
+	}
+
+	/***
+	 * 终止项目
+	 */
+	@Override
+	@Transactional(value="transactionManager")
+	public void stopProgram(Map<String, String> paramsMap,Program program) {
+		try{
+			Date now = new Date();
+
+			//创建流程
+
+			//program表
+			program.setProgramStatus(ProgramStatusNewEnum.ZZSQ.getCode());
+			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
+			program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
+			program.setModifiedName(paramsMap.get("modifiedName"));
+			programMapper.updateByPrimaryKey(program);
+
+			//program快照表
+			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+			program.setProgramStatus(ProgramStatusNewEnum.ZZSQ.getCode());
+			BeanUtils.copyProperties(programApprovalSnapshot,program);
+			programApprovalSnapshot.setCreateTime(now);
+			programApprovalSnapshot.setModifiedTime(now);
+			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+			//激活流程
 
 		}catch (Exception e){
 			e.printStackTrace();

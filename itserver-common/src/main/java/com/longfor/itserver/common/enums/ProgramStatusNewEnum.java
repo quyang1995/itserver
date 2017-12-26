@@ -21,6 +21,7 @@ public enum ProgramStatusNewEnum {
     XMFP(195, "项目复盘"),
     YQSX(200, "延期上线"),
     XQBG(210, "需求变更"),
+    ZZSQ(220, "终止申请"),
     WC(900, "完成"),
     ZZ(999, "终止");
 

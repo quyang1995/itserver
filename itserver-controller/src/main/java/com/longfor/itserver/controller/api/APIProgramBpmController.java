@@ -383,6 +383,28 @@ public class APIProgramBpmController extends BaseController {
 		return resultMap;
 	}
 
+    /**
+     * 终止项目
+     */
+    @RequestMapping(value = "/stopProgram", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+    @ResponseBody
+    public Map stopProgram(HttpServletRequest request) throws IOException {
+        Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        try{
+            Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+            LOG.info("------stopProgram:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+
+            Program program = this.getProgram(paramsMap);
+            if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
+
+            getProgramService().stopProgram(paramsMap,program);
+        }catch (Exception e){
+            e.printStackTrace();
+            resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+        }
+        return resultMap;
+    }
+
 	/**
 	 * 查看
 	 */
