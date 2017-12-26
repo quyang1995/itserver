@@ -55,7 +55,7 @@ public class ProgramBpmUtil
      * @return
      */
     public static ApplySubmitResultVo applySumbmitWorkItem(String oaAccount,String workItemId){
-        String result = BpmUtils.submitWorkItem(oaAccount,workItemId,null,null);
+        String result = BpmUtils.submitWorkItem(oaAccount,workItemId,null,"我是审批意见");
         ApplySubmitResultVo pplySubmitResultVo = JSONObject.parseObject(result, ApplySubmitResultVo.class);
         return pplySubmitResultVo;
     }

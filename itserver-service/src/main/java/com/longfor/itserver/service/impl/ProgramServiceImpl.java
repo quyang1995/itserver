@@ -680,6 +680,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	public void demoReview(Map<String, String> paramsMap,Program program) {
 		try{
 			Date now = new Date();
+
+			//创建流程
+			ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
+			if(!applyCreateResultVo.isSuccess()){
+				LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("创建流程失败");
+			}
+
 			//program表
 			program.setProgramStatus(ProgramStatusNewEnum.DPS.getCode());
 			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
@@ -697,6 +705,15 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 			//附件表
 			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.DPS.getCode());
+
+
+			//激活流程
+			ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
+					paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
+			if(pplySubmitResultVo.getIsSuccess().equals("false")){
+				LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("激活流程失败");
+			}
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("发生异常");
@@ -711,6 +728,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	public void tenderFile(Map<String, String> paramsMap,Program program) {
 		try{
 			Date now = new Date();
+
+			//创建流程
+			ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
+			if(!applyCreateResultVo.isSuccess()){
+				LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("创建流程失败");
+			}
+
 			//program表
 			program.setProgramStatus(ProgramStatusNewEnum.ZTBSQ.getCode());
 			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
@@ -728,6 +753,15 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 			//附件表
 			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.ZTBSQ.getCode());
+
+			//激活流程
+			ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
+					paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
+			if(pplySubmitResultVo.getIsSuccess().equals("false")){
+				LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("激活流程失败");
+			}
+
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("发生异常");
@@ -742,6 +776,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	public void bidNotice(Map<String, String> paramsMap,Program program) {
 		try{
 			Date now = new Date();
+
+			//创建流程
+			ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
+			if(!applyCreateResultVo.isSuccess()){
+				LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("创建流程失败");
+			}
+
 			//program表
 			program.setProgramStatus(ProgramStatusNewEnum.ZBSQ.getCode());
 			program.setOverallCost(new BigDecimal(paramsMap.get("overallCost")));
@@ -762,6 +804,15 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 			//附件表
 			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.ZBSQ.getCode());
+
+			//激活流程
+			ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
+					paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
+			if(pplySubmitResultVo.getIsSuccess().equals("false")){
+				LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("激活流程失败");
+			}
+
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("发生异常");
@@ -776,6 +827,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	public void productReview(Map<String, String> paramsMap,Program program) {
 		try{
 			Date now = new Date();
+
+			//创建流程
+			ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
+			if(!applyCreateResultVo.isSuccess()){
+				LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("创建流程失败");
+			}
+
 			//program表
 			program.setProgramStatus(ProgramStatusNewEnum.CPPS.getCode());
 
@@ -799,6 +858,15 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 			//附件表
 			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.CPPS.getCode());
+
+			//激活流程
+			ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
+					paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
+			if(pplySubmitResultVo.getIsSuccess().equals("false")){
+				LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("激活流程失败");
+			}
+
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("发生异常");
@@ -813,6 +881,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	public void development(Map<String, String> paramsMap,Program program) {
 		try{
 			Date now = new Date();
+
+			//创建流程
+			ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
+			if(!applyCreateResultVo.isSuccess()){
+				LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("创建流程失败");
+			}
+
 			//program表
 			program.setProgramStatus(ProgramStatusNewEnum.KFPS.getCode());
 			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
@@ -830,6 +906,15 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 			//附件表
 			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.KFPS.getCode());
+
+			//激活流程
+			ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
+					paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
+			if(pplySubmitResultVo.getIsSuccess().equals("false")){
+				LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("激活流程失败");
+			}
+
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("发生异常");
@@ -844,6 +929,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	public void deploy(Map<String, String> paramsMap,Program program) {
 		try{
 			Date now = new Date();
+
+			//创建流程
+			ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
+			if(!applyCreateResultVo.isSuccess()){
+				LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("创建流程失败");
+			}
+
 			//program表
 			program.setProgramStatus(ProgramStatusNewEnum.CSPS.getCode());
 			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
@@ -861,6 +954,15 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 			//附件表
 			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.CSPS.getCode());
+
+			//激活流程
+			ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
+					paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
+			if(pplySubmitResultVo.getIsSuccess().equals("false")){
+				LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("激活流程失败");
+			}
+
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("发生异常");
@@ -875,6 +977,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	public void planOnline(Map<String, String> paramsMap,Program program) {
 		try{
 			Date now = new Date();
+
+			//创建流程
+			ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
+			if(!applyCreateResultVo.isSuccess()){
+				LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("创建流程失败");
+			}
+
 			//program表
 			program.setProgramStatus(ProgramStatusNewEnum.SXPS.getCode());
 			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
@@ -893,6 +1003,15 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			//附件表
 			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.SXPS.getCode());
 
+			//激活流程
+			ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
+					paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
+			if(pplySubmitResultVo.getIsSuccess().equals("false")){
+				LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("激活流程失败");
+			}
+
+
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("发生异常");
@@ -907,6 +1026,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	public void release(Map<String, String> paramsMap,Program program) {
 		try{
 			Date now = new Date();
+
+			//创建流程
+			ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
+			if(!applyCreateResultVo.isSuccess()){
+				LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("创建流程失败");
+			}
+
 			//program表
 			program.setProgramStatus(ProgramStatusNewEnum.HDFB.getCode());
 			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
@@ -924,6 +1051,15 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 			//附件表
 			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.HDFB.getCode());
+
+			//激活流程
+			ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
+					paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
+			if(pplySubmitResultVo.getIsSuccess().equals("false")){
+				LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("激活流程失败");
+			}
+
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("发生异常");
@@ -938,6 +1074,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	public void delay(Map<String, String> paramsMap,Program program) {
 		try{
 			Date now = new Date();
+
+			//创建流程
+			ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
+			if(!applyCreateResultVo.isSuccess()){
+				LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("创建流程失败");
+			}
+
 			//program表
 			program.setProgramStatus(ProgramStatusNewEnum.YQSX.getCode());
 
@@ -960,6 +1104,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			programApprovalSnapshot.setModifiedTime(now);
 			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
+			//激活流程
+			ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
+					paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
+			if(pplySubmitResultVo.getIsSuccess().equals("false")){
+				LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("激活流程失败");
+			}
+
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("发生异常");
@@ -974,6 +1126,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	public void demandChange(Map<String, String> paramsMap,Program program) {
 		try{
 			Date now = new Date();
+
+			//创建流程
+			ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
+			if(!applyCreateResultVo.isSuccess()){
+				LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("创建流程失败");
+			}
+
 			//program表
 			program.setProgramStatus(ProgramStatusNewEnum.XQBG.getCode());
 
@@ -1000,6 +1160,15 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 			//附件表
 			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.XQBG.getCode());
+
+			//激活流程
+			ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
+					paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
+			if(pplySubmitResultVo.getIsSuccess().equals("false")){
+				LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+				throw new RuntimeException("激活流程失败");
+			}
+
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("发生异常");
