@@ -192,6 +192,8 @@ public class APIProgramController extends BaseController {
 		/*项目费用记录*/
 		List<ProgramApprovalSnapshot> costRecordList =  this.grayLevelList(productList);
 		program.setGrayLevelList(costRecordList);
+		/*项目里程碑*/
+
 		/* 返回报文 */
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		resultMap.put("data", program);

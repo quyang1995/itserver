@@ -30,6 +30,8 @@ public interface IProgramService extends IAdminService<Program> {
 
     List<ProgramApprovalSnapshot> lookNodes(Map<String,Object> map);
 
+    ProgramApprovalSnapshot getProgramByBpmCode(Map<String,Object> map);
+
     void apply(Map<String, String> paramsMap,Program program);
 
     void approvalPass(Map<String, String> paramsMap,Program program);
@@ -51,6 +53,8 @@ public interface IProgramService extends IAdminService<Program> {
     void planOnline(Map<String, String> paramsMap,Program program);
 
     void release(Map<String, String> paramsMap,Program program);
+
+    void projectReview(Map<String, String> paramsMap,Program program);
 
     void delay(Map<String, String> paramsMap,Program program);
 

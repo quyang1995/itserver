@@ -306,6 +306,29 @@ public class APIProgramBpmController extends BaseController {
 	}
 
 	/**
+	 * 项目复盘
+	 */
+	@RequestMapping(value = "/projectReview", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public Map projectReview(HttpServletRequest request) throws IOException {
+		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try{
+			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------projectReview:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+
+			Program program = this.getProgram(paramsMap);
+			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
+
+			getProgramService().projectReview(paramsMap,program);
+		}catch (Exception e){
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return resultMap;
+	}
+
+
+	/**
 	 *延期上线
 	 */
 	@RequestMapping(value = "/delay", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
@@ -380,5 +403,26 @@ public class APIProgramBpmController extends BaseController {
 		return resultMap;
 	}
 
+	/**
+	 * 根据bpm流程id查询项目信息
+	 */
+	@RequestMapping(value = "/getProgramByBpmCode", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public Map getProgramByBpmCode(HttpServletRequest request) throws IOException {
+		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try{
+			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------getProgramByBpmCode:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+			Map map = new HashMap();
+			map.put("bpmCode",paramsMap.get("bpmCode"));
+			ProgramApprovalSnapshot shot = getProgramService().getProgramByBpmCode(map);
+			if(null==shot)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
+			resultMap.put("data",shot);
+		}catch (Exception e){
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return resultMap;
+	}
 
 }

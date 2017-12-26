@@ -109,6 +109,24 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	}
 
 	@Override
+	public ProgramApprovalSnapshot getProgramByBpmCode(Map<String,Object> paramMap) {
+		List<ProgramApprovalSnapshot> allList =programApprovalSnapshotMapper.grayLevelList(paramMap);
+		ProgramApprovalSnapshot shot = new ProgramApprovalSnapshot();
+		if (allList!=null && !allList.isEmpty()) {
+			shot = allList.get(0);
+			Map map = new HashMap();
+			map.put("programId",paramMap.get("id"));
+			map.put("type",paramMap.get("programStatus"));
+			List<ProgramFile> fileList = programFileMapper.getListByMap(map);
+			shot.setFileList(fileList);
+			map.put("employeeType","1");
+			List<ProgramEmployee> empList  = programEmployeeMapper.selectTypeList(map);
+			shot.setEmpList(empList);
+		}
+		return shot;
+	}
+
+	@Override
 	@Transactional
 	public boolean addProgram(Map map) {
 		JSONObject json = (JSONObject) JSONObject.toJSON(map);
@@ -942,6 +960,37 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	}
 
 	/***
+	 * 项目复盘
+	 */
+	@Override
+	@Transactional(value="transactionManager")
+	public void projectReview(Map<String, String> paramsMap,Program program) {
+		try{
+			Date now = new Date();
+			//program表
+			program.setProgramStatus(ProgramStatusNewEnum.XMFP.getCode());
+			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
+			program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
+			program.setModifiedName(paramsMap.get("modifiedName"));
+			programMapper.updateByPrimaryKey(program);
+
+			//program快照表
+			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+			BeanUtils.copyProperties(programApprovalSnapshot,program);
+			programApprovalSnapshot.setRemark(paramsMap.get("remark"));
+			programApprovalSnapshot.setCreateTime(now);
+			programApprovalSnapshot.setModifiedTime(now);
+			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+			//附件表
+			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.XMFP.getCode());
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("发生异常");
+		}
+	}
+
+	/***
 	 * 延期上线
 	 */
 	@Override
@@ -986,7 +1035,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		try{
 			Date now = new Date();
 			//program表
-			program.setProgramStatus(ProgramStatusNewEnum.XQBG.getCode());
+//			program.setProgramStatus(ProgramStatusNewEnum.XQBG.getCode());
 
 			program.setDevWorkload(Integer.parseInt(paramsMap.get("devWorkloadChange")));
 			program.setOverallCost(new BigDecimal(paramsMap.get("overallCost")));
@@ -995,6 +1044,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("developmentDate"),DateUtil.PATTERN_DATE));
 			program.setTestApprovalDate(DateUtil.string2Date(paramsMap.get("testReviewDate"),DateUtil.PATTERN_DATE));
 			program.setOnlinePlanDate(DateUtil.string2Date(paramsMap.get("onlineDate"),DateUtil.PATTERN_DATE));
+			program.setApprovalStatus(ProgramApprovalStatusEnum.BGSHZ.getCode());
 
 			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
 			program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));

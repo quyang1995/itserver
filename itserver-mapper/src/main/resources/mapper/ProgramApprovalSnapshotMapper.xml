@@ -91,6 +91,9 @@
                 #{item}
         </foreach>
       </if>
+      <if test=" bpmCode != null and bpmCode != '' ">
+        and bpm_code= #{bpmCode}
+      </if>
     </where>
     ORDER  BY  create_time DESC
   </select>
