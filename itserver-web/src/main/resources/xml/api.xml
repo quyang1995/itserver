@@ -1080,6 +1080,7 @@
             <property name="modifiedName" type="string" required="true"/>
             <property name="workItemId" type="string" required="true"/>
             <property name="suggestion" type="string" required="false"/>
+            <property name="instanceId" type="string" required="true"/>
         </request>
     </item>
 

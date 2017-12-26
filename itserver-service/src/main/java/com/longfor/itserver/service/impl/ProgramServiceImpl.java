@@ -681,16 +681,16 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			programMapper.updateByPrimaryKey(program);
 
 			//program快照表
-			//获取bpmcode
-			ProgramApprovalSnapshot programApprovalSnapshotTmp = new ProgramApprovalSnapshot();
-			programApprovalSnapshotTmp.setId(program.getId());
-			programApprovalSnapshotTmp.setProgramStatus(program.getProgramStatus());
-			programApprovalSnapshotTmp = programApprovalSnapshotMapper.selectByExample(programApprovalSnapshotTmp).get(0);
-			String bpmCode = programApprovalSnapshotTmp.getBpmCode();
+//			//获取bpmcode
+//			ProgramApprovalSnapshot programApprovalSnapshotTmp = new ProgramApprovalSnapshot();
+//			programApprovalSnapshotTmp.setId(program.getId());
+//			programApprovalSnapshotTmp.setProgramStatus(program.getProgramStatus());
+//			programApprovalSnapshotTmp = programApprovalSnapshotMapper.select(programApprovalSnapshotTmp);
+//			String bpmCode = programApprovalSnapshotTmp.getBpmCode();
 
 			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
 			BeanUtils.copyProperties(programApprovalSnapshot,program);
-			programApprovalSnapshot.setBpmCode(bpmCode);
+			programApprovalSnapshot.setBpmCode(paramsMap.get("instanceId"));
 			programApprovalSnapshot.setSuggestion(paramsMap.get("suggestion"));
 			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 

@@ -68,7 +68,7 @@
       <if test=" productId != null and productId != '' ">
           and product_id = #{productId}
       </if>
-      <if test=" programStatus != null and programStatus != '' ">
+      <if test=" programStatus != null and programStatus != '' ">``
           and program_status = #{programStatus}
       </if>
     </where>
