@@ -184,7 +184,7 @@ public class APIProgramController extends BaseController {
 		program.setBusinessList(businessList);
 		/*根據id获取项目快照list*/
 		Map grayLevelMap = new HashMap();
-		grayLevelMap.put("productId", new Long(id));
+		grayLevelMap.put("id", new Long(id));
 		List<ProgramApprovalSnapshot> productList =  this.getProgramApprovalSnapshotService().grayLevelList(grayLevelMap);
 		/* 灰度时间变更记录 */
 		List<ProgramApprovalSnapshot> grayLevelList =  this.getGrayLevelList(productList);

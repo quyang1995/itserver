@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -358,10 +360,18 @@ public class APIProgramBpmController extends BaseController {
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 			LOG.info("------lookNodes:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 
-			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-			programApprovalSnapshot.setProductId(Long.parseLong(paramsMap.get("productId")));
-			programApprovalSnapshot.setProgramStatus(Integer.parseInt(paramsMap.get("programStatus")));
-			List<ProgramApprovalSnapshot>  shotList= this.getProgramService().lookNodes(programApprovalSnapshot);
+//			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+//			programApprovalSnapshot.setId(Long.parseLong(paramsMap.get("id")));
+//			programApprovalSnapshot.setProgramStatus(Integer.parseInt(paramsMap.get("programStatus")));
+
+			Map<String,Object> nodesMap = new HashMap<String,Object>();
+			nodesMap.put("id",new Long(paramsMap.get("id")));
+			nodesMap.put("programStatus",paramsMap.get("programStatus"));
+			List<Object> str = new ArrayList<Object>();
+			str.add(paramsMap.get("programStatus"));
+			str.add(ProgramStatusNewEnum.XQBG.getCode());
+			nodesMap.put("programStatusList",str);
+			List<ProgramApprovalSnapshot>  shotList= this.getProgramService().lookNodes(nodesMap);
 			resultMap.put("list",shotList);
 		}catch (Exception e){
 			e.printStackTrace();

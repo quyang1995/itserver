@@ -80,19 +80,30 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	}
 
 	@Override
-	public List<ProgramApprovalSnapshot> lookNodes(ProgramApprovalSnapshot programApprovalSnapshot) {
-		List<ProgramApprovalSnapshot> resultList =programApprovalSnapshotMapper.getListByProgramIdAndStatus(programApprovalSnapshot);
-		if (resultList != null && !resultList.isEmpty()) {
-			for (ProgramApprovalSnapshot model:resultList) {
-				Map map = new HashMap();
-				map.put("programId",programApprovalSnapshot.getProductId());
-				map.put("type",programApprovalSnapshot.getProgramStatus());
-				List<ProgramFile> fileList = programFileMapper.getListByMap(map);
-				model.setFileList(fileList);
-				map.put("employeeType","1");
-				List<ProgramEmployee> empList  = programEmployeeMapper.selectTypeList(map);
-				model.setEmpList(empList);
+	public List<ProgramApprovalSnapshot> lookNodes(Map<String,Object> paramMap) {
+		List<ProgramApprovalSnapshot> allList =programApprovalSnapshotMapper.grayLevelList(paramMap);
+		List<ProgramApprovalSnapshot> resultList = new ArrayList<ProgramApprovalSnapshot>();
+		if (("110".equals(paramMap.get("programStatus")) || "120".equals(paramMap.get("programStatus"))
+				|| "130".equals(paramMap.get("programStatus")) || "140".equals(paramMap.get("programStatus"))
+		) && allList != null && !allList.isEmpty()) {
+			resultList.add(allList.get(0));
+		}else {
+			for (int i = 0;i<allList.size();i++) {
+				if (allList.get(i).getApprovalStatus()==110) {
+					resultList.add(allList.get(i));
+				}
 			}
+		}
+
+		for (ProgramApprovalSnapshot model:resultList) {
+			Map map = new HashMap();
+			map.put("programId",paramMap.get("id"));
+			map.put("type",paramMap.get("programStatus"));
+			List<ProgramFile> fileList = programFileMapper.getListByMap(map);
+			model.setFileList(fileList);
+			map.put("employeeType","1");
+			List<ProgramEmployee> empList  = programEmployeeMapper.selectTypeList(map);
+			model.setEmpList(empList);
 		}
 		return resultList;
 	}

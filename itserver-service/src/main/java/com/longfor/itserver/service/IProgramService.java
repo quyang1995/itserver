@@ -28,7 +28,7 @@ public interface IProgramService extends IAdminService<Program> {
 
     boolean updateStatus(Map paramsMap);
 
-    List<ProgramApprovalSnapshot> lookNodes(ProgramApprovalSnapshot programApprovalSnapshot);
+    List<ProgramApprovalSnapshot> lookNodes(Map<String,Object> map);
 
     void apply(Map<String, String> paramsMap,Program program);
 
