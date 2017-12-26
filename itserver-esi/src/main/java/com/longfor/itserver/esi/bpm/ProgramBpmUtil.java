@@ -54,8 +54,31 @@ public class ProgramBpmUtil
      * @param workItemId
      * @return
      */
+    public static ApplySubmitResultVo applySumbmitWorkItem(String oaAccount,String workItemId,String suggestion){
+        String result = BpmUtils.submitWorkItem(oaAccount,workItemId,null,suggestion);
+        ApplySubmitResultVo pplySubmitResultVo = JSONObject.parseObject(result, ApplySubmitResultVo.class);
+        return pplySubmitResultVo;
+    }
+    /***
+     * 提交立项-提交流程
+     * @param oaAccount
+     * @param workItemId
+     * @return
+     */
     public static ApplySubmitResultVo applySumbmitWorkItem(String oaAccount,String workItemId){
-        String result = BpmUtils.submitWorkItem(oaAccount,workItemId,null,"我是审批意见");
+        String result = BpmUtils.submitWorkItem(oaAccount,workItemId,null,null);
+        ApplySubmitResultVo pplySubmitResultVo = JSONObject.parseObject(result, ApplySubmitResultVo.class);
+        return pplySubmitResultVo;
+    }
+
+    /***
+     * 提交立项-驳回至发起人
+     * @param oaAccount
+     * @param workItemId
+     * @return
+     */
+    public static ApplySubmitResultVo returnWorkflowToStart(String oaAccount,String workItemId,String suggestion){
+        String result = BpmUtils.returnWorkflowToStart(oaAccount,workItemId,suggestion);
         ApplySubmitResultVo pplySubmitResultVo = JSONObject.parseObject(result, ApplySubmitResultVo.class);
         return pplySubmitResultVo;
     }

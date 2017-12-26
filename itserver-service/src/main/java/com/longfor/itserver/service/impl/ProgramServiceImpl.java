@@ -7,8 +7,6 @@ import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.*;
 import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.common.util.StringUtil;
-import com.longfor.itserver.common.vo.programBpm.ApplyViewVo;
-import com.longfor.itserver.common.vo.programBpm.ProgramManagerVo;
 import com.longfor.itserver.common.vo.programBpm.common.ApplyCreateResultVo;
 import com.longfor.itserver.common.vo.programBpm.common.ApplySubmitResultVo;
 import com.longfor.itserver.common.vo.programBpm.common.FileVo;
@@ -609,7 +607,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		try{
 			//提交流程
 			ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
-					paramsMap.get("modifiedAccountId"),paramsMap.get("workItemId"));
+					paramsMap.get("modifiedAccountId"),paramsMap.get("workItemId"),paramsMap.get("suggestion"));
 			if(pplySubmitResultVo.getIsSuccess().equals("false")){
 				LOG.error("提交流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
 				throw new RuntimeException("提交流程失败");
@@ -636,6 +634,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			programApprovalSnapshot.setBpmCode(bpmCode);
 			programApprovalSnapshot.setCreateTime(now);
 			programApprovalSnapshot.setModifiedTime(now);
+			programApprovalSnapshot.setSuggestion(paramsMap.get("suggestion"));
 			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
 		}catch (Exception e){
@@ -653,7 +652,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		try{
 			//提交流程
 			ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.returnWorkflowToStart(
-					paramsMap.get("modifiedAccountId"),paramsMap.get("workItemId"));
+					paramsMap.get("modifiedAccountId"),paramsMap.get("workItemId"),paramsMap.get("suggestion"));
 			if(pplySubmitResultVo.getIsSuccess().equals("false")){
 				LOG.error("提交流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
 				throw new RuntimeException("提交流程失败");
@@ -674,6 +673,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
 			BeanUtils.copyProperties(programApprovalSnapshot,program);
 			programApprovalSnapshot.setBpmCode(bpmCode);
+			programApprovalSnapshot.setSuggestion(paramsMap.get("suggestion"));
 			programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
 		}catch (Exception e){
