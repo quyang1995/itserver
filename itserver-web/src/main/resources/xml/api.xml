@@ -1323,7 +1323,7 @@
 
     <!--
     URL:
-    /api/program/bpm/demandChange
+    /api/program/bpm/lookNodes
     说明:查看节点信息
     -->
     <item id="api_program_bpm_lookNodes" description="查看节点信息">

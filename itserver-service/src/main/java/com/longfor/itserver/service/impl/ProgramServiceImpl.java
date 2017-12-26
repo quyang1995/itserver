@@ -1222,25 +1222,25 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	public void demandChange(Map<String, String> paramsMap,Program program) {
 		try{
 			Date now = new Date();
-
-			//创建流程
-			ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
-			if(!applyCreateResultVo.isSuccess()){
-				LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-				throw new RuntimeException("创建流程失败");
-			}
+			BigDecimal  overallCost = new BigDecimal(paramsMap.get("overallCost"));
+			BigDecimal ten = new BigDecimal(10);
 
 			//program表
 //			program.setProgramStatus(ProgramStatusNewEnum.XQBG.getCode());
 
 			program.setDevWorkload(Integer.parseInt(paramsMap.get("devWorkloadChange")));
-			program.setOverallCost(new BigDecimal(paramsMap.get("overallCost")));
+			program.setOverallCost(overallCost);
 			program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("releaseDate"),DateUtil.PATTERN_DATE));
 			program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("demandDate"),DateUtil.PATTERN_DATE));
 			program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("developmentDate"),DateUtil.PATTERN_DATE));
 			program.setTestApprovalDate(DateUtil.string2Date(paramsMap.get("testReviewDate"),DateUtil.PATTERN_DATE));
 			program.setOnlinePlanDate(DateUtil.string2Date(paramsMap.get("onlineDate"),DateUtil.PATTERN_DATE));
-			program.setApprovalStatus(ProgramApprovalStatusEnum.BGSHZ.getCode());
+			if (overallCost.compareTo(ten) == -1) {
+				program.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
+			} else {
+				program.setApprovalStatus(ProgramApprovalStatusEnum.BGSHZ.getCode());
+			}
+
 
 			program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
 			program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
@@ -1259,14 +1259,21 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			//附件表
 			this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.XQBG.getCode());
 
-			//激活流程
-			ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
-					paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
-			if(pplySubmitResultVo.getIsSuccess().equals("false")){
-				LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-				throw new RuntimeException("激活流程失败");
+			if (overallCost.compareTo(ten) != -1) {
+				//创建流程
+				ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
+				if(!applyCreateResultVo.isSuccess()){
+					LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+					throw new RuntimeException("创建流程失败");
+				}
+				//激活流程
+				ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
+						paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
+				if(pplySubmitResultVo.getIsSuccess().equals("false")){
+					LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+					throw new RuntimeException("激活流程失败");
+				}
 			}
-
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("发生异常");
