@@ -1,5 +1,8 @@
 package com.longfor.itserver.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import net.mayee.commons.CustomDateSerializer;
+
 import javax.persistence.Column;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -35,21 +38,27 @@ public class ProgramApprovalSnapshot {
     private String descp;
 
     @Column(name = "commit_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date commitDate;
 
     @Column(name = "start_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date startDate;
 
     @Column(name = "gray_release_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date grayReleaseDate;
 
     @Column(name = "release_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date releaseDate;
 
     @Column(name = "ued_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date uedDate;
 
     @Column(name = "architecture_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date architectureDate;
 
     /**
@@ -82,9 +91,11 @@ public class ProgramApprovalSnapshot {
     private String modifiedName;
 
     @Column(name = "create_time")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date createTime;
 
     @Column(name = "modified_time")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date modifiedTime;
 
     /**
@@ -97,42 +108,49 @@ public class ProgramApprovalSnapshot {
      * Demo评审日期
      */
     @Column(name = "demo_approval_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date demoApprovalDate;
 
     /**
      * 招标日期
      */
     @Column(name = "bidding_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date biddingDate;
 
     /**
      * 中标日期
      */
     @Column(name = "winning_bid_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date winningBidDate;
 
     /**
      * 产品评审日期
      */
     @Column(name = "prod_approval_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date prodApprovalDate;
 
     /**
      * 开发评审日期
      */
     @Column(name = "dev_approval_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date devApprovalDate;
 
     /**
      * 测试评审日期
      */
     @Column(name = "test_approval_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date testApprovalDate;
 
     /**
      * 上线计划日期
      */
     @Column(name = "online_plan_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date onlinePlanDate;
 
     /**

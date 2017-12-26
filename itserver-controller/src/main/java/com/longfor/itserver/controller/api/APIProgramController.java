@@ -193,7 +193,10 @@ public class APIProgramController extends BaseController {
 		List<ProgramApprovalSnapshot> costRecordList =  this.grayLevelList(productList);
 		program.setGrayLevelList(costRecordList);
 		/*项目里程碑*/
-
+		Map milepostMap = new HashMap();
+		milepostMap.put("id", new Long(id));
+		List<ProgramApprovalSnapshot> milepostList =this.getProgramService().milepost(milepostMap);
+		program.setMilepostList(milepostList);
 		/* 返回报文 */
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		resultMap.put("data", program);

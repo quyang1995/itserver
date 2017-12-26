@@ -81,12 +81,13 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	public List<ProgramApprovalSnapshot> lookNodes(Map<String,Object> paramMap) {
 		List<ProgramApprovalSnapshot> allList =programApprovalSnapshotMapper.grayLevelList(paramMap);
 		List<ProgramApprovalSnapshot> resultList = new ArrayList<ProgramApprovalSnapshot>();
-		if (("110".equals(paramMap.get("programStatus")) || "120".equals(paramMap.get("programStatus"))
-				|| "130".equals(paramMap.get("programStatus")) || "140".equals(paramMap.get("programStatus"))
-		) && allList != null && !allList.isEmpty()) {
-			resultList.add(allList.get(0));
-		}else {
-			for (int i = 0;i<allList.size();i++) {
+		if (allList != null || !allList.isEmpty()) {
+			return resultList;
+		}
+		for (int i = 0;i<allList.size();i++) {
+			if (i == 0) {
+				resultList.add(allList.get(i));
+			} else {
 				if (allList.get(i).getApprovalStatus()==110) {
 					resultList.add(allList.get(i));
 				}
@@ -103,6 +104,56 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			List<ProgramEmployee> empList  = programEmployeeMapper.selectTypeList(map);
 			model.setEmpList(empList);
 		}
+		return resultList;
+	}
+
+	@Override
+	public List<ProgramApprovalSnapshot> milepost(Map<String,Object> paramMap) {
+		List<ProgramApprovalSnapshot> resultList = new ArrayList<ProgramApprovalSnapshot>();
+		paramMap.put("programStatus",ProgramStatusNewEnum.LX);
+		List<ProgramApprovalSnapshot> snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+		/*立项*/
+		resultList.add(snapshot == null? null:snapshot.get(0));
+		paramMap.put("programStatus",ProgramStatusNewEnum.DPS);
+		snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+		resultList.add(snapshot == null? null:snapshot.get(0));
+		/*Demo评审*/
+		paramMap.put("programStatus",ProgramStatusNewEnum.DPS);
+		snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+		resultList.add(snapshot == null? null:snapshot.get(0));
+		/*招投标申请*/
+		paramMap.put("programStatus",ProgramStatusNewEnum.ZTBSQ);
+		snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+		resultList.add(snapshot == null? null:snapshot.get(0));
+		/*中标申请*/
+		paramMap.put("programStatus",ProgramStatusNewEnum.ZBSQ);
+		snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+		resultList.add(snapshot == null? null:snapshot.get(0));
+		/*产品评审*/
+
+		paramMap.put("programStatus",ProgramStatusNewEnum.CPPS);
+		snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+		resultList.add(snapshot == null? null:snapshot.get(0));
+		/*开发评审*/
+		paramMap.put("programStatus",ProgramStatusNewEnum.KFPS);
+		snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+		resultList.add(snapshot == null? null:snapshot.get(0));
+		/*测试评审*/
+		paramMap.put("programStatus",ProgramStatusNewEnum.CSPS);
+		snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+		resultList.add(snapshot == null? null:snapshot.get(0));
+		/*上线计划*/
+		paramMap.put("programStatus",ProgramStatusNewEnum.SXPS);
+		snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+		resultList.add(snapshot == null? null:snapshot.get(0));
+		/*灰度发布*/
+		paramMap.put("programStatus",ProgramStatusNewEnum.HDFB);
+		snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+		resultList.add(snapshot == null? null:snapshot.get(0));
+		/*项目复盘*/
+		paramMap.put("programStatus",ProgramStatusNewEnum.XMFP);
+		snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+		resultList.add(snapshot == null? null:snapshot.get(0));
 		return resultList;
 	}
 

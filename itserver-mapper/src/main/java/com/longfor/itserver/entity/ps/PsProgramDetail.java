@@ -43,6 +43,16 @@ public class PsProgramDetail extends Program implements Serializable {
     private List<ProgramApprovalSnapshot> grayLevelList;
     @Transient
     private List<ProgramApprovalSnapshot> costRecord;
+    @Transient
+    private List<ProgramApprovalSnapshot> milepostList;
+
+    public List<ProgramApprovalSnapshot> getMilepostList() {
+        return milepostList;
+    }
+
+    public void setMilepostList(List<ProgramApprovalSnapshot> milepostList) {
+        this.milepostList = milepostList;
+    }
 
     public List<ProgramApprovalSnapshot> getCostRecord() {
         return costRecord;

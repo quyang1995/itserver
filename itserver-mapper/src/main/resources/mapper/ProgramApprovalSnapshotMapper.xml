@@ -65,6 +65,9 @@
     <include refid="Base_Column_List"/>
     from program_approval_snapshot
     <where>
+      <if test=" id != null and id != '' ">
+        id = #{id}
+      </if>
       <if test=" productId != null and productId != '' ">
           and product_id = #{productId}
       </if>
