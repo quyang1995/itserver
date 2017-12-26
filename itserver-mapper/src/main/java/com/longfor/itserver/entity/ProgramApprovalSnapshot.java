@@ -1,9 +1,11 @@
 package com.longfor.itserver.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.*;
 
 @Table(name = "program_approval_snapshot")
 public class ProgramApprovalSnapshot {
@@ -181,11 +183,22 @@ public class ProgramApprovalSnapshot {
     @Column(name = "bpm_code")
     private String bpmCode;
 
+    @Column(name = "suggestion")
+    private String suggestion;
+
     @Transient
     private List<ProgramFile> fileList;
 
     @Transient
     private List<ProgramEmployee> empList;
+
+    public String getSuggestion() {
+        return suggestion;
+    }
+
+    public void setSuggestion(String suggestion) {
+        this.suggestion = suggestion;
+    }
 
     public List<ProgramEmployee> getEmpList() {
         return empList;

@@ -33,7 +33,7 @@ public class APIProgramBpmController extends BaseController {
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	/**
-	 * 查看立项申请
+	 * 查看立项申请（作废）
 	 */
 	@RequestMapping(value = "/applyView", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody

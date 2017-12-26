@@ -1060,6 +1060,7 @@
     -->
     <item id="api_program_bpm_approvalPass" description="审核通过">
         <request>
+            <property name="suggestion" type="string" required="false"/>
             <property name="programId" type="string" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
@@ -1078,6 +1079,7 @@
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="workItemId" type="string" required="true"/>
+            <property name="suggestion" type="string" required="false"/>
         </request>
     </item>
 
