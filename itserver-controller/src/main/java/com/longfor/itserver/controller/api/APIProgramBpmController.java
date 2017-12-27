@@ -71,7 +71,7 @@ public class APIProgramBpmController extends BaseController {
 
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
-			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
+//			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
 
 			getProgramService().apply(paramsMap,program);
 		}catch (Exception e){
@@ -167,7 +167,7 @@ public class APIProgramBpmController extends BaseController {
 
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
-			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
+//			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
 
 			getProgramService().tenderFile(paramsMap,program);
 		}catch (Exception e){
@@ -190,7 +190,7 @@ public class APIProgramBpmController extends BaseController {
 
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
-			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
+//			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
 
 			getProgramService().bidNotice(paramsMap,program);
 		}catch (Exception e){
@@ -213,7 +213,7 @@ public class APIProgramBpmController extends BaseController {
 
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
-			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
+//			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
 
 			getProgramService().productReview(paramsMap,program);
 		}catch (Exception e){
@@ -236,7 +236,7 @@ public class APIProgramBpmController extends BaseController {
 
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
-			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
+//			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
 
 			getProgramService().development(paramsMap,program);
 		}catch (Exception e){
@@ -259,7 +259,7 @@ public class APIProgramBpmController extends BaseController {
 
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
-			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
+//			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
 
 			getProgramService().deploy(paramsMap,program);
 		}catch (Exception e){
@@ -282,7 +282,7 @@ public class APIProgramBpmController extends BaseController {
 
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
-			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
+//			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
 
 			getProgramService().planOnline(paramsMap,program);
 		}catch (Exception e){
@@ -305,7 +305,7 @@ public class APIProgramBpmController extends BaseController {
 
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
-			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
+//			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
 
 			getProgramService().release(paramsMap,program);
 		}catch (Exception e){
@@ -328,7 +328,7 @@ public class APIProgramBpmController extends BaseController {
 
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
-			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
+//			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
 
 			getProgramService().projectReview(paramsMap,program);
 		}catch (Exception e){
