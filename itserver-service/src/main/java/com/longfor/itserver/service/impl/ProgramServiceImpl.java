@@ -114,47 +114,69 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 		paramMap.put("programStatus",ProgramStatusNewEnum.LX);
 		List<ProgramApprovalSnapshot> snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
 		/*立项*/
-		resultList.add(snapshot == null? null:snapshot.get(0));
+		if (snapshot != null && !snapshot.isEmpty()) {
+			resultList.add(snapshot.get(0));
+		}
 		paramMap.put("programStatus",ProgramStatusNewEnum.DPS);
 		snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
-		resultList.add(snapshot == null? null:snapshot.get(0));
+		if (snapshot != null && !snapshot.isEmpty()) {
+			resultList.add(snapshot.get(0));
+		}
 		/*Demo评审*/
 		paramMap.put("programStatus",ProgramStatusNewEnum.DPS);
 		snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
-		resultList.add(snapshot == null? null:snapshot.get(0));
+		if (snapshot != null && !snapshot.isEmpty()) {
+			resultList.add(snapshot.get(0));
+		}
 		/*招投标申请*/
 		paramMap.put("programStatus",ProgramStatusNewEnum.ZTBSQ);
 		snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
-		resultList.add(snapshot == null? null:snapshot.get(0));
+		if (snapshot != null && !snapshot.isEmpty()) {
+			resultList.add(snapshot.get(0));
+		}
 		/*中标申请*/
 		paramMap.put("programStatus",ProgramStatusNewEnum.ZBSQ);
 		snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
-		resultList.add(snapshot == null? null:snapshot.get(0));
+		if (snapshot != null && !snapshot.isEmpty()) {
+			resultList.add(snapshot.get(0));
+		}
 		/*产品评审*/
 
 		paramMap.put("programStatus",ProgramStatusNewEnum.CPPS);
 		snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
-		resultList.add(snapshot == null? null:snapshot.get(0));
+		if (snapshot != null && !snapshot.isEmpty()) {
+			resultList.add(snapshot.get(0));
+		}
 		/*开发评审*/
 		paramMap.put("programStatus",ProgramStatusNewEnum.KFPS);
 		snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
-		resultList.add(snapshot == null? null:snapshot.get(0));
+		if (snapshot != null && !snapshot.isEmpty()) {
+			resultList.add(snapshot.get(0));
+		}
 		/*测试评审*/
 		paramMap.put("programStatus",ProgramStatusNewEnum.CSPS);
 		snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
-		resultList.add(snapshot == null? null:snapshot.get(0));
+		if (snapshot != null && !snapshot.isEmpty()) {
+			resultList.add(snapshot.get(0));
+		}
 		/*上线计划*/
 		paramMap.put("programStatus",ProgramStatusNewEnum.SXPS);
 		snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
-		resultList.add(snapshot == null? null:snapshot.get(0));
+		if (snapshot != null && !snapshot.isEmpty()) {
+			resultList.add(snapshot.get(0));
+		}
 		/*灰度发布*/
 		paramMap.put("programStatus",ProgramStatusNewEnum.HDFB);
 		snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
-		resultList.add(snapshot == null? null:snapshot.get(0));
+		if (snapshot != null && !snapshot.isEmpty()) {
+			resultList.add(snapshot.get(0));
+		}
 		/*项目复盘*/
 		paramMap.put("programStatus",ProgramStatusNewEnum.XMFP);
 		snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
-		resultList.add(snapshot == null? null:snapshot.get(0));
+		if (snapshot != null && !snapshot.isEmpty()) {
+			resultList.add(snapshot.get(0));
+		}
 		return resultList;
 	}
 
