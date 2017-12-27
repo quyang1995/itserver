@@ -219,6 +219,15 @@ public class APIProgramController extends BaseController {
 						|| model.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode())) {
 					changeDay += model.getDevWorkload();
 					bignum.add(model.getOverallCost());
+//					发起人ID：model.getModifiedAccountId();
+//					发起人：model.getModifiedName();
+//					预估变更整体费用：model.getBidOverallCost();
+//					预估人天：model.getBidOversingleCost()
+//					Map map = new HashMap();
+//					map.put("modifiedAccountId",model.getModifiedAccountId());
+//					map.put("modifiedName",model.getModifiedName());
+//					map.put("bidOverallCost",model.getBidOverallCost());
+//					map.put("bidOversingleCost",model.getBidOversingleCost());
 					resultList.add(model);
 				}
 			}
@@ -235,6 +244,10 @@ public class APIProgramController extends BaseController {
 						&& (model.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
 								|| model.getProgramStatus()==ProgramStatusNewEnum.YQSX.getCode()
 								|| model.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode())) {
+//					发起人ID：model.getModifiedAccountId();
+//					发起人：model.getModifiedName();
+//					灰度时间：model.getGrayReleaseDate();
+//					变更渠道：model.getProgramStatus();
 					resultList.add(model);
 				}
 			}
