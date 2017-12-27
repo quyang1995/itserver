@@ -710,14 +710,30 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             }
 
             Date now = new Date();
+            String bpmCode = paramsMap.get("instanceId");
             //更新项目表
             program.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
+
+            //获取该审批流的项目状态
+            ProgramApprovalSnapshot shotTmp = new ProgramApprovalSnapshot();
+            shotTmp.setBpmCode(bpmCode);
+            List<ProgramApprovalSnapshot> tmpList = programApprovalSnapshotMapper.select(shotTmp);
+            int programStatus = tmpList.get(0).getProgramStatus();
+            if(programStatus==ProgramStatusNewEnum.XMFP.getCode()){//如果提交审批的为复盘，则项目状态直接到完成
+                program.setProgramStatus(ProgramStatusNewEnum.WC.getCode());
+            }else if(programStatus==ProgramStatusNewEnum.YQSX.getCode()
+                    || programStatus==ProgramStatusNewEnum.XQBG.getCode()){//如果提交审批的为延期上线或者需求变更，则项目状态直接到产品评审
+                program.setProgramStatus(ProgramStatusNewEnum.CPPS.getCode());
+            }else if(programStatus==ProgramStatusNewEnum.ZZ.getCode()){//如果提交审批的为终止项目，则项目状态直接到终止
+                program.setProgramStatus(ProgramStatusNewEnum.ZZ.getCode());
+            }
+
             programMapper.updateByPrimaryKey(program);
 
             //program快照表
             ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
             BeanUtils.copyProperties(programApprovalSnapshot,program);
-            programApprovalSnapshot.setBpmCode(paramsMap.get("instanceId"));
+            programApprovalSnapshot.setBpmCode(bpmCode);
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
             programApprovalSnapshot.setSuggestion(paramsMap.get("suggestion"));
@@ -1354,7 +1370,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             }
 
             //program表
-            program.setProgramStatus(ProgramStatusNewEnum.ZZSQ.getCode());
+            program.setProgramStatus(ProgramStatusNewEnum.ZZ.getCode());
             program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
             program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
             program.setModifiedName(paramsMap.get("modifiedName"));
@@ -1362,7 +1378,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //program快照表
             ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-            program.setProgramStatus(ProgramStatusNewEnum.ZZSQ.getCode());
+            program.setProgramStatus(ProgramStatusNewEnum.ZZ.getCode());
             BeanUtils.copyProperties(programApprovalSnapshot,program);
             programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
             programApprovalSnapshot.setCreateTime(now);
