@@ -72,6 +72,8 @@ public class BaseController {
     @Autowired
     private IBugFileService bugFileService;
     @Autowired
+    private IProgramFileService programFileService;
+    @Autowired
     private ADSHelper adsHelper;
 
     public ADSHelper getAdsHelper() {
@@ -167,6 +169,10 @@ public class BaseController {
 
     public void setBugFileService(IBugFileService bugFileService) {
         this.bugFileService = bugFileService;
+    }
+
+    public IProgramFileService getProgramFileService() {
+        return programFileService;
     }
 
     public RedisCache getRedisCache() {
