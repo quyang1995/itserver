@@ -139,67 +139,70 @@ public class APIProgramController extends BaseController {
 		/* 获得已经验证过的参数map */
 		@SuppressWarnings("unchecked")
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-
-		long id = Long.parseLong(paramsMap.get("id").toString());
-
-		PsProgramDetail program = (PsProgramDetail) this.getProgramService().getProgramId(id);
-		if(program.getLikeProduct() != null && !"".equals(program.getLikeProduct())){
-			String likeProduct = program.getLikeProduct().substring(1, program.getLikeProduct().length());
-			// 关联产品
-			List<Product> product = this.getProductService().searchIdList(likeProduct);
-			program.setProductList(product);
-		}
-
-		Map map = new HashMap();
-		map.put("programId", new Long(id));
-		/* 产品相关人员 */
-		/* 责任人 */
-		map.put("employeeType", AvaStatusEnum.LIABLEAVA.getCode());
-		List<ProgramEmployee> personLiableList = this.getProgramEmployeeService().selectTypeList(map);
-		program.setPersonLiableList(personLiableList);
-		/* 产品经理 */
-		map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
-		map.put("employeeTypeId", new Long(AvaStatusEnum.PRODAVA.getCode()));
-		List<ProgramEmployee> programManagerList = this.getProgramEmployeeService().selectTypeList(map);
-		program.setProductManagerList(programManagerList);
-		/* 项目经理 */
-		map.put("employeeTypeId", new Long(AvaStatusEnum.PROGAVA.getCode()));
-		List<ProgramEmployee> productManagerList = this.getProgramEmployeeService().selectTypeList(map);
-		program.setProgramManagerList(productManagerList);
-		/* 开发人员 */
-		map.put("employeeTypeId", new Long(AvaStatusEnum.DEVEAVA.getCode()));
-		List<ProgramEmployee> developerList = this.getProgramEmployeeService().selectTypeList(map);
-		program.setDeveloperList(developerList);
-		/* UED人员 */
-		map.put("employeeTypeId", new Long(AvaStatusEnum.UEDAVA.getCode()));
-		List<ProgramEmployee> uedList = this.getProgramEmployeeService().selectTypeList(map);
-		program.setUedList(uedList);
-		/* 测试人员 */
-		map.put("employeeTypeId", new Long(AvaStatusEnum.TESTINGAVA.getCode()));
-		List<ProgramEmployee> testingList = this.getProgramEmployeeService().selectTypeList(map);
-		program.setTestingList(testingList);
-		/* 业务人员 */
-		map.put("employeeTypeId", new Long(AvaStatusEnum.BUSINESSAVA.getCode()));
-		List<ProgramEmployee> businessList = this.getProgramEmployeeService().selectTypeList(map);
-		program.setBusinessList(businessList);
-		/*根據id获取项目快照list*/
-		Map grayLevelMap = new HashMap();
-		grayLevelMap.put("id", new Long(id));
-		List<ProgramApprovalSnapshot> productList =  this.getProgramApprovalSnapshotService().grayLevelList(grayLevelMap);
-		/* 灰度时间变更记录 */
-		List<ProgramApprovalSnapshot> grayLevelList =  this.getGrayLevelList(productList);
-		program.setGrayLevelList(grayLevelList);
-		/*项目费用记录*/
-		List<ProgramApprovalSnapshot> costRecordList =  this.grayLevelList(productList);
-		program.setGrayLevelList(costRecordList);
-		/*项目里程碑*/
-		Map milepostMap = new HashMap();
-		milepostMap.put("id", new Long(id));
-		List<ProgramApprovalSnapshot> milepostList =this.getProgramService().milepost(milepostMap);
-		program.setMilepostList(milepostList);
-		/* 返回报文 */
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-		resultMap.put("data", program);
+		try {
+			long id = Long.parseLong(paramsMap.get("id").toString());
+
+			PsProgramDetail program = (PsProgramDetail) this.getProgramService().getProgramId(id);
+			if(program.getLikeProduct() != null && !"".equals(program.getLikeProduct())){
+				String likeProduct = program.getLikeProduct().substring(1, program.getLikeProduct().length());
+				// 关联产品
+				List<Product> product = this.getProductService().searchIdList(likeProduct);
+				program.setProductList(product);
+			}
+
+			Map map = new HashMap();
+			map.put("programId", new Long(id));
+			/* 产品相关人员 */
+			/* 责任人 */
+			map.put("employeeType", AvaStatusEnum.LIABLEAVA.getCode());
+			List<ProgramEmployee> personLiableList = this.getProgramEmployeeService().selectTypeList(map);
+			program.setPersonLiableList(personLiableList);
+			/* 产品经理 */
+			map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
+			map.put("employeeTypeId", new Long(AvaStatusEnum.PRODAVA.getCode()));
+			List<ProgramEmployee> programManagerList = this.getProgramEmployeeService().selectTypeList(map);
+			program.setProductManagerList(programManagerList);
+			/* 项目经理 */
+			map.put("employeeTypeId", new Long(AvaStatusEnum.PROGAVA.getCode()));
+			List<ProgramEmployee> productManagerList = this.getProgramEmployeeService().selectTypeList(map);
+			program.setProgramManagerList(productManagerList);
+			/* 开发人员 */
+			map.put("employeeTypeId", new Long(AvaStatusEnum.DEVEAVA.getCode()));
+			List<ProgramEmployee> developerList = this.getProgramEmployeeService().selectTypeList(map);
+			program.setDeveloperList(developerList);
+			/* UED人员 */
+			map.put("employeeTypeId", new Long(AvaStatusEnum.UEDAVA.getCode()));
+			List<ProgramEmployee> uedList = this.getProgramEmployeeService().selectTypeList(map);
+			program.setUedList(uedList);
+			/* 测试人员 */
+			map.put("employeeTypeId", new Long(AvaStatusEnum.TESTINGAVA.getCode()));
+			List<ProgramEmployee> testingList = this.getProgramEmployeeService().selectTypeList(map);
+			program.setTestingList(testingList);
+			/* 业务人员 */
+			map.put("employeeTypeId", new Long(AvaStatusEnum.BUSINESSAVA.getCode()));
+			List<ProgramEmployee> businessList = this.getProgramEmployeeService().selectTypeList(map);
+			program.setBusinessList(businessList);
+			/*根據id获取项目快照list*/
+			Map grayLevelMap = new HashMap();
+			grayLevelMap.put("id", new Long(id));
+			List<ProgramApprovalSnapshot> productList =  this.getProgramApprovalSnapshotService().grayLevelList(grayLevelMap);
+			/* 灰度时间变更记录 */
+			List<ProgramApprovalSnapshot> grayLevelList =  this.getGrayLevelList(productList);
+			program.setGrayLevelList(grayLevelList);
+			/*项目费用记录*/
+			List<ProgramApprovalSnapshot> costRecordList =  this.grayLevelList(productList);
+			program.setGrayLevelList(costRecordList);
+			/*项目里程碑*/
+			Map milepostMap = new HashMap();
+			milepostMap.put("id", new Long(id));
+			List<ProgramApprovalSnapshot> milepostList =this.getProgramService().milepost(milepostMap);
+			program.setMilepostList(milepostList);
+			/* 返回报文 */
+			resultMap.put("data", program);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 		return resultMap;
 	}
 
@@ -216,6 +219,15 @@ public class APIProgramController extends BaseController {
 						|| model.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode())) {
 					changeDay += model.getDevWorkload();
 					bignum.add(model.getOverallCost());
+//					发起人ID：model.getModifiedAccountId();
+//					发起人：model.getModifiedName();
+//					预估变更整体费用：model.getBidOverallCost();
+//					预估人天：model.getBidOversingleCost()
+//					Map map = new HashMap();
+//					map.put("modifiedAccountId",model.getModifiedAccountId());
+//					map.put("modifiedName",model.getModifiedName());
+//					map.put("bidOverallCost",model.getBidOverallCost());
+//					map.put("bidOversingleCost",model.getBidOversingleCost());
 					resultList.add(model);
 				}
 			}
@@ -232,6 +244,10 @@ public class APIProgramController extends BaseController {
 						&& (model.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
 								|| model.getProgramStatus()==ProgramStatusNewEnum.YQSX.getCode()
 								|| model.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode())) {
+//					发起人ID：model.getModifiedAccountId();
+//					发起人：model.getModifiedName();
+//					灰度时间：model.getGrayReleaseDate();
+//					变更渠道：model.getProgramStatus();
 					resultList.add(model);
 				}
 			}

@@ -275,7 +275,7 @@
             <property name="likeProduct" type="string" required="false" maxLength="20"/>
             <property name="likeProgram" type="string" required="false" maxLength="20"/>
             <property name="type" type="int" required="true" area="0,1"/>
-            <property name="programStatus" type="int" required="true" area="0,1,2"/>
+            <property name="programStatus" type="int" required="true" area="100,110,120,130,140,150,160,170,180,190,195,200,210,900,999"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="true" maxLength="50"/>
             <property name="personLiableList" type="string" required="true"/>
@@ -1143,7 +1143,7 @@
             <property name="programId" type="string" required="true"/>
             <property name="remark" type="string" required="true"/>
             <property name="fileList" type="string" required="false"/>
-            <property name="overallCost" type="string" required="true"/>
+            <property name="bidOverallCost" type="string" required="true"/>
             <property name="bidDevWorkload" type="string" required="false"/>
             <property name="bidOversingleCost" type="string" required="false"/>
             <property name="counterSigners" type="string" required="true"/>
