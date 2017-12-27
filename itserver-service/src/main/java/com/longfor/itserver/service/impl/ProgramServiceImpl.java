@@ -81,7 +81,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 	public List<ProgramApprovalSnapshot> lookNodes(Map<String,Object> paramMap) {
 		List<ProgramApprovalSnapshot> allList =programApprovalSnapshotMapper.grayLevelList(paramMap);
 		List<ProgramApprovalSnapshot> resultList = new ArrayList<ProgramApprovalSnapshot>();
-		if (allList != null || !allList.isEmpty()) {
+		if (allList == null || allList.isEmpty()) {
 			return resultList;
 		}
 		for (int i = 0;i<allList.size();i++) {
@@ -100,7 +100,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			map.put("type",paramMap.get("programStatus"));
 			List<ProgramFile> fileList = programFileMapper.getListByMap(map);
 			model.setFileList(fileList);
-			map.put("employeeType","1");
+			map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
+			map.put("employeeTypeId", new Long(AvaStatusEnum.PROGAVA.getCode()));
 			List<ProgramEmployee> empList  = programEmployeeMapper.selectTypeList(map);
 			model.setEmpList(empList);
 		}
@@ -168,7 +169,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 			map.put("type",paramMap.get("programStatus"));
 			List<ProgramFile> fileList = programFileMapper.getListByMap(map);
 			shot.setFileList(fileList);
-			map.put("employeeType","1");
+			map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
+			map.put("employeeTypeId", new Long(AvaStatusEnum.PROGAVA.getCode()));
 			List<ProgramEmployee> empList  = programEmployeeMapper.selectTypeList(map);
 			shot.setEmpList(empList);
 		}

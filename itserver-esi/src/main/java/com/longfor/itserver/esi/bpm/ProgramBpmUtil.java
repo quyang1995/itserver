@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.helper.JoddHelper;
+import com.longfor.itserver.common.util.StringUtil;
 import com.longfor.itserver.common.vo.programBpm.common.ApplyCreateResultVo;
 import com.longfor.itserver.common.vo.programBpm.common.ApplySubmitResultVo;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
@@ -21,7 +23,7 @@ public class ProgramBpmUtil
      * @return
      */
     public static String getApplyApproval2(String tApproval){
-        if(tApproval.equals("1"))return ConfigConsts.programBpm.apply_approval2_1;
+        if(StringUtils.isBlank(tApproval) || tApproval.equals("1"))return ConfigConsts.programBpm.apply_approval2_1;
         if(tApproval.equals("2"))return ConfigConsts.programBpm.apply_approval2_2;
         return null;
     }

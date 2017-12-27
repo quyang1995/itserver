@@ -1109,7 +1109,7 @@
             <property name="programId" type="string" required="true"/>
             <property name="remark" type="string" required="true"/>
             <property name="fileList" type="string" required="false"/>
-            <property name="counterSigners" type="string" required="false"/>
+            <property name="counterSigners" type="string" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
@@ -1126,7 +1126,7 @@
             <property name="programId" type="string" required="true"/>
             <property name="remark" type="string" required="true"/>
             <property name="fileList" type="string" required="false"/>
-            <property name="counterSigners" type="string" required="false"/>
+            <property name="counterSigners" type="string" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
@@ -1146,10 +1146,11 @@
             <property name="overallCost" type="string" required="true"/>
             <property name="bidDevWorkload" type="string" required="false"/>
             <property name="bidOversingleCost" type="string" required="false"/>
-            <property name="counterSigners" type="string" required="false"/>
+            <property name="counterSigners" type="string" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
+            <property name="tApproval" type="int" required="false"/>
         </request>
     </item>
 
@@ -1167,7 +1168,7 @@
             <property name="researchDate" type="string" required="true"/>
             <property name="testDate" type="string" required="true"/>
             <property name="onlineDate" type="string" required="true"/>
-            <property name="counterSigners" type="string" required="false"/>
+            <property name="counterSigners" type="string" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
@@ -1184,7 +1185,7 @@
             <property name="programId" type="string" required="true"/>
             <property name="remark" type="string" required="true"/>
             <property name="fileList" type="string" required="false"/>
-            <property name="counterSigners" type="string" required="false"/>
+            <property name="counterSigners" type="string" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
@@ -1201,7 +1202,7 @@
             <property name="programId" type="string" required="true"/>
             <property name="remark" type="string" required="true"/>
             <property name="fileList" type="string" required="false"/>
-            <property name="counterSigners" type="string" required="false"/>
+            <property name="counterSigners" type="string" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
@@ -1218,7 +1219,7 @@
             <property name="programId" type="string" required="true"/>
             <property name="remark" type="string" required="true"/>
             <property name="fileList" type="string" required="false"/>
-            <property name="counterSigners" type="string" required="false"/>
+            <property name="counterSigners" type="string" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
@@ -1235,7 +1236,7 @@
             <property name="programId" type="string" required="true"/>
             <property name="remark" type="string" required="true"/>
             <property name="fileList" type="string" required="false"/>
-            <property name="counterSigners" type="string" required="false"/>
+            <property name="counterSigners" type="string" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
@@ -1252,7 +1253,7 @@
             <property name="programId" type="string" required="true"/>
             <property name="remark" type="string" required="true"/>
             <property name="fileList" type="string" required="false"/>
-            <property name="counterSigners" type="string" required="false"/>
+            <property name="counterSigners" type="string" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
@@ -1275,6 +1276,7 @@
             <property name="testReviewDate" type="string" required="true"/>
             <property name="onlineDate" type="string" required="true"/>
 
+            <property name="counterSigners" type="string" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
@@ -1290,6 +1292,7 @@
         <request>
             <property name="programId" type="string" required="true"/>
             <property name="remark" type="string" required="true"/>
+            <property name="fileList" type="string" required="false"/>
 
             <property name="devWorkloadChange" type="string" required="true"/>
             <property name="overallCost" type="string" required="true"/>
@@ -1299,8 +1302,7 @@
             <property name="testReviewDate" type="string" required="true"/>
             <property name="onlineDate" type="string" required="true"/>
 
-            <property name="fileList" type="string" required="false"/>
-            <property name="counterSigners" type="string" required="false"/>
+            <property name="counterSigners" type="string" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
@@ -1315,6 +1317,7 @@
     <item id="api_program_bpm_stopProgram" description="终止项目">
         <request>
             <property name="programId" type="string" required="true"/>
+            <property name="counterSigners" type="string" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
