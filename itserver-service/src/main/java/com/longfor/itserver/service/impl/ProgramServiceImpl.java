@@ -1295,9 +1295,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("developmentDate"),DateUtil.PATTERN_DATE));
             program.setTestApprovalDate(DateUtil.string2Date(paramsMap.get("testReviewDate"),DateUtil.PATTERN_DATE));
             program.setOnlinePlanDate(DateUtil.string2Date(paramsMap.get("onlineDate"),DateUtil.PATTERN_DATE));
-            if (overallCost.compareTo(ten) == -1) {
-                program.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
-            } else {
+            if (overallCost.compareTo(ten) != -1) {
                 program.setApprovalStatus(ProgramApprovalStatusEnum.BGSHZ.getCode());
             }
 
@@ -1314,6 +1312,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             if (overallCost.compareTo(ten) != -1) {
                 programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
             }
+            programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
             programApprovalSnapshot.setRemark(paramsMap.get("remark"));
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
