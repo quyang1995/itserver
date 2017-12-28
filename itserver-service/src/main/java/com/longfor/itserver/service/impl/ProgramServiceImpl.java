@@ -784,7 +784,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
 
     /***
-     * 提交立项申请
+     * demo评审
      */
     @Override
     @Transactional(value="transactionManager")
@@ -801,6 +801,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //program表
             program.setProgramStatus(ProgramStatusNewEnum.DPS.getCode());
+            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
             program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
             program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
             program.setModifiedName(paramsMap.get("modifiedName"));
@@ -850,6 +851,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //program表
             program.setProgramStatus(ProgramStatusNewEnum.ZTBSQ.getCode());
+            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
             program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
             program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
             program.setModifiedName(paramsMap.get("modifiedName"));
@@ -899,6 +901,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //program表
             program.setProgramStatus(ProgramStatusNewEnum.ZBSQ.getCode());
+            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
             program.setBidOverallCost(new BigDecimal(paramsMap.get("bidOverallCost")));
             program.setBidDevWorkload(Integer.parseInt(paramsMap.get("bidDevWorkload")));
             program.setBidOversingleCost(new BigDecimal(paramsMap.get("bidOversingleCost")));
@@ -951,7 +954,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //program表
             program.setProgramStatus(ProgramStatusNewEnum.CPPS.getCode());
-
+            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
             program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("productReviewDate"),DateUtil.PATTERN_DATE));
             program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("researchDate"),DateUtil.PATTERN_DATE));
             program.setTestApprovalDate(DateUtil.string2Date(paramsMap.get("testDate"),DateUtil.PATTERN_DATE));
@@ -1006,6 +1009,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //program表
             program.setProgramStatus(ProgramStatusNewEnum.KFPS.getCode());
+            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
             program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
             program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
             program.setModifiedName(paramsMap.get("modifiedName"));
@@ -1055,6 +1059,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //program表
             program.setProgramStatus(ProgramStatusNewEnum.CSPS.getCode());
+            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
             program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
             program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
             program.setModifiedName(paramsMap.get("modifiedName"));
@@ -1104,6 +1109,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //program表
             program.setProgramStatus(ProgramStatusNewEnum.SXPS.getCode());
+            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
             program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
             program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
             program.setModifiedName(paramsMap.get("modifiedName"));
@@ -1154,6 +1160,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //program表
             program.setProgramStatus(ProgramStatusNewEnum.HDFB.getCode());
+            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
             program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
             program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
             program.setModifiedName(paramsMap.get("modifiedName"));
@@ -1203,6 +1210,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //program表
             program.setProgramStatus(ProgramStatusNewEnum.XMFP.getCode());
+            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
             program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
             program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
             program.setModifiedName(paramsMap.get("modifiedName"));
@@ -1251,7 +1259,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //program表
             program.setProgramStatus(ProgramStatusNewEnum.YQSX.getCode());
-
+            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
             program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("releaseDate"),DateUtil.PATTERN_DATE));
             program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("demandDate"),DateUtil.PATTERN_DATE));
             program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("developmentDate"),DateUtil.PATTERN_DATE));
@@ -1380,6 +1388,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //program表
             program.setProgramStatus(ProgramStatusNewEnum.ZZ.getCode());
+            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
             program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
             program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
             program.setModifiedName(paramsMap.get("modifiedName"));
