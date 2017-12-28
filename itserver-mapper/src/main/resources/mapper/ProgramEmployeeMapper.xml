@@ -36,6 +36,9 @@
     <if test="employeeType == 2">
       and employee_type_id = #{employeeTypeId}
     </if>
+    <if test=" accountId != null and accountId != ''">
+      and account_id = #{accountId}
+    </if>
     ORDER BY modified_time DESC
   </select>
 </mapper>

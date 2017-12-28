@@ -1323,12 +1323,15 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //program快照表
             ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-            programApprovalSnapshot.setProgramStatus(ProgramStatusNewEnum.XQBG.getCode());
             BeanUtils.copyProperties(programApprovalSnapshot,program);
+            programApprovalSnapshot.setProgramStatus(ProgramStatusNewEnum.XQBG.getCode());
             if (overallCost.compareTo(ten) != -1) {
                 programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
+                programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.BGSHZ.getCode());
+            } else {
+                programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
             }
-            programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
+
             programApprovalSnapshot.setRemark(paramsMap.get("remark"));
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
