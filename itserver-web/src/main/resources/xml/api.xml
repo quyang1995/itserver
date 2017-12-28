@@ -316,6 +316,8 @@
             <property name="uedList" type="string" required="false"/>
             <property name="testingList" type="string" required="false"/>
             <property name="businessList" type="string" required="false"/>
+            <property name="operationList" type="string" required="false"/>
+            <property name="operateList" type="string" required="false"/>
             <property name="accountType" type="string" required="false" />
         </request>
     </item>
