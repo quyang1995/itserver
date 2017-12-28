@@ -35,31 +35,6 @@ public class APIProgramBpmController extends BaseController {
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	/**
-	 * 查看立项申请（作废）
-	 */
-	@RequestMapping(value = "/applyView", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
-	@ResponseBody
-	public Map applyView(HttpServletRequest request) throws IOException {
-		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-		try{
-			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-			LOG.info("------applyView:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
-
-			Program program = this.getProgram(paramsMap);
-			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
-			if(program.getProgramStatus() == ProgramStatusNewEnum.WLX.getCode())
-				return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
-
-//			ApplyViewVo applyViewVo = getProgramService().applyView(paramsMap,program);
-//			resultMap.put("data",applyViewVo);
-		}catch (Exception e){
-			e.printStackTrace();
-			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
-		}
-		return resultMap;
-	}
-
-	/**
 	 * 提交立项申请
 	 */
 	@RequestMapping(value = "/apply", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
@@ -72,10 +47,9 @@ public class APIProgramBpmController extends BaseController {
 
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
-//			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"))) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
-			};
+			}
 			getProgramService().apply(paramsMap,program);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -97,9 +71,6 @@ public class APIProgramBpmController extends BaseController {
 
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
-			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"))) {
-				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
-			};
 			getProgramService().approvalPass(paramsMap,program);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -121,9 +92,6 @@ public class APIProgramBpmController extends BaseController {
 
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
-			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"))) {
-				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
-			};
 			getProgramService().approvalRebut(paramsMap,program);
 		}catch (Exception e){
 			e.printStackTrace();
