@@ -8,6 +8,7 @@ import com.longfor.itserver.entity.ProgramEmployee;
 import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -42,9 +43,42 @@ public class PsProgramDetail extends Program implements Serializable {
     @Transient
     private List<ProgramApprovalSnapshot> grayLevelList;
     @Transient
-    private List<ProgramApprovalSnapshot> costRecord;
+    private List<ProgramApprovalSnapshot> costRecordList;
     @Transient
     private List<ProgramApprovalSnapshot> milepostList;
+
+    @Transient
+    private List<Map> grayLevelMap;
+
+    @Transient
+    private List<Map> costRecordMap;
+
+    @Transient
+    private List<Map> milepostMap;
+
+    public void setGrayLevelMap(List<Map> grayLevelMap) {
+        this.grayLevelMap = grayLevelMap;
+    }
+
+    public void setCostRecordMap(List<Map> costRecordMap) {
+        this.costRecordMap = costRecordMap;
+    }
+
+    public void setMilepostMap(List<Map> milepostMap) {
+        this.milepostMap = milepostMap;
+    }
+
+    public List<Map> getGrayLevelMap() {
+        return grayLevelMap;
+    }
+
+    public List<Map> getCostRecordMap() {
+        return costRecordMap;
+    }
+
+    public List<Map> getMilepostMap() {
+        return milepostMap;
+    }
 
     public List<ProgramApprovalSnapshot> getMilepostList() {
         return milepostList;
@@ -54,12 +88,12 @@ public class PsProgramDetail extends Program implements Serializable {
         this.milepostList = milepostList;
     }
 
-    public List<ProgramApprovalSnapshot> getCostRecord() {
-        return costRecord;
+    public List<ProgramApprovalSnapshot> getCostRecordList() {
+        return costRecordList;
     }
 
-    public void setCostRecord(List<ProgramApprovalSnapshot> costRecord) {
-        this.costRecord = costRecord;
+    public void setCostRecordList(List<ProgramApprovalSnapshot> costRecordList) {
+        this.costRecordList = costRecordList;
     }
 
     public List<ProgramApprovalSnapshot> getGrayLevelList() {
