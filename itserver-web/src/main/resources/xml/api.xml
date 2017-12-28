@@ -266,16 +266,9 @@
             <property name="productId" type="int" required="true"/>
             <property name="name" type="string" required="true" maxLength="100"/>
             <property name="descp" type="string" required="false" maxLength="3000"/>
-            <!--<property name="commitDate" type="string" required="true" maxLength="20"/>-->
-            <!--<property name="startDate" type="string" required="true" maxLength="20"/>-->
-            <!--<property name="grayReleaseDate" type="string" required="true" maxLength="20"/>-->
-            <!--<property name="releaseDate" type="string" required="true" maxLength="20"/>-->
-            <!--<property name="uedDate" type="string" required="true" maxLength="20"/>-->
-            <!--<property name="architectureDate" type="string" required="true" maxLength="20"/>-->
             <property name="likeProduct" type="string" required="false" maxLength="20"/>
             <property name="likeProgram" type="string" required="false" maxLength="20"/>
             <property name="type" type="int" required="true" area="0,1"/>
-            <property name="programStatus" type="int" required="true" area="100,110,120,130,140,150,160,170,180,190,195,200,210,900,999"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="true" maxLength="50"/>
             <property name="personLiableList" type="string" required="true"/>
@@ -297,16 +290,9 @@
             <property name="productId" type="int" required="true"/>
             <property name="name" type="string" required="true" maxLength="100"/>
             <property name="descp" type="string" required="false" maxLength="3000"/>
-            <property name="commitDate" type="string" required="true" maxLength="20"/>
-            <property name="startDate" type="string" required="true" maxLength="20"/>
-            <property name="grayReleaseDate" type="string" required="true" maxLength="20"/>
-            <property name="releaseDate" type="string" required="true" maxLength="20"/>
-            <property name="uedDate" type="string" required="true" maxLength="20"/>
-            <property name="architectureDate" type="string" required="true" maxLength="20"/>
             <property name="likeProduct" type="string" required="false" maxLength="20"/>
             <property name="likeProgram" type="string" required="false" maxLength="20"/>
             <property name="type" type="int" required="true" area="0,1"/>
-            <property name="programStatus" type="int" required="true" area="0,1,2"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="true" maxLength="50"/>
             <property name="personLiableList" type="string" required="true"/>

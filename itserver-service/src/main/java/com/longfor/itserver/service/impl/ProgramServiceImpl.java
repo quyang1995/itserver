@@ -202,6 +202,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         if(product == null){
             return false;
         }
+        program.setProgramStatus(ProgramStatusNewEnum.WLX.getCode());
         program.setProductName(product.getName());
         program.setProductCode(product.getCode());
         program.setCreateTime(TimeUtils.getTodayByDateTime());
