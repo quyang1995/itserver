@@ -10,6 +10,7 @@ import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ProgramApprovalSnapshot;
 import com.longfor.itserver.entity.ProgramEmployee;
+import com.longfor.itserver.entity.ProgramFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -495,6 +496,27 @@ public class APIProgramBpmController extends BaseController {
 			f = true;
 		}
 		return f;
+	}
+
+	/**
+	 * 根据需求ID 获取相关需求文件
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/getFile" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+	@ResponseBody
+	public Map getFile(HttpServletRequest request){
+		Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try {
+			//获取文件
+			ProgramFile result = this.getProgramFileService().selectById(Long.valueOf((String)paramsMap.get("id")));
+			resultMap.put("data",result);
+		} catch ( Exception e) {
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return  resultMap;
 	}
 
 }

@@ -191,8 +191,8 @@ public class APIProgramController extends BaseController {
 			List<ProgramApprovalSnapshot> grayLevelList =  this.getGrayLevelList(productList);
 			program.setGrayLevelList(grayLevelList);
 			/*项目费用记录*/
-			List<ProgramApprovalSnapshot> costRecordList =  this.grayLevelList(productList);
-			program.setGrayLevelList(costRecordList);
+			List<ProgramApprovalSnapshot> costRecordList =  this.costRecordList(productList);
+			program.setCostRecord(costRecordList);
 			/*项目里程碑*/
 			Map milepostMap = new HashMap();
 			milepostMap.put("id", new Long(id));
@@ -207,7 +207,7 @@ public class APIProgramController extends BaseController {
 	}
 
 	/* 项目费用记录 */
-	private List<ProgramApprovalSnapshot> grayLevelList(List<ProgramApprovalSnapshot> productList){
+	private List<ProgramApprovalSnapshot> costRecordList(List<ProgramApprovalSnapshot> productList){
 		List<ProgramApprovalSnapshot> resultList = new ArrayList<ProgramApprovalSnapshot>();
 		Integer changeDay = 0;
 		BigDecimal bignum = new BigDecimal("0");

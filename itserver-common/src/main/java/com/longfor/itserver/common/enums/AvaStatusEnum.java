@@ -22,6 +22,8 @@ public enum AvaStatusEnum {
     UEDAVA(4, "UED人员", ""),
     TESTINGAVA(5, "测试人员", ""),
     BUSINESSAVA(6, "业务人员", ""),
+    OPERATION(7, "运维人员", ""),
+    OPERATE(8, "运营人员", ""),
     /*评论回复类型*/
     REPLY_ZERO(0, "未回复", ""),
     REPLY_ONE(1, "已回复", ""),

@@ -183,19 +183,19 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     @Override
     public ProgramApprovalSnapshot getProgramByBpmCode(Map<String,Object> paramMap) {
         List<ProgramApprovalSnapshot> allList =programApprovalSnapshotMapper.grayLevelList(paramMap);
-        ProgramApprovalSnapshot shot = new ProgramApprovalSnapshot();
-        if (allList!=null && !allList.isEmpty()) {
-            shot = allList.get(0);
-            Map map = new HashMap();
-            map.put("programId",paramMap.get("id"));
-            map.put("type",paramMap.get("programStatus"));
-            List<ProgramFile> fileList = programFileMapper.getListByMap(map);
-            shot.setFileList(fileList);
-            map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
-            map.put("employeeTypeId", new Long(AvaStatusEnum.PROGAVA.getCode()));
-            List<ProgramEmployee> empList  = programEmployeeMapper.selectTypeList(map);
-            shot.setEmpList(empList);
+        if (allList==null || allList.isEmpty()) {
+            return null;
         }
+        ProgramApprovalSnapshot shot = allList.get(0);
+        Map map = new HashMap();
+        map.put("programId",shot.getId());
+        map.put("type",paramMap.get("programStatus"));
+        List<ProgramFile> fileList = programFileMapper.getListByMap(map);
+        shot.setFileList(fileList);
+        map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
+        map.put("employeeTypeId", new Long(AvaStatusEnum.PROGAVA.getCode()));
+        List<ProgramEmployee> empList  = programEmployeeMapper.selectTypeList(map);
+        shot.setEmpList(empList);
         return shot;
     }
 
@@ -251,6 +251,18 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         String jsonArrBusiness = json.get("businessList").toString();
         if (!"".equals(jsonArrBusiness)) {
             getAccountLongfor(program, jsonArrBusiness, "6");
+        }
+
+        // 运维人员
+        String jsonArrOperation = json.get("operationList").toString();
+        if (!"".equals(jsonArrOperation)) {
+            getAccountLongfor(program, jsonArrOperation, "7");
+        }
+
+        // 运营人员
+        String jsonArrOperate = json.get("operateList").toString();
+        if (!"".equals(jsonArrOperate)) {
+            getAccountLongfor(program, jsonArrOperate, "8");
         }
 
         //先生成变动日志
@@ -310,6 +322,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                     pe.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
                     pe.setEmployeeTypeId(new Long(AvaStatusEnum.BUSINESSAVA.getCode()));
                     pe.setEmployeeTypeText(AvaStatusEnum.BUSINESSAVA.getText());
+                }else if ("7".equals(id)) {
+                    pe.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
+                    pe.setEmployeeTypeId(new Long(AvaStatusEnum.OPERATION.getCode()));
+                    pe.setEmployeeTypeText(AvaStatusEnum.OPERATION.getText());
+                }else if ("8".equals(id)) {
+                    pe.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
+                    pe.setEmployeeTypeId(new Long(AvaStatusEnum.OPERATE.getCode()));
+                    pe.setEmployeeTypeText(AvaStatusEnum.OPERATE.getText());
                 }
                 pe.setStatus(AvaStatusEnum.AVA.getCode());
                 pe.setCreateTime(TimeUtils.getTodayByDateTime());
