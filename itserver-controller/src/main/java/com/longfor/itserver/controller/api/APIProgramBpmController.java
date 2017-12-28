@@ -47,7 +47,7 @@ public class APIProgramBpmController extends BaseController {
 
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
-			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"))) {
+			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
 			getProgramService().apply(paramsMap,program);
@@ -120,9 +120,9 @@ public class APIProgramBpmController extends BaseController {
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
 //			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
-			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"))) {
+			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
-			};
+			}
 			getProgramService().demoReview(paramsMap,program);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -145,9 +145,9 @@ public class APIProgramBpmController extends BaseController {
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
 //			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
-			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"))) {
+			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
-			};
+			}
 			getProgramService().tenderFile(paramsMap,program);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -170,9 +170,9 @@ public class APIProgramBpmController extends BaseController {
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
 //			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
-			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"))) {
+			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
-			};
+			}
 			getProgramService().bidNotice(paramsMap,program);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -195,9 +195,9 @@ public class APIProgramBpmController extends BaseController {
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
 //			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
-			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"))) {
+			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
-			};
+			}
 			getProgramService().productReview(paramsMap,program);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -220,9 +220,9 @@ public class APIProgramBpmController extends BaseController {
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
 //			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
-			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"))) {
+			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.DEVEAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
-			};
+			}
 			getProgramService().development(paramsMap,program);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -245,9 +245,9 @@ public class APIProgramBpmController extends BaseController {
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
 //			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
-			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"))) {
+			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.TESTINGAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
-			};
+			}
 			getProgramService().deploy(paramsMap,program);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -270,9 +270,9 @@ public class APIProgramBpmController extends BaseController {
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
 //			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
-			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"))) {
+			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
-			};
+			}
 			getProgramService().planOnline(paramsMap,program);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -295,9 +295,9 @@ public class APIProgramBpmController extends BaseController {
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
 //			if(ProgramApprovalStatusEnum.SHTG.getCode() != program.getApprovalStatus()) return CommonUtils.getResultMapByBizEnum(BizEnum.E1302);
-			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"))) {
+			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
-			};
+			}
 			getProgramService().release(paramsMap,program);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -319,9 +319,9 @@ public class APIProgramBpmController extends BaseController {
 
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
-			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"))) {
+			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
-			};
+			}
 			getProgramService().projectReview(paramsMap,program);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -344,9 +344,9 @@ public class APIProgramBpmController extends BaseController {
 
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
-			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"))) {
+			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
-			};
+			}
 			getProgramService().delay(paramsMap,program);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -368,9 +368,9 @@ public class APIProgramBpmController extends BaseController {
 
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
-			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"))) {
+			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
-			};
+			}
 			getProgramService().demandChange(paramsMap,program);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -392,9 +392,9 @@ public class APIProgramBpmController extends BaseController {
 
             Program program = this.getProgram(paramsMap);
             if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
-			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"))) {
+			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
-			};
+			}
             getProgramService().stopProgram(paramsMap,program);
         }catch (Exception e){
             e.printStackTrace();
@@ -452,18 +452,17 @@ public class APIProgramBpmController extends BaseController {
 		return resultMap;
 	}
 
-	private boolean checkAuth(String id,String accountId){
-		boolean f = false;
+	private boolean checkAuth(String id,String accountId ,int avaStatusEnum){
 		Map map = new HashMap();
 		map.put("programId",id);
 		map.put("accountId",accountId);
 		map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
-		map.put("employeeTypeId", new Long(AvaStatusEnum.PROGAVA.getCode()));
+		map.put("employeeTypeId", new Long(avaStatusEnum));
 		List<ProgramEmployee> empList  = getProgramEmployeeService().selectTypeList(map);
 		if (empList != null && !empList.isEmpty()) {
-			f = true;
+			return true;
 		}
-		return f;
+		return false;
 	}
 
 	/**
