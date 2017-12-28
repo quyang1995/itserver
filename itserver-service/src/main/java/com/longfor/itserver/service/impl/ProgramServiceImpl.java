@@ -733,21 +733,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             String bpmCode = paramsMap.get("instanceId");
             //更新项目表
             program.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
-
-            //获取该审批流的项目状态
-            ProgramApprovalSnapshot shotTmp = new ProgramApprovalSnapshot();
-            shotTmp.setBpmCode(bpmCode);
-            List<ProgramApprovalSnapshot> tmpList = programApprovalSnapshotMapper.select(shotTmp);
-            int programStatus = tmpList.get(0).getProgramStatus();
-            if(programStatus==ProgramStatusNewEnum.XMFP.getCode()){//如果提交审批的为复盘，则项目状态直接到完成
-                program.setProgramStatus(ProgramStatusNewEnum.WC.getCode());
-            }else if(programStatus==ProgramStatusNewEnum.YQSX.getCode()
-                    || programStatus==ProgramStatusNewEnum.XQBG.getCode()){//如果提交审批的为延期上线或者需求变更，则项目状态直接到产品评审
-                program.setProgramStatus(ProgramStatusNewEnum.CPPS.getCode());
-            }else if(programStatus==ProgramStatusNewEnum.ZZ.getCode()){//如果提交审批的为终止项目，则项目状态直接到终止
-                program.setProgramStatus(ProgramStatusNewEnum.ZZ.getCode());
-            }
-
+            getApprovelAfterProgramStatus(bpmCode,program);
             programMapper.updateByPrimaryKey(program);
 
             //program快照表
@@ -1439,6 +1425,27 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                     programFileMapper.insert(programFile);
                 }
             }
+        }
+    }
+
+    /***
+     * 审批流审批通过之后，如果审批为复盘、延期上线、需求变更、终止项目时，  则项目表项目状态需要变更
+     * @param bpmCode
+     * @return
+     */
+    private void getApprovelAfterProgramStatus(String bpmCode,Program program){
+        //获取该审批流的项目状态
+        ProgramApprovalSnapshot shotTmp = new ProgramApprovalSnapshot();
+        shotTmp.setBpmCode(bpmCode);
+        List<ProgramApprovalSnapshot> tmpList = programApprovalSnapshotMapper.select(shotTmp);
+        int programStatus = tmpList.get(0).getProgramStatus();
+
+        if(programStatus==ProgramStatusNewEnum.XMFP.getCode()){//如果提交审批的为复盘，则项目状态直接到完成
+            program.setProgramStatus(ProgramStatusNewEnum.WC.getCode());
+        }else if(programStatus==ProgramStatusNewEnum.YQSX.getCode() || programStatus==ProgramStatusNewEnum.XQBG.getCode()){//如果提交审批的为延期上线或者需求变更，则项目状态直接到产品评审
+            program.setProgramStatus(ProgramStatusNewEnum.CPPS.getCode());
+        }else if(programStatus==ProgramStatusNewEnum.ZZ.getCode()){//如果提交审批的为终止项目，则项目状态直接到终止
+            program.setProgramStatus(ProgramStatusNewEnum.ZZ.getCode());
         }
     }
 }
