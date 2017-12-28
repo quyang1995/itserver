@@ -209,16 +209,18 @@ public class APIProgramController extends BaseController {
 	/* 项目费用记录 */
 	private List<ProgramApprovalSnapshot> costRecordList(List<ProgramApprovalSnapshot> productList){
 		List<ProgramApprovalSnapshot> resultList = new ArrayList<ProgramApprovalSnapshot>();
+		if (productList == null || productList.isEmpty()) {
+			return null;
+		}
 		Integer changeDay = 0;
 		BigDecimal bignum = new BigDecimal("0");
-		if (productList != null && !productList.isEmpty()) {
-			for(ProgramApprovalSnapshot model:productList){
-				if (model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-						&& (model.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
-						|| model.getProgramStatus()==ProgramStatusNewEnum.ZBSQ.getCode()
-						|| model.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode())) {
-					changeDay += model.getDevWorkload();
-					bignum.add(model.getOverallCost());
+		for(ProgramApprovalSnapshot model:productList){
+			if (model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+					&& (model.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
+					|| model.getProgramStatus()==ProgramStatusNewEnum.ZBSQ.getCode()
+					|| model.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode())) {
+				changeDay += model.getDevWorkload();
+				bignum.add(model.getOverallCost());
 //					发起人ID：model.getModifiedAccountId();
 //					发起人：model.getModifiedName();
 //					预估变更整体费用：model.getBidOverallCost();
@@ -228,8 +230,7 @@ public class APIProgramController extends BaseController {
 //					map.put("modifiedName",model.getModifiedName());
 //					map.put("bidOverallCost",model.getBidOverallCost());
 //					map.put("bidOversingleCost",model.getBidOversingleCost());
-					resultList.add(model);
-				}
+				resultList.add(model);
 			}
 		}
 		return  resultList;
@@ -302,20 +303,22 @@ public class APIProgramController extends BaseController {
 	/* 灰度时间变更记录 */
 	private List<ProgramApprovalSnapshot> getGrayLevelList(List<ProgramApprovalSnapshot> productList){
 		List<ProgramApprovalSnapshot> resultList = new ArrayList<ProgramApprovalSnapshot>();
-		if (productList != null && !productList.isEmpty()) {
-			for(ProgramApprovalSnapshot model:productList){
-				if (model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-						&& (model.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
-								|| model.getProgramStatus()==ProgramStatusNewEnum.YQSX.getCode()
-								|| model.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode())) {
+		if (productList == null || productList.isEmpty()) {
+			return null;
+		}
+		for(ProgramApprovalSnapshot model:productList){
+			if (model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+					&& (model.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
+							|| model.getProgramStatus()==ProgramStatusNewEnum.YQSX.getCode()
+							|| model.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode())) {
 //					发起人ID：model.getModifiedAccountId();
 //					发起人：model.getModifiedName();
 //					灰度时间：model.getGrayReleaseDate();
 //					变更渠道：model.getProgramStatus();
-					resultList.add(model);
-				}
+				resultList.add(model);
 			}
 		}
+
 		return  resultList;
 	}
 
