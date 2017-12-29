@@ -55,7 +55,7 @@ public class PsProgramDetail extends Program implements Serializable {
     private List<Map> grayLevelMap;
 
     @Transient
-    private List<Map> costRecordMap;
+    private List<Map<String,Object>> costRecordMap;
 
     @Transient
     private List<Map> milepostMap;
@@ -80,7 +80,7 @@ public class PsProgramDetail extends Program implements Serializable {
         this.grayLevelMap = grayLevelMap;
     }
 
-    public void setCostRecordMap(List<Map> costRecordMap) {
+    public void setCostRecordMap(List<Map<String,Object>> costRecordMap) {
         this.costRecordMap = costRecordMap;
     }
 
@@ -92,7 +92,7 @@ public class PsProgramDetail extends Program implements Serializable {
         return grayLevelMap;
     }
 
-    public List<Map> getCostRecordMap() {
+    public List<Map<String,Object>> getCostRecordMap() {
         return costRecordMap;
     }
 

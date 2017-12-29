@@ -174,7 +174,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     }
 
     @Override
-    public ProgramApprovalSnapshot getProgramByBpmCode(Map<String,Object> paramMap) {
+    public ProgramApprovalSnapshot  getProgramByBpmCode(Map<String,Object> paramMap) {
         List<ProgramApprovalSnapshot> allList =programApprovalSnapshotMapper.grayLevelList(paramMap);
         if (allList==null || allList.isEmpty()) {
             return null;
@@ -182,7 +182,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         ProgramApprovalSnapshot shot = allList.get(0);
         Map map = new HashMap();
         map.put("programId",shot.getId());
-        map.put("type",paramMap.get("programStatus"));
+        map.put("type",shot.getProgramStatus());
         List<ProgramFile> fileList = programFileMapper.getListByMap(map);
         shot.setFileList(fileList);
         map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
@@ -490,14 +490,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                 || !Objects.equals(oldProgram.getType(), newProgram.getType())){
             StringBuilder sb = new StringBuilder();
             //判断code是否有效
-            if(Objects.nonNull(ProgramStatusEnum.getByCode(newProgram.getProgramStatus())) && !Objects.equals(oldProgram.getProgramStatus(), newProgram.getProgramStatus())){
-                sb.append(newProgram.getModifiedName())
-                        .append(" 将 项目状态 从 [")
-                        .append(ProgramStatusEnum.getByCode(oldProgram.getProgramStatus()).getText())
-                        .append("] 更新为 [")
-                        .append(ProgramStatusEnum.getByCode(newProgram.getProgramStatus()).getText())
-                        .append("] ");
-            }
+//            if(Objects.nonNull(ProgramStatusEnum.getByCode(newProgram.getProgramStatus())) && !Objects.equals(oldProgram.getProgramStatus(), newProgram.getProgramStatus())){
+//                sb.append(newProgram.getModifiedName())
+//                        .append(" 将 项目状态 从 [")
+//                        .append(ProgramStatusEnum.getByCode(oldProgram.getProgramStatus()).getText())
+//                        .append("] 更新为 [")
+//                        .append(ProgramStatusEnum.getByCode(newProgram.getProgramStatus()).getText())
+//                        .append("] ");
+//            }
             if(!Objects.equals(oldProgram.getType(), newProgram.getType())){
                 if(StringUtils.isNotBlank(sb.toString())){
                     sb.append(",");
@@ -510,81 +510,82 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                         .append(PublicTypeEnum.getByCode(newProgram.getType()).getText())
                         .append("]");
             }
-
-            textList.add(sb.toString());
+            if (!sb.toString().isEmpty()) {
+                textList.add(sb.toString());
+            }
         }
 
         //立项时间
-        if(!TimeUtils.sameDate(oldProgram.getCommitDate(), newProgram.getCommitDate())){
-            StringBuilder sb = new StringBuilder();
-            sb.append(newProgram.getModifiedName());
-            sb.append(" 将 立项时间 从 [")
-                    .append(TimeUtils.getTime(oldProgram.getCommitDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-                    .append("] 更新为 [")
-                    .append(TimeUtils.getTime(newProgram.getCommitDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-                    .append("]");
-            textList.add(sb.toString());
-        }
+//        if(!TimeUtils.sameDate(oldProgram.getCommitDate(), newProgram.getCommitDate())){
+//            StringBuilder sb = new StringBuilder();
+//            sb.append(newProgram.getModifiedName());
+//            sb.append(" 将 立项时间 从 [")
+//                    .append(TimeUtils.getTime(oldProgram.getCommitDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+//                    .append("] 更新为 [")
+//                    .append(TimeUtils.getTime(newProgram.getCommitDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+//                    .append("]");
+//            textList.add(sb.toString());
+//        }
         //启动时间
-        if(!TimeUtils.sameDate(oldProgram.getStartDate(), newProgram.getStartDate())){
-            StringBuilder sb = new StringBuilder();
-            sb.append(newProgram.getModifiedName());
-            sb.append(" 将 启动时间 从 [")
-                    .append(TimeUtils.getTime(oldProgram.getStartDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-                    .append("] 更新为 [")
-                    .append(TimeUtils.getTime(newProgram.getStartDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-                    .append("]");
-            textList.add(sb.toString());
-        }
+//        if(!TimeUtils.sameDate(oldProgram.getStartDate(), newProgram.getStartDate())){
+//            StringBuilder sb = new StringBuilder();
+//            sb.append(newProgram.getModifiedName());
+//            sb.append(" 将 启动时间 从 [")
+//                    .append(TimeUtils.getTime(oldProgram.getStartDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+//                    .append("] 更新为 [")
+//                    .append(TimeUtils.getTime(newProgram.getStartDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+//                    .append("]");
+//            textList.add(sb.toString());
+//        }
         //UED评审时间
-        if(!"".equals(oldProgram.getUedDate()) && oldProgram.getUedDate() != null){
-            if(!TimeUtils.sameDate(oldProgram.getUedDate(), newProgram.getUedDate())){
-                StringBuilder sb = new StringBuilder();
-                sb.append(newProgram.getModifiedName());
-                sb.append(" 将 UED评审时间 从 [")
-                        .append(TimeUtils.getTime(oldProgram.getUedDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-                        .append("] 更新为 [")
-                        .append(TimeUtils.getTime(newProgram.getUedDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-                        .append("]");
-                textList.add(sb.toString());
-            }
-        }
+//        if(!"".equals(oldProgram.getUedDate()) && oldProgram.getUedDate() != null){
+//            if(!TimeUtils.sameDate(oldProgram.getUedDate(), newProgram.getUedDate())){
+//                StringBuilder sb = new StringBuilder();
+//                sb.append(newProgram.getModifiedName());
+//                sb.append(" 将 UED评审时间 从 [")
+//                        .append(TimeUtils.getTime(oldProgram.getUedDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+//                        .append("] 更新为 [")
+//                        .append(TimeUtils.getTime(newProgram.getUedDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+//                        .append("]");
+//                textList.add(sb.toString());
+//            }
+//        }
 
         //架构评审时间
-        if(!"".equals(oldProgram.getArchitectureDate()) && oldProgram.getArchitectureDate() != null) {
-            if (!TimeUtils.sameDate(oldProgram.getArchitectureDate(), newProgram.getArchitectureDate())) {
-                StringBuilder sb = new StringBuilder();
-                sb.append(newProgram.getModifiedName());
-                sb.append(" 将 架构评审时间 从 [")
-                        .append(TimeUtils.getTime(oldProgram.getArchitectureDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-                        .append("] 更新为 [")
-                        .append(TimeUtils.getTime(newProgram.getArchitectureDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-                        .append("]");
-                textList.add(sb.toString());
-            }
-        }
+//        if(!"".equals(oldProgram.getArchitectureDate()) && oldProgram.getArchitectureDate() != null) {
+//            if (!TimeUtils.sameDate(oldProgram.getArchitectureDate(), newProgram.getArchitectureDate())) {
+//                StringBuilder sb = new StringBuilder();
+//                sb.append(newProgram.getModifiedName());
+//                sb.append(" 将 架构评审时间 从 [")
+//                        .append(TimeUtils.getTime(oldProgram.getArchitectureDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+//                        .append("] 更新为 [")
+//                        .append(TimeUtils.getTime(newProgram.getArchitectureDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+//                        .append("]");
+//                textList.add(sb.toString());
+//            }
+//        }
         //灰度时间
-        if(!TimeUtils.sameDate(oldProgram.getGrayReleaseDate(), newProgram.getGrayReleaseDate())){
-            StringBuilder sb = new StringBuilder();
-            sb.append(newProgram.getModifiedName());
-            sb.append(" 将 灰度时间 从 [")
-                    .append(TimeUtils.getTime(oldProgram.getGrayReleaseDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-                    .append("] 更新为 [")
-                    .append(TimeUtils.getTime(newProgram.getGrayReleaseDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-                    .append("]");
-            textList.add(sb.toString());
-        }
+//        if(!TimeUtils.sameDate(oldProgram.getGrayReleaseDate(), newProgram.getGrayReleaseDate())){
+//            StringBuilder sb = new StringBuilder();
+//            sb.append(newProgram.getModifiedName());
+//            sb.append(" 将 灰度时间 从 [")
+//                    .append(TimeUtils.getTime(oldProgram.getGrayReleaseDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+//                    .append("] 更新为 [")
+//                    .append(TimeUtils.getTime(newProgram.getGrayReleaseDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+//                    .append("]");
+//            textList.add(sb.toString());
+//        }
         //发布时间
-        if(!TimeUtils.sameDate(oldProgram.getReleaseDate(), newProgram.getReleaseDate())){
-            StringBuilder sb = new StringBuilder();
-            sb.append(newProgram.getModifiedName());
-            sb.append(" 将 发布时间 从 [")
-                    .append(TimeUtils.getTime(oldProgram.getReleaseDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-                    .append("] 更新为 [")
-                    .append(TimeUtils.getTime(newProgram.getReleaseDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
-                    .append("]");
-            textList.add(sb.toString());
-        }
+//        if(!TimeUtils.sameDate(oldProgram.getReleaseDate(), newProgram.getReleaseDate())){
+//            StringBuilder sb = new StringBuilder();
+//            sb.append(newProgram.getModifiedName());
+//            sb.append(" 将 发布时间 从 [")
+//                    .append(TimeUtils.getTime(oldProgram.getReleaseDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+//                    .append("] 更新为 [")
+//                    .append(TimeUtils.getTime(newProgram.getReleaseDate().getTime(), TimeUtils.JDATE_FORMAT_DEFAULT))
+//                    .append("]");
+//            textList.add(sb.toString());
+//        }
 
         if(!Objects.equals(oldProgram.getName(), newProgram.getName())
                 || !Objects.equals(oldProgram.getLikeProduct(), newProgram.getLikeProduct())

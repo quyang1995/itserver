@@ -25,15 +25,9 @@ public class ProgramEmployeeChangeLogServiceImpl extends AdminBaseService<Progra
     private ProgramEmployeeChangeLogMapper programEmployeeChangeLogMapper;
 
     @Override
-    public Map orderLimitList(Map paramsMap) {
-        JSONObject jsonObject = (JSONObject)JSONObject.toJSON(paramsMap);
-        Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-        ProgramEmployeeChangeLog employeeChangeLog = JSONObject.toJavaObject(jsonObject,ProgramEmployeeChangeLog.class);
+    public List<ProgramEmployeeChangeLog> orderLimitList(Map<String,Object> paramsMap) {
 
-        List list = programEmployeeChangeLogMapper.orderLimitList(employeeChangeLog);
-        resultMap.put("list",list);
-
-        return resultMap;
+        return programEmployeeChangeLogMapper.orderLimitList(paramsMap);
     }
 
     @Override

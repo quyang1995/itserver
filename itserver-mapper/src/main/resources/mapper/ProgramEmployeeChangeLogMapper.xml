@@ -23,7 +23,7 @@
   
   <select id="orderLimitList" resultMap="BaseResultMap">
     SELECT <include refid="Base_Column_List" /> from program_employee_change_log WHERE
-    program_id =#{programId} ORDER BY create_time DESC limit 0,50;
+    program_id =#{programId} ORDER BY create_time DESC limit #{startRow},#{endRow}
   </select>
 
   <select id="paraQuery" resultMap="BaseResultMap">
