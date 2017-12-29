@@ -33,29 +33,9 @@ public interface IProgramService extends IAdminService<Program> {
 
     ProgramApprovalSnapshot getProgramByBpmCode(Map<String,Object> map);
 
-    void apply(Map<String, String> paramsMap,Program program);
-
     void approvalPass(Map<String, String> paramsMap,Program program);
 
     void approvalRebut(Map<String, String> paramsMap,Program program);
-
-    void demoReview(Map<String, String> paramsMap,Program program);
-
-    void tenderFile(Map<String, String> paramsMap,Program program);
-
-    void bidNotice(Map<String, String> paramsMap,Program program);
-
-    void productReview(Map<String, String> paramsMap,Program program);
-
-    void development(Map<String, String> paramsMap,Program program);
-
-    void deploy(Map<String, String> paramsMap,Program program);
-
-    void planOnline(Map<String, String> paramsMap,Program program);
-
-    void release(Map<String, String> paramsMap,Program program);
-
-    void projectReview(Map<String, String> paramsMap,Program program);
 
     void delay(Map<String, String> paramsMap,Program program);
 
@@ -63,5 +43,6 @@ public interface IProgramService extends IAdminService<Program> {
 
     void stopProgram(Map<String, String> paramsMap,Program program);
 
+    void submit(Map<String, String> paramsMap,Program program,int programStatus);
 //    ApplyViewVo applyView(Map<String, String> paramsMap, Program program) throws Exception;
 }

@@ -658,66 +658,6 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         return true;
     }
 
-    /***
-     * 提交立项申请
-     */
-    @Override
-    @Transactional(value="transactionManager")
-    public void apply(Map<String, String> paramsMap,Program program) {
-        try{
-            Date now = new Date();
-            //创建流程
-            ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
-            if(!applyCreateResultVo.isSuccess()){
-                LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("创建流程失败");
-            }
-
-            int approvalStatus = ProgramApprovalStatusEnum.SHZ.getCode();
-            int programStatus = ProgramStatusNewEnum.LX.getCode();
-
-            //program表
-            program.setDevType(Integer.parseInt(paramsMap.get("devType")));//研发方式
-            program.setAnalyzingConditions(Integer.parseInt(paramsMap.get("analyzingConditions")));//判断条件
-            program.setDevWorkload(Integer.parseInt(paramsMap.get("devWorkload")));//研发工作量预估
-            program.setOverallCost(new BigDecimal(paramsMap.get("devWorkload")));//整体费用预估
-            program.setCommitDate(DateUtil.string2Date(paramsMap.get("commitDate"),DateUtil.PATTERN_DATE));
-            program.setDemoApprovalDate(DateUtil.string2Date(paramsMap.get("demoApprovalDate"),DateUtil.PATTERN_DATE));
-            program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("grayReleaseDate"),DateUtil.PATTERN_DATE));
-            if(program.getDevType() == ProgramDevTypeEnum.ZTB.getCode()){//招投标需要设置招标和中标时间
-                program.setBiddingDate(DateUtil.string2Date(paramsMap.get("biddingDate"),DateUtil.PATTERN_DATE));//招标时间
-                program.setWinningBidDate(DateUtil.string2Date(paramsMap.get("winningBidDate"),DateUtil.PATTERN_DATE));//中标时间
-            }
-            program.setApprovalStatus(approvalStatus);
-            program.setProgramStatus(programStatus);
-            programMapper.updateByPrimaryKey(program);
-
-            //program快照表
-            ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-            BeanUtils.copyProperties(programApprovalSnapshot,program);
-            programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
-            programApprovalSnapshot.setRemark(paramsMap.get("remark"));
-            programApprovalSnapshot.setCreateTime(now);
-            programApprovalSnapshot.setModifiedTime(now);
-            programApprovalSnapshotMapper.insert(programApprovalSnapshot);
-
-            //附件表
-            this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.LX.getCode());
-
-            //激活流程
-            ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
-                    paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
-
-            if(pplySubmitResultVo.getIsSuccess().equals("false")){
-                LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("激活流程失败");
-            }
-
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new RuntimeException("发生异常");
-        }
-    }
 
     /***
      * 审核通过
@@ -800,465 +740,6 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programApprovalSnapshot.setSuggestion(paramsMap.get("suggestion"));
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new RuntimeException("发生异常");
-        }
-    }
-
-
-    /***
-     * demo评审
-     */
-    @Override
-    @Transactional(value="transactionManager")
-    public void demoReview(Map<String, String> paramsMap,Program program) {
-        try{
-            Date now = new Date();
-
-            //创建流程
-            ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
-            if(!applyCreateResultVo.isSuccess()){
-                LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("创建流程失败");
-            }
-
-            //program表
-            program.setProgramStatus(ProgramStatusNewEnum.DPS.getCode());
-            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
-            program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
-            program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
-            program.setModifiedName(paramsMap.get("modifiedName"));
-            programMapper.updateByPrimaryKey(program);
-
-            //program快照表
-            ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-            BeanUtils.copyProperties(programApprovalSnapshot,program);
-            programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
-            programApprovalSnapshot.setRemark(paramsMap.get("remark"));
-            programApprovalSnapshot.setCreateTime(now);
-            programApprovalSnapshot.setModifiedTime(now);
-            programApprovalSnapshotMapper.insert(programApprovalSnapshot);
-
-            //附件表
-            this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.DPS.getCode());
-
-
-            //激活流程
-            ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
-                    paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
-            if(pplySubmitResultVo.getIsSuccess().equals("false")){
-                LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("激活流程失败");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new RuntimeException("发生异常");
-        }
-    }
-
-    /***
-     * 招标文件
-     */
-    @Override
-    @Transactional(value="transactionManager")
-    public void tenderFile(Map<String, String> paramsMap,Program program) {
-        try{
-            Date now = new Date();
-
-            //创建流程
-            ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
-            if(!applyCreateResultVo.isSuccess()){
-                LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("创建流程失败");
-            }
-
-            //program表
-            program.setProgramStatus(ProgramStatusNewEnum.ZTBSQ.getCode());
-            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
-            program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
-            program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
-            program.setModifiedName(paramsMap.get("modifiedName"));
-            programMapper.updateByPrimaryKey(program);
-
-            //program快照表
-            ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-            BeanUtils.copyProperties(programApprovalSnapshot,program);
-            programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
-            programApprovalSnapshot.setRemark(paramsMap.get("remark"));
-            programApprovalSnapshot.setCreateTime(now);
-            programApprovalSnapshot.setModifiedTime(now);
-            programApprovalSnapshotMapper.insert(programApprovalSnapshot);
-
-            //附件表
-            this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.ZTBSQ.getCode());
-
-            //激活流程
-            ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
-                    paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
-            if(pplySubmitResultVo.getIsSuccess().equals("false")){
-                LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("激活流程失败");
-            }
-
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new RuntimeException("发生异常");
-        }
-    }
-
-    /***
-     * 中标通知
-     */
-    @Override
-    @Transactional(value="transactionManager")
-    public void bidNotice(Map<String, String> paramsMap,Program program) {
-        try{
-            Date now = new Date();
-
-            //创建流程
-            ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
-            if(!applyCreateResultVo.isSuccess()){
-                LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("创建流程失败");
-            }
-
-            //program表
-            program.setProgramStatus(ProgramStatusNewEnum.ZBSQ.getCode());
-            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
-            program.setBidOverallCost(new BigDecimal(paramsMap.get("bidOverallCost")));
-            program.setBidDevWorkload(Integer.parseInt(paramsMap.get("bidDevWorkload")));
-            program.setBidOversingleCost(new BigDecimal(paramsMap.get("bidOversingleCost")));
-            program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
-            program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
-            program.setModifiedName(paramsMap.get("modifiedName"));
-            programMapper.updateByPrimaryKey(program);
-
-            //program快照表
-            ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-            BeanUtils.copyProperties(programApprovalSnapshot,program);
-            programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
-            programApprovalSnapshot.setRemark(paramsMap.get("remark"));
-            programApprovalSnapshot.setCreateTime(now);
-            programApprovalSnapshot.setModifiedTime(now);
-            programApprovalSnapshotMapper.insert(programApprovalSnapshot);
-
-            //附件表
-            this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.ZBSQ.getCode());
-
-            //激活流程
-            ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
-                    paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
-            if(pplySubmitResultVo.getIsSuccess().equals("false")){
-                LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("激活流程失败");
-            }
-
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new RuntimeException("发生异常");
-        }
-    }
-
-    /***
-     * 产品评审
-     */
-    @Override
-    @Transactional(value="transactionManager")
-    public void productReview(Map<String, String> paramsMap,Program program) {
-        try{
-            Date now = new Date();
-
-            //创建流程
-            ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
-            if(!applyCreateResultVo.isSuccess()){
-                LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("创建流程失败");
-            }
-
-            //program表
-            program.setProgramStatus(ProgramStatusNewEnum.CPPS.getCode());
-            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
-            program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("productReviewDate"),DateUtil.PATTERN_DATE));
-            program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("researchDate"),DateUtil.PATTERN_DATE));
-            program.setTestApprovalDate(DateUtil.string2Date(paramsMap.get("testDate"),DateUtil.PATTERN_DATE));
-            program.setOnlinePlanDate(DateUtil.string2Date(paramsMap.get("onlineDate"),DateUtil.PATTERN_DATE));
-
-            program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
-            program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
-            program.setModifiedName(paramsMap.get("modifiedName"));
-            programMapper.updateByPrimaryKey(program);
-
-            //program快照表
-            ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-            BeanUtils.copyProperties(programApprovalSnapshot,program);
-            programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
-            programApprovalSnapshot.setRemark(paramsMap.get("remark"));
-            programApprovalSnapshot.setCreateTime(now);
-            programApprovalSnapshot.setModifiedTime(now);
-            programApprovalSnapshotMapper.insert(programApprovalSnapshot);
-
-            //附件表
-            this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.CPPS.getCode());
-
-            //激活流程
-            ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
-                    paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
-            if(pplySubmitResultVo.getIsSuccess().equals("false")){
-                LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("激活流程失败");
-            }
-
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new RuntimeException("发生异常");
-        }
-    }
-
-    /***
-     * 进入开发
-     */
-    @Override
-    @Transactional(value="transactionManager")
-    public void development(Map<String, String> paramsMap,Program program) {
-        try{
-            Date now = new Date();
-
-            //创建流程
-            ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
-            if(!applyCreateResultVo.isSuccess()){
-                LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("创建流程失败");
-            }
-
-            //program表
-            program.setProgramStatus(ProgramStatusNewEnum.KFPS.getCode());
-            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
-            program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
-            program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
-            program.setModifiedName(paramsMap.get("modifiedName"));
-            programMapper.updateByPrimaryKey(program);
-
-            //program快照表
-            ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-            BeanUtils.copyProperties(programApprovalSnapshot,program);
-            programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
-            programApprovalSnapshot.setRemark(paramsMap.get("remark"));
-            programApprovalSnapshot.setCreateTime(now);
-            programApprovalSnapshot.setModifiedTime(now);
-            programApprovalSnapshotMapper.insert(programApprovalSnapshot);
-
-            //附件表
-            this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.KFPS.getCode());
-
-            //激活流程
-            ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
-                    paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
-            if(pplySubmitResultVo.getIsSuccess().equals("false")){
-                LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("激活流程失败");
-            }
-
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new RuntimeException("发生异常");
-        }
-    }
-
-    /***
-     * 测试部署
-     */
-    @Override
-    @Transactional(value="transactionManager")
-    public void deploy(Map<String, String> paramsMap,Program program) {
-        try{
-            Date now = new Date();
-
-            //创建流程
-            ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
-            if(!applyCreateResultVo.isSuccess()){
-                LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("创建流程失败");
-            }
-
-            //program表
-            program.setProgramStatus(ProgramStatusNewEnum.CSPS.getCode());
-            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
-            program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
-            program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
-            program.setModifiedName(paramsMap.get("modifiedName"));
-            programMapper.updateByPrimaryKey(program);
-
-            //program快照表
-            ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-            BeanUtils.copyProperties(programApprovalSnapshot,program);
-            programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
-            programApprovalSnapshot.setRemark(paramsMap.get("remark"));
-            programApprovalSnapshot.setCreateTime(now);
-            programApprovalSnapshot.setModifiedTime(now);
-            programApprovalSnapshotMapper.insert(programApprovalSnapshot);
-
-            //附件表
-            this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.CSPS.getCode());
-
-            //激活流程
-            ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
-                    paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
-            if(pplySubmitResultVo.getIsSuccess().equals("false")){
-                LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("激活流程失败");
-            }
-
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new RuntimeException("发生异常");
-        }
-    }
-
-    /***
-     * 上线计划
-     */
-    @Override
-    @Transactional(value="transactionManager")
-    public void planOnline(Map<String, String> paramsMap,Program program) {
-        try{
-            Date now = new Date();
-
-            //创建流程
-            ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
-            if(!applyCreateResultVo.isSuccess()){
-                LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("创建流程失败");
-            }
-
-            //program表
-            program.setProgramStatus(ProgramStatusNewEnum.SXPS.getCode());
-            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
-            program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
-            program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
-            program.setModifiedName(paramsMap.get("modifiedName"));
-            programMapper.updateByPrimaryKey(program);
-
-            //program快照表
-            ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-            BeanUtils.copyProperties(programApprovalSnapshot,program);
-            programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
-            programApprovalSnapshot.setRemark(paramsMap.get("remark"));
-            programApprovalSnapshot.setCreateTime(now);
-            programApprovalSnapshot.setModifiedTime(now);
-            programApprovalSnapshotMapper.insert(programApprovalSnapshot);
-
-            //附件表
-            this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.SXPS.getCode());
-
-            //激活流程
-            ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
-                    paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
-            if(pplySubmitResultVo.getIsSuccess().equals("false")){
-                LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("激活流程失败");
-            }
-
-
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new RuntimeException("发生异常");
-        }
-    }
-
-    /***
-     * 灰度发布
-     */
-    @Override
-    @Transactional(value="transactionManager")
-    public void release(Map<String, String> paramsMap,Program program) {
-        try{
-            Date now = new Date();
-
-            //创建流程
-            ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
-            if(!applyCreateResultVo.isSuccess()){
-                LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("创建流程失败");
-            }
-
-            //program表
-            program.setProgramStatus(ProgramStatusNewEnum.HDFB.getCode());
-            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
-            program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
-            program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
-            program.setModifiedName(paramsMap.get("modifiedName"));
-            programMapper.updateByPrimaryKey(program);
-
-            //program快照表
-            ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-            BeanUtils.copyProperties(programApprovalSnapshot,program);
-            programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
-            programApprovalSnapshot.setRemark(paramsMap.get("remark"));
-            programApprovalSnapshot.setCreateTime(now);
-            programApprovalSnapshot.setModifiedTime(now);
-            programApprovalSnapshotMapper.insert(programApprovalSnapshot);
-
-            //附件表
-            this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.HDFB.getCode());
-
-            //激活流程
-            ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
-                    paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
-            if(pplySubmitResultVo.getIsSuccess().equals("false")){
-                LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("激活流程失败");
-            }
-
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new RuntimeException("发生异常");
-        }
-    }
-
-    /***
-     * 项目复盘
-     */
-    @Override
-    @Transactional(value="transactionManager")
-    public void projectReview(Map<String, String> paramsMap,Program program) {
-        try{
-            Date now = new Date();
-
-            //创建流程
-            ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
-            if(!applyCreateResultVo.isSuccess()){
-                LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("创建流程失败");
-            }
-
-            //program表
-            program.setProgramStatus(ProgramStatusNewEnum.XMFP.getCode());
-            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
-            program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
-            program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
-            program.setModifiedName(paramsMap.get("modifiedName"));
-            programMapper.updateByPrimaryKey(program);
-
-            //program快照表
-            ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-            BeanUtils.copyProperties(programApprovalSnapshot,program);
-            programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
-            programApprovalSnapshot.setRemark(paramsMap.get("remark"));
-            programApprovalSnapshot.setCreateTime(now);
-            programApprovalSnapshot.setModifiedTime(now);
-            programApprovalSnapshotMapper.insert(programApprovalSnapshot);
-
-            //附件表
-            this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.XMFP.getCode());
-
-            //激活流程
-            ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
-                    paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
-            if(pplySubmitResultVo.getIsSuccess().equals("false")){
-                LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("激活流程失败");
-            }
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException("发生异常");
@@ -1474,6 +955,86 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             program.setProgramStatus(ProgramStatusNewEnum.CPPS.getCode());
         }else if(programStatus==ProgramStatusNewEnum.ZZ.getCode()){//如果提交审批的为终止项目，则项目状态直接到终止
             program.setProgramStatus(ProgramStatusNewEnum.ZZ.getCode());
+        }
+    }
+
+    @Override
+    @Transactional(value="transactionManager")
+    public void submit(Map<String, String> paramsMap,Program program,int programStatus) {
+        try{
+            Date now = new Date();
+            //创建流程
+            ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
+            if(!applyCreateResultVo.isSuccess()){
+                LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+                throw new RuntimeException("创建流程失败");
+            }
+
+            int approvalStatus = ProgramApprovalStatusEnum.SHZ.getCode();
+
+            String devType = paramsMap.get("devType");
+            String analyzingConditions = paramsMap.get("analyzingConditions");
+            String devWorkload = paramsMap.get("devWorkload");
+            String overallCost = paramsMap.get("overallCost");
+            String commitDate = paramsMap.get("commitDate");
+            String demoApprovalDate = paramsMap.get("demoApprovalDate");
+            String grayReleaseDate = paramsMap.get("grayReleaseDate");
+            String biddingDate = paramsMap.get("biddingDate");
+            String winningBidDate = paramsMap.get("winningBidDate");
+            String bidOverallCost = paramsMap.get("bidOverallCost");
+            String bidDevWorkload = paramsMap.get("bidDevWorkload");
+            String bidOversingleCost = paramsMap.get("bidOversingleCost");
+            String productReviewDate = paramsMap.get("productReviewDate");
+            String researchDate = paramsMap.get("researchDate");
+            String testDate = paramsMap.get("testDate");
+            String onlineDate = paramsMap.get("onlineDate");
+
+            //program表
+            if(StringUtils.isNotBlank(devType))program.setDevType(Integer.parseInt(devType));//研发方式
+            if(StringUtils.isNotBlank(analyzingConditions))program.setAnalyzingConditions(Integer.parseInt(analyzingConditions));//判断条件
+            if(StringUtils.isNotBlank(devWorkload))program.setDevWorkload(Integer.parseInt(devWorkload));//研发工作量预估
+            if(StringUtils.isNotBlank(overallCost))program.setOverallCost(new BigDecimal(overallCost));//整体费用预估
+            if(StringUtils.isNotBlank(commitDate))program.setCommitDate(DateUtil.string2Date(commitDate,DateUtil.PATTERN_DATE));//立项时间
+            if(StringUtils.isNotBlank(demoApprovalDate))program.setDemoApprovalDate(DateUtil.string2Date(demoApprovalDate,DateUtil.PATTERN_DATE));//demo评审时间
+            if(StringUtils.isNotBlank(grayReleaseDate))program.setGrayReleaseDate(DateUtil.string2Date(grayReleaseDate,DateUtil.PATTERN_DATE));//灰度发布时间
+            if(StringUtils.isNotBlank(biddingDate))program.setBiddingDate(DateUtil.string2Date(biddingDate,DateUtil.PATTERN_DATE));//招标时间
+            if(StringUtils.isNotBlank(winningBidDate))program.setWinningBidDate(DateUtil.string2Date(winningBidDate,DateUtil.PATTERN_DATE));//中标时间
+            if(StringUtils.isNotBlank(bidOverallCost))program.setBidOverallCost(new BigDecimal(bidOverallCost));//整体费用
+            if(StringUtils.isNotBlank(bidDevWorkload))program.setBidDevWorkload(Integer.parseInt(bidDevWorkload));//人天（框架合同填写）
+            if(StringUtils.isNotBlank(bidOversingleCost))program.setBidOversingleCost(new BigDecimal(bidOversingleCost));//人天单价（框架合同填写）
+            program.setProdApprovalDate(DateUtil.string2Date(productReviewDate,DateUtil.PATTERN_DATE));//产品评审时间
+            program.setDevApprovalDate(DateUtil.string2Date(researchDate,DateUtil.PATTERN_DATE));//研发评审时间
+            program.setTestApprovalDate(DateUtil.string2Date(testDate,DateUtil.PATTERN_DATE));//测试评审时间
+            program.setOnlinePlanDate(DateUtil.string2Date(onlineDate,DateUtil.PATTERN_DATE));//上线计划时间
+
+            program.setApprovalStatus(approvalStatus);
+            program.setProgramStatus(programStatus);
+            program.setModifiedTime(now);
+            programMapper.updateByPrimaryKey(program);
+
+            //program快照表
+            ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
+            BeanUtils.copyProperties(programApprovalSnapshot,program);
+            programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
+            programApprovalSnapshot.setRemark(paramsMap.get("remark"));
+            programApprovalSnapshot.setCreateTime(now);
+            programApprovalSnapshot.setModifiedTime(now);
+            programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+            //附件表
+            this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.LX.getCode());
+
+            //激活流程
+            ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
+                    paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
+            if(pplySubmitResultVo.getIsSuccess().equals("false")){
+                LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+                throw new RuntimeException("激活流程失败");
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("发生异常");
         }
     }
 }
