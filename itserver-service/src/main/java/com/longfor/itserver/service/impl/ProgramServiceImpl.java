@@ -748,6 +748,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //更新项目表
             program.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
+            program.setModifiedTime(now);
             getApprovelAfterProgramStatus(programApprovalSnapshot.getBpmCode(),program,programApprovalSnapshot.getProgramStatus());
             programMapper.updateByPrimaryKey(program);
 
@@ -780,12 +781,21 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                 throw new RuntimeException("提交流程失败");
             }
 
+            //获取快照表最新一条数据
+            Map<String,Object> paraMap = new HashMap<>();
+            paraMap.put("bpmCode",paramsMap.get("instanceId"));
+            List<ProgramApprovalSnapshot> tmpList = programApprovalSnapshotMapper.grayLevelList(paraMap);
+            ProgramApprovalSnapshot programApprovalSnapshot = tmpList.get(0);
+            Date now = new Date();
+
             //更新项目表
             program.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
+            program.setModifiedTime(now);
             programMapper.updateByPrimaryKey(program);
 
-            ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-            BeanUtils.copyProperties(programApprovalSnapshot,program);
+            programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
+            programApprovalSnapshot.setCreateTime(now);
+            programApprovalSnapshot.setModifiedTime(now);
             programApprovalSnapshot.setBpmCode(paramsMap.get("instanceId"));
             programApprovalSnapshot.setSuggestion(paramsMap.get("suggestion"));
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
