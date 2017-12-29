@@ -86,7 +86,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         }
         resultList.add(allList.get(0));
         for (int i = 0;i<allList.size();i++) {
-            if (allList.get(i).getApprovalStatus()==110) {
+            if (allList.get(i).getApprovalStatus()==110 && i!=0) {
                 resultList.add(allList.get(i));
             }
         }
