@@ -1003,10 +1003,10 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             if(StringUtils.isNotBlank(bidOverallCost))program.setBidOverallCost(new BigDecimal(bidOverallCost));//整体费用
             if(StringUtils.isNotBlank(bidDevWorkload))program.setBidDevWorkload(Integer.parseInt(bidDevWorkload));//人天（框架合同填写）
             if(StringUtils.isNotBlank(bidOversingleCost))program.setBidOversingleCost(new BigDecimal(bidOversingleCost));//人天单价（框架合同填写）
-            program.setProdApprovalDate(DateUtil.string2Date(productReviewDate,DateUtil.PATTERN_DATE));//产品评审时间
-            program.setDevApprovalDate(DateUtil.string2Date(researchDate,DateUtil.PATTERN_DATE));//研发评审时间
-            program.setTestApprovalDate(DateUtil.string2Date(testDate,DateUtil.PATTERN_DATE));//测试评审时间
-            program.setOnlinePlanDate(DateUtil.string2Date(onlineDate,DateUtil.PATTERN_DATE));//上线计划时间
+            if(StringUtils.isNotBlank(bidOversingleCost))program.setProdApprovalDate(DateUtil.string2Date(productReviewDate,DateUtil.PATTERN_DATE));//产品评审时间
+            if(StringUtils.isNotBlank(bidOversingleCost))program.setDevApprovalDate(DateUtil.string2Date(researchDate,DateUtil.PATTERN_DATE));//研发评审时间
+            if(StringUtils.isNotBlank(bidOversingleCost))program.setTestApprovalDate(DateUtil.string2Date(testDate,DateUtil.PATTERN_DATE));//测试评审时间
+            if(StringUtils.isNotBlank(bidOversingleCost))program.setOnlinePlanDate(DateUtil.string2Date(onlineDate,DateUtil.PATTERN_DATE));//上线计划时间
 
             program.setApprovalStatus(approvalStatus);
             program.setProgramStatus(programStatus);
