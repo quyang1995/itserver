@@ -199,8 +199,10 @@ public class APIProgramController extends BaseController {
 			List<ProgramApprovalSnapshot> grayLevelList =  this.getGrayLevelList(productList);
 			program.setGrayLevelList(grayLevelList);
 			/*项目费用记录*/
-			List<ProgramApprovalSnapshot> costRecordList =  this.costRecordList(productList);
-			program.setCostRecordList(costRecordList);
+//			List<ProgramApprovalSnapshot> costRecordList =  this.costRecordList(productList);
+//			program.setCostRecordList(costRecordList);
+			List<Map<String,Object>> costRecordMap =  this.costRecordMap(productList);
+			program.setCostRecordMap(costRecordMap);
 			/*项目里程碑*/
 			Map milepostMap = new HashMap();
 			milepostMap.put("id", new Long(id));
@@ -224,8 +226,7 @@ public class APIProgramController extends BaseController {
 		BigDecimal bignum = new BigDecimal("0");
 		for(ProgramApprovalSnapshot model:productList){
 			if (model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-					&& (model.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
-					|| model.getProgramStatus()==ProgramStatusNewEnum.ZBSQ.getCode()
+					&& (model.getProgramStatus()==ProgramStatusNewEnum.ZBSQ.getCode()
 					|| model.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode())) {
 				changeDay += model.getDevWorkload();
 				bignum.add(model.getOverallCost());
@@ -249,8 +250,7 @@ public class APIProgramController extends BaseController {
         BigDecimal bignum = new BigDecimal("0");
         for(ProgramApprovalSnapshot model:productList){
             if (model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                    && (model.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
-                    || model.getProgramStatus()==ProgramStatusNewEnum.ZBSQ.getCode()
+                    && (model.getProgramStatus()==ProgramStatusNewEnum.ZBSQ.getCode()
                     || model.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode())) {
 //					发起人ID：model.getModifiedAccountId();
 //					发起人：model.getModifiedName();
@@ -263,7 +263,7 @@ public class APIProgramController extends BaseController {
                 map.put("modifiedName",model.getModifiedName());
                 map.put("bidOverallCost",model.getBidOverallCost());
                 map.put("bidOversingleCost",model.getBidOversingleCost());
-                map.put("time",model.getCreateTime());
+                map.put("createTime",model.getCreateTime());
                 resultList.add(map);
             }
         }
@@ -291,11 +291,11 @@ public class APIProgramController extends BaseController {
 //					灰度时间：model.getGrayReleaseDate();
 //					变更渠道：model.getProgramStatus();
                 Map map = new HashMap();
-                map.put("ModifiedAccountId",model.getModifiedAccountId());
-                map.put("ModifiedName",model.getModifiedName());
-                map.put("GrayReleaseDate",model.getGrayReleaseDate());
-                map.put("ProgramStatus",model.getProgramStatus());
-                map.put("time",model.getCreateTime());
+                map.put("modifiedAccountId",model.getModifiedAccountId());
+                map.put("modifiedName",model.getModifiedName());
+                map.put("grayReleaseDate",model.getGrayReleaseDate());
+                map.put("programStatus",model.getProgramStatus());
+                map.put("createTime",model.getCreateTime());
                 resultList.add(map);
             }
         }
@@ -394,13 +394,38 @@ public class APIProgramController extends BaseController {
 	@RequestMapping(value = "/changeLog/list" ,method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public Map changeLogList(HttpServletResponse response,HttpServletRequest request){
+		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try{
+			this.buildPageParams(paramsMap);
+			resultMap.put("list",this.getProgramEmployeeChangeLogService().orderLimitList(paramsMap));
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
 
-		Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-
-		return this.getProgramEmployeeChangeLogService().orderLimitList(paramsMap);
+		return resultMap;
 	}
 
+	private void buildPageParams(Map<String, Object> paramsMap) {
+		if(paramsMap.containsKey("pageNum") && paramsMap.containsKey("pageSize")) {
+			int pageNum = Integer.parseInt((String)paramsMap.get("pageNum"));
+			int pageSize = Integer.parseInt((String)paramsMap.get("pageSize"));
+			if(pageSize < 1) {
+				paramsMap.put("pageSize", "10");
+			}
 
+			if(pageSize > 50) {
+				paramsMap.put("pageSize", "50");
+			}
+
+			int page_start = (pageNum - 1) * pageSize + 1;
+			int page_end = page_start + pageSize - 1;
+			paramsMap.put("startRow", page_start );
+			paramsMap.put("endRow", page_end );
+		}
+
+	}
 
 
 	/**

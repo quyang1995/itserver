@@ -702,6 +702,8 @@
     <item id="api_program_changeLog_list" description="项目变更日志列表">
         <request>
             <property name="programId" type="int" required="true"/>
+            <property ref="pageNum"/>
+            <property ref="pageSize"/>
         </request>
     </item>
 
@@ -1031,9 +1033,9 @@
             <property name="devWorkload" type="int" required="true"/>
             <property name="overallCost" type="String" required="true"/>
             <property name="commitDate" type="string" required="true"/>
-            <property name="demoApprovalDate" type="string" required="true"/>
-            <property name="biddingDate" type="string" required="true"/>
-            <property name="winningBidDate" type="string" required="true"/>
+            <property name="demoApprovalDate" type="string" required="false"/>
+            <property name="biddingDate" type="string" required="false"/>
+            <property name="winningBidDate" type="string" required="false"/>
             <property name="grayReleaseDate" type="string" required="true"/>
             <property name="counterSigners" type="string" required="false"/>
             <property name="modifiedAccountId" type="string" required="true"/>

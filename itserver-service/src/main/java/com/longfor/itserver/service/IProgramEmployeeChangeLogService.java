@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface IProgramEmployeeChangeLogService extends IAdminService<ProgramEmployeeChangeLog> {
 
-    Map orderLimitList(Map paramsMap);
+    List<ProgramEmployeeChangeLog> orderLimitList(Map<String,Object> paramsMap);
     List<ProgramEmployeeChangeLog> paraQuery(Map<String, String> paramsMap);
 }
 
