@@ -731,15 +731,21 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             Date now = new Date();
             String bpmCode = paramsMap.get("instanceId");
+
+            //获取快照表最新一条数据
+            Map<String,Object> paraMap = new HashMap<>();
+            paraMap.put("bpmCode",bpmCode);
+            List<ProgramApprovalSnapshot> tmpList = programApprovalSnapshotMapper.grayLevelList(paraMap);
+            ProgramApprovalSnapshot programApprovalSnapshot = tmpList.get(0);
+
             //更新项目表
             program.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
-            getApprovelAfterProgramStatus(bpmCode,program);
+            getApprovelAfterProgramStatus(programApprovalSnapshot.getBpmCode(),program,programApprovalSnapshot.getProgramStatus());
             programMapper.updateByPrimaryKey(program);
 
             //program快照表
-            ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-            BeanUtils.copyProperties(programApprovalSnapshot,program);
-            programApprovalSnapshot.setBpmCode(bpmCode);
+            programApprovalSnapshot.setProgramStatus(program.getProgramStatus());
+            programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
             programApprovalSnapshot.setSuggestion(paramsMap.get("suggestion"));
@@ -1442,13 +1448,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      * @param bpmCode
      * @return
      */
-    private void getApprovelAfterProgramStatus(String bpmCode,Program program){
-        //获取该审批流的项目状态
-        ProgramApprovalSnapshot shotTmp = new ProgramApprovalSnapshot();
-        shotTmp.setBpmCode(bpmCode);
-        List<ProgramApprovalSnapshot> tmpList = programApprovalSnapshotMapper.select(shotTmp);
-        int programStatus = tmpList.get(0).getProgramStatus();
-
+    private void getApprovelAfterProgramStatus(String bpmCode,Program program,int programStatus){
         if(programStatus==ProgramStatusNewEnum.XMFP.getCode()){//如果提交审批的为复盘，则项目状态直接到完成
             program.setProgramStatus(ProgramStatusNewEnum.WC.getCode());
         }else if(programStatus==ProgramStatusNewEnum.YQSX.getCode() || programStatus==ProgramStatusNewEnum.XQBG.getCode()){//如果提交审批的为延期上线或者需求变更，则项目状态直接到产品评审
