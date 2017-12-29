@@ -283,8 +283,7 @@ public class APIProgramController extends BaseController {
         }
         for(ProgramApprovalSnapshot model:productList){
             if (model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                    && (model.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
-                    || model.getProgramStatus()==ProgramStatusNewEnum.YQSX.getCode()
+                    && (model.getProgramStatus()==ProgramStatusNewEnum.YQSX.getCode()
                     || model.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode())) {
 //					发起人ID：model.getModifiedAccountId();
 //					发起人：model.getModifiedName();
@@ -311,8 +310,7 @@ public class APIProgramController extends BaseController {
 		}
 		for(ProgramApprovalSnapshot model:productList){
 			if (model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-					&& (model.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
-							|| model.getProgramStatus()==ProgramStatusNewEnum.YQSX.getCode()
+					&& (model.getProgramStatus()==ProgramStatusNewEnum.YQSX.getCode()
 							|| model.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode())) {
 //					发起人ID：model.getModifiedAccountId();
 //					发起人：model.getModifiedName();
