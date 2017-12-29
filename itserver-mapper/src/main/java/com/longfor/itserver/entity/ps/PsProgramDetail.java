@@ -39,6 +39,10 @@ public class PsProgramDetail extends Program implements Serializable {
     @Transient
     private List<ProgramEmployee> testingList;
     @Transient
+    private List<ProgramEmployee> operationList;
+    @Transient
+    private List<ProgramEmployee> operateList;
+    @Transient
     private List<ProgramEmployee> businessList;
     @Transient
     private List<ProgramApprovalSnapshot> grayLevelList;
@@ -55,6 +59,22 @@ public class PsProgramDetail extends Program implements Serializable {
 
     @Transient
     private List<Map> milepostMap;
+
+    public void setOperationList(List<ProgramEmployee> operationList) {
+        this.operationList = operationList;
+    }
+
+    public void setOperateList(List<ProgramEmployee> operateList) {
+        this.operateList = operateList;
+    }
+
+    public List<ProgramEmployee> getOperationList() {
+        return operationList;
+    }
+
+    public List<ProgramEmployee> getOperateList() {
+        return operateList;
+    }
 
     public void setGrayLevelMap(List<Map> grayLevelMap) {
         this.grayLevelMap = grayLevelMap;

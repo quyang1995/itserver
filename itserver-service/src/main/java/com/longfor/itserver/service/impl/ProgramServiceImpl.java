@@ -84,13 +84,10 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         if (allList == null || allList.isEmpty()) {
             return resultList;
         }
+        resultList.add(allList.get(0));
         for (int i = 0;i<allList.size();i++) {
-            if (i == 0) {
+            if (allList.get(i).getApprovalStatus()==110) {
                 resultList.add(allList.get(i));
-            } else {
-                if (allList.get(i).getApprovalStatus()==110) {
-                    resultList.add(allList.get(i));
-                }
             }
         }
 
@@ -111,69 +108,65 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     @Override
     public List<ProgramApprovalSnapshot> milepost(Map<String,Object> paramMap) {
         List<ProgramApprovalSnapshot> resultList = new ArrayList<ProgramApprovalSnapshot>();
-        paramMap.put("programStatus",ProgramStatusNewEnum.LX);
-        List<ProgramApprovalSnapshot> snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+        paramMap.put("approvalStatus",ProgramApprovalStatusEnum.SHTG.getCode());
 		/*立项*/
-        if (snapshot != null && !snapshot.isEmpty()) {
-            resultList.add(snapshot.get(0));
-        }
-        paramMap.put("programStatus",ProgramStatusNewEnum.DPS);
-        snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+        paramMap.put("programStatus",ProgramStatusNewEnum.LX.getCode());
+        List<ProgramApprovalSnapshot> snapshot =programApprovalSnapshotMapper.getListByProgramIdAndStatus(paramMap);
         if (snapshot != null && !snapshot.isEmpty()) {
             resultList.add(snapshot.get(0));
         }
 		/*Demo评审*/
-        paramMap.put("programStatus",ProgramStatusNewEnum.DPS);
-        snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+        paramMap.put("programStatus",ProgramStatusNewEnum.DPS.getCode());
+        snapshot =programApprovalSnapshotMapper.getListByProgramIdAndStatus(paramMap);
         if (snapshot != null && !snapshot.isEmpty()) {
             resultList.add(snapshot.get(0));
         }
 		/*招投标申请*/
-        paramMap.put("programStatus",ProgramStatusNewEnum.ZTBSQ);
-        snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+        paramMap.put("programStatus",ProgramStatusNewEnum.ZTBSQ.getCode());
+        snapshot =programApprovalSnapshotMapper.getListByProgramIdAndStatus(paramMap);
         if (snapshot != null && !snapshot.isEmpty()) {
             resultList.add(snapshot.get(0));
         }
 		/*中标申请*/
-        paramMap.put("programStatus",ProgramStatusNewEnum.ZBSQ);
-        snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+        paramMap.put("programStatus",ProgramStatusNewEnum.ZBSQ.getCode());
+        snapshot =programApprovalSnapshotMapper.getListByProgramIdAndStatus(paramMap);
         if (snapshot != null && !snapshot.isEmpty()) {
             resultList.add(snapshot.get(0));
         }
 		/*产品评审*/
 
-        paramMap.put("programStatus",ProgramStatusNewEnum.CPPS);
-        snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+        paramMap.put("programStatus",ProgramStatusNewEnum.CPPS.getCode());
+        snapshot =programApprovalSnapshotMapper.getListByProgramIdAndStatus(paramMap);
         if (snapshot != null && !snapshot.isEmpty()) {
             resultList.add(snapshot.get(0));
         }
 		/*开发评审*/
-        paramMap.put("programStatus",ProgramStatusNewEnum.KFPS);
-        snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+        paramMap.put("programStatus",ProgramStatusNewEnum.KFPS.getCode());
+        snapshot =programApprovalSnapshotMapper.getListByProgramIdAndStatus(paramMap);
         if (snapshot != null && !snapshot.isEmpty()) {
             resultList.add(snapshot.get(0));
         }
 		/*测试评审*/
-        paramMap.put("programStatus",ProgramStatusNewEnum.CSPS);
-        snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+        paramMap.put("programStatus",ProgramStatusNewEnum.CSPS.getCode());
+        snapshot =programApprovalSnapshotMapper.getListByProgramIdAndStatus(paramMap);
         if (snapshot != null && !snapshot.isEmpty()) {
             resultList.add(snapshot.get(0));
         }
 		/*上线计划*/
-        paramMap.put("programStatus",ProgramStatusNewEnum.SXPS);
-        snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+        paramMap.put("programStatus",ProgramStatusNewEnum.SXPS.getCode());
+        snapshot =programApprovalSnapshotMapper.getListByProgramIdAndStatus(paramMap);
         if (snapshot != null && !snapshot.isEmpty()) {
             resultList.add(snapshot.get(0));
         }
 		/*灰度发布*/
-        paramMap.put("programStatus",ProgramStatusNewEnum.HDFB);
-        snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+        paramMap.put("programStatus",ProgramStatusNewEnum.HDFB.getCode());
+        snapshot =programApprovalSnapshotMapper.getListByProgramIdAndStatus(paramMap);
         if (snapshot != null && !snapshot.isEmpty()) {
             resultList.add(snapshot.get(0));
         }
 		/*项目复盘*/
-        paramMap.put("programStatus",ProgramStatusNewEnum.XMFP);
-        snapshot =programApprovalSnapshotMapper.grayLevelList(paramMap);
+        paramMap.put("programStatus",ProgramStatusNewEnum.XMFP.getCode());
+        snapshot =programApprovalSnapshotMapper.getListByProgramIdAndStatus(paramMap);
         if (snapshot != null && !snapshot.isEmpty()) {
             resultList.add(snapshot.get(0));
         }
@@ -209,6 +202,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         if(product == null){
             return false;
         }
+        program.setProgramStatus(ProgramStatusNewEnum.WLX.getCode());
         program.setProductName(product.getName());
         program.setProductCode(product.getCode());
         program.setCreateTime(TimeUtils.getTodayByDateTime());
@@ -389,16 +383,16 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         selectOneProgram.setName(program.getName());
         selectOneProgram.setProductId(program.getProductId());
         selectOneProgram.setDescp(program.getDescp());
-        selectOneProgram.setCommitDate(program.getCommitDate());
-        selectOneProgram.setStartDate(program.getStartDate());
-        selectOneProgram.setUedDate(program.getUedDate());
-        selectOneProgram.setArchitectureDate(program.getArchitectureDate());
-        selectOneProgram.setGrayReleaseDate(program.getGrayReleaseDate());
-        selectOneProgram.setReleaseDate(program.getReleaseDate());
+//        selectOneProgram.setCommitDate(program.getCommitDate());
+//        selectOneProgram.setStartDate(program.getStartDate());
+//        selectOneProgram.setUedDate(program.getUedDate());
+//        selectOneProgram.setArchitectureDate(program.getArchitectureDate());
+//        selectOneProgram.setGrayReleaseDate(program.getGrayReleaseDate());
+//        selectOneProgram.setReleaseDate(program.getReleaseDate());
         selectOneProgram.setLikeProduct(program.getLikeProduct());
         selectOneProgram.setLikeProgram(program.getLikeProgram());
         selectOneProgram.setType(program.getType());
-        selectOneProgram.setProgramStatus(program.getProgramStatus());
+//        selectOneProgram.setProgramStatus(program.getProgramStatus());
         selectOneProgram.setAccountType(accountType);
         selectOneProgram.setModifiedTime(TimeUtils.getTodayByDateTime());
         programMapper.updateByPrimaryKey(selectOneProgram);
@@ -444,6 +438,20 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         if (!"".equals(jsonArrBusiness)) {
             deleteByParam(2, 6, program);
             getAccountLongfor(program, jsonArrBusiness, "6");
+        }
+
+        // 运维人员
+        String jsonArrOperation = json.get("operationList").toString();
+        if (!"".equals(jsonArrBusiness)) {
+            deleteByParam(2, 7, program);
+            getAccountLongfor(program, jsonArrBusiness, "7");
+        }
+
+        // 运营人员
+        String jsonArrOperate = json.get("operateList").toString();
+        if (!"".equals(jsonArrBusiness)) {
+            deleteByParam(2, 8, program);
+            getAccountLongfor(program, jsonArrBusiness, "8");
         }
 
 		/*添加日志*/
@@ -1264,7 +1272,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             }
 
             //program表
-            program.setProgramStatus(ProgramStatusNewEnum.YQSX.getCode());
+//            program.setProgramStatus(ProgramStatusNewEnum.YQSX.getCode());
             program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
             program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("releaseDate"),DateUtil.PATTERN_DATE));
             program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("demandDate"),DateUtil.PATTERN_DATE));
@@ -1281,6 +1289,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
             BeanUtils.copyProperties(programApprovalSnapshot,program);
             programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
+            programApprovalSnapshot.setProgramStatus(ProgramStatusNewEnum.YQSX.getCode());
             programApprovalSnapshot.setRemark(paramsMap.get("remark"));
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
@@ -1309,7 +1318,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         try{
             Date now = new Date();
             BigDecimal  overallCost = new BigDecimal(paramsMap.get("overallCost"));
-            BigDecimal ten = new BigDecimal(10);
+            BigDecimal ten = new BigDecimal(100000);
 
             ApplyCreateResultVo applyCreateResultVo = new ApplyCreateResultVo();
             if (overallCost.compareTo(ten) != -1) {
@@ -1393,7 +1402,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             }
 
             //program表
-            program.setProgramStatus(ProgramStatusNewEnum.ZZ.getCode());
+//            program.setProgramStatus(ProgramStatusNewEnum.ZZ.getCode());
             program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
             program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
             program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
@@ -1402,8 +1411,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //program快照表
             ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-            program.setProgramStatus(ProgramStatusNewEnum.ZZ.getCode());
             BeanUtils.copyProperties(programApprovalSnapshot,program);
+            program.setProgramStatus(ProgramStatusNewEnum.ZZ.getCode());
             programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);

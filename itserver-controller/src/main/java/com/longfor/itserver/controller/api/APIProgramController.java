@@ -183,6 +183,14 @@ public class APIProgramController extends BaseController {
 			map.put("employeeTypeId", new Long(AvaStatusEnum.BUSINESSAVA.getCode()));
 			List<ProgramEmployee> businessList = this.getProgramEmployeeService().selectTypeList(map);
 			program.setBusinessList(businessList);
+			/* 运维人员 */
+            map.put("employeeTypeId", new Long(AvaStatusEnum.OPERATION.getCode()));
+            List<ProgramEmployee> operationList = this.getProgramEmployeeService().selectTypeList(map);
+            program.setOperationList(operationList);
+            /* 运营人员 */
+            map.put("employeeTypeId", new Long(AvaStatusEnum.OPERATE.getCode()));
+            List<ProgramEmployee> operateList = this.getProgramEmployeeService().selectTypeList(map);
+            program.setOperateList(operateList);
 			/*根據id获取项目快照list*/
 			Map grayLevelMap = new HashMap();
 			grayLevelMap.put("id", new Long(id));
@@ -225,11 +233,6 @@ public class APIProgramController extends BaseController {
 //					发起人：model.getModifiedName();
 //					预估变更整体费用：model.getBidOverallCost();
 //					预估人天：model.getBidOversingleCost()
-//					Map map = new HashMap();
-//					map.put("modifiedAccountId",model.getModifiedAccountId());
-//					map.put("modifiedName",model.getModifiedName());
-//					map.put("bidOverallCost",model.getBidOverallCost());
-//					map.put("bidOversingleCost",model.getBidOversingleCost());
 				resultList.add(model);
 			}
 		}

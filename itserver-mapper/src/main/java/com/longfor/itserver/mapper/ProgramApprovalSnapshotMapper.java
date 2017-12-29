@@ -11,7 +11,7 @@ import tk.mybatis.mapper.common.Mapper;
 
 public interface ProgramApprovalSnapshotMapper extends BeeMapper<ProgramApprovalSnapshot> {
 
-    List<ProgramApprovalSnapshot> getListByProgramIdAndStatus(ProgramApprovalSnapshot programApprovalSnapshot);
+    List<ProgramApprovalSnapshot> getListByProgramIdAndStatus(Map<String, Object> map);
 
     List<ProgramApprovalSnapshot> grayLevelList(Map<String, Object> map);
 }

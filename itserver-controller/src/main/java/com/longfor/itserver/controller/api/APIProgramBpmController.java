@@ -419,6 +419,7 @@ public class APIProgramBpmController extends BaseController {
 			nodesMap.put("programStatus",paramsMap.get("programStatus"));
 			List<Object> str = new ArrayList<Object>();
 			str.add(paramsMap.get("programStatus"));
+			str.add(ProgramStatusNewEnum.YQSX.getCode());
 			str.add(ProgramStatusNewEnum.XQBG.getCode());
 			nodesMap.put("programStatusList",str);
 			List<ProgramApprovalSnapshot>  shotList= this.getProgramService().lookNodes(nodesMap);
