@@ -3,11 +3,13 @@ package com.longfor.itserver.entity;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.mayee.commons.CustomDateSerializer;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "product")
-public class Product {
+public class Product implements Serializable {
+    private static final long serialVersionUID = -6776870685616143799L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

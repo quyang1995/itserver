@@ -3,17 +3,25 @@ package com.longfor.itserver.entity;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.mayee.commons.CustomDateSerializer;
 
-import javax.persistence.Column;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 @Table(name = "program_approval_snapshot")
-public class ProgramApprovalSnapshot {
-    @Column(name = "id")
+public class ProgramApprovalSnapshot implements Serializable {
+    private static final long serialVersionUID = -6776870685616143799L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    /**
+     * 项目ID
+     */
+    @Column(name = "program_id")
+    private Long programId;
 
     /**
      * 归属产品
@@ -238,6 +246,14 @@ public class ProgramApprovalSnapshot {
      * 内容摘要
      */
     private String remark;
+
+    public Long getProgramId() {
+        return programId;
+    }
+
+    public void setProgramId(Long programId) {
+        this.programId = programId;
+    }
 
     /**
      * 审核意见

@@ -10,5 +10,6 @@ import java.util.Map;
 public interface ProgramEmployeeChangeLogMapper extends BeeMapper<ProgramEmployeeChangeLog> {
 
     List<ProgramEmployeeChangeLog> orderLimitList(Map<String, Object> paramsMap);
+    int orderLimitTotal(Map<String, Object> paramsMap);
     List<ProgramEmployeeChangeLog> paraQuery(Map<String, String> paramsMap);
 }

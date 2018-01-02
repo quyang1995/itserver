@@ -93,8 +93,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
         for (ProgramApprovalSnapshot model:resultList) {
             Map map = new HashMap();
-            map.put("programId",paramMap.get("id"));
-            map.put("type",paramMap.get("programStatus"));
+            map.put("programId",model.getProgramId());
+            map.put("type",model.getProgramStatus());
+            map.put("snapshotId",model.getId());
             List<ProgramFile> fileList = programFileMapper.getListByMap(map);
             model.setFileList(fileList);
             map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
@@ -181,8 +182,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         }
         ProgramApprovalSnapshot shot = allList.get(0);
         Map map = new HashMap();
-        map.put("programId",shot.getId());
+        map.put("programId",shot.getProgramId());
         map.put("type",shot.getProgramStatus());
+        map.put("snapshotId",shot.getId());
         List<ProgramFile> fileList = programFileMapper.getListByMap(map);
         shot.setFileList(fileList);
         map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
@@ -694,6 +696,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programMapper.updateByPrimaryKey(program);
 
             //program快照表
+            programApprovalSnapshot.setId(null);
             programApprovalSnapshot.setProgramStatus(program.getProgramStatus());
             programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
             programApprovalSnapshot.setCreateTime(now);
@@ -734,6 +737,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             program.setModifiedTime(now);
             programMapper.updateByPrimaryKey(program);
 
+            programApprovalSnapshot.setId(null);
             programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
@@ -779,7 +783,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //program快照表
             ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-            BeanUtils.copyProperties(programApprovalSnapshot,program);
+            this.copyProperties(programApprovalSnapshot,program);
             programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
             programApprovalSnapshot.setProgramStatus(ProgramStatusNewEnum.YQSX.getCode());
             programApprovalSnapshot.setRemark(paramsMap.get("remark"));
@@ -844,7 +848,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //program快照表
             ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-            BeanUtils.copyProperties(programApprovalSnapshot,program);
+            this.copyProperties(programApprovalSnapshot,program);
             programApprovalSnapshot.setProgramStatus(ProgramStatusNewEnum.XQBG.getCode());
             if (overallCost.compareTo(ten) != -1) {
                 programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
@@ -859,7 +863,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
             //附件表
-            this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.XQBG.getCode());
+            this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.XQBG.getCode(),programApprovalSnapshot.getId());
 
 
             if (overallCost.compareTo(ten) != -1) {
@@ -903,8 +907,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //program快照表
             ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-            BeanUtils.copyProperties(programApprovalSnapshot,program);
-            program.setProgramStatus(ProgramStatusNewEnum.ZZ.getCode());
+            this.copyProperties(programApprovalSnapshot,program);
+            programApprovalSnapshot.setProgramStatus(ProgramStatusNewEnum.ZZ.getCode());
             programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
@@ -924,7 +928,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         }
     }
 
-    private void dealFileList(String fileStr,Long programId , int programStatus) {
+    private void dealFileList(String fileStr,Long programId , int programStatus, Long snapshotId) {
         if (org.apache.commons.lang.StringUtils.isNotBlank(fileStr)) {
             List<FileVo> fileList = JSON.parseArray(fileStr, FileVo.class);
             if (fileList != null && !fileList.isEmpty()) {
@@ -938,6 +942,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                     programFile.setType(programStatus);
                     programFile.setCreateTime(new Date());
                     programFile.setFilePath(fileVo.getFilePath());
+                    programFile.setSnapshotId(snapshotId);
                     programFileMapper.insert(programFile);
                 }
             }
@@ -1015,7 +1020,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //program快照表
             ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
-            BeanUtils.copyProperties(programApprovalSnapshot,program);
+            this.copyProperties(programApprovalSnapshot,program);
             programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
             programApprovalSnapshot.setRemark(paramsMap.get("remark"));
             programApprovalSnapshot.setCreateTime(now);
@@ -1023,7 +1028,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
             //附件表
-            this.dealFileList(paramsMap.get("fileList"),program.getId(),programStatus);
+            this.dealFileList(paramsMap.get("fileList"),program.getId(),programStatus,programApprovalSnapshot.getId());
 
             //激活流程
             ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
@@ -1037,5 +1042,11 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             e.printStackTrace();
             throw new RuntimeException("发生异常");
         }
+    }
+
+    private void copyProperties(ProgramApprovalSnapshot programApprovalSnapshot,Program program) throws Exception{
+        BeanUtils.copyProperties(programApprovalSnapshot,program);
+        programApprovalSnapshot.setId(null);
+        programApprovalSnapshot.setProgramId(program.getId());
     }
 }

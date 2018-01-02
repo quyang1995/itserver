@@ -48,6 +48,20 @@ public class ProgramFile {
     private String filePath;
 
     /**
+     * 快照表id
+     */
+    @Column(name = "snapshot_id")
+    private Long snapshotId;
+
+    public void setSnapshotId(Long snapshotId) {
+        this.snapshotId = snapshotId;
+    }
+
+    public Long getSnapshotId() {
+        return snapshotId;
+    }
+
+    /**
      * @return id
      */
     public Long getId() {

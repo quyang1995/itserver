@@ -407,12 +407,12 @@ public class APIProgramBpmController extends BaseController {
 			LOG.info("------lookNodes:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 
 			Map<String,Object> nodesMap = new HashMap<String,Object>();
-			nodesMap.put("id",new Long(paramsMap.get("id")));
+			nodesMap.put("programId",new Long(paramsMap.get("id")));
 			nodesMap.put("programStatus",paramsMap.get("programStatus"));
 			List<Object> str = new ArrayList<Object>();
 			str.add(paramsMap.get("programStatus"));
-			str.add(ProgramStatusNewEnum.YQSX.getCode());
-			str.add(ProgramStatusNewEnum.XQBG.getCode());
+//			str.add(ProgramStatusNewEnum.YQSX.getCode());
+//			str.add(ProgramStatusNewEnum.XQBG.getCode());
 			nodesMap.put("programStatusList",str);
 			List<ProgramApprovalSnapshot>  shotList= this.getProgramService().lookNodes(nodesMap);
 			resultMap.put("list",shotList);

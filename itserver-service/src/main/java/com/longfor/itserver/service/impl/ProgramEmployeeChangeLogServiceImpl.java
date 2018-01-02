@@ -31,6 +31,12 @@ public class ProgramEmployeeChangeLogServiceImpl extends AdminBaseService<Progra
     }
 
     @Override
+    public int orderLimitTotal(Map<String,Object> paramsMap) {
+
+        return programEmployeeChangeLogMapper.orderLimitTotal(paramsMap);
+    }
+
+    @Override
     public  List<ProgramEmployeeChangeLog> paraQuery(Map<String, String> paramsMap){
         return programEmployeeChangeLogMapper.paraQuery(paramsMap);
     }

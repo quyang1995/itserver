@@ -12,6 +12,7 @@
     <result column="file_size" property="fileSize" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="snapshot_id" property="snapshotId" jdbcType="BIGINT" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.longfor.itserver.entity.ProgramFile" extends="BaseResultMap" >
     <!--
@@ -24,7 +25,7 @@
     <!--
       WARNING - @mbggenerated
     -->
-    id, program_id, file_name, file_suffix, file_size, type, create_time
+    id, program_id, file_name, file_suffix, file_size, type, create_time, snapshot_id
   </sql>
   <sql id="Blob_Column_List" >
     <!--
@@ -43,6 +44,9 @@
       </if>
       <if test="type != null and type != ''">
         and type = #{type}
+      </if>
+      <if test="snapshotId != null and snapshotId != ''">
+        and snapshot_id = #{snapshotId}
       </if>
     </where>
     ORDER BY create_time DESC

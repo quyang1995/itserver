@@ -267,11 +267,6 @@ public class APIProgramController extends BaseController {
                 resultList.add(map);
             }
         }
-        Map sumMap = new HashMap();
-        sumMap.put("modifiedName","累计");
-        sumMap.put("bidOverallCost",bignum);
-        sumMap.put("bidOversingleCost",changeDay);
-        resultList.add(sumMap);
         return  resultList;
     }
 
@@ -397,6 +392,9 @@ public class APIProgramController extends BaseController {
 		try{
 			this.buildPageParams(paramsMap);
 			resultMap.put("list",this.getProgramEmployeeChangeLogService().orderLimitList(paramsMap));
+			resultMap.put(APIHelper.PAGE_NUM, paramsMap.get("pageNum"));
+			resultMap.put(APIHelper.PAGE_SIZE, paramsMap.get("pageSize"));
+			resultMap.put(APIHelper.TOTAL, this.getProgramEmployeeChangeLogService().orderLimitTotal(paramsMap));
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
@@ -417,8 +415,8 @@ public class APIProgramController extends BaseController {
 				paramsMap.put("pageSize", "50");
 			}
 
-			int page_start = (pageNum - 1) * pageSize + 1;
-			int page_end = page_start + pageSize - 1;
+			int page_start = (pageNum - 1) * pageSize;
+			int page_end = pageSize;
 			paramsMap.put("startRow", page_start );
 			paramsMap.put("endRow", page_end );
 		}

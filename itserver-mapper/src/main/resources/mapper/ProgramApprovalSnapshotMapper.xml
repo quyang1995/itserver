@@ -6,6 +6,7 @@
       WARNING - @mbggenerated
     -->
     <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="program_id" property="programId" jdbcType="BIGINT" />
     <result column="product_id" property="productId" jdbcType="BIGINT" />
     <result column="product_name" property="productName" jdbcType="VARCHAR" />
     <result column="product_code" property="productCode" jdbcType="VARCHAR" />
@@ -51,7 +52,7 @@
     <!--
       WARNING - @mbggenerated
     -->
-    id, product_id, product_name, product_code, name, descp, commit_date, start_date, 
+    id, program_id, product_id, product_name, product_code, name, descp, commit_date, start_date,
     gray_release_date, release_date, ued_date, architecture_date, like_product, like_program, 
     type, program_status, modified_account_id, modified_name, create_time, modified_time, 
     account_type, demo_approval_date, bidding_date, winning_bid_date, prod_approval_date, 
@@ -67,6 +68,9 @@
     <where>
       <if test=" id != null and id != '' ">
         id = #{id}
+      </if>
+      <if test=" programId != null and programId != '' ">
+        program_id = #{programId}
       </if>
       <if test=" productId != null and productId != '' ">
           and product_id = #{productId}
