@@ -2,6 +2,7 @@ package com.longfor.itserver.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.mayee.commons.CustomDateSerializer;
+import net.mayee.commons.CustomFullDateSerializer;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -99,7 +100,7 @@ public class ProgramApprovalSnapshot implements Serializable {
     private String modifiedName;
 
     @Column(name = "create_time")
-    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date createTime;
 
     @Column(name = "modified_time")

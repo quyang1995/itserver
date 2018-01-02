@@ -70,7 +70,7 @@
         id = #{id}
       </if>
       <if test=" programId != null and programId != '' ">
-        program_id = #{programId}
+        and program_id = #{programId}
       </if>
       <if test=" productId != null and productId != '' ">
           and product_id = #{productId}
@@ -80,6 +80,9 @@
       </if>
       <if test=" approvalStatus != null and approvalStatus != '' ">
         and approval_status= #{approvalStatus}
+      </if>
+      <if test=" bpmCode != null and bpmCode != '' ">
+        and bpm_code= #{bpmCode}
       </if>
     </where>
     ORDER  BY  create_time DESC
@@ -92,6 +95,9 @@
     <where>
       <if test=" id != null and id != '' ">
         id = #{id}
+      </if>
+      <if test=" programId != null and programId != '' ">
+        and program_id = #{programId}
       </if>
       <if test=" approvalStatus != null and approvalStatus != '' ">
         and approval_status= #{approvalStatus}

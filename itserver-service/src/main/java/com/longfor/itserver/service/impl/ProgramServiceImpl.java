@@ -92,10 +92,19 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         }
 
         for (ProgramApprovalSnapshot model:resultList) {
+            Map pMap = new HashMap();
+            pMap.put("bpmCode", model.getBpmCode());
+            pMap.put("approvalStatus", ProgramApprovalStatusEnum.SHZ.getCode());
+            List<ProgramApprovalSnapshot> s = programApprovalSnapshotMapper.grayLevelList(pMap);
+            if (s == null || s.isEmpty()) {
+//                break;
+                pMap.put("approvalStatus", ProgramApprovalStatusEnum.BGSHZ.getCode());
+                s = programApprovalSnapshotMapper.grayLevelList(pMap);
+            }
             Map map = new HashMap();
-            map.put("programId",model.getProgramId());
-            map.put("type",model.getProgramStatus());
-            map.put("snapshotId",model.getId());
+            map.put("programId",s.get(0).getProgramId());
+            map.put("type",s.get(0).getProgramStatus());
+            map.put("snapshotId",s.get(0).getId());
             List<ProgramFile> fileList = programFileMapper.getListByMap(map);
             model.setFileList(fileList);
             map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
@@ -181,12 +190,23 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             return null;
         }
         ProgramApprovalSnapshot shot = allList.get(0);
+        Map pMap = new HashMap();
+        pMap.put("bpmCode", shot.getBpmCode());
+        pMap.put("approvalStatus", ProgramApprovalStatusEnum.SHZ.getCode());
+        List<ProgramApprovalSnapshot> s = programApprovalSnapshotMapper.grayLevelList(pMap);
+        if (s==null || s.isEmpty()) {
+            pMap.put("approvalStatus", ProgramApprovalStatusEnum.BGSHZ.getCode());
+            s = programApprovalSnapshotMapper.grayLevelList(pMap);
+        }
         Map map = new HashMap();
-        map.put("programId",shot.getProgramId());
-        map.put("type",shot.getProgramStatus());
-        map.put("snapshotId",shot.getId());
-        List<ProgramFile> fileList = programFileMapper.getListByMap(map);
-        shot.setFileList(fileList);
+        if (s != null && !s.isEmpty()) {
+            map.put("programId",s.get(0).getProgramId());
+            map.put("type",s.get(0).getProgramStatus());
+            map.put("snapshotId",s.get(0).getId());
+            List<ProgramFile> fileList = programFileMapper.getListByMap(map);
+            shot.setFileList(fileList);
+        }
+
         map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
         map.put("employeeTypeId", new Long(AvaStatusEnum.PROGAVA.getCode()));
         List<ProgramEmployee> empList  = programEmployeeMapper.selectTypeList(map);
