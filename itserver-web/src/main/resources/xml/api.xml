@@ -1262,7 +1262,7 @@
             <property name="programId" type="string" required="true"/>
             <property name="remark" type="string" required="true"/>
 
-            <property name="releaseDate" type="string" required="true"/>
+            <property name="grayReleaseDate" type="string" required="true"/>
             <property name="demandDate" type="string" required="true"/>
             <property name="developmentDate" type="string" required="true"/>
             <property name="testReviewDate" type="string" required="true"/>
@@ -1288,7 +1288,7 @@
 
             <property name="devWorkloadChange" type="string" required="true"/>
             <property name="overallCost" type="string" required="true"/>
-            <property name="releaseDate" type="string" required="true"/>
+            <property name="grayReleaseDate" type="string" required="true"/>
             <property name="demandDate" type="string" required="true"/>
             <property name="developmentDate" type="string" required="true"/>
             <property name="testReviewDate" type="string" required="true"/>
@@ -1345,6 +1345,16 @@
     说明:根据需求ID 获取相关需求文件
     -->
     <item id="api_program_bpm_getFile" description="根据需求ID 获取相关需求文件">
+        <request>
+            <property name="id" type="string" required="true"/>
+        </request>
+    </item>
+    <!--
+    URL:
+    /api/program/bpm/getSnapshot
+    说明:根据需求ID 获取快照信息
+    -->
+    <item id="api_program_bpm_getSnapshot" description="根据需求ID 获取快照信息">
         <request>
             <property name="id" type="string" required="true"/>
         </request>

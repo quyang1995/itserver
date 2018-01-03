@@ -193,19 +193,17 @@ public class APIProgramController extends BaseController {
             program.setOperateList(operateList);
 			/*根據id获取项目快照list*/
 			Map grayLevelMap = new HashMap();
-			grayLevelMap.put("id", new Long(id));
+			grayLevelMap.put("programId", new Long(id));
 			List<ProgramApprovalSnapshot> productList =  this.getProgramApprovalSnapshotService().grayLevelList(grayLevelMap);
 			/* 灰度时间变更记录 */
 			List<ProgramApprovalSnapshot> grayLevelList =  this.getGrayLevelList(productList);
 			program.setGrayLevelList(grayLevelList);
 			/*项目费用记录*/
-//			List<ProgramApprovalSnapshot> costRecordList =  this.costRecordList(productList);
-//			program.setCostRecordList(costRecordList);
-			List<Map<String,Object>> costRecordMap =  this.costRecordMap(productList);
-			program.setCostRecordMap(costRecordMap);
+			List<ProgramApprovalSnapshot> costRecordList =  this.costRecordList(productList);
+			program.setCostRecordList(costRecordList);
 			/*项目里程碑*/
 			Map milepostMap = new HashMap();
-			milepostMap.put("id", new Long(id));
+			milepostMap.put("programId", new Long(id));
 			List<ProgramApprovalSnapshot> milepostList =this.getProgramService().milepost(milepostMap);
 			program.setMilepostList(milepostList);
 			/* 返回报文 */
@@ -222,14 +220,10 @@ public class APIProgramController extends BaseController {
 		if (productList == null || productList.isEmpty()) {
 			return null;
 		}
-		Integer changeDay = 0;
-		BigDecimal bignum = new BigDecimal("0");
 		for(ProgramApprovalSnapshot model:productList){
 			if (model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
 					&& (model.getProgramStatus()==ProgramStatusNewEnum.ZBSQ.getCode()
 					|| model.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode())) {
-				changeDay += model.getDevWorkload();
-				bignum.add(model.getOverallCost());
 //					发起人ID：model.getModifiedAccountId();
 //					发起人：model.getModifiedName();
 //					预估变更整体费用：model.getBidOverallCost();
@@ -239,63 +233,6 @@ public class APIProgramController extends BaseController {
 		}
 		return  resultList;
 	}
-
-    /* 项目费用记录 */
-    private List<Map<String,Object>> costRecordMap(List<ProgramApprovalSnapshot> productList){
-        List<Map<String,Object>> resultList = new ArrayList<Map<String,Object>>();
-        if (productList == null || productList.isEmpty()) {
-            return null;
-        }
-        Integer changeDay = 0;
-        BigDecimal bignum = new BigDecimal("0");
-        for(ProgramApprovalSnapshot model:productList){
-            if (model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                    && (model.getProgramStatus()==ProgramStatusNewEnum.ZBSQ.getCode()
-                    || model.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode())) {
-//					发起人ID：model.getModifiedAccountId();
-//					发起人：model.getModifiedName();
-//					预估变更整体费用：model.getBidOverallCost();
-//					预估人天：model.getBidOversingleCost()
-                changeDay += model.getDevWorkload();
-                bignum.add(model.getOverallCost());
-                Map map = new HashMap();
-                map.put("modifiedAccountId",model.getModifiedAccountId());
-                map.put("modifiedName",model.getModifiedName());
-                map.put("bidOverallCost",model.getBidOverallCost());
-                map.put("bidOversingleCost",model.getBidOversingleCost());
-                map.put("createTime",model.getCreateTime());
-                resultList.add(map);
-            }
-        }
-        return  resultList;
-    }
-
-    /* 灰度时间变更记录 */
-    private List<Map> getGrayLevelMap(List<ProgramApprovalSnapshot> productList){
-        List<Map> resultList = new ArrayList<Map>();
-        if (productList == null || productList.isEmpty()) {
-            return null;
-        }
-        for(ProgramApprovalSnapshot model:productList){
-            if (model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                    && (model.getProgramStatus()==ProgramStatusNewEnum.YQSX.getCode()
-                    || model.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode())) {
-//					发起人ID：model.getModifiedAccountId();
-//					发起人：model.getModifiedName();
-//					灰度时间：model.getGrayReleaseDate();
-//					变更渠道：model.getProgramStatus();
-                Map map = new HashMap();
-                map.put("modifiedAccountId",model.getModifiedAccountId());
-                map.put("modifiedName",model.getModifiedName());
-                map.put("grayReleaseDate",model.getGrayReleaseDate());
-                map.put("programStatus",model.getProgramStatus());
-                map.put("createTime",model.getCreateTime());
-                resultList.add(map);
-            }
-        }
-
-        return  resultList;
-    }
 
 	/* 灰度时间变更记录 */
 	private List<ProgramApprovalSnapshot> getGrayLevelList(List<ProgramApprovalSnapshot> productList){

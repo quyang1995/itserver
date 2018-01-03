@@ -45,4 +45,6 @@ public interface IProgramService extends IAdminService<Program> {
 
     void submit(Map<String, String> paramsMap,Program program,int programStatus);
 //    ApplyViewVo applyView(Map<String, String> paramsMap, Program program) throws Exception;
+
+    ProgramApprovalSnapshot getSnapshot(Long id) throws Exception;
 }

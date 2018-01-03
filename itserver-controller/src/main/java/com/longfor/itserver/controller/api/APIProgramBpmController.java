@@ -479,4 +479,25 @@ public class APIProgramBpmController extends BaseController {
 		return  resultMap;
 	}
 
+	/**
+	 * 根据需求ID 获取快照信息
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/getSnapshot" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+	@ResponseBody
+	public Map getSnapshot(HttpServletRequest request){
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try {
+			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------getSnapshot:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+			Long id = Long.parseLong(paramsMap.get("id"));
+			resultMap.put("data",getProgramService().getSnapshot(id));
+		} catch ( Exception e) {
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return  resultMap;
+	}
+
 }

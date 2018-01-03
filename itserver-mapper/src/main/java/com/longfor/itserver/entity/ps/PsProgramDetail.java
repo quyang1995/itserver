@@ -47,18 +47,11 @@ public class PsProgramDetail extends Program implements Serializable {
     @Transient
     private List<ProgramApprovalSnapshot> grayLevelList;
     @Transient
-    private List<ProgramApprovalSnapshot> costRecordList;
-    @Transient
     private List<ProgramApprovalSnapshot> milepostList;
 
     @Transient
-    private List<Map> grayLevelMap;
+    private List<ProgramApprovalSnapshot> costRecordList;
 
-    @Transient
-    private List<Map<String,Object>> costRecordMap;
-
-    @Transient
-    private List<Map> milepostMap;
 
     public void setOperationList(List<ProgramEmployee> operationList) {
         this.operationList = operationList;
@@ -76,28 +69,12 @@ public class PsProgramDetail extends Program implements Serializable {
         return operateList;
     }
 
-    public void setGrayLevelMap(List<Map> grayLevelMap) {
-        this.grayLevelMap = grayLevelMap;
+    public void setCostRecordList(List<ProgramApprovalSnapshot> costRecordList) {
+        this.costRecordList = costRecordList;
     }
 
-    public void setCostRecordMap(List<Map<String,Object>> costRecordMap) {
-        this.costRecordMap = costRecordMap;
-    }
-
-    public void setMilepostMap(List<Map> milepostMap) {
-        this.milepostMap = milepostMap;
-    }
-
-    public List<Map> getGrayLevelMap() {
-        return grayLevelMap;
-    }
-
-    public List<Map<String,Object>> getCostRecordMap() {
-        return costRecordMap;
-    }
-
-    public List<Map> getMilepostMap() {
-        return milepostMap;
+    public List<ProgramApprovalSnapshot> getCostRecordList() {
+        return costRecordList;
     }
 
     public List<ProgramApprovalSnapshot> getMilepostList() {
@@ -106,14 +83,6 @@ public class PsProgramDetail extends Program implements Serializable {
 
     public void setMilepostList(List<ProgramApprovalSnapshot> milepostList) {
         this.milepostList = milepostList;
-    }
-
-    public List<ProgramApprovalSnapshot> getCostRecordList() {
-        return costRecordList;
-    }
-
-    public void setCostRecordList(List<ProgramApprovalSnapshot> costRecordList) {
-        this.costRecordList = costRecordList;
     }
 
     public List<ProgramApprovalSnapshot> getGrayLevelList() {

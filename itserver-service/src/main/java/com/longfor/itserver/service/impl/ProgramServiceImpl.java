@@ -97,20 +97,12 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             pMap.put("approvalStatus", ProgramApprovalStatusEnum.SHZ.getCode());
             List<ProgramApprovalSnapshot> s = programApprovalSnapshotMapper.grayLevelList(pMap);
             if (s == null || s.isEmpty()) {
-//                break;
                 pMap.put("approvalStatus", ProgramApprovalStatusEnum.BGSHZ.getCode());
                 s = programApprovalSnapshotMapper.grayLevelList(pMap);
             }
-            Map map = new HashMap();
-            map.put("programId",s.get(0).getProgramId());
-            map.put("type",s.get(0).getProgramStatus());
-            map.put("snapshotId",s.get(0).getId());
-            List<ProgramFile> fileList = programFileMapper.getListByMap(map);
-            model.setFileList(fileList);
-            map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
-            map.put("employeeTypeId", new Long(AvaStatusEnum.PROGAVA.getCode()));
-            List<ProgramEmployee> empList  = programEmployeeMapper.selectTypeList(map);
-            model.setEmpList(empList);
+            if (s != null && !s.isEmpty()) {
+                this.setProgramApprovalSnapshotInfo(s.get(0));
+            }
         }
         return resultList;
     }
@@ -198,19 +190,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             pMap.put("approvalStatus", ProgramApprovalStatusEnum.BGSHZ.getCode());
             s = programApprovalSnapshotMapper.grayLevelList(pMap);
         }
-        Map map = new HashMap();
         if (s != null && !s.isEmpty()) {
-            map.put("programId",s.get(0).getProgramId());
-            map.put("type",s.get(0).getProgramStatus());
-            map.put("snapshotId",s.get(0).getId());
-            List<ProgramFile> fileList = programFileMapper.getListByMap(map);
-            shot.setFileList(fileList);
+            this.setProgramApprovalSnapshotInfo(s.get(0));
         }
-
-        map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
-        map.put("employeeTypeId", new Long(AvaStatusEnum.PROGAVA.getCode()));
-        List<ProgramEmployee> empList  = programEmployeeMapper.selectTypeList(map);
-        shot.setEmpList(empList);
         return shot;
     }
 
@@ -717,7 +699,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //program快照表
             programApprovalSnapshot.setId(null);
-            programApprovalSnapshot.setProgramStatus(program.getProgramStatus());
+
+//            programApprovalSnapshot.setProgramStatus(program.getProgramStatus());
+
             programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
@@ -790,7 +774,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             //program表
 //            program.setProgramStatus(ProgramStatusNewEnum.YQSX.getCode());
             program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
-            program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("releaseDate"),DateUtil.PATTERN_DATE));
+            program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("grayReleaseDate"),DateUtil.PATTERN_DATE));
             program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("demandDate"),DateUtil.PATTERN_DATE));
             program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("developmentDate"),DateUtil.PATTERN_DATE));
             program.setTestApprovalDate(DateUtil.string2Date(paramsMap.get("testReviewDate"),DateUtil.PATTERN_DATE));
@@ -851,7 +835,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             program.setDevWorkload(Integer.parseInt(paramsMap.get("devWorkloadChange")));
             program.setOverallCost(overallCost);
-            program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("releaseDate"),DateUtil.PATTERN_DATE));
+            program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("grayReleaseDate"),DateUtil.PATTERN_DATE));
             program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("demandDate"),DateUtil.PATTERN_DATE));
             program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("developmentDate"),DateUtil.PATTERN_DATE));
             program.setTestApprovalDate(DateUtil.string2Date(paramsMap.get("testReviewDate"),DateUtil.PATTERN_DATE));
@@ -1068,5 +1052,31 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         BeanUtils.copyProperties(programApprovalSnapshot,program);
         programApprovalSnapshot.setId(null);
         programApprovalSnapshot.setProgramId(program.getId());
+    }
+
+    /***
+     * 根据需求ID 获取快照信息
+     */
+    @Override
+    public ProgramApprovalSnapshot getSnapshot(Long id)  throws Exception{
+        ProgramApprovalSnapshot shot = programApprovalSnapshotMapper.selectByPrimaryKey(id);
+        this.setProgramApprovalSnapshotInfo(shot);
+        return shot;
+    }
+
+    /*设置快照文件信息和项目经理信息*/
+    private void setProgramApprovalSnapshotInfo (ProgramApprovalSnapshot model){
+        if (model != null ) {
+            Map map = new HashMap();
+            map.put("programId",model.getProgramId());
+            map.put("type",model.getProgramStatus());
+            map.put("snapshotId",model.getId());
+            List<ProgramFile> fileList = programFileMapper.getListByMap(map);
+            model.setFileList(fileList);
+            map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
+            map.put("employeeTypeId", new Long(AvaStatusEnum.PROGAVA.getCode()));
+            List<ProgramEmployee> empList  = programEmployeeMapper.selectTypeList(map);
+            model.setEmpList(empList);
+        }
     }
 }
