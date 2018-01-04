@@ -1261,12 +1261,16 @@
         <request>
             <property name="programId" type="string" required="true"/>
             <property name="remark" type="string" required="true"/>
+            <property name="causeDelay" type="string" required="true"/>
+            <property name="fileList" type="string" required="false"/>
 
             <property name="grayReleaseDate" type="string" required="true"/>
             <property name="demandDate" type="string" required="true"/>
             <property name="developmentDate" type="string" required="true"/>
             <property name="testReviewDate" type="string" required="true"/>
             <property name="onlineDate" type="string" required="true"/>
+            <property name="devWorkloadChange" type="string" required="false"/>
+            <property name="overallCost" type="string" required="false"/>
 
             <property name="counterSigners" type="string" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>

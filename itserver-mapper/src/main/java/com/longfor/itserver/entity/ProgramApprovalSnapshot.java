@@ -216,6 +216,12 @@ public class ProgramApprovalSnapshot implements Serializable {
     @Column(name = "apply_account")
     private String applyAccount;
 
+    /**
+     * 延期原因，1：需求变更，2：其他原因（不涉及费用）
+     */
+    @Column(name = "cause_delay")
+    private String causeDelay;
+
     @Transient
     private List<ProgramFile> fileList;
 
@@ -907,5 +913,13 @@ public class ProgramApprovalSnapshot implements Serializable {
      */
     public void setApprovalView(String approvalView) {
         this.approvalView = approvalView == null ? null : approvalView.trim();
+    }
+
+    public String getCauseDelay() {
+        return causeDelay;
+    }
+
+    public void setCauseDelay(String causeDelay) {
+        this.causeDelay = causeDelay;
     }
 }

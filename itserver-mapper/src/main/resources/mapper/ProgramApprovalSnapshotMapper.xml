@@ -47,6 +47,7 @@
     <result column="bid_oversingle_cost" property="bidOversingleCost" jdbcType="DECIMAL" />
     <result column="suggestion" property="suggestion" jdbcType="VARCHAR" />
     <result column="applyAccount" property="apply_account" jdbcType="VARCHAR" />
+    <result column="cause_delay" property="causeDelay" jdbcType="VARCHAR" />
   </resultMap>
 
   <sql id="Base_Column_List" >
@@ -59,7 +60,7 @@
     account_type, demo_approval_date, bidding_date, winning_bid_date, prod_approval_date, 
     dev_approval_date, test_approval_date, online_plan_date, dev_type, analyzing_conditions, 
     dev_workload, overall_cost, bid_dev_workload, bid_overall_cost, approval_status, 
-    bpm_code, remark, approval_view, bid_oversingle_cost,suggestion,apply_account
+    bpm_code, remark, approval_view, bid_oversingle_cost, suggestion, apply_account, cause_delay
   </sql>
 
   <select id="getListByProgramIdAndStatus" resultMap="BaseResultMap">

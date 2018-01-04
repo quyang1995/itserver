@@ -767,17 +767,34 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     public void delay(Map<String, String> paramsMap,Program program) {
         try{
             Date now = new Date();
+            //延期原因
+            String causeDelay = paramsMap.get("causeDelay");
+            //变更预期费用
+            String oc = paramsMap.get("overallCost");
+            if ("2".equals(causeDelay)) {
+                oc = "0";
+            }
+            BigDecimal  overallCost = new BigDecimal(oc);
+            BigDecimal ten = new BigDecimal(100000);
 
             //创建流程
-            ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
-            if(!applyCreateResultVo.isSuccess()){
-                LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("创建流程失败");
+            ApplyCreateResultVo applyCreateResultVo = new ApplyCreateResultVo();
+            if (overallCost.compareTo(ten) != -1) {
+                //创建流程
+                applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
+                if (!applyCreateResultVo.isSuccess()) {
+                    LOG.error("创建流程失败:" + JSON.toJSONString(paramsMap) + "-----------------------");
+                    throw new RuntimeException("创建流程失败");
+                }
             }
 
             //program表
 //            program.setProgramStatus(ProgramStatusNewEnum.YQSX.getCode());
             program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
+            if ("1".equals(causeDelay)) {
+                program.setDevWorkload(Integer.parseInt(paramsMap.get("devWorkloadChange")));
+                program.setOverallCost(overallCost);
+            }
             program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("grayReleaseDate"),DateUtil.PATTERN_DATE));
             program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("demandDate"),DateUtil.PATTERN_DATE));
             program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("developmentDate"),DateUtil.PATTERN_DATE));
@@ -792,19 +809,28 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             //program快照表
             ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
             this.copyProperties(programApprovalSnapshot,program);
-            programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
+            if (overallCost.compareTo(ten) != -1) {
+                programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
+            }
+            programApprovalSnapshot.setCauseDelay(causeDelay);
             programApprovalSnapshot.setProgramStatus(ProgramStatusNewEnum.YQSX.getCode());
             programApprovalSnapshot.setRemark(paramsMap.get("remark"));
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
-            //激活流程
-            ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
-                    paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
-            if(pplySubmitResultVo.getIsSuccess().equals("false")){
-                LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("激活流程失败");
+            //附件表
+            this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.YQSX.getCode(),programApprovalSnapshot.getId());
+
+
+            if (overallCost.compareTo(ten) != -1) {
+                //激活流程
+                ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
+                        paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
+                if(pplySubmitResultVo.getIsSuccess().equals("false")){
+                    LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+                    throw new RuntimeException("激活流程失败");
+                }
             }
 
         }catch (Exception e){
