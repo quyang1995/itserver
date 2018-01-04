@@ -101,7 +101,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                 s = programApprovalSnapshotMapper.grayLevelList(pMap);
             }
             if (s != null && !s.isEmpty()) {
-                this.setProgramApprovalSnapshotInfo(s.get(0));
+                this.setProgramApprovalSnapshotInfo(s.get(0),model);
             }
         }
         return resultList;
@@ -191,7 +191,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             s = programApprovalSnapshotMapper.grayLevelList(pMap);
         }
         if (s != null && !s.isEmpty()) {
-            this.setProgramApprovalSnapshotInfo(s.get(0));
+            this.setProgramApprovalSnapshotInfo(s.get(0),shot);
         }
         return shot;
     }
@@ -961,8 +961,13 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     private void getApprovelAfterProgramStatus(String bpmCode,Program program,int programStatus){
         if(programStatus==ProgramStatusNewEnum.XMFP.getCode()){//如果提交审批的为复盘，则项目状态直接到完成
             program.setProgramStatus(ProgramStatusNewEnum.WC.getCode());
-        }else if(programStatus==ProgramStatusNewEnum.YQSX.getCode() || programStatus==ProgramStatusNewEnum.XQBG.getCode()){//如果提交审批的为延期上线或者需求变更，则项目状态直接到产品评审
-            program.setProgramStatus(ProgramStatusNewEnum.CPPS.getCode());
+        }else if(programStatus==ProgramStatusNewEnum.XQBG.getCode()){//如果提交审批的为需求变更，则项目状态根据研发方式回到对应节点
+            if (program.getDevType() == 1) {
+                program.setProgramStatus(ProgramStatusNewEnum.ZBSQ.getCode());
+            }
+            if (program.getDevType() == 2) {
+                program.setProgramStatus(ProgramStatusNewEnum.DPS.getCode());
+            }
         }else if(programStatus==ProgramStatusNewEnum.ZZ.getCode()){//如果提交审批的为终止项目，则项目状态直接到终止
             program.setProgramStatus(ProgramStatusNewEnum.ZZ.getCode());
         }
@@ -1060,23 +1065,23 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     @Override
     public ProgramApprovalSnapshot getSnapshot(Long id)  throws Exception{
         ProgramApprovalSnapshot shot = programApprovalSnapshotMapper.selectByPrimaryKey(id);
-        this.setProgramApprovalSnapshotInfo(shot);
+        this.setProgramApprovalSnapshotInfo(shot,shot);
         return shot;
     }
 
     /*设置快照文件信息和项目经理信息*/
-    private void setProgramApprovalSnapshotInfo (ProgramApprovalSnapshot model){
+    private void setProgramApprovalSnapshotInfo (ProgramApprovalSnapshot model,ProgramApprovalSnapshot resultModel){
         if (model != null ) {
             Map map = new HashMap();
             map.put("programId",model.getProgramId());
             map.put("type",model.getProgramStatus());
             map.put("snapshotId",model.getId());
             List<ProgramFile> fileList = programFileMapper.getListByMap(map);
-            model.setFileList(fileList);
+            resultModel.setFileList(fileList);
             map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
             map.put("employeeTypeId", new Long(AvaStatusEnum.PROGAVA.getCode()));
             List<ProgramEmployee> empList  = programEmployeeMapper.selectTypeList(map);
-            model.setEmpList(empList);
+            resultModel.setEmpList(empList);
         }
     }
 }

@@ -195,6 +195,7 @@ public class APIProgramController extends BaseController {
 			Map grayLevelMap = new HashMap();
 			grayLevelMap.put("programId", new Long(id));
 			List<ProgramApprovalSnapshot> productList =  this.getProgramApprovalSnapshotService().grayLevelList(grayLevelMap);
+			program.setChangeStatus(this.getchangeStatus(productList));
 			/* 灰度时间变更记录 */
 			List<ProgramApprovalSnapshot> grayLevelList =  this.getGrayLevelList(productList);
 			program.setGrayLevelList(grayLevelList);
@@ -214,6 +215,16 @@ public class APIProgramController extends BaseController {
 		return resultMap;
 	}
 
+	private Integer getchangeStatus(List<ProgramApprovalSnapshot> productList){
+		if (productList == null || productList.isEmpty()) {
+			return null;
+		}
+		Integer changeStatus = productList.get(0).getProgramStatus();
+		if (changeStatus !=  ProgramStatusNewEnum.XQBG.getCode() && changeStatus !=  ProgramStatusNewEnum.YQSX.getCode()) {
+			return  null;
+		}
+		return  changeStatus;
+	}
 	/* 项目费用记录 */
 	private List<ProgramApprovalSnapshot> costRecordList(List<ProgramApprovalSnapshot> productList){
 		List<ProgramApprovalSnapshot> resultList = new ArrayList<ProgramApprovalSnapshot>();

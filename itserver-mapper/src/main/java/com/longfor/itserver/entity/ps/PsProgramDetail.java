@@ -20,6 +20,9 @@ import java.util.Map;
 public class PsProgramDetail extends Program implements Serializable {
 
     @Transient
+    private Integer changeStatus;
+
+    @Transient
     private List<Product> productList;
 
     @Transient
@@ -52,6 +55,13 @@ public class PsProgramDetail extends Program implements Serializable {
     @Transient
     private List<ProgramApprovalSnapshot> costRecordList;
 
+    public Integer getChangeStatus() {
+        return changeStatus;
+    }
+
+    public void setChangeStatus(Integer changeStatus) {
+        this.changeStatus = changeStatus;
+    }
 
     public void setOperationList(List<ProgramEmployee> operationList) {
         this.operationList = operationList;

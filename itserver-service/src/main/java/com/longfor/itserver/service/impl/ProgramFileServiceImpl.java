@@ -34,7 +34,30 @@ import java.util.*;
  * @version v1.0
  */
 @Service("ProgramFileService")
-public class ProgramFileServiceImpl extends AdminBaseService< ProgramFile> implements IProgramFileService {
+public class ProgramFileServiceImpl extends AdminBaseService<ProgramFile> implements IProgramFileService {
 
+    @Autowired
+    private ProgramFileMapper programFileMapper;
+    @Autowired
+    private ProgramApprovalSnapshotMapper programApprovalSnapshotMapper;
+
+    @Override
+    public List<ProgramFileVo> getListByMap(Map<String,Object> paramsMap) throws Exception{
+        List<ProgramFile> fileList = programFileMapper.getListByMap(paramsMap);
+        if (fileList == null || fileList.isEmpty()) {
+            return null;
+        }
+        List<ProgramFileVo> fileVoList = new ArrayList<ProgramFileVo>();
+        for (ProgramFile file : fileList) {
+            ProgramApprovalSnapshot shot = programApprovalSnapshotMapper.selectByPrimaryKey(file.getSnapshotId());
+            ProgramFileVo fileVo = new ProgramFileVo();
+            BeanUtils.copyProperties(fileVo,file);
+            fileVo.setProgramName(shot.getName());
+            fileVo.setProductId(shot.getProductId());
+            fileVo.setProductName(shot.getProductName());
+            fileVoList.add(fileVo);
+        }
+        return fileVoList;
+    }
 }
 

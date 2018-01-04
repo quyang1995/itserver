@@ -1359,4 +1359,25 @@
             <property name="id" type="string" required="true"/>
         </request>
     </item>
+
+    <!--
+    URL:
+    /api/program/bpm/exportGrayLevel
+    说明:导出-灰度时间变更记录
+    -->
+    <item id="api_program_bpm_exportGrayLevel" description="导出-灰度时间变更记录">
+        <request>
+            <property name="programId" type="string" required="true"/>
+        </request>
+    </item>
+    <!--
+    URL:
+    /api/program/bpm/getFileList
+    说明:获取相关需求文件
+    -->
+    <item id="api_program_bpm_getFileList" description="获取相关需求文件">
+        <request>
+            <property name="programId" type="string" required="true"/>
+        </request>
+    </item>
 </api>

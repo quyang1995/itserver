@@ -4,13 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
+import com.longfor.itserver.common.enums.ProgramApprovalStatusEnum;
 import com.longfor.itserver.common.enums.ProgramStatusNewEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.controller.base.BaseController;
-import com.longfor.itserver.entity.Program;
-import com.longfor.itserver.entity.ProgramApprovalSnapshot;
-import com.longfor.itserver.entity.ProgramEmployee;
-import com.longfor.itserver.entity.ProgramFile;
+import com.longfor.itserver.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -493,6 +491,64 @@ public class APIProgramBpmController extends BaseController {
 			LOG.info("------getSnapshot:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			Long id = Long.parseLong(paramsMap.get("id"));
 			resultMap.put("data",getProgramService().getSnapshot(id));
+		} catch ( Exception e) {
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return  resultMap;
+	}
+
+	/**
+	 * 导出-灰度时间变更记录
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/exportGrayLevel" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+	@ResponseBody
+	public Map exportGrayLevel(HttpServletRequest request){
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try {
+			Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------exportGrayLevel:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+			List<ProgramApprovalSnapshot> productList =  this.getProgramApprovalSnapshotService().grayLevelList(paramsMap);
+			if (productList == null || productList.isEmpty()) {
+				resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1017);
+				return resultMap;
+			}
+			List<ProgramApprovalSnapshot> resultList = new ArrayList<ProgramApprovalSnapshot>();
+			for(ProgramApprovalSnapshot model:productList){
+				if (model.getApprovalStatus()== ProgramApprovalStatusEnum.SHTG.getCode()
+						&& (model.getProgramStatus()==ProgramStatusNewEnum.YQSX.getCode()
+						|| model.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode())) {
+//					发起人ID：model.getModifiedAccountId();
+//					发起人：model.getModifiedName();
+//					灰度时间：model.getGrayReleaseDate();
+//					变更渠道：model.getProgramStatus();
+					resultList.add(model);
+				}
+			}
+			resultMap.put("data",resultList);
+		} catch ( Exception e) {
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return  resultMap;
+	}
+
+	/**
+	 *  获取相关需求文件
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/getFileList" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+	@ResponseBody
+	public Map getFileList(HttpServletRequest request){
+		Map<String,Object> paramsMap = (Map<String,Object>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try {
+			//获取文件
+			List<ProgramFileVo> fileList = this.getProgramFileService().getListByMap(paramsMap);
+			resultMap.put("data",fileList);
 		} catch ( Exception e) {
 			e.printStackTrace();
 			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
