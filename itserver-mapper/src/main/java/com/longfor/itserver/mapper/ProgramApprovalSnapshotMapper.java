@@ -14,4 +14,6 @@ public interface ProgramApprovalSnapshotMapper extends BeeMapper<ProgramApproval
     List<ProgramApprovalSnapshot> getListByProgramIdAndStatus(Map<String, Object> map);
 
     List<ProgramApprovalSnapshot> grayLevelList(Map<String, Object> map);
+
+    List<ProgramApprovalSnapshot> getByBpmCodes(List<String> list);
 }

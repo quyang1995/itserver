@@ -12,4 +12,6 @@ import java.util.Map;
 public interface IProgramApprovalSnapshotService  extends IAdminService<ProgramApprovalSnapshot> {
 
     List<ProgramApprovalSnapshot> grayLevelList(Map<String, Object> map);
+
+    List<ProgramApprovalSnapshot> getByBpmCodes(List<String> list);
 }

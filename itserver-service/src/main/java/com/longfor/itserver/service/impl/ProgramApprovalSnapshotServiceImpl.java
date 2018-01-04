@@ -24,4 +24,9 @@ public class ProgramApprovalSnapshotServiceImpl extends AdminBaseService<Program
 
         return  programApprovalSnapshotMapper.grayLevelList(map);
     }
+
+    @Override
+    public List<ProgramApprovalSnapshot> getByBpmCodes(List<String> list) {
+        return  programApprovalSnapshotMapper.getByBpmCodes(list);
+    }
 }

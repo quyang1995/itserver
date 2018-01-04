@@ -1,5 +1,7 @@
 package com.longfor.itserver.service;
 
+import com.longfor.itserver.common.vo.MoApprove.MoApproveListVo;
+import com.longfor.itserver.common.vo.programBpm.ApproveListVo;
 import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ProgramApprovalSnapshot;
 import com.longfor.itserver.service.base.IAdminService;
@@ -47,4 +49,6 @@ public interface IProgramService extends IAdminService<Program> {
 //    ApplyViewVo applyView(Map<String, String> paramsMap, Program program) throws Exception;
 
     ProgramApprovalSnapshot getSnapshot(Long id) throws Exception;
+
+    ApproveListVo getApprovelapprovList(MoApproveListVo moApproveListVo) throws Exception;
 }

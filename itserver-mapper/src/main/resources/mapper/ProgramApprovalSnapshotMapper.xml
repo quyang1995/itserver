@@ -46,6 +46,7 @@
     <result column="approval_view" property="approvalView" jdbcType="VARCHAR" />
     <result column="bid_oversingle_cost" property="bidOversingleCost" jdbcType="DECIMAL" />
     <result column="suggestion" property="suggestion" jdbcType="VARCHAR" />
+    <result column="applyAccount" property="apply_account" jdbcType="VARCHAR" />
   </resultMap>
 
   <sql id="Base_Column_List" >
@@ -58,7 +59,7 @@
     account_type, demo_approval_date, bidding_date, winning_bid_date, prod_approval_date, 
     dev_approval_date, test_approval_date, online_plan_date, dev_type, analyzing_conditions, 
     dev_workload, overall_cost, bid_dev_workload, bid_overall_cost, approval_status, 
-    bpm_code, remark, approval_view, bid_oversingle_cost,suggestion
+    bpm_code, remark, approval_view, bid_oversingle_cost,suggestion,apply_account
   </sql>
 
   <select id="getListByProgramIdAndStatus" resultMap="BaseResultMap">
@@ -112,6 +113,17 @@
         and bpm_code= #{bpmCode}
       </if>
     </where>
+    ORDER  BY  create_time DESC
+  </select>
+
+  <select id="getByBpmCodes" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from program_approval_snapshot
+    where bpm_code in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+          #{item}
+        </foreach>
     ORDER  BY  create_time DESC
   </select>
 

@@ -7,8 +7,15 @@ import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.enums.ProgramApprovalStatusEnum;
 import com.longfor.itserver.common.enums.ProgramStatusNewEnum;
 import com.longfor.itserver.common.util.CommonUtils;
+import com.longfor.itserver.common.vo.MoApprove.MoApproveListVo;
+import com.longfor.itserver.common.vo.programBpm.ApproveListVo;
 import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.*;
+import com.longfor.itserver.entity.Program;
+import com.longfor.itserver.entity.ProgramApprovalSnapshot;
+import com.longfor.itserver.entity.ProgramEmployee;
+import com.longfor.itserver.entity.ProgramFile;
+import com.longfor.itserver.esi.MoApproveUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -556,4 +563,35 @@ public class APIProgramBpmController extends BaseController {
 		return  resultMap;
 	}
 
+	/**
+	 * 查看审批列表页面
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/getApprovelapprovList" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+	@ResponseBody
+	public Map getApprovelapprovList(HttpServletRequest request){
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try {
+			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------getApprovelapprovList:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+
+			//调用移动审批接口获取列表
+			MoApproveListVo moApproveListVo = MoApproveUtil.flowapiList(Integer.parseInt(paramsMap.get("approveStatus")),
+										paramsMap.get("oaAccount"),
+										paramsMap.get("searchType"),
+										Integer.parseInt(paramsMap.get("page")),
+										Integer.parseInt(paramsMap.get("pageSize")));
+
+			if(null==moApproveListVo)return CommonUtils.getResultMapByBizEnum(BizEnum.E1303);
+
+			ApproveListVo result = getProgramService().getApprovelapprovList(moApproveListVo);
+
+			resultMap.put("data",result);
+		} catch ( Exception e) {
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return  resultMap;
+	}
 }

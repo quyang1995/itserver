@@ -1380,4 +1380,19 @@
             <property name="programId" type="string" required="true"/>
         </request>
     </item>
+
+    <!--
+        URL:
+        /api/program/bpm/getApprovelapprovList
+        说明:查看审批列表页面
+    -->
+    <item id="api_program_bpm_getApprovelapprovList" description="查看审批列表页面">
+        <request>
+            <property name="oaAccount" type="string" required="true"/>
+            <property name="approveStatus" type="int" required="true"/>
+            <property name="searchType" type="string" required="false"/>
+            <property name="page" type="int" required="false"/>
+            <property name="pageSize" type="int" required="false"/>
+        </request>
+    </item>
 </api>
