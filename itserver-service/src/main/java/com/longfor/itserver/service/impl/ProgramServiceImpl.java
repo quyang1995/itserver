@@ -7,6 +7,10 @@ import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.*;
 import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.common.util.StringUtil;
+import com.longfor.itserver.common.vo.MoApprove.MoApproveListVo;
+import com.longfor.itserver.common.vo.MoApprove.MoApproveVo;
+import com.longfor.itserver.common.vo.programBpm.ApproveListVo;
+import com.longfor.itserver.common.vo.programBpm.ApproveVo;
 import com.longfor.itserver.common.vo.programBpm.common.ApplyCreateResultVo;
 import com.longfor.itserver.common.vo.programBpm.common.ApplySubmitResultVo;
 import com.longfor.itserver.common.vo.programBpm.common.FileVo;
@@ -1029,6 +1033,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programApprovalSnapshot.setRemark(paramsMap.get("remark"));
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
+            programApprovalSnapshot.setApplyAccount(paramsMap.get("modifiedAccountId"));
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
             //附件表
@@ -1078,5 +1083,47 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             List<ProgramEmployee> empList  = programEmployeeMapper.selectTypeList(map);
             model.setEmpList(empList);
         }
+    }
+
+    @Override
+    public ApproveListVo getApprovelapprovList(MoApproveListVo moApproveListVo) throws Exception{
+        ApproveListVo approveListVo = new ApproveListVo();
+        approveListVo.setTotal(moApproveListVo.getTotal());
+        approveListVo.setPageNo(moApproveListVo.getPage());
+
+        //循环获取bpmcode list，然后查询快照表获取 每个bpmcode获取最后一条对应快照
+        List<String> bmpCodeList = new ArrayList<>();
+        List<MoApproveVo> moApproveVoList = moApproveListVo.getList();
+        for(MoApproveVo moApproveVo:moApproveVoList){
+            bmpCodeList.add(moApproveVo.getFlowNo());
+        }
+        List<ProgramApprovalSnapshot> snapshotList = programApprovalSnapshotMapper.getByBpmCodes(bmpCodeList);
+
+        //封装bmpcode为key  快照为value的map
+        Map<String,ProgramApprovalSnapshot> map = new HashMap<>();
+        for(ProgramApprovalSnapshot programApprovalSnapshot:snapshotList){
+            map.put(programApprovalSnapshot.getBpmCode(),programApprovalSnapshot);
+        }
+
+        //循环生成返回页面对象视图
+        List<ApproveVo> resultList = new ArrayList<>();
+        for(MoApproveVo moApproveVo:moApproveVoList){
+            String bpmCode = moApproveVo.getFlowNo();
+            ProgramApprovalSnapshot tmpSna = map.get(bpmCode);
+            if(tmpSna==null)continue;
+            ApproveVo resultVo = new ApproveVo();
+            resultVo.setInstanceId(bpmCode);
+            resultVo.setToDoId(moApproveVo.getTodoId());
+            resultVo.setTitle(moApproveVo.getTitle());
+            resultVo.setProgramId(String.valueOf(tmpSna.getProgramId()));
+            resultVo.setProgramName(tmpSna.getName());
+            resultVo.setProgramStatus(tmpSna.getProgramStatus());
+            resultVo.setProgramStatusCh(ProgramStatusNewEnum.getByCode(tmpSna.getProgramStatus()).getText());
+            resultVo.setApplyName(tmpSna.getApplyAccount());
+            resultVo.setApplyTime(DateUtil.date2String(tmpSna.getCreateTime(),"yyyy-MM-dd HH:mm:ss"));
+            resultList.add(resultVo);
+        }
+        approveListVo.setList(resultList);
+        return approveListVo;
     }
 }

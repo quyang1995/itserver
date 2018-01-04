@@ -213,11 +213,22 @@ public class ProgramApprovalSnapshot implements Serializable {
     @Column(name = "suggestion")
     private String suggestion;
 
+    @Column(name = "apply_account")
+    private String applyAccount;
+
     @Transient
     private List<ProgramFile> fileList;
 
     @Transient
     private List<ProgramEmployee> empList;
+
+    public String getApplyAccount() {
+        return applyAccount;
+    }
+
+    public void setApplyAccount(String applyAccount) {
+        this.applyAccount = applyAccount;
+    }
 
     public String getSuggestion() {
         return suggestion;
