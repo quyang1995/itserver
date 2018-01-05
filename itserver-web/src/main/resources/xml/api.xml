@@ -1037,6 +1037,17 @@
             <property name="biddingDate" type="string" required="false"/>
             <property name="winningBidDate" type="string" required="false"/>
             <property name="grayReleaseDate" type="string" required="true"/>
+
+            <property name="personLiableList" type="string" required="false" description="责任人"/>
+            <property name="programManagerList" type="string" required="false" description="项目经理"/>
+            <property name="productManagerList" type="string" required="false" description="产品经理"/>
+            <property name="developerList" type="string" required="false" description="开发人员"/>
+            <property name="uedList" type="string" required="false" description="UED人员"/>
+            <property name="testingList" type="string" required="false" description="测试人员"/>
+            <property name="businessList" type="string" required="false" description="业务人员"/>
+            <property name="operationList" type="string" required="false" description="运维人员"/>
+            <property name="operateList" type="string" required="false" description="运营人员"/>
+
             <property name="counterSigners" type="string" required="false"/>
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
@@ -1382,6 +1393,8 @@
     <item id="api_program_bpm_getFileList" description="获取相关需求文件">
         <request>
             <property name="programId" type="string" required="false"/>
+            <property name="programName" type="string" required="false"/>
+            <property name="type" type="string" required="false"/>
             <property name="pageNum" type="int" required="true"/>
             <property name="pageSize" type="int" required="true"/>
         </request>

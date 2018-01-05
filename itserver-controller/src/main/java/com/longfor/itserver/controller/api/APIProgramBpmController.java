@@ -7,6 +7,7 @@ import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.enums.ProgramApprovalStatusEnum;
 import com.longfor.itserver.common.enums.ProgramStatusNewEnum;
 import com.longfor.itserver.common.util.CommonUtils;
+import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.common.vo.MoApprove.MoApproveListVo;
 import com.longfor.itserver.common.vo.programBpm.ApproveListVo;
 import com.longfor.itserver.controller.base.BaseController;
@@ -472,11 +473,11 @@ public class APIProgramBpmController extends BaseController {
 	@RequestMapping(value = "/getFile" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
 	@ResponseBody
 	public Map getFile(HttpServletRequest request){
-		Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		Map<String,String> paramsMap = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try {
 			//获取文件
-			ProgramFile result = this.getProgramFileService().selectById(Long.valueOf((String)paramsMap.get("id")));
+			ProgramFile result = this.getProgramFileService().selectById(Long.valueOf(paramsMap.get("id")));
 			resultMap.put("data",result);
 		} catch ( Exception e) {
 			e.printStackTrace();
@@ -518,6 +519,12 @@ public class APIProgramBpmController extends BaseController {
 		try {
 			Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 			LOG.info("------exportGrayLevel:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+			//计划时间
+			Program program = this.getProgramService().selectById(Long.valueOf(paramsMap.get("programId").toString()));
+			resultMap.put("planTime",program);
+			//实际时间
+			resultMap.put("actualTime",this.actualTime(paramsMap));
+			//变更时间
 			List<ProgramApprovalSnapshot> productList =  this.getProgramApprovalSnapshotService().grayLevelList(paramsMap);
 			if (productList == null || productList.isEmpty()) {
 				resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1017);
@@ -543,6 +550,41 @@ public class APIProgramBpmController extends BaseController {
 		return  resultMap;
 	}
 
+	private Map actualTime(Map paramsMap) throws Exception{
+		Map map = new HashMap();
+		List<ProgramApprovalSnapshot> milepostList =this.getProgramService().milepost(paramsMap);
+		for (ProgramApprovalSnapshot model:milepostList) {
+			if (model.getProgramStatus() == ProgramStatusNewEnum.LX.getCode()) {
+				map.put("commitDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_TIMESTAMP));
+			}
+			if (model.getProgramStatus() == ProgramStatusNewEnum.DPS.getCode()) {
+				map.put("demoApprovalDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_TIMESTAMP));
+			}
+			if (model.getProgramStatus() == ProgramStatusNewEnum.ZTBSQ.getCode()) {
+				map.put("biddingDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_TIMESTAMP));
+			}
+			if (model.getProgramStatus() == ProgramStatusNewEnum.ZBSQ.getCode()) {
+				map.put("winningBidDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_TIMESTAMP));
+			}
+			if (model.getProgramStatus() == ProgramStatusNewEnum.CPPS.getCode()) {
+				map.put("prodApprovalDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_TIMESTAMP));
+			}
+			if (model.getProgramStatus() == ProgramStatusNewEnum.KFPS.getCode()) {
+				map.put("devApprovalDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_TIMESTAMP));
+			}
+			if (model.getProgramStatus() == ProgramStatusNewEnum.CSPS.getCode()) {
+				map.put("testApprovalDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_TIMESTAMP));
+			}
+			if (model.getProgramStatus() == ProgramStatusNewEnum.SXPS.getCode()) {
+				map.put("onlinePlanDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_TIMESTAMP));
+			}
+			if (model.getProgramStatus() == ProgramStatusNewEnum.HDFB.getCode()) {
+				map.put("grayReleaseDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_TIMESTAMP));
+			}
+		}
+		return map;
+	}
+
 	/**
 	 *  获取相关需求文件
 	 * @param request
@@ -556,10 +598,10 @@ public class APIProgramBpmController extends BaseController {
 		try {
 			//获取文件
 			this.buildPageParams(paramsMap);
-			List<ProgramFileVo> fileList = this.getProgramFileService().getListByMap(paramsMap);
+			List<ProgramFileVo> fileList = this.getProgramFileService().getFileListByMap(paramsMap);
 			resultMap.put(APIHelper.PAGE_NUM, paramsMap.get("pageNum"));
 			resultMap.put(APIHelper.PAGE_SIZE, paramsMap.get("pageSize"));
-			resultMap.put(APIHelper.TOTAL, this.getProgramFileService().getListByMapTotal(paramsMap));
+			resultMap.put(APIHelper.TOTAL, this.getProgramFileService().getFileListByMapTotal(paramsMap));
 			resultMap.put("data",fileList);
 		} catch ( Exception e) {
 			e.printStackTrace();
