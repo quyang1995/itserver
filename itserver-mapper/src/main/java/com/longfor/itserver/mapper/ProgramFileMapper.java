@@ -13,4 +13,6 @@ public interface ProgramFileMapper extends BeeMapper<ProgramFile> {
 
     List<ProgramFile> getListByMap(Map<String,Object> map);
 
+    int getListByMapTotal(Map<String,Object> map);
+
 }

@@ -12,4 +12,6 @@ import java.util.Map;
 public interface IProgramFileService extends IAdminService<ProgramFile> {
 
     List<ProgramFileVo> getListByMap(Map<String,Object> paramsMap)  throws Exception;
+
+    int getListByMapTotal(Map<String,Object> paramsMap)  throws Exception;
 }

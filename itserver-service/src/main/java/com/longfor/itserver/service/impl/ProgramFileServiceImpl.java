@@ -55,9 +55,17 @@ public class ProgramFileServiceImpl extends AdminBaseService<ProgramFile> implem
             fileVo.setProgramName(shot.getName());
             fileVo.setProductId(shot.getProductId());
             fileVo.setProductName(shot.getProductName());
+            fileVo.setModifiedAccountId(shot.getModifiedAccountId());
+            fileVo.setModifiedName(shot.getModifiedName());
             fileVoList.add(fileVo);
         }
         return fileVoList;
+    }
+
+    @Override
+    public int getListByMapTotal(Map<String,Object> paramsMap) throws Exception{
+
+        return programFileMapper.getListByMapTotal(paramsMap);
     }
 }
 

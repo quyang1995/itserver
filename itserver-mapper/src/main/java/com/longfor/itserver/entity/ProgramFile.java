@@ -1,5 +1,9 @@
 package com.longfor.itserver.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import net.mayee.commons.CustomDateSerializer;
+import net.mayee.commons.CustomFullDateSerializer;
+
 import java.util.Date;
 import javax.persistence.*;
 
@@ -39,6 +43,7 @@ public class ProgramFile {
     private Integer type;
 
     @Column(name = "create_time")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date createTime;
 
     /**

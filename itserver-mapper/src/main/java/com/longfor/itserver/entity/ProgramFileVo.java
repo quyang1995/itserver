@@ -1,5 +1,6 @@
 package com.longfor.itserver.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Transient;
 import java.io.Serializable;
 
@@ -14,6 +15,26 @@ public class ProgramFileVo extends ProgramFile implements Serializable {
     private Long productId;
     @Transient
     private String productName;
+    @Transient
+    private String modifiedAccountId;
+    @Transient
+    private String modifiedName;
+
+    public void setModifiedName(String modifiedName) {
+        this.modifiedName = modifiedName;
+    }
+
+    public void setModifiedAccountId(String modifiedAccountId) {
+        this.modifiedAccountId = modifiedAccountId;
+    }
+
+    public String getModifiedAccountId() {
+        return modifiedAccountId;
+    }
+
+    public String getModifiedName() {
+        return modifiedName;
+    }
 
     public void setProgramName(String programName) {
         this.programName = programName;
