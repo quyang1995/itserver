@@ -16,12 +16,14 @@ public class MoApproveUtil{
     private static final Logger LOG = LoggerFactory.getLogger(MoApproveUtil.class);
     private static String url;
     private static String token;
+    private static String systemCode;
     private static final String FLOWAPI_LIST = "/flowapi/list";
 
     static {
         Props props = JoddHelper.getInstance().getJoddProps();
         url = props.getValue("moApprovel.url");
         token = props.getValue("moApprovel.token");
+        systemCode = props.getValue("moApprovel.systemCode");
     }
 
     public static MoApproveListVo flowapiList(int status,String userName,String searchType,int page,int pageSize){
@@ -34,6 +36,7 @@ public class MoApproveUtil{
             para.put("searchType",searchType);
             para.put("page",page);
             para.put("pageSize",pageSize);
+            para.put("systemNo",systemCode);
             paraR = para.toString();
             JSONObject result = HttpUtil.post(url + FLOWAPI_LIST,token,paraR);
             resultR = result.toJSONString();
