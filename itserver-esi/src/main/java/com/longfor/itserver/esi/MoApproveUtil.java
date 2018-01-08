@@ -32,7 +32,7 @@ public class MoApproveUtil{
         try{
             JSONObject para = new JSONObject();
             para.put("status",status);
-            para.put("userName",userName);
+            para.put("username",userName);
             para.put("searchType",searchType);
             para.put("page",page);
             para.put("pageSize",pageSize);
@@ -40,9 +40,9 @@ public class MoApproveUtil{
             paraR = para.toString();
             JSONObject result = HttpUtil.post(url + FLOWAPI_LIST,token,paraR);
             resultR = result.toJSONString();
-
-            if ("SSSS".equals(result.get("code"))) {
-                return JSON.parseObject(JSON.toJSONString(result.get("data")), MoApproveListVo.class);
+            if ("0".equals(result.get("code").toString())) {
+                String data = JSON.toJSONString(result.get("data"));
+                return JSON.parseObject(data, MoApproveListVo.class);
             }
         }catch (Exception e){
             e.printStackTrace();

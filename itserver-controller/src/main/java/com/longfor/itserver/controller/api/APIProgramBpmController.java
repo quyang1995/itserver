@@ -9,12 +9,9 @@ import com.longfor.itserver.common.enums.ProgramStatusNewEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.vo.MoApprove.MoApproveListVo;
 import com.longfor.itserver.common.vo.programBpm.ApproveListVo;
+import com.longfor.itserver.common.vo.programBpm.ApproveVo;
 import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.*;
-import com.longfor.itserver.entity.Program;
-import com.longfor.itserver.entity.ProgramApprovalSnapshot;
-import com.longfor.itserver.entity.ProgramEmployee;
-import com.longfor.itserver.entity.ProgramFile;
 import com.longfor.itserver.esi.MoApproveUtil;
 import net.mayee.commons.helper.APIHelper;
 import org.slf4j.Logger;
@@ -608,6 +605,12 @@ public class APIProgramBpmController extends BaseController {
 										Integer.parseInt(paramsMap.get("pageSize")));
 
 			if(null==moApproveListVo)return CommonUtils.getResultMapByBizEnum(BizEnum.E1303);
+			if(moApproveListVo.getList().size()==0){
+				resultMap.put("total",0);
+				resultMap.put("pageNo",0);
+				resultMap.put("list",new ArrayList<ApproveVo>());
+				return  resultMap;
+			}
 
 			ApproveListVo result = getProgramService().getApprovelapprovList(moApproveListVo);
 
