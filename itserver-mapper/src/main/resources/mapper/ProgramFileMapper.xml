@@ -2,6 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.longfor.itserver.mapper.ProgramFileMapper" >
   <resultMap id="BaseResultMap" type="com.longfor.itserver.entity.ProgramFile" >
+  <!--
+    WARNING - @mbggenerated
+  -->
+  <id column="id" property="id" jdbcType="BIGINT" />
+  <result column="program_id" property="programId" jdbcType="BIGINT" />
+  <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+  <result column="file_suffix" property="fileSuffix" jdbcType="VARCHAR" />
+  <result column="file_size" property="fileSize" jdbcType="VARCHAR" />
+  <result column="type" property="type" jdbcType="INTEGER" />
+  <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  <result column="snapshot_id" property="snapshotId" jdbcType="BIGINT" />
+</resultMap>
+  <resultMap id="BaseResultMapVo" type="com.longfor.itserver.entity.ProgramFileVo" >
     <!--
       WARNING - @mbggenerated
     -->
@@ -13,7 +26,14 @@
     <result column="type" property="type" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="snapshot_id" property="snapshotId" jdbcType="BIGINT" />
+
+    <result column="name" property="name" jdbcType="BIGINT" />
+    <result column="product_id" property="productId" jdbcType="BIGINT" />
+    <result column="product_name" property="productName" jdbcType="BIGINT" />
+    <result column="modified_account_id" property="modifiedAccountId" jdbcType="BIGINT" />
+    <result column="modified_name" property="modifiedName" jdbcType="BIGINT" />
   </resultMap>
+
   <resultMap id="ResultMapWithBLOBs" type="com.longfor.itserver.entity.ProgramFile" extends="BaseResultMap" >
     <!--
       WARNING - @mbggenerated
@@ -55,19 +75,53 @@
     </if>
   </select>
 
-  <select id="getListByMapTotal" resultType="Integer">
-    select COUNT(0) from program_file
+  <select id="getFileListByMapTotal" resultType="Integer">
+    SELECT COUNT(0) FROM program_file pf
+    LEFT JOIN program_approval_snapshot pas ON pas.id = pf.snapshot_id
     <where>
       <if test="programId != null and programId != ''">
-        program_id = #{programId}
+        pf.program_id = #{programId}
+      </if>
+      <if test="programName != null and programName != ''">
+        and pas.pas.name = #{programName}
       </if>
       <if test="type != null and type != ''">
-        and type = #{type}
+        and pf.type = #{type}
       </if>
       <if test="snapshotId != null and snapshotId != ''">
-        and snapshot_id = #{snapshotId}
+        and pf.snapshot_id = #{snapshotId}
       </if>
     </where>
+  </select>
+
+  <select id="getFileListByMap" resultMap="BaseResultMapVo">
+    SELECT
+      pf.*, pas.name 'programName',
+      pas.product_Id,
+      pas.product_Name,
+      pas.modified_Account_Id,
+      pas.modified_Name
+    FROM
+        program_file pf
+    LEFT JOIN program_approval_snapshot pas ON pas.id = pf.snapshot_id
+      <where>
+        <if test="programId != null and programId != ''">
+          pf.program_id = #{programId}
+        </if>
+        <if test="programName != null and programName != ''">
+          and pas.pas.name = #{programName}
+        </if>
+        <if test="type != null and type != ''">
+          and pf.type = #{type}
+        </if>
+        <if test="snapshotId != null and snapshotId != ''">
+          and pf.snapshot_id = #{snapshotId}
+        </if>
+      </where>
+      ORDER BY pf.create_time DESC
+      <if test="startRow != null ">
+        LIMIT #{startRow},#{endRow}
+      </if>
   </select>
 
 </mapper>

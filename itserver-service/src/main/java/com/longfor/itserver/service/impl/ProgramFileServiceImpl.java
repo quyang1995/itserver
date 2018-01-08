@@ -41,31 +41,39 @@ public class ProgramFileServiceImpl extends AdminBaseService<ProgramFile> implem
     @Autowired
     private ProgramApprovalSnapshotMapper programApprovalSnapshotMapper;
 
+//    @Override
+//    public List<ProgramFileVo> getListByMap(Map<String,Object> paramsMap) throws Exception{
+//        List<ProgramFile> fileList = programFileMapper.getListByMap(paramsMap);
+//        if (fileList == null || fileList.isEmpty()) {
+//            return null;
+//        }
+//        List<ProgramFileVo> fileVoList = new ArrayList<ProgramFileVo>();
+//        for (ProgramFile file : fileList) {
+//            ProgramFileVo fileVo = new ProgramFileVo();
+//            BeanUtils.copyProperties(fileVo,file);
+//            ProgramApprovalSnapshot shot = programApprovalSnapshotMapper.selectByPrimaryKey(file.getSnapshotId());
+//            if (shot != null) {
+//                fileVo.setProgramName(shot.getName());
+//                fileVo.setProductId(shot.getProductId());
+//                fileVo.setProductName(shot.getProductName());
+//                fileVo.setModifiedAccountId(shot.getModifiedAccountId());
+//                fileVo.setModifiedName(shot.getModifiedName());
+//            }
+//            fileVoList.add(fileVo);
+//        }
+//        return fileVoList;
+//    }
+
     @Override
-    public List<ProgramFileVo> getListByMap(Map<String,Object> paramsMap) throws Exception{
-        List<ProgramFile> fileList = programFileMapper.getListByMap(paramsMap);
-        if (fileList == null || fileList.isEmpty()) {
-            return null;
-        }
-        List<ProgramFileVo> fileVoList = new ArrayList<ProgramFileVo>();
-        for (ProgramFile file : fileList) {
-            ProgramApprovalSnapshot shot = programApprovalSnapshotMapper.selectByPrimaryKey(file.getSnapshotId());
-            ProgramFileVo fileVo = new ProgramFileVo();
-            BeanUtils.copyProperties(fileVo,file);
-            fileVo.setProgramName(shot.getName());
-            fileVo.setProductId(shot.getProductId());
-            fileVo.setProductName(shot.getProductName());
-            fileVo.setModifiedAccountId(shot.getModifiedAccountId());
-            fileVo.setModifiedName(shot.getModifiedName());
-            fileVoList.add(fileVo);
-        }
-        return fileVoList;
+    public int getFileListByMapTotal(Map<String,Object> paramsMap){
+
+        return programFileMapper.getFileListByMapTotal(paramsMap);
     }
 
     @Override
-    public int getListByMapTotal(Map<String,Object> paramsMap) throws Exception{
+    public List<ProgramFileVo> getFileListByMap(Map<String,Object> paramsMap) {
 
-        return programFileMapper.getListByMapTotal(paramsMap);
+        return programFileMapper.getFileListByMap(paramsMap);
     }
 }
 

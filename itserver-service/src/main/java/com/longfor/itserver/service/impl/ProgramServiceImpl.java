@@ -90,8 +90,17 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         }
         resultList.add(allList.get(0));
         for (int i = 1;i<allList.size();i++) {
-            if (allList.get(i).getApprovalStatus()==110) {
-                resultList.add(allList.get(i));
+            if (paramMap.get("programStatus").equals("150")) {
+                if (allList.get(i).getApprovalStatus()==110
+                        || allList.get(i).getApprovalStatus()==120
+                        || allList.get(i).getApprovalStatus()==140) {
+                    resultList.add(allList.get(i));
+                }
+            } else {
+                if (allList.get(i).getApprovalStatus()==110
+                        || allList.get(i).getApprovalStatus()==120) {
+                    resultList.add(allList.get(i));
+                }
             }
         }
 
@@ -450,16 +459,16 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
         // 运维人员
         String jsonArrOperation = json.get("operationList").toString();
-        if (!"".equals(jsonArrBusiness)) {
+        if (!"".equals(jsonArrOperation)) {
             deleteByParam(2, 7, program);
-            getAccountLongfor(program, jsonArrBusiness, "7");
+            getAccountLongfor(program, jsonArrOperation, "7");
         }
 
         // 运营人员
         String jsonArrOperate = json.get("operateList").toString();
-        if (!"".equals(jsonArrBusiness)) {
+        if (!"".equals(jsonArrOperate)) {
             deleteByParam(2, 8, program);
-            getAccountLongfor(program, jsonArrBusiness, "8");
+            getAccountLongfor(program, jsonArrOperate, "8");
         }
 
 		/*添加日志*/
@@ -1057,6 +1066,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             program.setModifiedTime(now);
             programMapper.updateByPrimaryKey(program);
 
+            this.dealProgramEmployee(paramsMap, program);
+
             //program快照表
             ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
             this.copyProperties(programApprovalSnapshot,program);
@@ -1156,5 +1167,65 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         }
         approveListVo.setList(resultList);
         return approveListVo;
+    }
+
+    private void dealProgramEmployee (Map map,Program program) {
+        JSONObject json = (JSONObject) JSONObject.toJSON(map);
+        // 项目责任人
+        String jsonArrPl = json.get("personLiableList").toString();
+        if (!"".equals(jsonArrPl)) {
+            deleteByParam(1, 0, program);
+            getAccountLongfor(program, jsonArrPl, "0");
+        }
+        // 产品经理
+        String jsonArrPm = json.get("productManagerList").toString();
+        if (!"".equals(jsonArrPm)) {
+            deleteByParam(2, 1, program);
+            getAccountLongfor(program, jsonArrPm, "1");
+        }
+        // 项目经理
+        String jsonArrPMl = json.get("programManagerList").toString();
+        if (!"".equals(jsonArrPMl)) {
+            deleteByParam(2, 2, program);
+            getAccountLongfor(program, jsonArrPMl, "2");
+        }
+        // 开发人员
+        String jsonArrDe = json.get("developerList").toString();
+        if (!"".equals(jsonArrDe)) {
+            deleteByParam(2, 3, program);
+            getAccountLongfor(program, jsonArrDe, "3");
+        }
+        // UED人员
+        String jsonArrUed = json.get("uedList").toString();
+        if (!"".equals(jsonArrUed)) {
+            deleteByParam(2, 4, program);
+            getAccountLongfor(program, jsonArrUed, "4");
+        }
+        // 测试人员
+        String jsonArrTest = json.get("testingList").toString();
+        if (!"".equals(jsonArrTest)) {
+            deleteByParam(2, 5, program);
+            getAccountLongfor(program, jsonArrTest, "5");
+        }
+        // 业务人员
+        String jsonArrBusiness = json.get("businessList").toString();
+        if (!"".equals(jsonArrBusiness)) {
+            deleteByParam(2, 6, program);
+            getAccountLongfor(program, jsonArrBusiness, "6");
+        }
+
+        // 运维人员
+        String jsonArrOperation = json.get("operationList").toString();
+        if (!"".equals(jsonArrOperation)) {
+            deleteByParam(2, 7, program);
+            getAccountLongfor(program, jsonArrOperation, "7");
+        }
+
+        // 运营人员
+        String jsonArrOperate = json.get("operateList").toString();
+        if (!"".equals(jsonArrOperate)) {
+            deleteByParam(2, 8, program);
+            getAccountLongfor(program, jsonArrOperate, "8");
+        }
     }
 }
