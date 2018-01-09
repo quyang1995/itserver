@@ -58,6 +58,13 @@ public class ProgramBpmUtils
 
     /***
      * 创建流程_提交BRD
+     * submitAccount:提交人oa账号
+     * businessAccount:业务对接人guid
+     * developAccount:项目技术负责人/开发人员guid
+     * ifZqs:是否周琼硕审批  string 0-否，1-是
+     * counterSigners:会签人  string 逗号分隔
+     * cOrZ:李川还是傅志华   string 0-李，1-傅
+     * ifGj:是否光建总审批   string 0-否，1-是
      */
     public static ApplyCreateResultVo submitBrd(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
