@@ -17,6 +17,8 @@ import java.rmi.RemoteException;
  */
 public class BpmUtils {
 
+    private static String systemCode;
+
     public BpmUtils(){
         super();
     }
@@ -24,6 +26,7 @@ public class BpmUtils {
 
     static {
         bpmServiceLocator = new ComLongforEsbDCBPMBpmServiceLocator();
+        systemCode = JoddHelper.getInstance().getJoddProps().getValue("bpm.systemCode");
     }
 
     /**
@@ -32,7 +35,7 @@ public class BpmUtils {
      * @return
      */
     private static BPMServiceSoap_BindingStub getBpmStub(String methodName){
-        String systemCode = JoddHelper.getInstance().getJoddProps().getValue("bpm.systemCode");
+
         BPMServiceSoap_BindingStub bpmStub = null;
         try {
             bpmStub = (BPMServiceSoap_BindingStub) bpmServiceLocator.getBPMServiceSoap();

@@ -1,14 +1,35 @@
 package com.longfor.itserver.esi.bpm;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.itserver.common.vo.programBpm.common.ApplyCreateResultVo;
 import com.longfor.itserver.common.vo.programBpm.common.ApplySubmitResultVo;
+
+import java.util.Map;
 
 /**
  * Created by sunyanhui on 2017/12/8.
  */
 public class ProgramBpmUtils
 {
+    private static final String BRD_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String demo_temp_code = "ITplus_ITxmlx";
+    private static final String Tender_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String WinBidding_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String ContractSign_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String ProductReview_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String DevelopReview_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String TestReview_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String OnlinePlan_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String PartIntroduce_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String AllSpread_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String ProgramReplay_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String DelayOnline_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String DemandChangeAdvise_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String DemandChangeApprove_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String FinishProgram_TEMP_CODE = "ITplus_ITxmlx";
+
+
     /***
      * 审核通过
      * @param oaAccount  提交人OA账号
@@ -38,8 +59,20 @@ public class ProgramBpmUtils
     /***
      * 创建流程_提交BRD
      */
-    public static ApplyCreateResultVo submitBrd(){
-        return new ApplyCreateResultVo();
+    public static ApplyCreateResultVo submitBrd(Map<String, String> paramsMap){
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "approval302AppendActors");
+        jsonObject.put("ItemValue", paramsMap.get("counterSigners").split(","));
+        jsonArray.add(jsonObject);
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "textCondition");
+        jsonObject.put("ItemValue", ProgramBpmUtil.getApplyApproval2(paramsMap.get("tApproval")));
+        jsonArray.add(jsonObject);
+        String para = jsonArray.toString();
+        String result = BpmUtils.startWorkFlow(
+                BRD_TEMP_CODE,paramsMap.get("modifiedAccountId"),false,para,null);
+        return JSONObject.parseObject(result,ApplyCreateResultVo.class);
     }
 
     /***
@@ -136,14 +169,14 @@ public class ProgramBpmUtils
     /***
      * 创建流程_提交需求变更(大于等于10万走审批)
      */
-    public static ApplyCreateResultVo submitProgramReplayApprove(){
+    public static ApplyCreateResultVo submitDemandChangeApprove(){
         return new ApplyCreateResultVo();
     }
 
     /***
      * 创建流程_提交终止项目
      */
-    public static ApplyCreateResultVo submitFinishSubmit(){
+    public static ApplyCreateResultVo submitFinishProgram(){
         return new ApplyCreateResultVo();
     }
 
