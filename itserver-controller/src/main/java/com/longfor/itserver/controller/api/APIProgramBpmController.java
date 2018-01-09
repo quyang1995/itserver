@@ -552,31 +552,31 @@ public class APIProgramBpmController extends BaseController {
 		List<ProgramApprovalSnapshot> milepostList =this.getProgramService().milepost(paramsMap);
 		for (ProgramApprovalSnapshot model:milepostList) {
 			if (model.getProgramStatus() == ProgramStatusNewEnum.LX.getCode()) {
-				map.put("commitDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_TIMESTAMP));
+				map.put("commitDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_DATE));
 			}
 			if (model.getProgramStatus() == ProgramStatusNewEnum.DPS.getCode()) {
-				map.put("demoApprovalDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_TIMESTAMP));
+				map.put("demoApprovalDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_DATE));
 			}
 			if (model.getProgramStatus() == ProgramStatusNewEnum.ZTBSQ.getCode()) {
-				map.put("biddingDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_TIMESTAMP));
+				map.put("biddingDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_DATE));
 			}
 			if (model.getProgramStatus() == ProgramStatusNewEnum.ZBSQ.getCode()) {
-				map.put("winningBidDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_TIMESTAMP));
+				map.put("winningBidDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_DATE));
 			}
 			if (model.getProgramStatus() == ProgramStatusNewEnum.CPPS.getCode()) {
-				map.put("prodApprovalDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_TIMESTAMP));
+				map.put("prodApprovalDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_DATE));
 			}
 			if (model.getProgramStatus() == ProgramStatusNewEnum.KFPS.getCode()) {
-				map.put("devApprovalDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_TIMESTAMP));
+				map.put("devApprovalDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_DATE));
 			}
 			if (model.getProgramStatus() == ProgramStatusNewEnum.CSPS.getCode()) {
-				map.put("testApprovalDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_TIMESTAMP));
+				map.put("testApprovalDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_DATE));
 			}
 			if (model.getProgramStatus() == ProgramStatusNewEnum.SXPS.getCode()) {
-				map.put("onlinePlanDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_TIMESTAMP));
+				map.put("onlinePlanDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_DATE));
 			}
 			if (model.getProgramStatus() == ProgramStatusNewEnum.HDFB.getCode()) {
-				map.put("grayReleaseDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_TIMESTAMP));
+				map.put("grayReleaseDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_DATE));
 			}
 		}
 		return map;
