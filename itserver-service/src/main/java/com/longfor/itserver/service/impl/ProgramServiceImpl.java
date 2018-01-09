@@ -89,16 +89,17 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             return resultList;
         }
         resultList.add(allList.get(0));
+
         for (int i = 1;i<allList.size();i++) {
-            if (paramMap.get("programStatus").equals("150")) {
-                if (allList.get(i).getApprovalStatus()==110
-                        || allList.get(i).getApprovalStatus()==120
-                        || allList.get(i).getApprovalStatus()==140) {
+            if (paramMap.get("programStatus").equals(ProgramStatusNewEnum.CPPS.getCode())) {
+                if (allList.get(i).getApprovalStatus()== ProgramApprovalStatusEnum.SHTG.getCode()
+                        || allList.get(i).getApprovalStatus()== ProgramApprovalStatusEnum.SHBH.getCode()
+                        || allList.get(i).getApprovalStatus()== ProgramApprovalStatusEnum.BGSHBH.getCode()) {
                     resultList.add(allList.get(i));
                 }
             } else {
-                if (allList.get(i).getApprovalStatus()==110
-                        || allList.get(i).getApprovalStatus()==120) {
+                if (allList.get(i).getApprovalStatus()== ProgramApprovalStatusEnum.SHTG.getCode()
+                        || allList.get(i).getApprovalStatus()== ProgramApprovalStatusEnum.SHBH.getCode()) {
                     resultList.add(allList.get(i));
                 }
             }
@@ -220,6 +221,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             return false;
         }
         program.setProgramStatus(ProgramStatusNewEnum.WLX.getCode());
+        program.setUid(UUID.randomUUID().toString());
         program.setProductName(product.getName());
         program.setProductCode(product.getCode());
         program.setCreateTime(TimeUtils.getTodayByDateTime());
@@ -711,11 +713,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programMapper.updateByPrimaryKey(program);
 
             //program快照表
-            programApprovalSnapshot.setId(null);
-
+            this.copyProperties(programApprovalSnapshot,program);
+            if (programApprovalSnapshot.getProgramStatus() == ProgramStatusNewEnum.XQBG.getCode()
+                    || programApprovalSnapshot.getProgramStatus() == ProgramStatusNewEnum.YQSX.getCode()) {
+                programApprovalSnapshot.setProgramStatus(programApprovalSnapshot.getProgramStatus());
+            }
+//            programApprovalSnapshot.setId(null);
 //            programApprovalSnapshot.setProgramStatus(program.getProgramStatus());
-
-            programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
+//            programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
             programApprovalSnapshot.setSuggestion(paramsMap.get("suggestion"));
@@ -798,8 +803,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             }
 
             //program表
-//            program.setProgramStatus(ProgramStatusNewEnum.YQSX.getCode());
-            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
+            if (overallCost.compareTo(ten) != -1) {
+                program.setApprovalStatus(ProgramApprovalStatusEnum.BGSHZ.getCode());
+            }
             if ("1".equals(causeDelay)) {
                 program.setDevWorkload(Integer.parseInt(paramsMap.get("devWorkloadChange")));
                 program.setOverallCost(overallCost);
@@ -820,6 +826,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             this.copyProperties(programApprovalSnapshot,program);
             if (overallCost.compareTo(ten) != -1) {
                 programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
+                programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.BGSHZ.getCode());
+            } else {
+                programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
             }
             programApprovalSnapshot.setCauseDelay(causeDelay);
             programApprovalSnapshot.setProgramStatus(ProgramStatusNewEnum.YQSX.getCode());
@@ -1001,9 +1010,11 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         if(programStatus==ProgramStatusNewEnum.XMFP.getCode()){//如果提交审批的为复盘，则项目状态直接到完成
             program.setProgramStatus(ProgramStatusNewEnum.WC.getCode());
         }else if(programStatus==ProgramStatusNewEnum.XQBG.getCode()){//如果提交审批的为需求变更，则项目状态根据研发方式回到对应节点
+            //研发方式：招投标时，状态回到，中标申请，审核通过
             if (program.getDevType() == 1) {
                 program.setProgramStatus(ProgramStatusNewEnum.ZBSQ.getCode());
             }
+            //研发方式：自研时，状态回到，招投标申请，审核通过
             if (program.getDevType() == 2) {
                 program.setProgramStatus(ProgramStatusNewEnum.DPS.getCode());
             }
@@ -1172,60 +1183,85 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     private void dealProgramEmployee (Map map,Program program) {
         JSONObject json = (JSONObject) JSONObject.toJSON(map);
         // 项目责任人
-        String jsonArrPl = json.get("personLiableList").toString();
-        if (!"".equals(jsonArrPl)) {
-            deleteByParam(1, 0, program);
-            getAccountLongfor(program, jsonArrPl, "0");
+        if (json.get("personLiableList") != null) {
+            String jsonArrPl = json.get("personLiableList").toString();
+            if (!"".equals(jsonArrPl)) {
+                deleteByParam(1, 0, program);
+                getAccountLongfor(program, jsonArrPl, "0");
+            }
         }
+
         // 产品经理
-        String jsonArrPm = json.get("productManagerList").toString();
-        if (!"".equals(jsonArrPm)) {
-            deleteByParam(2, 1, program);
-            getAccountLongfor(program, jsonArrPm, "1");
+        if (json.get("productManagerList") != null) {
+            String jsonArrPm = json.get("productManagerList").toString();
+            if (!"".equals(jsonArrPm)) {
+                deleteByParam(2, 1, program);
+                getAccountLongfor(program, jsonArrPm, "1");
+            }
         }
+
         // 项目经理
-        String jsonArrPMl = json.get("programManagerList").toString();
-        if (!"".equals(jsonArrPMl)) {
-            deleteByParam(2, 2, program);
-            getAccountLongfor(program, jsonArrPMl, "2");
+        if (json.get("programManagerList") != null) {
+            String jsonArrPMl = json.get("programManagerList").toString();
+            if (!"".equals(jsonArrPMl)) {
+                deleteByParam(2, 2, program);
+                getAccountLongfor(program, jsonArrPMl, "2");
+            }
         }
+
         // 开发人员
-        String jsonArrDe = json.get("developerList").toString();
-        if (!"".equals(jsonArrDe)) {
-            deleteByParam(2, 3, program);
-            getAccountLongfor(program, jsonArrDe, "3");
+        if (json.get("developerList") != null) {
+            String jsonArrDe = json.get("developerList").toString();
+            if (!"".equals(jsonArrDe)) {
+                deleteByParam(2, 3, program);
+                getAccountLongfor(program, jsonArrDe, "3");
+            }
         }
+
         // UED人员
-        String jsonArrUed = json.get("uedList").toString();
-        if (!"".equals(jsonArrUed)) {
-            deleteByParam(2, 4, program);
-            getAccountLongfor(program, jsonArrUed, "4");
+        if (json.get("uedList") != null) {
+            String jsonArrUed = json.get("uedList").toString();
+            if (!"".equals(jsonArrUed)) {
+                deleteByParam(2, 4, program);
+                getAccountLongfor(program, jsonArrUed, "4");
+            }
         }
+
         // 测试人员
-        String jsonArrTest = json.get("testingList").toString();
-        if (!"".equals(jsonArrTest)) {
-            deleteByParam(2, 5, program);
-            getAccountLongfor(program, jsonArrTest, "5");
+        if (json.get("testingList") != null) {
+            String jsonArrTest = json.get("testingList").toString();
+            if (!"".equals(jsonArrTest)) {
+                deleteByParam(2, 5, program);
+                getAccountLongfor(program, jsonArrTest, "5");
+            }
         }
+
         // 业务人员
-        String jsonArrBusiness = json.get("businessList").toString();
-        if (!"".equals(jsonArrBusiness)) {
-            deleteByParam(2, 6, program);
-            getAccountLongfor(program, jsonArrBusiness, "6");
+        if (json.get("businessList") != null) {
+            String jsonArrBusiness = json.get("businessList").toString();
+            if (!"".equals(jsonArrBusiness)) {
+                deleteByParam(2, 6, program);
+                getAccountLongfor(program, jsonArrBusiness, "6");
+            }
         }
 
         // 运维人员
-        String jsonArrOperation = json.get("operationList").toString();
-        if (!"".equals(jsonArrOperation)) {
-            deleteByParam(2, 7, program);
-            getAccountLongfor(program, jsonArrOperation, "7");
+        if (json.get("operationList") != null) {
+            String jsonArrOperation = json.get("operationList").toString();
+            if (!"".equals(jsonArrOperation)) {
+                deleteByParam(2, 7, program);
+                getAccountLongfor(program, jsonArrOperation, "7");
+            }
         }
 
         // 运营人员
-        String jsonArrOperate = json.get("operateList").toString();
-        if (!"".equals(jsonArrOperate)) {
-            deleteByParam(2, 8, program);
-            getAccountLongfor(program, jsonArrOperate, "8");
+        if (json.get("operateList") != null) {
+            String jsonArrOperate = json.get("operateList").toString();
+            if (!"".equals(jsonArrOperate)) {
+                deleteByParam(2, 8, program);
+                getAccountLongfor(program, jsonArrOperate, "8");
+            }
         }
+
     }
 }

@@ -222,11 +222,22 @@ public class ProgramApprovalSnapshot implements Serializable {
     @Column(name = "cause_delay")
     private String causeDelay;
 
+    @Column(name = "uid")
+    private String uid;
+
     @Transient
     private List<ProgramFile> fileList;
 
     @Transient
     private List<ProgramEmployee> empList;
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getUid() {
+        return uid;
+    }
 
     public String getApplyAccount() {
         return applyAccount;

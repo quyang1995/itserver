@@ -219,8 +219,12 @@ public class APIProgramController extends BaseController {
 		if (productList == null || productList.isEmpty()) {
 			return null;
 		}
-		Integer changeStatus = productList.get(0).getProgramStatus();
+		ProgramApprovalSnapshot programApprovalSnapshot = productList.get(0);
+		Integer changeStatus = programApprovalSnapshot.getProgramStatus();
 		if (changeStatus !=  ProgramStatusNewEnum.XQBG.getCode() && changeStatus !=  ProgramStatusNewEnum.YQSX.getCode()) {
+			return  null;
+		}
+		if (programApprovalSnapshot.getApprovalStatus() == ProgramApprovalStatusEnum.SHTG.getCode()) {
 			return  null;
 		}
 		return  changeStatus;

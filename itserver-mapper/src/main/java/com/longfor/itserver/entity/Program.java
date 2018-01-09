@@ -170,6 +170,17 @@ public class Program implements Serializable {
     @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date modifiedTime;
 
+    @Column(name = "uid")
+    private String uid;
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
     public BigDecimal getBidOversingleCost() {
         return bidOversingleCost;
     }
