@@ -225,11 +225,26 @@ public class ProgramApprovalSnapshot implements Serializable {
     @Column(name = "uid")
     private String uid;
 
+    /**
+     * 跟琼朔相关的项目，手动添加琼朔,
+     * 1:需要琼朔审批2:不需要琼朔审批
+     */
+    @Column(name = "report_poor")
+    private String reportPoor;
+
     @Transient
     private List<ProgramFile> fileList;
 
     @Transient
     private List<ProgramEmployee> empList;
+
+    public void setReportPoor(String reportPoor) {
+        this.reportPoor = reportPoor;
+    }
+
+    public String getReportPoor() {
+        return reportPoor;
+    }
 
     public void setUid(String uid) {
         this.uid = uid;

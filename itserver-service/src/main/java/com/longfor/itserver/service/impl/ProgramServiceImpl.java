@@ -724,6 +724,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
             programApprovalSnapshot.setSuggestion(paramsMap.get("suggestion"));
+            programApprovalSnapshot.setReportPoor(paramsMap.get("reportPoor"));
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
         }catch (Exception e){
@@ -765,6 +766,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programApprovalSnapshot.setModifiedTime(now);
             programApprovalSnapshot.setBpmCode(paramsMap.get("instanceId"));
             programApprovalSnapshot.setSuggestion(paramsMap.get("suggestion"));
+            programApprovalSnapshot.setReportPoor(paramsMap.get("reportPoor"));
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
         }catch (Exception e){
@@ -781,20 +783,12 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     public void delay(Map<String, String> paramsMap,Program program) {
         try{
             Date now = new Date();
-            //延期原因
+            //延期原因，1：需求变更，2：其他原因,需走审批
             String causeDelay = paramsMap.get("causeDelay");
-            //变更预期费用
-            String oc = paramsMap.get("overallCost");
-            if ("2".equals(causeDelay)) {
-                oc = "0";
-            }
-            BigDecimal  overallCost = new BigDecimal(oc);
-            BigDecimal ten = new BigDecimal(100000);
 
             //创建流程
             ApplyCreateResultVo applyCreateResultVo = new ApplyCreateResultVo();
-            if (overallCost.compareTo(ten) != -1) {
-                //创建流程
+            if ("2".equals(causeDelay)) {
                 applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
                 if (!applyCreateResultVo.isSuccess()) {
                     LOG.error("创建流程失败:" + JSON.toJSONString(paramsMap) + "-----------------------");
@@ -803,12 +797,15 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             }
 
             //program表
-            if (overallCost.compareTo(ten) != -1) {
+            if ("2".equals(causeDelay)) {
                 program.setApprovalStatus(ProgramApprovalStatusEnum.BGSHZ.getCode());
             }
             if ("1".equals(causeDelay)) {
                 program.setDevWorkload(Integer.parseInt(paramsMap.get("devWorkloadChange")));
-                program.setOverallCost(overallCost);
+                //变更预期费用
+                String overallCost = paramsMap.get("overallCost");
+                BigDecimal overallCostBig = new BigDecimal(overallCost);
+                program.setOverallCost(overallCostBig);
             }
             program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("grayReleaseDate"),DateUtil.PATTERN_DATE));
             program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("demandDate"),DateUtil.PATTERN_DATE));
@@ -824,24 +821,25 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             //program快照表
             ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
             this.copyProperties(programApprovalSnapshot,program);
-            if (overallCost.compareTo(ten) != -1) {
+            if ("2".equals(causeDelay)) {
                 programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
                 programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.BGSHZ.getCode());
-            } else {
-                programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
+            } else if ("1".equals(causeDelay)) {
+//                programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
             }
             programApprovalSnapshot.setCauseDelay(causeDelay);
             programApprovalSnapshot.setProgramStatus(ProgramStatusNewEnum.YQSX.getCode());
             programApprovalSnapshot.setRemark(paramsMap.get("remark"));
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
+            programApprovalSnapshot.setReportPoor(paramsMap.get("reportPoor"));
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
             //附件表
             this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.YQSX.getCode(),programApprovalSnapshot.getId());
 
 
-            if (overallCost.compareTo(ten) != -1) {
+            if ("2".equals(causeDelay)) {
                 //激活流程
                 ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
                         paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
@@ -869,13 +867,15 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             BigDecimal ten = new BigDecimal(100000);
 
             ApplyCreateResultVo applyCreateResultVo = new ApplyCreateResultVo();
-            if (overallCost.compareTo(ten) != -1) {
+            if (overallCost.compareTo(ten) != -1) {//大于10万走审批
                 //创建流程
                 applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
                 if (!applyCreateResultVo.isSuccess()) {
                     LOG.error("创建流程失败:" + JSON.toJSONString(paramsMap) + "-----------------------");
                     throw new RuntimeException("创建流程失败");
                 }
+            } else {//小于10万走通知
+
             }
 
             //program表
@@ -912,6 +912,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programApprovalSnapshot.setRemark(paramsMap.get("remark"));
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
+            programApprovalSnapshot.setReportPoor(paramsMap.get("reportPoor"));
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
             //附件表
@@ -926,6 +927,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                     LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
                     throw new RuntimeException("激活流程失败");
                 }
+            } else {//小于10万走通知
+
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -964,6 +967,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
+            programApprovalSnapshot.setReportPoor(paramsMap.get("reportPoor"));
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
             //激活流程
@@ -1012,9 +1016,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         }else if(programStatus==ProgramStatusNewEnum.XQBG.getCode()){//如果提交审批的为需求变更，则项目状态根据研发方式回到对应节点
             //研发方式：招投标时，状态回到，中标申请，审核通过
             if (program.getDevType() == 1) {
-                program.setProgramStatus(ProgramStatusNewEnum.ZBSQ.getCode());
+//                program.setProgramStatus(ProgramStatusNewEnum.ZBSQ.getCode());
             }
-            //研发方式：自研时，状态回到，招投标申请，审核通过
+            //研发方式：自研时，状态回到，Demo评审，审核通过
             if (program.getDevType() == 2) {
                 program.setProgramStatus(ProgramStatusNewEnum.DPS.getCode());
             }
@@ -1087,6 +1091,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
             programApprovalSnapshot.setApplyAccount(paramsMap.get("modifiedAccountId"));
+            programApprovalSnapshot.setReportPoor(paramsMap.get("reportPoor"));
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
             //附件表
@@ -1130,11 +1135,12 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             map.put("type",model.getProgramStatus());
             map.put("snapshotId",model.getId());
             List<ProgramFile> fileList = programFileMapper.getListByMap(map);
-            resultModel.setFileList(fileList);
+            resultModel.setFileList(fileList);//w文件信息
             map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
             map.put("employeeTypeId", new Long(AvaStatusEnum.PROGAVA.getCode()));
             List<ProgramEmployee> empList  = programEmployeeMapper.selectTypeList(map);
-            resultModel.setEmpList(empList);
+            resultModel.setEmpList(empList);//项目经理信息
+
         }
     }
 
