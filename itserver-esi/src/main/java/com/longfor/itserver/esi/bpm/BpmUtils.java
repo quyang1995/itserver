@@ -17,6 +17,8 @@ import java.rmi.RemoteException;
  */
 public class BpmUtils {
 
+    private static String systemCode;
+
     public BpmUtils(){
         super();
     }
@@ -24,6 +26,7 @@ public class BpmUtils {
 
     static {
         bpmServiceLocator = new ComLongforEsbDCBPMBpmServiceLocator();
+        systemCode = JoddHelper.getInstance().getJoddProps().getValue("bpm.systemCode");
     }
 
     /**
@@ -32,7 +35,7 @@ public class BpmUtils {
      * @return
      */
     private static BPMServiceSoap_BindingStub getBpmStub(String methodName){
-        String systemCode = JoddHelper.getInstance().getJoddProps().getValue("bpm.systemCode");
+
         BPMServiceSoap_BindingStub bpmStub = null;
         try {
             bpmStub = (BPMServiceSoap_BindingStub) bpmServiceLocator.getBPMServiceSoap();
@@ -66,24 +69,6 @@ public class BpmUtils {
         }
         return resultMessage;
     }
-
-//    public static void main(String[] args) {
-//        String b = "57c80d5e-58ef-45a3-8a27-a85b8236437b,0d67f918-72ac-4695-8e93-bee2adaae450";
-//        JSONArray jsonArray = new JSONArray();
-//        JSONObject jsonObject = new JSONObject();
-//        jsonObject.put("ItemName", "approval302AppendActors");
-//        jsonObject.put("ItemValue", b.split(","));
-//        jsonArray.add(jsonObject);
-//        jsonObject = new JSONObject();
-//        jsonObject.put("ItemName", "textCondition");
-//        jsonObject.put("ItemValue", "地产、基础架构、技术管理相关");
-//        jsonArray.add(jsonObject);
-//        String para = jsonArray.toString();
-//
-//        String a = BpmUtils.startWorkFlow("ITplus_ITxmlx",
-//                "sunyanhui",false,para,null);
-//        ApplyCreateResultVo aa = JSONObject.parseObject(a,ApplyCreateResultVo.class);
-//    }
 
     /**
      * 提交流程;
@@ -125,10 +110,6 @@ public class BpmUtils {
         }
         return resultMessage;
     }
-//    public static void main(String[] args) {
-//        String a = BpmUtils.getInstanceInfo("12a90770-60c6-44cf-806c-2ee1381333d6");
-//        System.out.println(a);
-//    }
 
     /**
      * 获取流程实例审批步骤
@@ -145,10 +126,6 @@ public class BpmUtils {
         }
         return resultMessage;
     }
-//    public static void main(String[] args) {
-//        String a = BpmUtils.getInstanceSteps("12a90770-60c6-44cf-806c-2ee1381333d6");
-//        System.out.println(a);
-//    }
 
     /**
      * 撤销流程
@@ -185,10 +162,7 @@ public class BpmUtils {
         }
         return resultMessage;
     }
-//    public static void main(String[] args) {
-//        String a = BpmUtils.getWorkItemID("12a90770-60c6-44cf-806c-2ee1381333d6","sunyanhui");
-//        System.out.println(a);
-//    }
+
     /**
      * 获取工作项信息
      * @param workItemId 工作项ID

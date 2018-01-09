@@ -4,10 +4,10 @@ package com.longfor.itserver.common.vo.programBpm.common;
 import java.util.List;
 
 public class ApplySubmitResultVo {
-    private String  IsSuccess;
+    private String  IsSuccess;//是否成功
     private String WorkItemUrl;
     private List<NextPersonVo> NextPersons;
-    private String InstanceState;
+    private String InstanceState;//判断是否最后一个审批节点，ALLEND表示最后一个
     private String ErrorMessage;
 
 
