@@ -1,5 +1,6 @@
 [bpm<development>]
 url=http://192.168.33.95:9090/com.longfor.esb.DC.BPM.bpmService
+clientTempCode=ITplus_ITxmlx
 systemCode=ITplus_
 viewApprovalNode=http://demobpm.longhu.net/portal/InstanceDetailToOANewStart.aspx?instanceId=
 
