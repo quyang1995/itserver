@@ -37,7 +37,9 @@ public class ProgramBpmUtil
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval302AppendActors");
-        jsonObject.put("ItemValue", paramsMap.get("counterSigners").split(","));
+        if (paramsMap.get("counterSigners") != null){
+            jsonObject.put("ItemValue", paramsMap.get("counterSigners").split(","));
+        }
         jsonArray.add(jsonObject);
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "textCondition");

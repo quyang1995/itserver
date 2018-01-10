@@ -303,6 +303,30 @@ public class APIProgramBpmController extends BaseController {
 	}
 
 	/**
+	 * 全面推广
+	 */
+	@RequestMapping(value = "/overAllExtension", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public Map overAllExtension(HttpServletRequest request) {
+		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try{
+			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------overAllExtension:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+
+			Program program = this.getProgram(paramsMap);
+			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
+			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+			}
+			getProgramService().submit(paramsMap,program,ProgramStatusNewEnum.QMTG.getCode());
+		}catch (Exception e){
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return resultMap;
+	}
+
+	/**
 	 * 项目复盘
 	 */
 	@RequestMapping(value = "/projectReview", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })

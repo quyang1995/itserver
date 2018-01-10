@@ -17,6 +17,7 @@ import com.longfor.itserver.common.vo.programBpm.common.FileVo;
 import com.longfor.itserver.entity.*;
 import com.longfor.itserver.esi.bpm.ProgramBpmUtil;
 import com.longfor.itserver.mapper.*;
+import com.longfor.itserver.service.IProgramEmployeeService;
 import com.longfor.itserver.service.IProgramService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import com.longfor.itserver.service.util.AccountUitl;
@@ -47,6 +48,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
     @Autowired
     private ProgramEmployeeMapper programEmployeeMapper;
+
+    @Autowired
+    private IProgramEmployeeService programEmployeeService;
 
     @Autowired
     private ADSHelper adsHelper;
@@ -176,6 +180,12 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         }
 		/*灰度发布*/
         paramMap.put("programStatus",ProgramStatusNewEnum.HDFB.getCode());
+        snapshot =programApprovalSnapshotMapper.getListByProgramIdAndStatus(paramMap);
+        if (snapshot != null && !snapshot.isEmpty()) {
+            resultList.add(snapshot.get(0));
+        }
+        /*全面推广*/
+        paramMap.put("programStatus",ProgramStatusNewEnum.QMTG.getCode());
         snapshot =programApprovalSnapshotMapper.getListByProgramIdAndStatus(paramMap);
         if (snapshot != null && !snapshot.isEmpty()) {
             resultList.add(snapshot.get(0));
@@ -1057,6 +1067,10 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             String researchDate = paramsMap.get("researchDate");
             String testDate = paramsMap.get("testDate");
             String onlineDate = paramsMap.get("onlineDate");
+            String productId = paramsMap.get("productId");
+            String productName = paramsMap.get("productName");
+            String likeProduct = paramsMap.get("likeProduct");
+            String type = paramsMap.get("type");
 
             //program表
             if(StringUtils.isNotBlank(devType))program.setDevType(Integer.parseInt(devType));//研发方式
@@ -1075,6 +1089,10 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             if(StringUtils.isNotBlank(researchDate))program.setDevApprovalDate(DateUtil.string2Date(researchDate,DateUtil.PATTERN_DATE));//研发评审时间
             if(StringUtils.isNotBlank(testDate))program.setTestApprovalDate(DateUtil.string2Date(testDate,DateUtil.PATTERN_DATE));//测试评审时间
             if(StringUtils.isNotBlank(onlineDate))program.setOnlinePlanDate(DateUtil.string2Date(onlineDate,DateUtil.PATTERN_DATE));//上线计划时间
+            if(StringUtils.isNotBlank(productId))program.setProductId(Long.parseLong(productId));
+            if(StringUtils.isNotBlank(productName))program.setProductName(productName);
+            if(StringUtils.isNotBlank(likeProduct))program.setLikeProduct(likeProduct);
+            if(StringUtils.isNotBlank(type))program.setType(Integer.parseInt(type));
 
             program.setApprovalStatus(approvalStatus);
             program.setProgramStatus(programStatus);
@@ -1136,10 +1154,49 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             map.put("snapshotId",model.getId());
             List<ProgramFile> fileList = programFileMapper.getListByMap(map);
             resultModel.setFileList(fileList);//w文件信息
+
+             /* 责任人 */
+            map.put("employeeType", AvaStatusEnum.LIABLEAVA.getCode());
+            List<ProgramEmployee> personLiableList = programEmployeeService.selectTypeList(map);
+            resultModel.setPersonLiableList(personLiableList);
+            /*项目经理信息*/
             map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
             map.put("employeeTypeId", new Long(AvaStatusEnum.PROGAVA.getCode()));
             List<ProgramEmployee> empList  = programEmployeeMapper.selectTypeList(map);
-            resultModel.setEmpList(empList);//项目经理信息
+            resultModel.setEmpList(empList);
+			/* 产品经理 */
+            map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
+            map.put("employeeTypeId", new Long(AvaStatusEnum.PRODAVA.getCode()));
+            List<ProgramEmployee> programManagerList = programEmployeeService.selectTypeList(map);
+            resultModel.setProductManagerList(programManagerList);
+			/* 项目经理 */
+            map.put("employeeTypeId", new Long(AvaStatusEnum.PROGAVA.getCode()));
+            List<ProgramEmployee> productManagerList = programEmployeeService.selectTypeList(map);
+            resultModel.setProgramManagerList(productManagerList);
+			/* 开发人员 */
+            map.put("employeeTypeId", new Long(AvaStatusEnum.DEVEAVA.getCode()));
+            List<ProgramEmployee> developerList = programEmployeeService.selectTypeList(map);
+            resultModel.setDeveloperList(developerList);
+			/* UED人员 */
+            map.put("employeeTypeId", new Long(AvaStatusEnum.UEDAVA.getCode()));
+            List<ProgramEmployee> uedList = programEmployeeService.selectTypeList(map);
+            resultModel.setUedList(uedList);
+			/* 测试人员 */
+            map.put("employeeTypeId", new Long(AvaStatusEnum.TESTINGAVA.getCode()));
+            List<ProgramEmployee> testingList = programEmployeeService.selectTypeList(map);
+            resultModel.setTestingList(testingList);
+			/* 业务人员 */
+            map.put("employeeTypeId", new Long(AvaStatusEnum.BUSINESSAVA.getCode()));
+            List<ProgramEmployee> businessList = programEmployeeService.selectTypeList(map);
+            resultModel.setBusinessList(businessList);
+			/* 运维人员 */
+            map.put("employeeTypeId", new Long(AvaStatusEnum.OPERATION.getCode()));
+            List<ProgramEmployee> operationList = programEmployeeService.selectTypeList(map);
+            resultModel.setOperationList(operationList);
+            /* 运营人员 */
+            map.put("employeeTypeId", new Long(AvaStatusEnum.OPERATE.getCode()));
+            List<ProgramEmployee> operateList = programEmployeeService.selectTypeList(map);
+            resultModel.setOperateList(operateList);
 
         }
     }

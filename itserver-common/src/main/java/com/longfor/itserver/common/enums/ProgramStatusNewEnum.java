@@ -18,6 +18,7 @@ public enum ProgramStatusNewEnum {
     CSPS(170, "测试评审"),
     SXPS(180, "上线计划"),
     HDFB(190, "灰度发布"),
+    QMTG(193, "全面推广"),
     XMFP(195, "项目复盘"),
     YQSX(200, "延期上线"),
     XQBG(210, "需求变更"),

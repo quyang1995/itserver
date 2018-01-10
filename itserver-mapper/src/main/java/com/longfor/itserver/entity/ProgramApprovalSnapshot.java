@@ -234,9 +234,110 @@ public class ProgramApprovalSnapshot implements Serializable {
 
     @Transient
     private List<ProgramFile> fileList;
-
+    /**
+     * 人员：项目经理
+     */
     @Transient
     private List<ProgramEmployee> empList;
+    /* 责任人 */
+    @Transient
+    private List<ProgramEmployee> personLiableList;
+    /* 项目经理 */
+    @Transient
+    private List<ProgramEmployee> programManagerList;
+    /* 产品经理 */
+    @Transient
+    private List<ProgramEmployee> productManagerList;
+    /* 开发人员 */
+    @Transient
+    private List<ProgramEmployee> developerList;
+    /* UED人员 */
+    @Transient
+    private List<ProgramEmployee> uedList;
+    /* 测试人员 */
+    @Transient
+    private List<ProgramEmployee> testingList;
+    /* 运维人员 */
+    @Transient
+    private List<ProgramEmployee> operationList;
+    /* 运营人员 */
+    @Transient
+    private List<ProgramEmployee> operateList;
+    /* 业务人员 */
+    @Transient
+    private List<ProgramEmployee> businessList;
+
+    public void setPersonLiableList(List<ProgramEmployee> personLiableList) {
+        this.personLiableList = personLiableList;
+    }
+
+    public void setProgramManagerList(List<ProgramEmployee> programManagerList) {
+        this.programManagerList = programManagerList;
+    }
+
+    public void setProductManagerList(List<ProgramEmployee> productManagerList) {
+        this.productManagerList = productManagerList;
+    }
+
+    public void setDeveloperList(List<ProgramEmployee> developerList) {
+        this.developerList = developerList;
+    }
+
+    public void setUedList(List<ProgramEmployee> uedList) {
+        this.uedList = uedList;
+    }
+
+    public void setTestingList(List<ProgramEmployee> testingList) {
+        this.testingList = testingList;
+    }
+
+    public void setOperationList(List<ProgramEmployee> operationList) {
+        this.operationList = operationList;
+    }
+
+    public void setOperateList(List<ProgramEmployee> operateList) {
+        this.operateList = operateList;
+    }
+
+    public void setBusinessList(List<ProgramEmployee> businessList) {
+        this.businessList = businessList;
+    }
+
+    public List<ProgramEmployee> getPersonLiableList() {
+        return personLiableList;
+    }
+
+    public List<ProgramEmployee> getProgramManagerList() {
+        return programManagerList;
+    }
+
+    public List<ProgramEmployee> getProductManagerList() {
+        return productManagerList;
+    }
+
+    public List<ProgramEmployee> getDeveloperList() {
+        return developerList;
+    }
+
+    public List<ProgramEmployee> getUedList() {
+        return uedList;
+    }
+
+    public List<ProgramEmployee> getTestingList() {
+        return testingList;
+    }
+
+    public List<ProgramEmployee> getOperationList() {
+        return operationList;
+    }
+
+    public List<ProgramEmployee> getOperateList() {
+        return operateList;
+    }
+
+    public List<ProgramEmployee> getBusinessList() {
+        return businessList;
+    }
 
     public void setReportPoor(String reportPoor) {
         this.reportPoor = reportPoor;
