@@ -6,6 +6,7 @@ import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.*;
 import com.longfor.itserver.common.util.DateUtil;
+import com.longfor.itserver.common.util.HttpUtil;
 import com.longfor.itserver.common.util.StringUtil;
 import com.longfor.itserver.common.vo.MoApprove.MoApproveListVo;
 import com.longfor.itserver.common.vo.MoApprove.MoApproveVo;
@@ -129,7 +130,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     public List<ProgramApprovalSnapshot> milepost(Map<String,Object> paramMap) {
         List<ProgramApprovalSnapshot> resultList = new ArrayList<ProgramApprovalSnapshot>();
         paramMap.put("approvalStatus",ProgramApprovalStatusEnum.SHTG.getCode());
-		/*立项*/
+		/*立项*/b
         paramMap.put("programStatus",ProgramStatusNewEnum.LX.getCode());
         List<ProgramApprovalSnapshot> snapshot =programApprovalSnapshotMapper.getListByProgramIdAndStatus(paramMap);
         if (snapshot != null && !snapshot.isEmpty()) {
@@ -1143,6 +1144,29 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         ProgramApprovalSnapshot shot = programApprovalSnapshotMapper.selectByPrimaryKey(id);
         this.setProgramApprovalSnapshotInfo(shot,shot);
         return shot;
+    }
+
+    /**
+     * 根据员工oa账号获取员工guid
+     * 多个员工，以‘，’分割，返回guid也以‘，’分割
+     * @param url
+     * @param token
+     * @param param
+     * @return
+     */
+    private String getEmpGuidByPfAcc(String url,String token,String param){
+        JSONObject json = HttpUtil.post(url,token,param);
+        List<Map<String,Object>> jsonList = JSON.parseObject(JSON.toJSONString(json.get("list")),List.class);
+        if (jsonList == null || jsonList.isEmpty()) {
+            return null;
+        }
+        StringBuffer sb = new StringBuffer();
+        for (Map<String,Object> model:jsonList) {
+            sb.append(model.get("psGuid"));
+            sb.append(",");
+        }
+        sb.deleteCharAt(sb.length()-1);
+        return sb.toString();
     }
 
     /*设置快照文件信息和项目经理信息*/
