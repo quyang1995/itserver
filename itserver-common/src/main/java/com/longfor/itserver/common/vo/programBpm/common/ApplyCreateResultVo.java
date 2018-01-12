@@ -2,10 +2,10 @@ package com.longfor.itserver.common.vo.programBpm.common;
 
 
 public class ApplyCreateResultVo {
-    private boolean  Success;
-    private String  InstanceID;
+    private boolean  Success;//是否成功
+    private String  InstanceID;//流程id
     private String  Message;
-    private String  WorkItemID;
+    private String  WorkItemID;//工作项id
     private String  WorkItemUrl;
 
     public boolean isSuccess() {

@@ -90,6 +90,26 @@ public class BpmUtils {
         }
         return resultMessage;
     }
+
+    /**
+     * 驳回流程至发起人
+     * @param userCode 当前审批人的OA账号
+     * @param workItemId 当前审批人对应流程的工作项ID
+     * @param commentText 驳回意见
+     * @return
+     */
+    public static String returnWorkItem(String userCode, String workItemId, String commentText){
+        BPMServiceSoap_BindingStub bpmServiceStub = getBpmStub("ReturnWorkItem");
+        String resultMessage = null;
+        try {
+            resultMessage = bpmServiceStub.returnWorkItem(userCode, workItemId, commentText);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return resultMessage;
+    }
+
+
     public static void main(String[] args) {
         String a = BpmUtils.submitWorkItem("sunyanhui",
                 "c078682b-4315-4c45-8d6d-5279430bb2ad",null,null);
@@ -191,23 +211,6 @@ public class BpmUtils {
         return instanceStageModels;
     }
 
-    /**
-     * 驳回流程至发起人
-     * @param userCode 当前审批人的OA账号
-     * @param workItemId 当前审批人对应流程的工作项ID
-     * @param commentText 驳回意见
-     * @return
-     */
-    public static String returnWorkItem(String userCode, String workItemId, String commentText){
-        BPMServiceSoap_BindingStub bpmServiceStub = getBpmStub("ReturnWorkItem");
-        String resultMessage = null;
-        try {
-            resultMessage = bpmServiceStub.returnWorkItem(userCode, workItemId, commentText);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-        return resultMessage;
-    }
 
     public static String getInstanceActivityCode(String instanceId){
         BPMServiceSoap_BindingStub bpmServiceStub = getBpmStub("GetInstanceActivityCode");

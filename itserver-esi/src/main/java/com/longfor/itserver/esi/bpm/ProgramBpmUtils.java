@@ -68,14 +68,17 @@ public class ProgramBpmUtils
      */
     public static ApplyCreateResultVo submitBrd(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
+
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval302AppendActors");
         jsonObject.put("ItemValue", paramsMap.get("counterSigners").split(","));
         jsonArray.add(jsonObject);
+
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "textCondition");
         jsonObject.put("ItemValue", ProgramBpmUtil.getApplyApproval2(paramsMap.get("tApproval")));
         jsonArray.add(jsonObject);
+
         String para = jsonArray.toString();
         String result = BpmUtils.startWorkFlow(
                 BRD_TEMP_CODE,paramsMap.get("modifiedAccountId"),false,para,null);
