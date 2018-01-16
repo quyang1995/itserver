@@ -1486,21 +1486,26 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         List<ProgramApprovalSnapshot> resultList = programApprovalSnapshotMapper.latelychangeList(map);
         for (ProgramApprovalSnapshot model:resultList) {
             /* 产品经理 */
-            Map productManager = new HashMap();
-            productManager.put("programId",model.getProgramId());
-            productManager.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
-            productManager.put("employeeTypeId", new Long(AvaStatusEnum.PRODAVA.getCode()));
-            List<ProgramEmployee> programManagerList = programEmployeeService.selectTypeList(productManager);
-            model.setProductManagerList(programManagerList);
+            productManagerList(model);
         }
         return resultList;
+    }
+
+    /* 产品经理 */
+    private void productManagerList(ProgramApprovalSnapshot model){
+        Map productManager = new HashMap();
+        productManager.put("programId",model.getProgramId());
+        productManager.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
+        productManager.put("employeeTypeId", new Long(AvaStatusEnum.PRODAVA.getCode()));
+        List<ProgramEmployee> programManagerList = programEmployeeService.selectTypeList(productManager);
+        model.setProductManagerList(programManagerList);
     }
 
     /***
      * 我關注的項目
      */
     @Override
-    public List<Program> myFollowProgram(Map<String,Object> paramMap){
+    public List<Map<String,Object>> myFollowProgram(Map<String,Object> paramMap) throws Exception{
         List<Product> productList = getListByLikeAnalyzingConditions(paramMap,0);
         if (productList==null || productList.isEmpty()) {
             return null;
@@ -1516,7 +1521,39 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         map.put("startRow", paramMap.get("startRow") );
         map.put("endRow", paramMap.get("endRow") );
         map.put("pfAcc", paramMap.get("pfAcc") );
-        return programMapper.myFollowProgram(map);
+        List<Program> list = programMapper.myFollowProgram(map);
+        List<Map<String,Object>> mapList = new ArrayList<>();
+        for (Program model:list) {
+            Map shopMap = new HashMap();
+            //d当前项目
+            shopMap.put("programId",model.getId());
+//            shopMap.put("programStatus",model.getProgramStatus());
+//            ProgramApprovalSnapshot currShot = programApprovalSnapshotMapper.getOneByWhere(shopMap);
+            //立项时的状态
+            shopMap.put("programStatus", ProgramStatusNewEnum.LX.getCode());
+            shopMap.put("approvalStatus",ProgramApprovalStatusEnum.SHTG.getCode());
+            ProgramApprovalSnapshot lixiangShot = programApprovalSnapshotMapper.getOneByWhere(shopMap);
+
+            Map resultMap = new HashMap();
+            resultMap.put("programId",model.getId()); //项目id
+            resultMap.put("programName",model.getName());//项目名臣
+            resultMap.put("currProgramStatus",model.getProgramStatus());//当前项目节点
+            if(model!=null && model.getCreateTime()!=null) {
+                resultMap.put("currProgramStatusTime", DateUtil.date2String(model.getCreateTime(), DateUtil.PATTERN_DATE));//当前项目节点时间
+            }
+
+
+            resultMap.put("lxProgramStatus",ProgramStatusNewEnum.LX.getCode());//立项状态
+            if(lixiangShot!=null && lixiangShot.getCreateTime()!=null){
+                resultMap.put("lxTime",DateUtil.date2String(lixiangShot.getCreateTime(),DateUtil.PATTERN_DATE));//立项时间
+            }
+            resultMap.put("hdProgramStatus",ProgramStatusNewEnum.HDFB.getCode());//灰度发布状态
+            if(model!=null && model.getGrayReleaseDate()!=null){
+                resultMap.put("hdfbTime",DateUtil.date2String(model.getGrayReleaseDate(),DateUtil.PATTERN_DATE));//灰度发布时间
+            }
+            mapList.add(resultMap);
+        }
+        return mapList;
     }
 
     /***

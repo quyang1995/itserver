@@ -840,7 +840,7 @@ public class APIProgramBpmController extends BaseController {
 			LOG.info("------myFollowProgram:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			//我關注的項目
 			this.buildPageParams(paramsMap);
-			List<Program> myFollowProgram = getProgramService().myFollowProgram(paramsMap);
+			List<Map<String,Object>> myFollowProgram = getProgramService().myFollowProgram(paramsMap);
 			resultMap.put("data",myFollowProgram);
 		} catch ( Exception e) {
 			e.printStackTrace();

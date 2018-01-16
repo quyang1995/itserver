@@ -20,6 +20,7 @@
     <result column="modified_name" property="modifiedName" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+    <result column="analyzing_conditions" property="analyzingConditions" jdbcType="TIMESTAMP" />
   </resultMap>
   <resultMap id="ApiBaseResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsProductAll">
   </resultMap>
@@ -29,7 +30,7 @@
     -->
     id, name,code, descp, contact_account_id, contact_employee_code, contact_employee_name,
     contact_full_dept_path, like_program, type, status, modified_account_id, modified_name,
-    create_time, modified_time
+    create_time, modified_time, analyzing_conditions
   </sql>
 
   <select id="selectLikeList" resultMap="ApiBaseResultMap">

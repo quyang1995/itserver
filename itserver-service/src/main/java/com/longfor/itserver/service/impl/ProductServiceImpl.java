@@ -71,7 +71,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		Product product = JSONObject.toJavaObject(jsonObject, Product.class);
 
 		//code唯一检查
-		String code = product.getCode();
+		String code = this.generateProductNewCode();
 		Product codeCheckProduct = new Product();
 		codeCheckProduct.setCode(code);
 		if(StringUtils.isBlank(code) || productMapper.select(codeCheckProduct).size() > 0){
@@ -92,8 +92,8 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		product.setCreateTime(TimeUtils.getTodayByDateTime());
 		product.setModifiedTime(TimeUtils.getTodayByDateTime());
 		product.setAccountType(accountType);
-		product.setNewCode(this.generateProductNewCode());
-		product.setCode(this.generateProductNewCode());
+		product.setNewCode(code);
+		product.setCode(code);
 		product.setAnalyzingConditions(jsonObject.getString("analyzingConditions"));
 		int insert = productMapper.insert(product);
 		/* 产品责任人 */
@@ -177,6 +177,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		List<String> changeLogTextList = getChangeLogText(oldProduct, newProduct);
 
 		oldProduct.setName(jsonObject.getString("name"));
+		oldProduct.setAnalyzingConditions(jsonObject.getString("analyzingConditions"));
 		oldProduct.setDescp(jsonObject.getString("descp"));
 		oldProduct.setStatus(jsonObject.getInteger("status"));
 		oldProduct.setContactAccountId(jsonObject.getString("contactAccountId"));

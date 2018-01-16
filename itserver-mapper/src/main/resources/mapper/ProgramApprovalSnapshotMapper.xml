@@ -172,4 +172,29 @@
     LIMIT #{startRow},#{endRow}
   </select>
 
+  <select id="getOneByWhere" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from program_approval_snapshot
+    <where>
+      <if test=" id != null and id != '' ">
+        id = #{id}
+      </if>
+      <if test=" programId != null and programId != '' ">
+        and program_id = #{programId}
+      </if>
+      <if test=" productId != null and productId != '' ">
+        and product_id = #{productId}
+      </if>
+      <if test=" programStatus != null ">
+        and program_status = #{programStatus}
+      </if>
+      <if test=" approvalStatus != null ">
+        and approval_status = #{approvalStatus}
+      </if>
+    </where>
+    ORDER  BY  create_time DESC
+    LIMIT 0,1
+  </select>
+
 </mapper>

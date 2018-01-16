@@ -46,6 +46,7 @@
         <result column="pending" property="pending" jdbcType="BIGINT"/>
         <result column="working" property="working" jdbcType="BIGINT"/>
         <result column="complete" property="complete" jdbcType="BIGINT"/>
+        <result column="analyzingConditions" property="analyzingConditions" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -91,7 +92,7 @@
 
     <!--获取产品列表带各状态统计-->
     <select id="productCountList" parameterType="map" resultMap="ApiBaseResultMap">
-        SELECT DISTINCT ta.id,ta.`name`,
+        SELECT DISTINCT ta.id,ta.`name`,ta.analyzing_conditions as analyzingConditions,
         (select IFNULL(sum(CASE WHEN d.relation_id =ta.id THEN 1 ELSE 0 END),0) from demand d where d.relation_type=1
         and `status`=2)+
         (select IFNULL(sum(CASE WHEN b.relation_id =ta.id THEN 1 ELSE 0 END),0) from bug_info b where b.relation_type=1
@@ -173,7 +174,7 @@
     </select>
 
     <select id="getNewCode" resultType="String">
-        SELECT  new_code FROM product ORDER BY create_time DESC LIMIT 0,1
+        SELECT  code FROM product ORDER BY create_time DESC LIMIT 0,1
     </select>
 
     <select id="getListByLikeAnalyzingConditions" resultMap="BaseResultMap" parameterType="map">

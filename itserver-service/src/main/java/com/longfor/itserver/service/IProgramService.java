@@ -66,7 +66,7 @@ public interface IProgramService extends IAdminService<Program> {
 
     List<ProgramApprovalSnapshot> latelyChangeList(Map<String, Object> paramsMap);
 
-    List<Program> myFollowProgram(Map<String, Object> paramsMap);
+    List<Map<String,Object>> myFollowProgram(Map<String, Object> paramsMap) throws Exception;
 
     List<Map<String,Object>> changeTopFive(List<Product> productList,Map<String, Object> paramsMap);
 

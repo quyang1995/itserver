@@ -207,7 +207,7 @@
 
     <select id="myFollowProgram" parameterType="map" resultMap="BaseResultMap">
         SELECT * from program where id in (
-        SELECT program_id from program_follow where pf_acc = #{pfAcc}
+        SELECT program_id from program_follow where pf_acc = #{pfAcc} ORDER BY create_time desc
         )
         <if test="productIdList!=null">
             and product_id in

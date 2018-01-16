@@ -215,6 +215,32 @@ public class APIProgramController extends BaseController {
 		return resultMap;
 	}
 
+	/**
+	 * 获取项目变更记录
+	 *
+	 * @author lovex
+	 * @create 2017/8/5 下午2:25
+	 *
+	 * @version v1.0
+	 */
+	@RequestMapping(value = "/getChangeList", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public Map getChangeList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		/* 获得已经验证过的参数map */
+		@SuppressWarnings("unchecked")
+		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try {
+			List<ProgramApprovalSnapshot> productList =  this.getProgramApprovalSnapshotService().grayLevelList(paramsMap);
+			/* 灰度时间变更记录 */
+			List<ProgramApprovalSnapshot> grayLevelList =  this.getGrayLevelList(productList);
+			resultMap.put("data", grayLevelList);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		return resultMap;
+	}
+
 	private Integer getchangeStatus(List<ProgramApprovalSnapshot> productList){
 		if (productList == null || productList.isEmpty()) {
 			return null;

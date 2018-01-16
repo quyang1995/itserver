@@ -18,4 +18,6 @@ public interface ProgramApprovalSnapshotMapper extends BeeMapper<ProgramApproval
     List<ExceptionProgramVo> getExceptionProgram(Map<String, Object> map);
 
     List<ProgramApprovalSnapshot> latelychangeList(Map<String, Object> map);
+
+    ProgramApprovalSnapshot getOneByWhere(Map<String, Object> map);
 }

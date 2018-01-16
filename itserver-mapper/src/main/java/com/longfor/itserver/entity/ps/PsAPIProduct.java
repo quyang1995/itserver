@@ -19,6 +19,16 @@ public class PsAPIProduct {
     private Long working;
     @Transient
     private Long complete;
+    @Transient
+    private String analyzingConditions;
+
+    public String getAnalyzingConditions() {
+        return analyzingConditions;
+    }
+
+    public void setAnalyzingConditions(String analyzingConditions) {
+        this.analyzingConditions = analyzingConditions;
+    }
 
     public Long getId() {
         return id;
