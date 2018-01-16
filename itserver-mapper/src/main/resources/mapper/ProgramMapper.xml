@@ -42,6 +42,7 @@
         <result column="approval_status" jdbcType="DECIMAL" property="approvalStatus"/>
         <result column="bid_oversingle_cost" property="bidOversingleCost" jdbcType="DECIMAL" />
         <result column="uid" jdbcType="VARCHAR" property="uid"/>
+        <result column="new_code" jdbcType="VARCHAR" property="newCode"/>
     </resultMap>
 
     <resultMap id="ProgramResultMap" type="com.longfor.itserver.entity.ps.PsProgram">
@@ -72,7 +73,7 @@
         ued_date, architecture_date, like_product, like_program, type, program_status, modified_account_id, modified_name,
         create_time, modified_time,demo_approval_date,bidding_date,winning_bid_date,prod_approval_date,dev_approval_date
         ,test_approval_date,online_plan_date,dev_type,analyzing_conditions,dev_workload,overall_cost,bid_dev_workload
-        ,bid_overall_cost,approval_status,bid_oversingle_cost,uid
+        ,bid_overall_cost,approval_status,bid_oversingle_cost,uid,new_code
     </sql>
 
     <!-- 项目列表 -->
@@ -179,5 +180,66 @@
         SELECT *
         FROM program
         WHERE id = #{id}
+    </select>
+
+    <!-- 获取最新的newCode -->
+    <select id="getNewCode" resultType="String">
+        SELECT  new_code FROM program ORDER BY create_time DESC LIMIT 0,1
+    </select>
+
+    <select id="getCountByProductId" parameterType="map" resultType="int">
+        SELECT COUNT(0) FROM program
+        <where>
+            <if test="productIdList!=null">
+                product_id in
+                <foreach item="item" index="index" collection="productIdList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test=" type != null and type == 1 ">
+              and date_format(create_time,'%Y-%m')=date_format(now(),'%Y-%m')
+            </if>
+            <if test=" type != null and  type == 2 ">
+                and program_status != 100 and program_status != 900 and program_status != 999
+            </if>
+        </where>
+    </select>
+
+    <select id="myFollowProgram" parameterType="map" resultMap="BaseResultMap">
+        SELECT * from program where id in (
+        SELECT program_id from program_follow where pf_acc = #{pfAcc}
+        )
+        <if test="productIdList!=null">
+            and product_id in
+            <foreach item="item" index="index" collection="productIdList" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY create_time desc
+        LIMIT #{startRow},#{endRow}
+    </select>
+
+    <select id="changeTopFive" parameterType="map" resultType="map">
+        select a.programId programId,a.name programName,a.coun count from (
+        SELECT program_id programId,name,COUNT(1) coun from program_approval_snapshot
+        where program_status = 210 and approval_status = 110 and create_time>DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
+        <if test="productIdList!=null">
+            and product_id in
+            <foreach item="item" index="index" collection="productIdList" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY program_id
+        ) a ORDER BY coun desc LIMIT 0,5
+    </select>
+
+    <select id="yearCost" resultType="map">
+        select
+        analyzing_conditions as analyzingConditions,sum(overall_cost) as overAllCost,SUM(bid_overall_cost) as bidOverAllCost
+        from program
+        where
+        (program_status=110 and approval_status=110 or program_status!=100 and program_status!=110)
+        and YEAR(create_time)=YEAR(NOW())
+        GROUP BY analyzing_conditions
     </select>
 </mapper>

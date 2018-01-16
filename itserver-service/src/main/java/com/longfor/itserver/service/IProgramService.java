@@ -2,6 +2,8 @@ package com.longfor.itserver.service;
 
 import com.longfor.itserver.common.vo.MoApprove.MoApproveListVo;
 import com.longfor.itserver.common.vo.programBpm.ApproveListVo;
+import com.longfor.itserver.entity.ExceptionProgramVo;
+import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ProgramApprovalSnapshot;
 import com.longfor.itserver.service.base.IAdminService;
@@ -51,4 +53,22 @@ public interface IProgramService extends IAdminService<Program> {
     ProgramApprovalSnapshot getSnapshot(Long id) throws Exception;
 
     ApproveListVo getApprovelapprovList(MoApproveListVo moApproveListVo) throws Exception;
+
+    void addProgramFollow(Map<String,String> paramMap);
+
+    void cancelFollow(Map<String,String> paramMap);
+
+    List<Product> getListByLikeAnalyzingConditions(Map<String,Object> paramMap,int type);
+
+    int getProgramSum(List<Product> productList,int type);
+
+    List<ExceptionProgramVo> getExceptionProgramList(Map<String, Object> paramsMap);
+
+    List<ProgramApprovalSnapshot> latelyChangeList(Map<String, Object> paramsMap);
+
+    List<Program> myFollowProgram(Map<String, Object> paramsMap);
+
+    List<Map<String,Object>> changeTopFive(List<Product> productList,Map<String, Object> paramsMap);
+
+    List<Map<String,Object>> yearCost();
 }

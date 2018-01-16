@@ -98,6 +98,28 @@ public class Product implements Serializable {
     @JsonSerialize(using = CustomDateSerializer.class)
     private Date modifiedTime;
 
+    @Column(name = "new_code")
+    private String newCode;
+
+    @Column(name = "analyzing_conditions")
+    private String analyzingConditions;
+
+    public String getAnalyzingConditions() {
+        return analyzingConditions;
+    }
+
+    public void setAnalyzingConditions(String analyzingConditions) {
+        this.analyzingConditions = analyzingConditions;
+    }
+
+    public String getNewCode() {
+        return newCode;
+    }
+
+    public void setNewCode(String newCode) {
+        this.newCode = newCode;
+    }
+
     /**
      * @return id
      */

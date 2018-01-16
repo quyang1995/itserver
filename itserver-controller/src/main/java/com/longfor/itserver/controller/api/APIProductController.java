@@ -16,6 +16,7 @@ import com.longfor.itserver.entity.ProductEmployee;
 import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ProgramEmployee;
 import com.longfor.itserver.entity.ps.PsProductAll;
+import com.longfor.itserver.entity.ps.PsProductCount;
 import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.helper.APIHelper;
 import org.slf4j.Logger;
@@ -65,7 +66,7 @@ public class APIProductController extends BaseController {
         String accountId = paramsMap.get("accountId");
         paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
         PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
-        List<Product> products = this.getProductService().searchList(paramsMap);
+        List<PsProductCount> products = this.getProductService().searchList(paramsMap);
 
         /*返回数据*/
         Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);

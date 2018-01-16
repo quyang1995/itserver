@@ -687,4 +687,165 @@ public class APIProgramBpmController extends BaseController {
 		}
 		return  resultMap;
 	}
+
+	/**
+	 * 添加关注
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/addFollow" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+	@ResponseBody
+	public Map addFollow(HttpServletRequest request){
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try {
+			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------addFollow:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+			getProgramService().addProgramFollow(paramsMap);
+		} catch ( Exception e) {
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return  resultMap;
+	}
+
+	/**
+	 * 取消关注
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/cancelFollow" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+	@ResponseBody
+	public Map cancelFollow(HttpServletRequest request){
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try {
+			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------cancelFollow:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+			getProgramService().cancelFollow(paramsMap);
+		} catch ( Exception e) {
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return  resultMap;
+	}
+
+	/**
+	 * 移动首页
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/movePage" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+	@ResponseBody
+	public Map movePage(HttpServletRequest request){
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try {
+			Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------cancelFollow:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+			Map dataMap = new HashMap();
+			//产品总数
+			List<Product> productList = getProgramService().getListByLikeAnalyzingConditions(paramsMap,0);
+			if (productList == null || productList.isEmpty()) {
+				dataMap.put("productSum",0);
+			}
+			dataMap.put("productSum",productList.size());
+			//产品本月数
+			List<Product> yueList = getProgramService().getListByLikeAnalyzingConditions(paramsMap,1);
+			if (yueList == null || yueList.isEmpty()) {
+				dataMap.put("productYue",0);
+			}
+			dataMap.put("productYue",productList.size());
+			//进行中的产品
+			List<Product> productDoing = getProgramService().getListByLikeAnalyzingConditions(paramsMap,2);
+			if (productDoing == null || productDoing.isEmpty()) {
+				dataMap.put("productDoing",0);
+			}
+			dataMap.put("productDoing",productDoing.size());
+			//项目总数
+			dataMap.put("programSum",getProgramService().getProgramSum(productList,0));
+			//本月新增项目
+			dataMap.put("programYue",getProgramService().getProgramSum(productList,1));
+			//进行中的项目
+			dataMap.put("programDoing",getProgramService().getProgramSum(productList,2));
+			//需求变更--近三个月变更次数TOP5
+			List<Map<String,Object>> changeTopFive = getProgramService().changeTopFive(productList,paramsMap);
+			dataMap.put("changeTopFive",changeTopFive);
+			//本年度费用使用情况
+			List<Map<String,Object>> yearCost = getProgramService().yearCost();
+			dataMap.put("yearCost",yearCost);
+
+			resultMap.put("data",dataMap);
+		} catch ( Exception e) {
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return  resultMap;
+	}
+
+	/**
+	 * 异常项目
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/exceptionProgram" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+	@ResponseBody
+	public Map exceptionProgram(HttpServletRequest request){
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try {
+			Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------exceptionProgram:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+			//异常项目
+			this.buildPageParams(paramsMap);
+			List<ExceptionProgramVo> exceptionProgramList = getProgramService().getExceptionProgramList(paramsMap);
+			resultMap.put("data",exceptionProgramList);
+		} catch ( Exception e) {
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return  resultMap;
+	}
+
+	/**
+	 * 最新的需求变更
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/latelyChangeList" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+	@ResponseBody
+	public Map latelyChangeList(HttpServletRequest request){
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try {
+			Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------latelyChangeList:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+			//最新的需求变更
+			this.buildPageParams(paramsMap);
+			List<ProgramApprovalSnapshot> exceptionProgramList = getProgramService().latelyChangeList(paramsMap);
+			resultMap.put("data",exceptionProgramList);
+		} catch ( Exception e) {
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return  resultMap;
+	}
+
+	/**
+	 * 我關注的項目
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/myFollowProgram" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+	@ResponseBody
+	public Map myFollowProgram(HttpServletRequest request){
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try {
+			Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------myFollowProgram:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+			//我關注的項目
+			this.buildPageParams(paramsMap);
+			List<Program> myFollowProgram = getProgramService().myFollowProgram(paramsMap);
+			resultMap.put("data",myFollowProgram);
+		} catch ( Exception e) {
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return  resultMap;
+	}
 }

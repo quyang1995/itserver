@@ -12,6 +12,7 @@ import com.longfor.itserver.common.util.StringUtil;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.ProductEmployee;
 import com.longfor.itserver.entity.ProductEmployeeChangeLog;
+import com.longfor.itserver.entity.ps.PsProductCount;
 import com.longfor.itserver.mapper.ProductEmployeeChangeLogMapper;
 import com.longfor.itserver.mapper.ProductEmployeeMapper;
 import com.longfor.itserver.mapper.ProductMapper;
@@ -42,8 +43,15 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 	private ProductEmployeeChangeLogMapper productEmployeeChangeLogMapper;
 
 	@Override
-	public List<Product> searchList(Map map) {
-		return productMapper.selectList(map);
+	public List<PsProductCount> searchList(Map map) {
+		List<PsProductCount> list= productMapper.selectList(map);
+		for(PsProductCount model:list){
+			ProductEmployee productEmployee  = new ProductEmployee();
+			productEmployee.setEmployeeType(AvaStatusEnum.LIABLEAVA.getCode());
+			productEmployee.setProductId(model.getId());
+			model.setPersonLiableList(productEmployeeMapper.select(productEmployee));
+		}
+		return list;
 	}
 
 	@Override
@@ -84,6 +92,9 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		product.setCreateTime(TimeUtils.getTodayByDateTime());
 		product.setModifiedTime(TimeUtils.getTodayByDateTime());
 		product.setAccountType(accountType);
+		product.setNewCode(this.generateProductNewCode());
+		product.setCode(this.generateProductNewCode());
+		product.setAnalyzingConditions(jsonObject.getString("analyzingConditions"));
 		int insert = productMapper.insert(product);
 		/* 产品责任人 */
 		String personLiableList = (String) map.get("personLiableList");
@@ -125,6 +136,28 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		}
 
 		return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
+	}
+
+	/**
+	 * 根据规则生成新的产品code
+	 * 例：IT_CP000001
+	 * @return
+	 */
+	private String generateProductNewCode(){
+		String newCode = productMapper.getNewCode();
+		if (StringUtils.isBlank(newCode)) {
+			newCode = "IT_CP000001";
+			return newCode;
+		}
+		Integer newNum = Integer.parseInt(newCode.substring(5,newCode.length()))+1;
+		String newNumStr = newNum.toString();
+		Integer j  = newNumStr.length();
+		for(int i = 0; i< 6 - j; i++) {
+			newNumStr = "0" + newNumStr;
+		}
+		StringBuffer sb = new StringBuffer();
+		sb.append("IT_CP" + newNumStr);
+		return sb.toString();
 	}
 
 	@Override

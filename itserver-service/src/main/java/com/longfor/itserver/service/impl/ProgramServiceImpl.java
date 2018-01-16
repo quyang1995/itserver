@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.security.util.Length;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -46,6 +47,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
     @Autowired
     private ProductMapper productMapper;
+
+    @Autowired
+    private ProgramFollowMapper programFollowMapper;
 
     @Autowired
     private ProgramEmployeeMapper programEmployeeMapper;
@@ -65,15 +69,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     private ProgramFileMapper programFileMapper;
     @Override
     public List<Program> programList(Map map) {
-//		List<Program> programList = Lists.newArrayList();
-//		for (Program program : programMapper.programList(map)) {
-//			Product product = productMapper.selectByPrimaryKey(program.getProductId());
-//			if (null != product) {
-//				program.setProductName(product.getName());
-//			}
-//			programList.add(program);
-//		}
-        return programMapper.programList(map);
+        List<Program> programList = programMapper.programList(map);
+        for (Program model:programList) {
+            ProgramFollow follow = new ProgramFollow();
+            follow.setPfAcc(map.get("accountId").toString());
+            follow.setProgramId(model.getId());
+            model.setIsFollow(programFollowMapper.selectCount(follow));
+        }
+        return programList;
     }
 
     @Override
@@ -130,7 +133,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     public List<ProgramApprovalSnapshot> milepost(Map<String,Object> paramMap) {
         List<ProgramApprovalSnapshot> resultList = new ArrayList<ProgramApprovalSnapshot>();
         paramMap.put("approvalStatus",ProgramApprovalStatusEnum.SHTG.getCode());
-		/*立项*/b
+		/*立项*/
         paramMap.put("programStatus",ProgramStatusNewEnum.LX.getCode());
         List<ProgramApprovalSnapshot> snapshot =programApprovalSnapshotMapper.getListByProgramIdAndStatus(paramMap);
         if (snapshot != null && !snapshot.isEmpty()) {
@@ -238,6 +241,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         program.setCreateTime(TimeUtils.getTodayByDateTime());
         program.setModifiedTime(TimeUtils.getTodayByDateTime());
         program.setAccountType(accountType);
+        program.setNewCode(this.generateProgramNewCode());
         programMapper.insert(program);
 
         // 项目责任人
@@ -1351,4 +1355,198 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         }
 
     }
+
+    /**
+     * 根据规则生成新的项目code
+     * 例：IT_XM000001
+     * @return
+     */
+    private String generateProgramNewCode(){
+        String newCode = programMapper.getNewCode();
+        if (StringUtils.isBlank(newCode)) {
+            newCode = "IT_XM000001";
+            return newCode;
+        }
+        Integer newNum = Integer.parseInt(newCode.substring(5,newCode.length()))+1;
+        String newNumStr = newNum.toString();
+        Integer j  = newNumStr.length();
+        for(int i = 0; i< 6 - j; i++) {
+            newNumStr = "0" + newNumStr;
+        }
+        StringBuffer sb = new StringBuffer();
+        sb.append("IT_XM" + newNumStr);
+        return sb.toString();
+    }
+
+    /***
+     * 添加关注
+     */
+    @Override
+    public void addProgramFollow(Map<String,String> paramMap){
+        ProgramFollow follow = new ProgramFollow();
+        follow.setProgramId(Long.parseLong(paramMap.get("programId")));
+        follow.setPfAcc(paramMap.get("pfAcc"));
+        if (programFollowMapper.selectOne(follow) == null) {
+            follow.setCreateTime(new Date());
+            programFollowMapper.insert(follow);
+        }
+    }
+
+    /***
+     * 取消关注
+     */
+    @Override
+    public void cancelFollow(Map<String,String> paramMap){
+        ProgramFollow follow = new ProgramFollow();
+        follow.setPfAcc(paramMap.get("pfAcc"));
+        follow.setProgramId(Long.parseLong(paramMap.get("programId")));
+        programFollowMapper.delete(follow);
+    }
+
+    /***
+     * 产品总数list
+     */
+    @Override
+    public List<Product> getListByLikeAnalyzingConditions(Map<String,Object> paramMap,int type){
+        paramMap.put("type", type);
+        return productMapper.getListByLikeAnalyzingConditions(paramMap);
+    }
+
+    /***
+     * 項目数
+     */
+    @Override
+    public int getProgramSum(List<Product> productList,int type){
+        if (productList == null || productList.isEmpty()) {
+            return 0;
+        }
+        StringBuffer sb = new StringBuffer();
+        for (Product model:productList) {
+            sb.append(model.getId());
+            sb.append(",");
+        }
+        sb.deleteCharAt(sb.length()-1);
+        Map<String,Object> map = new HashMap<>();
+        map.put("productIdList",sb.toString().split(","));
+        map.put("type",type);
+        return  programMapper.getCountByProductId(map);
+    }
+
+    /***
+     * 异常项目
+     */
+    @Override
+    public List<ExceptionProgramVo> getExceptionProgramList(Map<String,Object> paramMap){
+        List<Product> productList = getListByLikeAnalyzingConditions(paramMap,0);
+        if (productList==null || productList.isEmpty()) {
+            return null;
+        }
+        StringBuffer sb = new StringBuffer();
+        for (Product model:productList) {
+            sb.append(model.getId());
+            sb.append(",");
+        }
+        sb.deleteCharAt(sb.length()-1);
+        Map<String,Object> map = new HashMap<>();
+        map.put("programIdList",sb.toString().split(","));
+        map.put("startRow", paramMap.get("startRow") );
+        map.put("endRow", paramMap.get("endRow") );
+        List<ExceptionProgramVo> exceptionList = programApprovalSnapshotMapper.getExceptionProgram(map);
+        for (ExceptionProgramVo model:exceptionList) {
+            /* 产品经理 */
+            Map productManager = new HashMap();
+            productManager.put("programId",model.getProgramId());
+            productManager.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
+            productManager.put("employeeTypeId", new Long(AvaStatusEnum.PRODAVA.getCode()));
+            List<ProgramEmployee> programManagerList = programEmployeeService.selectTypeList(productManager);
+            model.setProductManagerList(programManagerList);
+        }
+        return exceptionList;
+    }
+
+    /***
+     * 最新的需求变更
+     */
+    @Override
+    public List<ProgramApprovalSnapshot> latelyChangeList(Map<String,Object> paramMap){
+        List<Product> productList = getListByLikeAnalyzingConditions(paramMap,0);
+        if (productList==null || productList.isEmpty()) {
+            return null;
+        }
+        StringBuffer sb = new StringBuffer();
+        for (Product model:productList) {
+            sb.append(model.getId());
+            sb.append(",");
+        }
+        sb.deleteCharAt(sb.length()-1);
+        Map<String,Object> map = new HashMap<>();
+        map.put("programIdList",sb.toString().split(","));
+        map.put("startRow", paramMap.get("startRow") );
+        map.put("endRow", paramMap.get("endRow") );
+        List<ProgramApprovalSnapshot> resultList = programApprovalSnapshotMapper.latelychangeList(map);
+        for (ProgramApprovalSnapshot model:resultList) {
+            /* 产品经理 */
+            Map productManager = new HashMap();
+            productManager.put("programId",model.getProgramId());
+            productManager.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
+            productManager.put("employeeTypeId", new Long(AvaStatusEnum.PRODAVA.getCode()));
+            List<ProgramEmployee> programManagerList = programEmployeeService.selectTypeList(productManager);
+            model.setProductManagerList(programManagerList);
+        }
+        return resultList;
+    }
+
+    /***
+     * 我關注的項目
+     */
+    @Override
+    public List<Program> myFollowProgram(Map<String,Object> paramMap){
+        List<Product> productList = getListByLikeAnalyzingConditions(paramMap,0);
+        if (productList==null || productList.isEmpty()) {
+            return null;
+        }
+        StringBuffer sb = new StringBuffer();
+        for (Product model:productList) {
+            sb.append(model.getId());
+            sb.append(",");
+        }
+        sb.deleteCharAt(sb.length()-1);
+        Map<String,Object> map = new HashMap<>();
+        map.put("productIdList",sb.toString().split(","));
+        map.put("startRow", paramMap.get("startRow") );
+        map.put("endRow", paramMap.get("endRow") );
+        map.put("pfAcc", paramMap.get("pfAcc") );
+        return programMapper.myFollowProgram(map);
+    }
+
+    /***
+     * 需求变更--近三个月变更次数TOP5
+     */
+    @Override
+    public List<Map<String,Object>> changeTopFive(List<Product> productList,Map<String,Object> paramMap){
+        if (productList==null || productList.isEmpty()) {
+            return null;
+        }
+        StringBuffer sb = new StringBuffer();
+        for (Product model:productList) {
+            sb.append(model.getId());
+            sb.append(",");
+        }
+        sb.deleteCharAt(sb.length()-1);
+        Map<String,Object> map = new HashMap<>();
+        map.put("productIdList",sb.toString().split(","));
+        map.put("startRow", paramMap.get("startRow") );
+        map.put("endRow", paramMap.get("endRow") );
+        map.put("pfAcc", paramMap.get("pfAcc") );
+        return programMapper.changeTopFive(map);
+    }
+
+    /***
+     * 本年度费用使用情况
+     */
+    @Override
+    public List<Map<String,Object>> yearCost(){
+        return programMapper.yearCost();
+    }
+
 }

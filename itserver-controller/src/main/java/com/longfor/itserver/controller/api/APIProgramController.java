@@ -10,6 +10,7 @@ import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.*;
 import com.longfor.itserver.entity.ps.PsProgramDetail;
+import com.longfor.itserver.mapper.ProgramFollowMapper;
 import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.helper.APIHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -60,7 +61,6 @@ public class APIProgramController extends BaseController {
 		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
 		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
 		List<Program> programList = this.getProgramService().programList(paramsMap);
-
 
 		/* 返回报文 */
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);

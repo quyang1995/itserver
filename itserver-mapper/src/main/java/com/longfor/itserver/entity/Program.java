@@ -173,6 +173,31 @@ public class Program implements Serializable {
     @Column(name = "uid")
     private String uid;
 
+    @Column(name = "new_code")
+    private String newCode;
+
+    /**
+     * 是否关注，0：未关注，1：已关注
+     */
+    @Transient
+    private int isFollow;
+
+    public int getIsFollow() {
+        return isFollow;
+    }
+
+    public void setIsFollow(int isFollow) {
+        this.isFollow = isFollow;
+    }
+
+    public void setNewCode(String newCode) {
+        this.newCode = newCode;
+    }
+
+    public String getNewCode() {
+        return newCode;
+    }
+
     public void setUid(String uid) {
         this.uid = uid;
     }

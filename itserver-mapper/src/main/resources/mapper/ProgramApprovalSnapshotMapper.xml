@@ -51,6 +51,17 @@
     <result column="uid" property="uid" jdbcType="VARCHAR" />
   </resultMap>
 
+  <resultMap id="ExceptionProgramVoMap" type="com.longfor.itserver.entity.ExceptionProgramVo" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <result column="program_id" property="programId" jdbcType="VARCHAR" />
+    <result column="name" property="programName" jdbcType="VARCHAR" />
+    <result column="product_id" property="productId" jdbcType="VARCHAR" />
+    <result column="program_status" property="programStatus" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
   <sql id="Base_Column_List" >
     <!--
       WARNING - @mbggenerated
@@ -128,6 +139,37 @@
           #{item}
         </foreach>
     ORDER  BY  create_time DESC
+  </select>
+
+  <select id="getExceptionProgram" parameterType="map" resultMap="ExceptionProgramVoMap">
+    select * from (
+      SELECT program_id,name,product_id,program_status,create_time from program_approval_snapshot
+      where
+        program_status in ('999','200') and approval_status = 110
+        <if test="programIdList != null">
+          and product_id in
+          <foreach item="item" index="index" collection="programIdList" open="(" separator="," close=")">
+            #{item}
+          </foreach>
+        </if>
+      order by create_time DESC
+    ) a
+    GROUP BY a.program_id
+    order by a.create_time DESC
+    LIMIT #{startRow},#{endRow}
+  </select>
+
+  <select id="latelychangeList" parameterType="map" resultMap="BaseResultMap">
+    SELECT * from program_approval_snapshot
+    where program_status=210 and approval_status=110
+    <if test="programIdList != null">
+      and product_id in
+      <foreach item="item" index="index" collection="programIdList" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    ORDER BY create_time desc
+    LIMIT #{startRow},#{endRow}
   </select>
 
 </mapper>

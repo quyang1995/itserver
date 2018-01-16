@@ -232,6 +232,20 @@ public class ProgramApprovalSnapshot implements Serializable {
     @Column(name = "report_poor")
     private String reportPoor;
 
+    /**
+     * 自动生成项目code（规则：IT_XM000001，顺序递增）
+     */
+    @Column(name = "new_code")
+    private String newCode;
+
+    public String getNewCode() {
+        return newCode;
+    }
+
+    public void setNewCode(String newCode) {
+        this.newCode = newCode;
+    }
+
     @Transient
     private List<ProgramFile> fileList;
     /**

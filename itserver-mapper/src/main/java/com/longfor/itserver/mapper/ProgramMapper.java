@@ -19,4 +19,18 @@ public interface ProgramMapper extends BeeMapper<Program> {
 
     List<Program> productIdList(Map map);
 
+    /**
+     * 获取最新的newCode
+     * @return
+     */
+    String getNewCode();
+
+    int getCountByProductId(Map<String,Object> map);
+
+    List<Program> myFollowProgram(Map<String,Object> map);
+
+    List<Map<String,Object>> changeTopFive(Map<String,Object> map);
+
+    List<Map<String,Object>> yearCost();
+
 }

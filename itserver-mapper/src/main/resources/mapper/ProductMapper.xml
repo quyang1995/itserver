@@ -20,11 +20,14 @@
         <result column="modified_name" property="modifiedName" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP"/>
+        <result column="new_code" property="newCode" jdbcType="VARCHAR"/>
+        <result column="analyzing_conditions" property="analyzingConditions" jdbcType="VARCHAR"/>
     </resultMap>
 
 
     <resultMap id="CountBaseResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsProductCount">
         <result column="programCount" property="programCount" jdbcType="VARCHAR"/>
+        <result column="newestProgramName" property="newestProgramName" jdbcType="VARCHAR"/>
     </resultMap>
 
     <resultMap id="LikeBaseResultMap" type="com.longfor.itserver.entity.ps.PsProduct">
@@ -51,11 +54,12 @@
         -->
         id, name, code, descp, contact_account_id, contact_employee_code, contact_employee_name,
         contact_full_dept_path, like_program, type, status, modified_account_id, modified_name,
-        create_time, modified_time
+        create_time, modified_time, new_code, analyzing_conditions
     </sql>
     <select id="selectList" parameterType="map" resultMap="CountBaseResultMap">
         SELECT DISTINCT ta.*,
-        (select IFNULL(sum(CASE WHEN p.product_id =ta.id THEN 1 ELSE 0 END),0) from program p) AS programCount
+        (select IFNULL(sum(CASE WHEN p.product_id =ta.id THEN 1 ELSE 0 END),0) from program p) AS programCount,
+        (select name from program a  where a.product_id =ta.id ORDER BY create_time desc LIMIT 0,1 ) AS newestProgramName
         FROM product ta LEFT JOIN product_employee tb ON ta.id = tb.product_id
         WHERE 1=1
         <if test="isAdmin == 1">
@@ -168,4 +172,28 @@
         WHERE ID IN (${_parameter})
     </select>
 
+    <select id="getNewCode" resultType="String">
+        SELECT  new_code FROM product ORDER BY create_time DESC LIMIT 0,1
+    </select>
+
+    <select id="getListByLikeAnalyzingConditions" resultMap="BaseResultMap" parameterType="map">
+        SELECT
+        id
+        FROM product
+        <where>
+            <if test=" analyzingConditions != null and analyzingConditions != ''">
+                analyzing_conditions like concat('%',#{analyzingConditions},'%')
+            </if>
+
+            <if test=" type == 1 ">
+                and date_format(create_time,'%Y-%m')=date_format(now(),'%Y-%m')
+            </if>
+
+            <if test=" type == 2 ">
+                and id in (select product_id from program
+                            where program_status != 100 and program_status != 900 and program_status != 999)
+            </if>
+        </where>
+
+    </select>
 </mapper>
