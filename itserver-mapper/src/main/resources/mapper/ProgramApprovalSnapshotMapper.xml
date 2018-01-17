@@ -49,6 +49,8 @@
     <result column="applyAccount" property="apply_account" jdbcType="VARCHAR" />
     <result column="cause_delay" property="causeDelay" jdbcType="VARCHAR" />
     <result column="uid" property="uid" jdbcType="VARCHAR" />
+    <result column="replay_date" jdbcType="TIMESTAMP" property="replayDate"/>
+    <result column="all_extension_date" jdbcType="TIMESTAMP" property="allExtensionDate"/>
   </resultMap>
 
   <resultMap id="ExceptionProgramVoMap" type="com.longfor.itserver.entity.ExceptionProgramVo" >
@@ -73,7 +75,7 @@
     dev_approval_date, test_approval_date, online_plan_date, dev_type, analyzing_conditions, 
     dev_workload, overall_cost, bid_dev_workload, bid_overall_cost, approval_status, 
     bpm_code, remark, approval_view, bid_oversingle_cost, suggestion, apply_account, cause_delay
-    , uid
+    , uid, replay_date, all_extension_date
   </sql>
 
   <select id="getListByProgramIdAndStatus" resultMap="BaseResultMap">

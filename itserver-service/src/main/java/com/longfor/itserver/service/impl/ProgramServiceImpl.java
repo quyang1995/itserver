@@ -827,6 +827,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("developmentDate"),DateUtil.PATTERN_DATE));
             program.setTestApprovalDate(DateUtil.string2Date(paramsMap.get("testReviewDate"),DateUtil.PATTERN_DATE));
             program.setOnlinePlanDate(DateUtil.string2Date(paramsMap.get("onlineDate"),DateUtil.PATTERN_DATE));
+            if(StringUtils.isNotBlank(paramsMap.get("replayDate")))program.setReplayDate(DateUtil.string2Date(paramsMap.get("replayDate"),DateUtil.PATTERN_DATE));
+            if(StringUtils.isNotBlank(paramsMap.get("allExtensionDate")))program.setAllExtensionDate(DateUtil.string2Date(paramsMap.get("allExtensionDate"),DateUtil.PATTERN_DATE));
 
             program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
             program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
@@ -903,6 +905,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("developmentDate"),DateUtil.PATTERN_DATE));
             program.setTestApprovalDate(DateUtil.string2Date(paramsMap.get("testReviewDate"),DateUtil.PATTERN_DATE));
             program.setOnlinePlanDate(DateUtil.string2Date(paramsMap.get("onlineDate"),DateUtil.PATTERN_DATE));
+            if(StringUtils.isNoneBlank(paramsMap.get("replayDate")))program.setReplayDate(DateUtil.string2Date(paramsMap.get("replayDate"),DateUtil.PATTERN_DATE));
+            if(StringUtils.isNoneBlank(paramsMap.get("allExtensionDate")))program.setAllExtensionDate(DateUtil.string2Date(paramsMap.get("allExtensionDate"),DateUtil.PATTERN_DATE));
             if (overallCost.compareTo(ten) != -1) {
                 program.setApprovalStatus(ProgramApprovalStatusEnum.BGSHZ.getCode());
             }
@@ -982,6 +986,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
+            programApprovalSnapshot.setReportPoor(paramsMap.get("remark"));
             programApprovalSnapshot.setReportPoor(paramsMap.get("reportPoor"));
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
@@ -1076,6 +1081,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             String productName = paramsMap.get("productName");
             String likeProduct = paramsMap.get("likeProduct");
             String type = paramsMap.get("type");
+            String replayDate = paramsMap.get("replayDate");
+            String allExtensionDate = paramsMap.get("allExtensionDate");
 
             //program表
             if(StringUtils.isNotBlank(devType))program.setDevType(Integer.parseInt(devType));//研发方式
@@ -1098,6 +1105,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             if(StringUtils.isNotBlank(productName))program.setProductName(productName);
             if(StringUtils.isNotBlank(likeProduct))program.setLikeProduct(likeProduct);
             if(StringUtils.isNotBlank(type))program.setType(Integer.parseInt(type));
+            if(StringUtils.isNotBlank(replayDate))program.setReplayDate(DateUtil.string2Date(replayDate,DateUtil.PATTERN_DATE));//项目复盘时间
+            if(StringUtils.isNotBlank(allExtensionDate))program.setAllExtensionDate(DateUtil.string2Date(allExtensionDate,DateUtil.PATTERN_DATE));//全面推广时间
 
             program.setApprovalStatus(approvalStatus);
             program.setProgramStatus(programStatus);

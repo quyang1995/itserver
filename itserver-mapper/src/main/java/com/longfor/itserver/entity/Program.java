@@ -176,11 +176,35 @@ public class Program implements Serializable {
     @Column(name = "new_code")
     private String newCode;
 
+    @Column(name = "replay_date")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
+    private Date replayDate;
+
+    @Column(name = "all_extension_date")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
+    private Date allExtensionDate;
+
     /**
      * 是否关注，0：未关注，1：已关注
      */
     @Transient
     private int isFollow;
+
+    public Date getReplayDate() {
+        return replayDate;
+    }
+
+    public void setReplayDate(Date replayDate) {
+        this.replayDate = replayDate;
+    }
+
+    public Date getAllExtensionDate() {
+        return allExtensionDate;
+    }
+
+    public void setAllExtensionDate(Date allExtensionDate) {
+        this.allExtensionDate = allExtensionDate;
+    }
 
     public int getIsFollow() {
         return isFollow;

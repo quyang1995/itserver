@@ -87,6 +87,9 @@
             AND (tb.employee_name LIKE concat('%',#{searchText},'%') OR ta.name LIKE concat('%',#{searchText},'%') OR
             ta.contact_employee_name LIKE concat('%',#{searchText},'%'))
         </if>
+        <if test="analyzingConditions != null and analyzingConditions != '' and analyzingConditions != -1">
+            AND ta.analyzing_conditions LIKE concat('%',#{analyzingConditions},'%')
+        </if>
         ORDER BY ta.create_time DESC
     </select>
 

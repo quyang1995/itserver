@@ -43,6 +43,8 @@
         <result column="bid_oversingle_cost" property="bidOversingleCost" jdbcType="DECIMAL" />
         <result column="uid" jdbcType="VARCHAR" property="uid"/>
         <result column="new_code" jdbcType="VARCHAR" property="newCode"/>
+        <result column="replay_date" jdbcType="TIMESTAMP" property="replayDate"/>
+        <result column="all_extension_date" jdbcType="TIMESTAMP" property="allExtensionDate"/>
     </resultMap>
 
     <resultMap id="ProgramResultMap" type="com.longfor.itserver.entity.ps.PsProgram">
@@ -73,7 +75,7 @@
         ued_date, architecture_date, like_product, like_program, type, program_status, modified_account_id, modified_name,
         create_time, modified_time,demo_approval_date,bidding_date,winning_bid_date,prod_approval_date,dev_approval_date
         ,test_approval_date,online_plan_date,dev_type,analyzing_conditions,dev_workload,overall_cost,bid_dev_workload
-        ,bid_overall_cost,approval_status,bid_oversingle_cost,uid,new_code
+        ,bid_overall_cost,approval_status,bid_oversingle_cost,uid,new_code,replay_date,all_extension_date
     </sql>
 
     <!-- 项目列表 -->

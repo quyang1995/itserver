@@ -238,13 +238,13 @@ public class ProgramApprovalSnapshot implements Serializable {
     @Column(name = "new_code")
     private String newCode;
 
-    public String getNewCode() {
-        return newCode;
-    }
+    @Column(name = "replay_date")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
+    private Date replayDate;
 
-    public void setNewCode(String newCode) {
-        this.newCode = newCode;
-    }
+    @Column(name = "all_extension_date")
+    @JsonSerialize(using = CustomFullDateSerializer.class)
+    private Date allExtensionDate;
 
     @Transient
     private List<ProgramFile> fileList;
@@ -280,6 +280,30 @@ public class ProgramApprovalSnapshot implements Serializable {
     /* 业务人员 */
     @Transient
     private List<ProgramEmployee> businessList;
+
+    public Date getReplayDate() {
+        return replayDate;
+    }
+
+    public void setReplayDate(Date replayDate) {
+        this.replayDate = replayDate;
+    }
+
+    public Date getAllExtensionDate() {
+        return allExtensionDate;
+    }
+
+    public void setAllExtensionDate(Date allExtensionDate) {
+        this.allExtensionDate = allExtensionDate;
+    }
+
+    public String getNewCode() {
+        return newCode;
+    }
+
+    public void setNewCode(String newCode) {
+        this.newCode = newCode;
+    }
 
     public void setPersonLiableList(List<ProgramEmployee> personLiableList) {
         this.personLiableList = personLiableList;
