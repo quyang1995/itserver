@@ -1061,6 +1061,11 @@
             <property name="operationList" type="string" required="false" description="运维人员"/>
             <property name="operateList" type="string" required="false" description="运营人员"/>
 
+            <property name="businessCenterAccount" type="string" required="true" description="业务中心负责人"/>
+            <property name="itCenterAccount" type="string" required="true" description="IT中心负责人guid"/>
+            <property name="businessFunctionAccount" type="string" required="true" description="业务职能人"/>
+            <property name="businessVicePresident" type="string" required="false" description="业务副总裁"/>
+
             <property name="productId" type="string" required="false" description="归属产品"/>
             <property name="productName" type="string" required="false" description="归属产品名称"/>
             <property name="likeProduct" type="string" required="false" description="关联产品id字符串，e.g. 1,2,3,..."/>

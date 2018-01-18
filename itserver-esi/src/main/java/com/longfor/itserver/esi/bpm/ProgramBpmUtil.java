@@ -29,7 +29,7 @@ public class ProgramBpmUtil
     }
 
     public static String getIsFirst(String isFirst){
-        if(StringUtils.isBlank(isFirst) || isFirst.equals("1"))return ConfigConsts.programBpm.is_first;
+        if(StringUtils.isNotBlank(isFirst) && isFirst.equals("1"))return ConfigConsts.programBpm.is_first;
         return null;
     }
 

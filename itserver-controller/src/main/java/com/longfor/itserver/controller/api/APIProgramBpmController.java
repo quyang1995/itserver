@@ -13,10 +13,12 @@ import com.longfor.itserver.common.vo.programBpm.ApproveListVo;
 import com.longfor.itserver.common.vo.programBpm.ApproveVo;
 import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.*;
+import com.longfor.itserver.esi.IEdsService;
 import com.longfor.itserver.esi.MoApproveUtil;
 import net.mayee.commons.helper.APIHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,6 +39,8 @@ import java.util.Map;
 @Controller
 public class APIProgramBpmController extends BaseController {
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+	@Autowired
+	private IEdsService edsService;
 
 	/**
 	 * 提交立项申请
@@ -53,6 +57,10 @@ public class APIProgramBpmController extends BaseController {
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+			}
+			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString())==null
+					|| edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString())==null){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
 			}
 			getProgramService().submit(paramsMap,program,ProgramStatusNewEnum.LX.getCode());
 		}catch (Exception e){

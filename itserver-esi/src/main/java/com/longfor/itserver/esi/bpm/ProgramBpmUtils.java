@@ -64,20 +64,24 @@ public class ProgramBpmUtils
      * modifiedAccountGuid:提交人guid
      * businessAccount:业务对接人guid
      * businessFunctionAccount:业务职能人guid
+     * businessCenterAccount:业务中心负责人guid
      * itCenterAccount:IT中心负责人guid
      * developAccount:项目技术负责人/开发人员guid
-     * ifZqs:是否周琼硕审批  string 0-否，1-是
+     * ifZqs:是否周琼硕审批guid
      * counterSigners:会签人  string 逗号分隔
-     * cOrZ:李川还是傅志华   string 0-李，1-傅   IT部门副总经理
+     * cOrZ:李川还是傅志华   string 1-李，2-傅   IT部门副总经理
      * ifGj:是否光建总审批   string 0-否，1-是
+     * isFirst 是否产品下第一个项目
      */
     public static ApplyCreateResultVo submitBrd(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
         //********************添加业务及技术审批**********begin********************
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
-        String str = paramsMap.get("businessAccount")+","+paramsMap.get("developAccount");
-        jsonObject.put("ItemValue", str.split(","));//业务对接人（业务人员）+项目技术负责人（开发人员第一个）
+        String [] businessAccountGuis = paramsMap.get("businessAccount").split(",");
+        String [] developAccountGuis = paramsMap.get("developAccount").split(",");
+        String str = businessAccountGuis[0]+","+developAccountGuis[0];
+        jsonObject.put("ItemValue", str.split(","));//业务人（业务人员）+项目技术负责人（开发人员第一个）
         jsonArray.add(jsonObject);
         //********************添加业务及技术审批**********end********************
 
@@ -89,8 +93,7 @@ public class ProgramBpmUtils
 
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval300AppendActors");
-        //琼朔相关怎么处理??????????
-        str = paramsMap.get("businessAccount")+","+paramsMap.get("itCenterAccount")+","+paramsMap.get("counterSigners");
+        str = paramsMap.get("ifZqs")+","+paramsMap.get("itCenterAccount")+","+paramsMap.get("businessCenterAccount")+","+paramsMap.get("counterSigners");
         jsonObject.put("ItemValue", str.split(","));
         jsonArray.add(jsonObject);
         //********************集团审批1**********end********************
@@ -112,7 +115,8 @@ public class ProgramBpmUtils
         //********************集团审批4**********begin********************
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "textCondition");
-        jsonObject.put("ItemValue", ProgramBpmUtil.getIsFirst(paramsMap.get("isFirst")));
+        String a = paramsMap.get("isFirst");
+        jsonObject.put("ItemValue", ProgramBpmUtil.getIsFirst(a));
         jsonArray.add(jsonObject);
 
         jsonObject = new JSONObject();
