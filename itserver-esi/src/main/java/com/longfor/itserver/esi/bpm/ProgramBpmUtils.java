@@ -14,22 +14,22 @@ public class ProgramBpmUtils
 {
 
     private static final String BRD_TEMP_CODE = "ITplus_ITxmlx";//IT项目立项（提交BRD）
-    private static final String demo_temp_code = "ITplus_Demos";//提交Demo评审
-    private static final String Tender_TEMP_CODE = "ITplus_ITxmlx";
-    private static final String WinBidding_TEMP_CODE = "ITplus_ITxmlx";
-    private static final String ContractSign_TEMP_CODE = "ITplus_ITxmlx";
-    private static final String ProductReview_TEMP_CODE = "ITplus_Cpps";//产品评审
-    private static final String DevelopReview_TEMP_CODE = "ITplus_ITkfps";//IT开发评审
-    private static final String TestReview_TEMP_CODE = "ITplus_Csps";//测试评审
-    private static final String OnlinePlan_TEMP_CODE = "ITplus_Sxjh";//上线计划
-    private static final String PartIntroduce_TEMP_CODE = "ITplus_Hdfb";//灰度发布
-    private static final String AllSpread_TEMP_CODE = "ITplus_Qmtg";//全面推广
-    private static final String ProgramReplay_TEMP_CODE = "ITplus_ITxmfp";//项目复盘
-    private static final String DelayOnline_TEMP_CODE = "ITplus_Yqsx";//延期上线
-    private static final String DemandChangeAdvise_TEMP_CODE = "ITplus_ITxy10wbg";//IT系统小于10万变更需求申请
-    private static final String DemandChangeApprove_TEMP_CODE = "ITplus_ITxqbgsq";//IT系统需求变更申请
+    private static final String DEMO_TEMP_CODE = "ITplus_Demos";//提交Demo评审
+    private static final String TENDER_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String WINBIDDING_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String CONTRACTSIGN_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String PRODUCTREVIEW_TEMP_CODE = "ITplus_Cpps";//产品评审
+    private static final String DEVELOPREVIEW_TEMP_CODE = "ITplus_ITkfps";//IT开发评审
+    private static final String TESTREVIEW_TEMP_CODE = "ITplus_Csps";//测试评审
+    private static final String ONLINEPLAN_TEMP_CODE = "ITplus_Sxjh";//上线计划
+    private static final String PARTINTRODUCE_TEMP_CODE = "ITplus_Hdfb";//灰度发布
+    private static final String ALLSPREAD_TEMP_CODE = "ITplus_Qmtg";//全面推广
+    private static final String PROGRAMREPLAY_TEMP_CODE = "ITplus_ITxmfp";//项目复盘
+    private static final String DELAYONLINE_TEMP_CODE = "ITplus_Yqsx";//延期上线
+    private static final String DEMANDCHANGEADVISE_TEMP_CODE = "ITplus_ITxy10wbg";//IT系统小于10万变更需求申请
+    private static final String DEMANDCHANGEAPPROVE_TEMP_CODE = "ITplus_ITxqbgsq";//IT系统需求变更申请
     private static final String FinishProgram_TEMP_CODE = "ITplus_ITxmlx";
-    private static final String TerminationProgram_TEMP_CODE= "ITplus_Zzxm";//终止项目
+    private static final String TERMINATIONPROGRAM_TEMP_CODE= "ITplus_Zzxm";//终止项目
 
 
     /***
@@ -78,9 +78,9 @@ public class ProgramBpmUtils
         //********************添加业务及技术审批**********begin********************
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
-        String [] businessAccountGuis = paramsMap.get("businessAccount").split(",");
-        String [] developAccountGuis = paramsMap.get("developAccount").split(",");
-        String str = businessAccountGuis[0]+","+developAccountGuis[0];
+        String [] businessAccountGuid = paramsMap.get("businessAccount").split(",");
+        String [] developAccountGuid = paramsMap.get("developAccount").split(",");
+        String str = businessAccountGuid[0]+","+developAccountGuid[0];
         jsonObject.put("ItemValue", str.split(","));//业务人（业务人员）+项目技术负责人（开发人员第一个）
         jsonArray.add(jsonObject);
         //********************添加业务及技术审批**********end********************
@@ -140,9 +140,59 @@ public class ProgramBpmUtils
 
     /***
      * 创建流程_提交Demo
+     * modifiedAccountId:提交人oa账号
+     * modifiedAccountGuid:提交人guid
+     * businessAccount:业务对接人guid
+     * developAccount:项目技术负责人/开发人员guid
+     * businessCenterAccount:业务中心负责人guid
+     * itCenterAccount:IT中心负责人guid
+     * ifZqs:是否周琼硕审批guid
+     *
+     * cOrZ:李川还是傅志华   string 1-李，2-傅
      */
-    public static ApplyCreateResultVo submitDemo(){
-        return new ApplyCreateResultVo();
+    public static ApplyCreateResultVo submitDemo(Map<String, String> paramsMap){
+        JSONArray jsonArray = new JSONArray();
+        //********************添加相关负责人审批**********begin********************
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "approval200AppendActors");
+        String [] businessAccountGuid = paramsMap.get("businessAccount").split(",");
+        String [] developAccountGuid = paramsMap.get("developAccount").split(",");
+        String str = businessAccountGuid[0]+","+developAccountGuid[0];
+        jsonObject.put("ItemValue", str.split(","));//业务人（业务人员）+项目技术负责人（开发人员第一个）
+        jsonArray.add(jsonObject);
+        //********************添加相关负责人审批**********end********************
+
+        //********************集团审批1**********begin********************
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "Originator");
+        jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));
+        jsonArray.add(jsonObject);
+
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "approval300AppendActors");
+        str = paramsMap.get("ifZqs")+","+paramsMap.get("itCenterAccount")+","+paramsMap.get("businessCenterAccount");
+        jsonObject.put("ItemValue", str.split(","));
+        jsonArray.add(jsonObject);
+        //********************集团审批1**********end********************
+
+        //********************集团审批2**********begin********************
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "textCondition");
+        jsonObject.put("ItemValue", ProgramBpmUtil.getApplyApproval2(paramsMap.get("cOrZ")));
+        jsonArray.add(jsonObject);
+        //********************集团审批2**********end********************
+
+        //********************抄送**********begin********************
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "Originator");
+        jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));
+        jsonArray.add(jsonObject);
+        //********************抄送**********end********************
+
+        String para = jsonArray.toString();
+        String result = BpmUtils.startWorkFlow(
+                DEMO_TEMP_CODE,paramsMap.get("modifiedAccountId"),false,para,null);
+        return JSONObject.parseObject(result,ApplyCreateResultVo.class);
     }
 
     /***
