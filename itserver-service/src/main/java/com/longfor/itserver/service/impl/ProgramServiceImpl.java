@@ -17,6 +17,7 @@ import com.longfor.itserver.common.vo.programBpm.common.ApplySubmitResultVo;
 import com.longfor.itserver.common.vo.programBpm.common.FileVo;
 import com.longfor.itserver.entity.*;
 import com.longfor.itserver.esi.bpm.ProgramBpmUtil;
+import com.longfor.itserver.esi.bpm.ProgramBpmUtils;
 import com.longfor.itserver.mapper.*;
 import com.longfor.itserver.service.IProgramEmployeeService;
 import com.longfor.itserver.service.IProgramService;
@@ -964,7 +965,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             Date now = new Date();
 
             //创建流程
-            ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
+            ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtils.submitFinishProgram(paramsMap);
             if(!applyCreateResultVo.isSuccess()){
                 LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
                 throw new RuntimeException("创建流程失败");
