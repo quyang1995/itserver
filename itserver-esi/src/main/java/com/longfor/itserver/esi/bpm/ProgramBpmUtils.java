@@ -12,22 +12,24 @@ import java.util.Map;
  */
 public class ProgramBpmUtils
 {
-    private static final String BRD_TEMP_CODE = "ITplus_ITxmlx";
-    private static final String demo_temp_code = "ITplus_ITxmlx";
+
+    private static final String BRD_TEMP_CODE = "ITplus_ITxmlx";//IT项目立项（提交BRD）
+    private static final String demo_temp_code = "ITplus_Demos";//提交Demo评审
     private static final String Tender_TEMP_CODE = "ITplus_ITxmlx";
     private static final String WinBidding_TEMP_CODE = "ITplus_ITxmlx";
     private static final String ContractSign_TEMP_CODE = "ITplus_ITxmlx";
-    private static final String ProductReview_TEMP_CODE = "ITplus_ITxmlx";
-    private static final String DevelopReview_TEMP_CODE = "ITplus_ITxmlx";
-    private static final String TestReview_TEMP_CODE = "ITplus_ITxmlx";
-    private static final String OnlinePlan_TEMP_CODE = "ITplus_ITxmlx";
-    private static final String PartIntroduce_TEMP_CODE = "ITplus_ITxmlx";
-    private static final String AllSpread_TEMP_CODE = "ITplus_ITxmlx";
-    private static final String ProgramReplay_TEMP_CODE = "ITplus_ITxmlx";
-    private static final String DelayOnline_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String ProductReview_TEMP_CODE = "ITplus_Cpps";//产品评审
+    private static final String DevelopReview_TEMP_CODE = "ITplus_ITkfps";//IT开发评审
+    private static final String TestReview_TEMP_CODE = "ITplus_Csps";//测试评审
+    private static final String OnlinePlan_TEMP_CODE = "ITplus_Sxjh";//上线计划
+    private static final String PartIntroduce_TEMP_CODE = "ITplus_Hdfb";//灰度发布
+    private static final String AllSpread_TEMP_CODE = "ITplus_Qmtg";//全面推广
+    private static final String ProgramReplay_TEMP_CODE = "ITplus_ITxmfp";//项目复盘
+    private static final String DelayOnline_TEMP_CODE = "ITplus_Yqsx";//延期上线
     private static final String DemandChangeAdvise_TEMP_CODE = "ITplus_ITxmlx";
-    private static final String DemandChangeApprove_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String DemandChangeApprove_TEMP_CODE = "ITplus_ITxqbgsq";//IT系统需求变更申请
     private static final String FinishProgram_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String TerminationProgram_TEMP_CODE= "ITplus_Zzxm";//终止项目
 
 
     /***
@@ -58,26 +60,73 @@ public class ProgramBpmUtils
 
     /***
      * 创建流程_提交BRD
-     * submitAccount:提交人oa账号
+     * modifiedAccountId:提交人oa账号
+     * modifiedAccountGuid:提交人guid
      * businessAccount:业务对接人guid
+     * businessFunctionAccount:业务职能人guid
+     * itCenterAccount:IT中心负责人guid
      * developAccount:项目技术负责人/开发人员guid
      * ifZqs:是否周琼硕审批  string 0-否，1-是
      * counterSigners:会签人  string 逗号分隔
-     * cOrZ:李川还是傅志华   string 0-李，1-傅
+     * cOrZ:李川还是傅志华   string 0-李，1-傅   IT部门副总经理
      * ifGj:是否光建总审批   string 0-否，1-是
      */
     public static ApplyCreateResultVo submitBrd(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
-
+        //********************添加业务及技术审批**********begin********************
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("ItemName", "approval302AppendActors");
-        jsonObject.put("ItemValue", paramsMap.get("counterSigners").split(","));
+        jsonObject.put("ItemName", "approval200AppendActors");
+        String str = paramsMap.get("businessAccount")+","+paramsMap.get("developAccount");
+        jsonObject.put("ItemValue", str.split(","));//业务对接人（业务人员）+项目技术负责人（开发人员第一个）
+        jsonArray.add(jsonObject);
+        //********************添加业务及技术审批**********end********************
+
+        //********************集团审批1**********begin********************
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "Originator");
+        jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));
         jsonArray.add(jsonObject);
 
         jsonObject = new JSONObject();
-        jsonObject.put("ItemName", "textCondition");
-        jsonObject.put("ItemValue", ProgramBpmUtil.getApplyApproval2(paramsMap.get("tApproval")));
+        jsonObject.put("ItemName", "approval300AppendActors");
+        //琼朔相关怎么处理??????????
+        str = paramsMap.get("businessAccount")+","+paramsMap.get("itCenterAccount")+","+paramsMap.get("counterSigners");
+        jsonObject.put("ItemValue", str.split(","));
         jsonArray.add(jsonObject);
+        //********************集团审批1**********end********************
+
+        //********************集团审批2**********begin********************
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "textCondition");
+        jsonObject.put("ItemValue", ProgramBpmUtil.getApplyApproval2(paramsMap.get("cOrZ")));
+        jsonArray.add(jsonObject);
+        //********************集团审批2**********end********************
+
+        //********************集团审批3**********begin********************
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "approval302AppendActors");
+        jsonObject.put("ItemValue", paramsMap.get("businessFunctionAccount").split(","));
+        jsonArray.add(jsonObject);
+        //********************集团审批3**********end********************
+
+        //********************集团审批4**********begin********************
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "textCondition");
+        jsonObject.put("ItemValue", ProgramBpmUtil.getIsFirst(paramsMap.get("isFirst")));
+        jsonArray.add(jsonObject);
+
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "approval303AppendActors");
+        jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));
+        jsonArray.add(jsonObject);
+        //********************集团审批4**********end********************
+
+        //********************抄送**********begin********************
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "Originator");
+        jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));
+        jsonArray.add(jsonObject);
+        //********************抄送**********end********************
 
         String para = jsonArray.toString();
         String result = BpmUtils.startWorkFlow(

@@ -28,6 +28,11 @@ public class ProgramBpmUtil
         return null;
     }
 
+    public static String getIsFirst(String isFirst){
+        if(StringUtils.isBlank(isFirst) || isFirst.equals("1"))return ConfigConsts.programBpm.is_first;
+        return null;
+    }
+
     /***
      * 提交立项-创建流程
      * @param paramsMap

@@ -82,5 +82,6 @@ public class ConfigConsts {
         //提交立项-审批节点2
         public static final String apply_approval2_1 = "地产、基础架构、技术管理相关";
         public static final String apply_approval2_2 = "商业、冠寓、数据、养老相关";
+        public static final String is_first = "新产品下的第一个项目";
     }
 }
