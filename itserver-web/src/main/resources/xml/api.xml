@@ -1061,10 +1061,10 @@
             <property name="operationList" type="string" required="false" description="运维人员"/>
             <property name="operateList" type="string" required="false" description="运营人员"/>
 
-            <property name="businessCenterAccount" type="string" required="true" description="业务中心负责人"/>
-            <property name="itCenterAccount" type="string" required="true" description="IT中心负责人guid"/>
-            <property name="businessFunctionAccount" type="string" required="true" description="业务职能人"/>
-            <property name="businessVicePresident" type="string" required="false" description="业务副总裁"/>
+            <property name="businessCenterList" type="string" required="true" description="业务中心负责人"/>
+            <property name="itCenterLeaderList" type="string" required="true" description="IT中心负责人guid"/>
+            <property name="businessFunctionsList" type="string" required="true" description="业务职能人"/>
+            <property name="businessPresidentList" type="string" required="false" description="业务副总裁"/>
 
             <property name="productId" type="string" required="false" description="归属产品"/>
             <property name="productName" type="string" required="false" description="归属产品名称"/>
@@ -1136,7 +1136,13 @@
             <property name="programId" type="string" required="true"/>
             <property name="remark" type="string" required="true"/>
             <property name="fileList" type="string" required="true"/>
-            <!--<property name="counterSigners" type="string" required="false"/>-->
+
+            <property name="businessCenterList" type="string" required="true" description="业务中心负责人"/>
+            <property name="developerList" type="string" required="true" description="开发人员"/>
+            <property name="itCenterLeaderList" type="string" required="true" description="IT中心负责人"/>
+            <property name="businessList" type="string" required="true" description="业务中心人员"/>
+            <property name="tApproval" type="int" required="true" description="1-李，2-傅"/>
+
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
@@ -1200,7 +1206,12 @@
             <property name="onlineDate" type="string" required="true"/>
             <property name="replayDate" type="string" required="false"/>
             <property name="allExtensionDate" type="string" required="false"/>
-            <!--<property name="counterSigners" type="string" required="true"/>-->
+
+            <property name="businessCenterList" type="string" required="true" description="业务中心负责人"/>
+            <property name="developerList" type="string" required="true" description="开发人员"/>
+            <property name="itCenterLeaderList" type="string" required="true" description="IT中心负责人"/>
+            <property name="businessList" type="string" required="true" description="业务中心人员"/>
+
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
