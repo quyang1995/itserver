@@ -26,7 +26,7 @@ public class ProgramBpmUtils
     private static final String AllSpread_TEMP_CODE = "ITplus_Qmtg";//全面推广
     private static final String ProgramReplay_TEMP_CODE = "ITplus_ITxmfp";//项目复盘
     private static final String DelayOnline_TEMP_CODE = "ITplus_Yqsx";//延期上线
-    private static final String DemandChangeAdvise_TEMP_CODE = "ITplus_ITxmlx";
+    private static final String DemandChangeAdvise_TEMP_CODE = "ITplus_ITxy10wbg";//IT系统小于10万变更需求申请
     private static final String DemandChangeApprove_TEMP_CODE = "ITplus_ITxqbgsq";//IT系统需求变更申请
     private static final String FinishProgram_TEMP_CODE = "ITplus_ITxmlx";
     private static final String TerminationProgram_TEMP_CODE= "ITplus_Zzxm";//终止项目
