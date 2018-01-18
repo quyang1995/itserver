@@ -405,7 +405,7 @@ public class ProgramBpmUtils
 
         String para = jsonArray.toString();
         String result = BpmUtils.startWorkFlow(
-                DelayOnline_TEMP_CODE,paramsMap.get("modifiedAccountId"),false,para,null);
+                DELAYONLINE_TEMP_CODE,paramsMap.get("modifiedAccountId"),false,para,null);
         return JSONObject.parseObject(result,ApplyCreateResultVo.class);
     }
 
@@ -449,7 +449,7 @@ public class ProgramBpmUtils
 
         String para = jsonArray.toString();
         String result = BpmUtils.startWorkFlow(
-                DemandChangeAdvise_TEMP_CODE,paramsMap.get("modifiedAccountId"),false,para,null);
+                DEMANDCHANGEADVISE_TEMP_CODE,paramsMap.get("modifiedAccountId"),false,para,null);
         return JSONObject.parseObject(result,ApplyCreateResultVo.class);
     }
 
@@ -512,7 +512,7 @@ public class ProgramBpmUtils
 
         String para = jsonArray.toString();
         String result = BpmUtils.startWorkFlow(
-                DemandChangeApprove_TEMP_CODE,paramsMap.get("modifiedAccountId"),false,para,null);
+                DEMANDCHANGEAPPROVE_TEMP_CODE,paramsMap.get("modifiedAccountId"),false,para,null);
         return JSONObject.parseObject(result,ApplyCreateResultVo.class);
     }
 
@@ -586,7 +586,7 @@ public class ProgramBpmUtils
 
         String para = jsonArray.toString();
         String result = BpmUtils.startWorkFlow(
-                TerminationProgram_TEMP_CODE,paramsMap.get("modifiedAccountId"),false,para,null);
+                TERMINATIONPROGRAM_TEMP_CODE,paramsMap.get("modifiedAccountId"),false,para,null);
         return JSONObject.parseObject(result,ApplyCreateResultVo.class);
     }
 
