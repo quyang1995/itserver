@@ -6,7 +6,6 @@ import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.*;
 import com.longfor.itserver.common.util.DateUtil;
-import com.longfor.itserver.common.util.HttpUtil;
 import com.longfor.itserver.common.util.StringUtil;
 import com.longfor.itserver.common.vo.MoApprove.MoApproveListVo;
 import com.longfor.itserver.common.vo.MoApprove.MoApproveVo;
@@ -16,6 +15,7 @@ import com.longfor.itserver.common.vo.programBpm.common.ApplyCreateResultVo;
 import com.longfor.itserver.common.vo.programBpm.common.ApplySubmitResultVo;
 import com.longfor.itserver.common.vo.programBpm.common.FileVo;
 import com.longfor.itserver.entity.*;
+import com.longfor.itserver.esi.IEdsService;
 import com.longfor.itserver.esi.bpm.ProgramBpmUtil;
 import com.longfor.itserver.esi.bpm.ProgramBpmUtils;
 import com.longfor.itserver.mapper.*;
@@ -59,6 +59,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
     @Autowired
     private ADSHelper adsHelper;
+
+    @Autowired
+    private IEdsService edsService;
 
     @Autowired
     private ProgramEmployeeChangeLogMapper programEmployeeChangeLogMapper;
@@ -1047,17 +1050,49 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         }
     }
 
+    /**
+     * 创建流程_提交BRD参数处理
+     * @param paramsMap
+     * @return
+     */
+    private Map submitBrdMap(Map paramsMap){
+        Map map = new HashMap();
+        map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
+        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+        map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
+        map.put("businessFunctionAccount",paramsMap.get("businessFunctionAccount"));//业务职能人guid
+        map.put("itCenterAccount",paramsMap.get("itCenterAccount"));//IT中心负责人guid
+        map.put("businessCenterAccount",paramsMap.get("businessCenterAccount"));//业务中心负责人
+        map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
+        if("1".equals(paramsMap.get("reportPoor"))){
+            map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+        }
+        map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
+        map.put("cOrZ",paramsMap.get("tApproval"));//string 1-李，2-傅   IT部门副总经理
+        if(paramsMap.get("productId")!=null){
+            Program program = new Program();
+            program.setProductId(Long.parseLong(paramsMap.get("productId").toString()));
+            int i = programMapper.selectCount(program);
+            map.put("isFirst",String.valueOf(i));//是否产品下第一个项目
+        }
+        return map;
+    }
+
     @Override
     @Transactional(value="transactionManager")
     public void submit(Map<String, String> paramsMap,Program program,int programStatus) {
         try{
             Date now = new Date();
-            //创建流程
-            ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
-            if(!applyCreateResultVo.isSuccess()){
-                LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                throw new RuntimeException("创建流程失败");
+            ApplyCreateResultVo applyCreateResultVo = new ApplyCreateResultVo();
+            if(programStatus==ProgramStatusNewEnum.LX.getCode()) {
+                //立项创建流程
+                applyCreateResultVo = ProgramBpmUtils.submitBrd(submitBrdMap(paramsMap));
+                if(!applyCreateResultVo.isSuccess()){
+                    LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+                    throw new RuntimeException("创建流程失败");
+                }
             }
+
 
             int approvalStatus = ProgramApprovalStatusEnum.SHZ.getCode();
 
@@ -1130,8 +1165,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             this.dealFileList(paramsMap.get("fileList"),program.getId(),programStatus,programApprovalSnapshot.getId());
 
             //激活流程
-            ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
-                    paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
+            ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtils.approvePass(
+                    paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID(),null);
             if(pplySubmitResultVo.getIsSuccess().equals("false")){
                 LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
                 throw new RuntimeException("激活流程失败");
@@ -1157,29 +1192,6 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         ProgramApprovalSnapshot shot = programApprovalSnapshotMapper.selectByPrimaryKey(id);
         this.setProgramApprovalSnapshotInfo(shot,shot);
         return shot;
-    }
-
-    /**
-     * 根据员工oa账号获取员工guid
-     * 多个员工，以‘，’分割，返回guid也以‘，’分割
-     * @param url
-     * @param token
-     * @param param
-     * @return
-     */
-    private String getEmpGuidByPfAcc(String url,String token,String param){
-        JSONObject json = HttpUtil.post(url,token,param);
-        List<Map<String,Object>> jsonList = JSON.parseObject(JSON.toJSONString(json.get("list")),List.class);
-        if (jsonList == null || jsonList.isEmpty()) {
-            return null;
-        }
-        StringBuffer sb = new StringBuffer();
-        for (Map<String,Object> model:jsonList) {
-            sb.append(model.get("psGuid"));
-            sb.append(",");
-        }
-        sb.deleteCharAt(sb.length()-1);
-        return sb.toString();
     }
 
     /*设置快照文件信息和项目经理信息*/
