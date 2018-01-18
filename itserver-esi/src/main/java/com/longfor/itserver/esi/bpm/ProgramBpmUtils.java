@@ -255,8 +255,8 @@ public class ProgramBpmUtils
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval300AppendActors");
         str = paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList");
-        if("2".equals(paramsMap.get("reportPoor"))){
-            str += ",zhouqiongshuo";
+        if("1".equals(paramsMap.get("reportPoor"))){
+            str += "," + EdsServiceImpl.getEmpGuidByPfAcc("zhouqiongshuo");
         }
         jsonObject.put("ItemValue", str.split(","));
         jsonArray.add(jsonObject);
