@@ -1090,7 +1090,7 @@
             <property name="suggestion" type="string" required="false"/>
             <property name="programId" type="string" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
-            <property name="modifiedName" type="string" required="true"/>
+            <property name="modifiedName" type="string" required="false"/>
             <property name="workItemId" type="string" required="true"/>
             <property name="instanceId" type="string" required="true"/>
         </request>

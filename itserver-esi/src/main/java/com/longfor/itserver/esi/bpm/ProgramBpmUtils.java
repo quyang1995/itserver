@@ -286,28 +286,29 @@ public class ProgramBpmUtils
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval300AppendActors");
         String [] productManagerList = paramsMap.get("productManagerList").split(",");
-        jsonObject.put("ItemValue", productManagerList[0]);//业务人（业务人员）
+        String [] developAccountList = paramsMap.get("developAccount").split(",");
+        jsonObject.put("ItemValue", productManagerList[0]+","+ developAccountList[0]+","+paramsMap.get("counterSigners"));//产品经理+项目技术负责人+会签人
         jsonArray.add(jsonObject);
         //********************添加技术负责人审批**********end********************
 
         //********************添加测试测试人审批**********begin********************
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval301AppendActors");
-        String [] developAccountList = paramsMap.get("developAccount").split(",");
-        jsonObject.put("ItemValue", developAccountList[0]+","+paramsMap.get("counterSigners"));//项目技术负责人+会签人
+        String [] testingStr = paramsMap.get("testingList").split(",");
+        jsonObject.put("ItemValue",testingStr[0]);//项目测试负责人
         jsonArray.add(jsonObject);
         //********************添加测试负责人审批**********end********************
 
         //********************审批**********begin********************
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval302AppendActors");
-        jsonObject.put("ItemValue", paramsMap.get("developAccount"));//项目技术负责人
+        jsonObject.put("ItemValue", "7c7386d4-d3cd-47e5-98bb-dea04951be42");//基础架构中心--李峻岩GUID
         jsonArray.add(jsonObject);
         //********************审批**********end********************
 
         String para = jsonArray.toString();
         String result = BpmUtils.startWorkFlow(
-                PRODUCTREVIEW_TEMP_CODE,paramsMap.get("modifiedAccountId"),false,para,null);
+                DEVELOPREVIEW_TEMP_CODE,paramsMap.get("modifiedAccountId"),false,para,null);
         return JSONObject.parseObject(result,ApplyCreateResultVo.class);
     }
 
