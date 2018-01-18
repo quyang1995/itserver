@@ -803,11 +803,17 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             Date now = new Date();
             //延期原因，1：需求变更，2：其他原因,需走审批
             String causeDelay = paramsMap.get("causeDelay");
-
+            //人员转换
+            paramsMap.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+            paramsMap.put("businessList",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList")));//业务人员转成GUID
+            paramsMap.put("developerList",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList")));//开发人员转成GUID
+            if("1".equals(paramsMap.get("reportPoor"))){
+                paramsMap.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+            }
             //创建流程
             ApplyCreateResultVo applyCreateResultVo = new ApplyCreateResultVo();
             if ("2".equals(causeDelay)) {
-                applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
+                applyCreateResultVo = ProgramBpmUtils.submitDelayOnline(paramsMap);
                 if (!applyCreateResultVo.isSuccess()) {
                     LOG.error("创建流程失败:" + JSON.toJSONString(paramsMap) + "-----------------------");
                     throw new RuntimeException("创建流程失败");
@@ -861,8 +867,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             if ("2".equals(causeDelay)) {
                 //激活流程
-                ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
-                        paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
+                ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtils.approvePass(
+                        paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID(),null);
                 if(pplySubmitResultVo.getIsSuccess().equals("false")){
                     LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
                     throw new RuntimeException("激活流程失败");
@@ -885,17 +891,34 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             Date now = new Date();
             BigDecimal  overallCost = new BigDecimal(paramsMap.get("overallCost"));
             BigDecimal ten = new BigDecimal(100000);
+            //人员转换
+            paramsMap.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+            paramsMap.put("businessList",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList")));//业务人员转成GUID
+            paramsMap.put("developerList",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList")));//开发人员转成GUID
+            if("1".equals(paramsMap.get("reportPoor"))){
+                paramsMap.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+            }
+            if("1".equals(paramsMap.get("tApproval"))){
+                paramsMap.put("lorf",edsService.getEmpGuidByPfAcc("lichuan"));//lorf:李川    string 1-李，2-傅
+            }else if("2".equals(paramsMap.get("tApproval"))){
+                paramsMap.put("lorf",edsService.getEmpGuidByPfAcc("fuzhihua"));//lorf:傅志华    string 1-李，2-傅
+            }
 
             ApplyCreateResultVo applyCreateResultVo = new ApplyCreateResultVo();
             if (overallCost.compareTo(ten) != -1) {//大于10万走审批
                 //创建流程
-                applyCreateResultVo = ProgramBpmUtil.createApplyWorkFlow(paramsMap);
+                applyCreateResultVo = ProgramBpmUtils.submitDemandChangeApprove(paramsMap);
                 if (!applyCreateResultVo.isSuccess()) {
                     LOG.error("创建流程失败:" + JSON.toJSONString(paramsMap) + "-----------------------");
                     throw new RuntimeException("创建流程失败");
                 }
             } else {//小于10万走通知
-
+                //创建流程
+                applyCreateResultVo = ProgramBpmUtils.submitDemandChangeAdvise(paramsMap);
+                if (!applyCreateResultVo.isSuccess()) {
+                    LOG.error("创建流程失败:" + JSON.toJSONString(paramsMap) + "-----------------------");
+                    throw new RuntimeException("创建流程失败");
+                }
             }
 
             //program表
@@ -943,8 +966,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             if (overallCost.compareTo(ten) != -1) {
                 //激活流程
-                ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
-                        paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
+                ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtils.approvePass(
+                        paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID(),null);
                 if(pplySubmitResultVo.getIsSuccess().equals("false")){
                     LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
                     throw new RuntimeException("激活流程失败");
@@ -967,6 +990,12 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         try{
             Date now = new Date();
 
+            paramsMap.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+            paramsMap.put("businessList",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList")));//业务人员转成GUID
+            paramsMap.put("developerList",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList")));//开发人员转成GUID
+            if("1".equals(paramsMap.get("reportPoor"))){
+                paramsMap.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+            }
             //创建流程
             ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtils.submitFinishProgram(paramsMap);
             if(!applyCreateResultVo.isSuccess()){
@@ -994,8 +1023,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
             //激活流程
-            ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.applySumbmitWorkItem(
-                    paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID());
+            ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtils.approvePass(
+                    paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID(),null);
             if(pplySubmitResultVo.getIsSuccess().equals("false")){
                 LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
                 throw new RuntimeException("激活流程失败");

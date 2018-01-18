@@ -217,35 +217,22 @@ public class ProgramBpmUtils
 
     /***
      * 创建流程_提交延期上线
+     * modifiedAccountId:提交人oa账号
+     * modifiedAccountGuid:提交人guid
+     * businessList:业务对接人guid
+     * developerList:项目技术负责人/开发人员guid
+     * businessFunctionsList:业务职能人guid
+     * businessCenterList:业务中心负责人guid
+     * itCenterLeaderList:IT中心负责人guid
+     * ifZqs:是否周琼硕审批guid
+     * tApproval:李川还是傅志华   string 1-李，2-傅   IT部门副总经理
      */
-    public static ApplyCreateResultVo submitDelayOnline(){
-        return new ApplyCreateResultVo();
-    }
-
-    /***
-     * 创建流程_提交需求变更(小于10万走通知)
-     */
-    public static ApplyCreateResultVo submitDemandChangeAdvise(){
-        return new ApplyCreateResultVo();
-    }
-
-    /***
-     * 创建流程_提交需求变更(大于等于10万走审批)
-     */
-    public static ApplyCreateResultVo submitDemandChangeApprove(){
-        return new ApplyCreateResultVo();
-    }
-
-    /***
-     * 创建流程_提交终止项目
-     */
-    public static ApplyCreateResultVo submitFinishProgram(Map<String, String> paramsMap){
-
+    public static ApplyCreateResultVo submitDelayOnline(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
         //********************添加业务人员及项目技术负责人**********begin********************
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
-        String str = paramsMap.get("businessList")+","+ paramsMap.get("projectLeaderList");
+        String str = paramsMap.get("businessList")+","+ paramsMap.get("developerList");
         jsonObject.put("ItemValue", str.split(","));//业务对接人（业务人员）+项目技术负责人（开发人员第一个）
         jsonArray.add(jsonObject);
         //********************添加业务人员及项目技术负责人**********end********************
@@ -253,14 +240,14 @@ public class ProgramBpmUtils
         //********************集团审批1**********begin********************
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "Originator");
-        jsonObject.put("ItemValue", paramsMap.get("modifiedAccountId"));
+        jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));
         jsonArray.add(jsonObject);
 
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval300AppendActors");
         str = paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList");
         if("1".equals(paramsMap.get("reportPoor"))){
-            str += "," + EdsServiceImpl.getEmpGuidByPfAcc("zhouqiongshuo");
+            str += "," + paramsMap.get("ifZqs");
         }
         jsonObject.put("ItemValue", str.split(","));
         jsonArray.add(jsonObject);
@@ -269,26 +256,193 @@ public class ProgramBpmUtils
         //********************集团审批2**********begin********************
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "textCondition");
-        jsonObject.put("ItemValue", ProgramBpmUtil.getApplyApproval2(paramsMap.get("cOrZ")));
+        jsonObject.put("ItemValue", ProgramBpmUtil.getApplyApproval2(paramsMap.get("tApproval")));
+        jsonArray.add(jsonObject);
+        //业务职能负责人审批
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "approval301AppendActors");
+        jsonObject.put("ItemValue", paramsMap.get("businessFunctionsList").split(","));
         jsonArray.add(jsonObject);
         //********************集团审批2**********end********************
 
-        //********************集团审批3**********begin********************
+        //********************抄送**********begin********************
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "Originator");
+        jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));
+        jsonArray.add(jsonObject);
+        //********************抄送**********end********************
+
+        String para = jsonArray.toString();
+        String result = BpmUtils.startWorkFlow(
+                DelayOnline_TEMP_CODE,paramsMap.get("modifiedAccountId"),false,para,null);
+        return JSONObject.parseObject(result,ApplyCreateResultVo.class);
+    }
+
+    /***
+     * 创建流程_提交需求变更(小于10万走通知)
+     * modifiedAccountId:提交人oa账号
+     * modifiedAccountGuid:提交人guid
+     * businessList:业务对接人guid
+     * developerList:项目技术负责人/开发人员guid
+     * businessFunctionsList:业务职能人guid
+     * businessCenterList:业务中心负责人guid
+     * itCenterLeaderList:IT中心负责人guid
+     * ifZqs:是否周琼硕审批guid
+     * tApproval:李川还是傅志华   string 1-李，2-傅   IT部门副总经理
+     */
+    public static ApplyCreateResultVo submitDemandChangeAdvise(Map<String, String> paramsMap){
+        JSONArray jsonArray = new JSONArray();
+
+        //********************集团通知**********begin********************
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "Originator");
+        jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));
+        jsonArray.add(jsonObject);
+
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "approval300AppendActors");
+        String str = paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList")+ "," + paramsMap.get("businessFunctionsList") +","+paramsMap.get("businessList")+","+ paramsMap.get("developerList")+","+ paramsMap.get("lorf");
+        if("1".equals(paramsMap.get("reportPoor"))){
+            str += "," + paramsMap.get("ifZqs");
+        }
+        jsonObject.put("ItemValue", str.split(","));
+        jsonArray.add(jsonObject);
+        //********************集团通知**********end********************
+
+        //********************抄送**********begin********************
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "Originator");
+        jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));
+        jsonArray.add(jsonObject);
+        //********************抄送**********end********************
+
+        String para = jsonArray.toString();
+        String result = BpmUtils.startWorkFlow(
+                DemandChangeAdvise_TEMP_CODE,paramsMap.get("modifiedAccountId"),false,para,null);
+        return JSONObject.parseObject(result,ApplyCreateResultVo.class);
+    }
+
+    /***
+     * 创建流程_提交需求变更(大于等于10万走审批)
+     * modifiedAccountId:提交人oa账号
+     * modifiedAccountGuid:提交人guid
+     * businessList:业务对接人guid
+     * developerList:项目技术负责人/开发人员guid
+     * businessFunctionsList:业务职能人guid
+     * businessCenterList:业务中心负责人guid
+     * itCenterLeaderList:IT中心负责人guid
+     * ifZqs:是否周琼硕审批guid
+     * tApproval:李川还是傅志华   string 1-李，2-傅   IT部门副总经理
+     */
+    public static ApplyCreateResultVo submitDemandChangeApprove(Map<String, String> paramsMap){
+        JSONArray jsonArray = new JSONArray();
+        //********************添加业务人员及项目技术负责人**********begin********************
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "approval200AppendActors");
+        String str = paramsMap.get("businessList")+","+ paramsMap.get("developerList");
+        jsonObject.put("ItemValue", str.split(","));//业务对接人（业务人员）+项目技术负责人（开发人员第一个）
+        jsonArray.add(jsonObject);
+        //********************添加业务人员及项目技术负责人**********end********************
+
+        //********************集团审批1**********begin********************
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "Originator");
+        jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));
+        jsonArray.add(jsonObject);
+
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "approval300AppendActors");
+        str = paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList");
+        if("1".equals(paramsMap.get("reportPoor"))){
+            str += "," + paramsMap.get("ifZqs");
+        }
+        jsonObject.put("ItemValue", str.split(","));
+        jsonArray.add(jsonObject);
+        //********************集团审批1**********end********************
+
+        //********************集团审批2**********begin********************
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "textCondition");
+        jsonObject.put("ItemValue", ProgramBpmUtil.getApplyApproval2(paramsMap.get("tApproval")));
+        jsonArray.add(jsonObject);
+        //业务职能负责人审批
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "approval301AppendActors");
+        jsonObject.put("ItemValue", paramsMap.get("businessFunctionsList").split(","));
+        jsonArray.add(jsonObject);
+        //********************集团审批2**********end********************
+
+        //********************抄送**********begin********************
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "Originator");
+        jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));
+        jsonArray.add(jsonObject);
+        //********************抄送**********end********************
+
+        String para = jsonArray.toString();
+        String result = BpmUtils.startWorkFlow(
+                DemandChangeApprove_TEMP_CODE,paramsMap.get("modifiedAccountId"),false,para,null);
+        return JSONObject.parseObject(result,ApplyCreateResultVo.class);
+    }
+
+    /***
+     * 创建流程_提交终止项目
+     * modifiedAccountId:提交人oa账号
+     * modifiedAccountGuid:提交人guid
+     * businessList:业务对接人guid
+     * developerList:项目技术负责人/开发人员guid
+     * businessFunctionsList:业务职能人guid
+     * businessCenterList:业务中心负责人guid
+     * itCenterLeaderList:IT中心负责人guid
+     * businessPresidentList:业务副总裁guid
+     * ifZqs:是否周琼硕审批guid
+     * tApproval:李川还是傅志华   string 1-李，2-傅   IT部门副总经理
+     */
+    public static ApplyCreateResultVo submitFinishProgram(Map<String, String> paramsMap){
+
+        JSONArray jsonArray = new JSONArray();
+        //********************添加业务人员及项目技术负责人**********begin********************
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "approval200AppendActors");
+        String str = paramsMap.get("businessList")+","+ paramsMap.get("developerList");
+        jsonObject.put("ItemValue", str.split(","));//业务对接人（业务人员）+项目技术负责人（开发人员第一个）
+        jsonArray.add(jsonObject);
+        //********************添加业务人员及项目技术负责人**********end********************
+
+        //********************集团审批1**********begin********************
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "Originator");
+        jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));
+        jsonArray.add(jsonObject);
+
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "approval300AppendActors");
+        str = paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList");
+        if("1".equals(paramsMap.get("reportPoor"))){
+            str += "," + paramsMap.get("ifZqs");
+        }
+        jsonObject.put("ItemValue", str.split(","));
+        jsonArray.add(jsonObject);
+        //********************集团审批1**********end********************
+
+        //********************集团审批2**********begin********************
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "textCondition");
+        jsonObject.put("ItemValue", ProgramBpmUtil.getApplyApproval2(paramsMap.get("tApproval")));
+        jsonArray.add(jsonObject);
+        //********************集团审批2**********end********************
+
+        //********************业务职能负责人审批**********begin********************
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval302AppendActors");
-        jsonObject.put("ItemValue", paramsMap.get("businessFunctionAccount").split(","));
+        jsonObject.put("ItemValue", paramsMap.get("businessFunctionsList").split(","));
         jsonArray.add(jsonObject);
-        //********************集团审批3**********end********************
+        //********************业务职能负责人审批**********end********************
 
         //********************集团审批4**********begin********************
         jsonObject = new JSONObject();
-        jsonObject.put("ItemName", "textCondition");
-        jsonObject.put("ItemValue", ProgramBpmUtil.getIsFirst(paramsMap.get("isFirst")));
-        jsonArray.add(jsonObject);
-
-        jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval303AppendActors");
-        jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));
+        jsonObject.put("ItemValue", paramsMap.get("businessPresidentList"));
         jsonArray.add(jsonObject);
         //********************集团审批4**********end********************
 

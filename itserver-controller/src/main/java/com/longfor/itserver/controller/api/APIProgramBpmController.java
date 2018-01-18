@@ -423,6 +423,10 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
+			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()) == null
+					|| edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString())==null){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
+			}
             getProgramService().stopProgram(paramsMap,program);
         }catch (Exception e){
             e.printStackTrace();
