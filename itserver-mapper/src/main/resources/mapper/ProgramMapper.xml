@@ -236,12 +236,12 @@
     </select>
 
     <select id="yearCost" resultType="map">
+        select pc.type,pc.descr,pc.total,a.overAllCost from  program_count pc LEFT JOIN (
         select
-        analyzing_conditions as analyzingConditions,sum(overall_cost) as overAllCost,SUM(bid_overall_cost) as bidOverAllCost
-        from program
-        where
+        analyzing_conditions as analyzingConditions,sum(overall_cost) as overAllCost
+        from program where
         (program_status=110 and approval_status=110 or program_status!=100 and program_status!=110)
         and YEAR(create_time)=YEAR(NOW())
-        GROUP BY analyzing_conditions
+        GROUP BY analyzing_conditions) a on pc.type=a.analyzingConditions
     </select>
 </mapper>
