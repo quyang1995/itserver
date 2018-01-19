@@ -289,7 +289,8 @@ public class ProgramBpmUtils
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] productManagerList = paramsMap.get("productManagerList").split(",");
-        jsonObject.put("ItemValue", productManagerList[0]+","+paramsMap.get("ifZqs"));//产品经理 + 周琼硕审批guid
+        String str = productManagerList[0]+","+paramsMap.get("ifZqs");
+        jsonObject.put("ItemValue", str.split(","));//产品经理 + 周琼硕审批guid
         jsonArray.add(jsonObject);
         //********************添加产品经理审批**********end********************
 
@@ -297,7 +298,8 @@ public class ProgramBpmUtils
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval300AppendActors");
         String [] developAccountList = paramsMap.get("developAccount").split(",");
-        jsonObject.put("ItemValue",developAccountList[0]+","+paramsMap.get("counterSigners"));//项目技术负责人+会签人
+        str = developAccountList[0]+","+paramsMap.get("counterSigners");
+        jsonObject.put("ItemValue",str.split(","));//项目技术负责人+会签人
         jsonArray.add(jsonObject);
         //********************添加技术负责人审批**********end********************
 
@@ -310,10 +312,10 @@ public class ProgramBpmUtils
         //********************添加测试负责人审批**********end********************
 
         //********************审批**********begin********************
-        jsonObject = new JSONObject();
-        jsonObject.put("ItemName", "approval302AppendActors");
-        jsonObject.put("ItemValue", "7c7386d4-d3cd-47e5-98bb-dea04951be42");//基础架构中心--李峻岩GUID
-        jsonArray.add(jsonObject);
+//        jsonObject = new JSONObject();
+//        jsonObject.put("ItemName", "approval302AppendActors");
+//        jsonObject.put("ItemValue", "7c7386d4-d3cd-47e5-98bb-dea04951be42");//基础架构中心--李峻岩GUID
+//        jsonArray.add(jsonObject);
         //********************审批**********end********************
 
         String para = jsonArray.toString();
