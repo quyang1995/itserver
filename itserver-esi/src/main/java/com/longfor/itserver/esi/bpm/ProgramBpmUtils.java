@@ -364,7 +364,9 @@ public class ProgramBpmUtils
         //********************添加业务人员及项目技术负责人**********begin********************
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
-        String str = paramsMap.get("businessList")+","+ paramsMap.get("developerList");
+        String [] businessAccountGuid = paramsMap.get("businessList").split(",");
+        String [] developAccountGuid = paramsMap.get("developerList").split(",");
+        String str = businessAccountGuid[0]+","+developAccountGuid[0];
         jsonObject.put("ItemValue", str.split(","));//业务对接人（业务人员）+项目技术负责人（开发人员第一个）
         jsonArray.add(jsonObject);
         //********************添加业务人员及项目技术负责人**********end********************
@@ -390,11 +392,6 @@ public class ProgramBpmUtils
         jsonObject.put("ItemName", "textCondition");
         jsonObject.put("ItemValue", ProgramBpmUtil.getApplyApproval2(paramsMap.get("tApproval")));
         jsonArray.add(jsonObject);
-        //业务职能负责人审批
-        jsonObject = new JSONObject();
-        jsonObject.put("ItemName", "approval301AppendActors");
-        jsonObject.put("ItemValue", paramsMap.get("businessFunctionsList").split(","));
-        jsonArray.add(jsonObject);
         //********************集团审批2**********end********************
 
         //********************抄送**********begin********************
@@ -416,7 +413,6 @@ public class ProgramBpmUtils
      * modifiedAccountGuid:提交人guid
      * businessList:业务对接人guid
      * developerList:项目技术负责人/开发人员guid
-     * businessFunctionsList:业务职能人guid
      * businessCenterList:业务中心负责人guid
      * itCenterLeaderList:IT中心负责人guid
      * ifZqs:是否周琼硕审批guid
@@ -433,7 +429,9 @@ public class ProgramBpmUtils
 
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval300AppendActors");
-        String str = paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList")+ "," + paramsMap.get("businessFunctionsList") +","+paramsMap.get("businessList")+","+ paramsMap.get("developerList")+","+ paramsMap.get("lorf");
+        String [] businessAccountGuid = paramsMap.get("businessList").split(",");
+        String [] developAccountGuid = paramsMap.get("developerList").split(",");
+        String str = paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList")+ "," + paramsMap.get("businessFunctionsList") +","+ businessAccountGuid[0]+","+ developAccountGuid[0]+","+ paramsMap.get("lorf");
         if("1".equals(paramsMap.get("reportPoor"))){
             str += "," + paramsMap.get("ifZqs");
         }
@@ -471,7 +469,9 @@ public class ProgramBpmUtils
         //********************添加业务人员及项目技术负责人**********begin********************
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
-        String str = paramsMap.get("businessList")+","+ paramsMap.get("developerList");
+        String [] businessAccountGuid = paramsMap.get("businessList").split(",");
+        String [] developAccountGuid = paramsMap.get("developerList").split(",");
+        String str = businessAccountGuid[0]+","+developAccountGuid[0];
         jsonObject.put("ItemValue", str.split(","));//业务对接人（业务人员）+项目技术负责人（开发人员第一个）
         jsonArray.add(jsonObject);
         //********************添加业务人员及项目技术负责人**********end********************
@@ -536,7 +536,9 @@ public class ProgramBpmUtils
         //********************添加业务人员及项目技术负责人**********begin********************
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
-        String str = paramsMap.get("businessList")+","+ paramsMap.get("developerList");
+        String [] businessAccountGuid = paramsMap.get("businessList").split(",");
+        String [] developAccountGuid = paramsMap.get("developerList").split(",");
+        String str = businessAccountGuid[0]+","+developAccountGuid[0];
         jsonObject.put("ItemValue", str.split(","));//业务对接人（业务人员）+项目技术负责人（开发人员第一个）
         jsonArray.add(jsonObject);
         //********************添加业务人员及项目技术负责人**********end********************
