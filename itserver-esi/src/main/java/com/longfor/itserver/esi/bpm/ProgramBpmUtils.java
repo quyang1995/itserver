@@ -284,12 +284,20 @@ public class ProgramBpmUtils
      */
     public static ApplyCreateResultVo submitDevelopReview(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
-        //********************添加技术负责人审批**********begin********************
+
+        //********************添加产品经理审批**********begin********************
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("ItemName", "approval300AppendActors");
+        jsonObject.put("ItemName", "approval200AppendActors");
         String [] productManagerList = paramsMap.get("productManagerList").split(",");
+        jsonObject.put("ItemValue", productManagerList[0]+","+paramsMap.get("ifZqs"));//产品经理 + 周琼硕审批guid
+        jsonArray.add(jsonObject);
+        //********************添加产品经理审批**********end********************
+
+        //********************添加技术负责人审批**********begin********************
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "approval300AppendActors");
         String [] developAccountList = paramsMap.get("developAccount").split(",");
-        jsonObject.put("ItemValue", productManagerList[0]+","+ developAccountList[0]+","+paramsMap.get("counterSigners"));//产品经理+项目技术负责人+会签人
+        jsonObject.put("ItemValue",developAccountList[0]+","+paramsMap.get("counterSigners"));//产品经理+项目技术负责人+会签人
         jsonArray.add(jsonObject);
         //********************添加技术负责人审批**********end********************
 
