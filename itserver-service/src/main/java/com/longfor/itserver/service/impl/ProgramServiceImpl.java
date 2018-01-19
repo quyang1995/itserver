@@ -949,6 +949,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                 programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
                 programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.BGSHZ.getCode());
             } else {
+                programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
                 programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
             }
 
@@ -971,7 +972,13 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                     throw new RuntimeException("激活流程失败");
                 }
             } else {//小于10万走通知
-
+                //激活流程
+                ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtils.approvePass(
+                        paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID(),null);
+                if(pplySubmitResultVo.getIsSuccess().equals("false")){
+                    LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+                    throw new RuntimeException("激活流程失败");
+                }
             }
         }catch (Exception e){
             e.printStackTrace();

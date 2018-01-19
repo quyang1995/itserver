@@ -648,14 +648,21 @@ public class ProgramBpmUtils
     public static ApplyCreateResultVo submitDemandChangeAdvise(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
 
-        //********************集团通知**********begin********************
+        //********************集团审批**********begin********************
         JSONObject jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "Originator");
+        jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));
+        jsonArray.add(jsonObject);
+        //********************集团审批**********end********************
+
+        //********************抄送**********begin********************
+        jsonObject = new JSONObject();
         jsonObject.put("ItemName", "Originator");
         jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));
         jsonArray.add(jsonObject);
 
         jsonObject = new JSONObject();
-        jsonObject.put("ItemName", "approval300AppendActors");
+        jsonObject.put("ItemName", "read600AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessList").split(",");
         String [] developAccountGuid = paramsMap.get("developerList").split(",");
         String str = paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList")+ "," + paramsMap.get("businessFunctionsList") +","+ businessAccountGuid[0]+","+ developAccountGuid[0]+","+ paramsMap.get("lorf");
@@ -663,13 +670,6 @@ public class ProgramBpmUtils
             str += "," + paramsMap.get("ifZqs");
         }
         jsonObject.put("ItemValue", str.split(","));
-        jsonArray.add(jsonObject);
-        //********************集团通知**********end********************
-
-        //********************抄送**********begin********************
-        jsonObject = new JSONObject();
-        jsonObject.put("ItemName", "Originator");
-        jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));
         jsonArray.add(jsonObject);
         //********************抄送**********end********************
 
