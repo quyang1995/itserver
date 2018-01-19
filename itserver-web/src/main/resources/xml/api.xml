@@ -1229,7 +1229,12 @@
             <property name="programId" type="string" required="true"/>
             <property name="remark" type="string" required="true"/>
             <property name="fileList" type="string" required="true"/>
+
+            <property name="productManagerList" type="string" required="true" description="产品经理"/>
+            <property name="developerList" type="string" required="true" description="开发人员"/>
+            <property name="testingList" type="string" required="true" description="测试人员"/>
             <property name="counterSigners" type="string" required="false"/>
+
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
@@ -1247,7 +1252,11 @@
             <property name="programId" type="string" required="true"/>
             <property name="remark" type="string" required="true"/>
             <property name="fileList" type="string" required="true"/>
-            <!--<property name="counterSigners" type="string" required="true"/>-->
+
+            <property name="productManagerList" type="string" required="true" description="产品经理"/>
+            <property name="developerList" type="string" required="true" description="开发人员"/>
+            <property name="testingList" type="string" required="true" description="测试人员"/>
+
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
@@ -1265,10 +1274,18 @@
             <property name="programId" type="string" required="true"/>
             <property name="remark" type="string" required="true"/>
             <property name="fileList" type="string" required="true"/>
-            <!--<property name="counterSigners" type="string" required="true"/>-->
+
+            <property name="businessList" type="string" required="true" description="业务人员"/>
+            <property name="businessFunctionsList" type="string" required="true" description="业务职能人"/>
+            <property name="itCenterLeaderList" type="string" required="true" description="IT中心负责人guid"/>
+            <property name="businessCenterList" type="string" required="true" description="业务中心负责人"/>
+            <property name="developerList" type="string" required="true" description="开发人员"/>
+            <property name="businessPresidentList" type="string" required="false" description="业务副总裁"/>
+
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
+            <property name="tApproval" type="int" required="false"/>
             <property name="reportPoor" type="int" required="false"/>
         </request>
     </item>
@@ -1283,7 +1300,12 @@
             <property name="programId" type="string" required="true"/>
             <property name="remark" type="string" required="true"/>
             <property name="fileList" type="string" required="true"/>
-            <!--<property name="counterSigners" type="string" required="true"/>-->
+
+            <property name="businessList" type="string" required="true" description="业务人员"/>
+            <property name="itCenterLeaderList" type="string" required="true" description="IT中心负责人guid"/>
+            <property name="businessCenterList" type="string" required="true" description="业务中心负责人"/>
+            <property name="developerList" type="string" required="true" description="开发人员"/>
+
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
@@ -1301,7 +1323,12 @@
             <property name="programId" type="string" required="true"/>
             <property name="remark" type="string" required="true"/>
             <property name="fileList" type="string" required="true"/>
-            <!--<property name="counterSigners" type="string" required="true"/>-->
+
+            <property name="businessList" type="string" required="true" description="业务人员"/>
+            <property name="itCenterLeaderList" type="string" required="true" description="IT中心负责人guid"/>
+            <property name="businessCenterList" type="string" required="true" description="业务中心负责人"/>
+            <property name="developerList" type="string" required="true" description="开发人员"/>
+
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
@@ -1319,7 +1346,7 @@
             <property name="programId" type="string" required="true"/>
             <property name="remark" type="string" required="true"/>
             <property name="fileList" type="string" required="true"/>
-            <!--<property name="counterSigners" type="string" required="true"/>-->
+            <property name="itCenterLeaderList" type="string" required="true" description="IT中心负责人guid"/>
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
