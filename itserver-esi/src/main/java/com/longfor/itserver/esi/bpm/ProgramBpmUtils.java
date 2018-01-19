@@ -124,7 +124,7 @@ public class ProgramBpmUtils
 
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval303AppendActors");
-        jsonObject.put("ItemValue", paramsMap.get("businessPresidentList"));
+        jsonObject.put("ItemValue", paramsMap.get("businessPresidentList").split(","));
         jsonArray.add(jsonObject);
         //********************集团审批4**********end********************
 
@@ -310,13 +310,6 @@ public class ProgramBpmUtils
         jsonObject.put("ItemValue",testingStr[0]);//项目测试负责人
         jsonArray.add(jsonObject);
         //********************添加测试负责人审批**********end********************
-
-        //********************审批**********begin********************
-//        jsonObject = new JSONObject();
-//        jsonObject.put("ItemName", "approval302AppendActors");
-//        jsonObject.put("ItemValue", "7c7386d4-d3cd-47e5-98bb-dea04951be42");//基础架构中心--李峻岩GUID
-//        jsonArray.add(jsonObject);
-        //********************审批**********end********************
 
         String para = jsonArray.toString();
         String result = BpmUtils.startWorkFlow(
@@ -815,7 +808,7 @@ public class ProgramBpmUtils
         //********************集团审批4**********begin********************
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval303AppendActors");
-        jsonObject.put("ItemValue", paramsMap.get("businessPresidentList"));
+        jsonObject.put("ItemValue", paramsMap.get("businessPresidentList").split(","));
         jsonArray.add(jsonObject);
         //********************集团审批4**********end********************
 
