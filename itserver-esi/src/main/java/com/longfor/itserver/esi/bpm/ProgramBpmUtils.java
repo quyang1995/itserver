@@ -339,7 +339,8 @@ public class ProgramBpmUtils
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] productManagerList = paramsMap.get("productManagerList").split(",");
-        jsonObject.put("ItemValue", productManagerList[0]+","+ paramsMap.get("ifZqs"));//产品经理+是否周琼硕审批guid
+        String str = productManagerList[0]+","+ paramsMap.get("ifZqs");
+        jsonObject.put("ItemValue", str.split(","));//产品经理+是否周琼硕审批guid
         jsonArray.add(jsonObject);
         //********************添加x相关负责人审批**********end********************
 
@@ -419,7 +420,8 @@ public class ProgramBpmUtils
 
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval301AppendActors");
-        jsonObject.put("ItemValue", paramsMap.get("businessCenterList")+","+paramsMap.get("businessPresidentList"));
+        str = paramsMap.get("businessCenterList")+","+paramsMap.get("businessPresidentList");
+        jsonObject.put("ItemValue", str.split(","));
         jsonArray.add(jsonObject);
         //********************集团审批2**********end********************
 
