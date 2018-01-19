@@ -238,6 +238,9 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.DEVEAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
+			if (edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString())==null){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1031);
+			}
 			getProgramService().submit(paramsMap,program,ProgramStatusNewEnum.KFPS.getCode());
 		}catch (Exception e){
 			e.printStackTrace();
@@ -261,6 +264,9 @@ public class APIProgramBpmController extends BaseController {
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.TESTINGAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+			}
+			if (edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString())==null){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1031);
 			}
 			getProgramService().submit(paramsMap,program,ProgramStatusNewEnum.CSPS.getCode());
 		}catch (Exception e){
@@ -286,6 +292,12 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
+			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString())==null){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
+			}
+			if (edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString())==null){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1031);
+			}
 			getProgramService().submit(paramsMap,program,ProgramStatusNewEnum.SXPS.getCode());
 		}catch (Exception e){
 			e.printStackTrace();
@@ -310,6 +322,12 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
+			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString())==null){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
+			}
+			if (edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString())==null){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1031);
+			}
 			getProgramService().submit(paramsMap,program,ProgramStatusNewEnum.HDFB.getCode());
 		}catch (Exception e){
 			e.printStackTrace();
@@ -333,6 +351,12 @@ public class APIProgramBpmController extends BaseController {
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+			}
+			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString())==null){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
+			}
+			if (edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString())==null){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1031);
 			}
 			getProgramService().submit(paramsMap,program,ProgramStatusNewEnum.QMTG.getCode());
 		}catch (Exception e){

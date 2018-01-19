@@ -1118,8 +1118,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
         map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
         map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
-        map.put("itCenterLeaderList",paramsMap.get("itCenterAccount"));//IT中心负责人guid
-        map.put("businessCenterList",paramsMap.get("businessCenterAccount"));//业务中心负责人
+        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
+        map.put("businessCenterList",paramsMap.get("businessCenterList"));//业务中心负责人
         map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
         if("1".equals(paramsMap.get("reportPoor"))){
             map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
@@ -1137,9 +1137,122 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
         map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
         map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
-        map.put("itCenterLeaderList",paramsMap.get("itCenterAccount"));//IT中心负责人guid
+        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
         map.put("businessCenterList",paramsMap.get("businessCenterList"));//业务中心负责人
         map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
+        if("1".equals(paramsMap.get("reportPoor"))){
+            map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+        }
+        return map;
+    }
+
+    /**
+     * 参数处理_开发评审
+     * @param paramsMap
+     * @return
+     */
+    private Map submitDevelopReview(Map paramsMap){
+        Map map = new HashMap();
+        map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
+        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+        map.put("productManagerList",edsService.getEmpGuidByPfAcc(paramsMap.get("productManagerList").toString()));//产品经理
+        map.put("testingList",edsService.getEmpGuidByPfAcc(paramsMap.get("testingList").toString()));//项目测试负责人
+        map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
+        map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
+        if("1".equals(paramsMap.get("reportPoor"))){
+            map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+        }
+        return map;
+    }
+
+    /**
+     * 参数处理_测试评审
+     * @param paramsMap
+     * @return
+     */
+    private Map submitTestReview(Map paramsMap){
+        Map map = new HashMap();
+        map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
+        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+        map.put("productManagerList",edsService.getEmpGuidByPfAcc(paramsMap.get("productManagerList").toString()));//产品经理
+        map.put("testingList",edsService.getEmpGuidByPfAcc(paramsMap.get("testingList").toString()));//项目测试负责人
+        map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
+        if("1".equals(paramsMap.get("reportPoor"))){
+            map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+        }
+        return map;
+    }
+
+    /**
+     * 参数处理_提交上线计划
+     * @param paramsMap
+     * @return
+     */
+    private Map submitOnlinePlan(Map paramsMap){
+        Map map = new HashMap();
+        map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
+        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+        map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
+        map.put("businessFunctionsList",paramsMap.get("businessFunctionsList"));//业务职能人guid
+        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
+        map.put("businessCenterList",paramsMap.get("businessCenterList"));//业务中心负责人
+        map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
+        if("1".equals(paramsMap.get("reportPoor"))){
+            map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+        }
+        map.put("cOrZ",paramsMap.get("tApproval"));//string 1-李，2-傅   IT部门副总经理
+        map.put("businessPresidentList",paramsMap.get("businessPresidentList"));//业务副总裁
+        return map;
+    }
+
+    /**
+     * 参数处理_提交灰度发布
+     * @param paramsMap
+     * @return
+     */
+    private Map submitPartIntroduce(Map paramsMap){
+        Map map = new HashMap();
+        map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
+        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+        map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
+        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
+        map.put("businessCenterList",paramsMap.get("businessCenterList"));//业务中心负责人
+        map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
+        if("1".equals(paramsMap.get("reportPoor"))){
+            map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+        }
+        return map;
+    }
+
+    /**
+     * 参数处理_提交全面推广
+     * @param paramsMap
+     * @return
+     */
+    private Map submitAllSpread(Map paramsMap){
+        Map map = new HashMap();
+        map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
+        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+        map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
+        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
+        map.put("businessCenterList",paramsMap.get("businessCenterList"));//业务中心负责人
+        map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
+        if("1".equals(paramsMap.get("reportPoor"))){
+            map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+        }
+        return map;
+    }
+
+    /**
+     * 参数处理_提交项目复盘
+     * @param paramsMap
+     * @return
+     */
+    private Map submitProgramReplay(Map paramsMap){
+        Map map = new HashMap();
+        map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
+        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
         if("1".equals(paramsMap.get("reportPoor"))){
             map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
         }
@@ -1171,6 +1284,59 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             if(programStatus==ProgramStatusNewEnum.CPPS.getCode()) {
                 //产品评审创建流程
                 applyCreateResultVo = ProgramBpmUtils.submitProductReview(submitProductReview(paramsMap));
+                if(!applyCreateResultVo.isSuccess()){
+                    LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+                    throw new RuntimeException("创建流程失败");
+                }
+            }
+
+            if(programStatus==ProgramStatusNewEnum.KFPS.getCode()) {
+                //提交开发评审创建流程
+                applyCreateResultVo = ProgramBpmUtils.submitDevelopReview(submitDevelopReview(paramsMap));
+                if(!applyCreateResultVo.isSuccess()){
+                    LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+                    throw new RuntimeException("创建流程失败");
+                }
+            }
+
+            if(programStatus==ProgramStatusNewEnum.CSPS.getCode()) {
+                //提交测试评审创建流程
+                applyCreateResultVo = ProgramBpmUtils.submitTestReview(submitTestReview(paramsMap));
+                if(!applyCreateResultVo.isSuccess()){
+                    LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+                    throw new RuntimeException("创建流程失败");
+                }
+            }
+            if(programStatus==ProgramStatusNewEnum.SXPS.getCode()) {
+                //提交上线计划创建流程
+                applyCreateResultVo = ProgramBpmUtils.submitOnlinePlan(submitOnlinePlan(paramsMap));
+                if(!applyCreateResultVo.isSuccess()){
+                    LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+                    throw new RuntimeException("创建流程失败");
+                }
+            }
+
+            if(programStatus==ProgramStatusNewEnum.HDFB.getCode()) {
+                //提交灰度发布创建流程
+                applyCreateResultVo = ProgramBpmUtils.submitPartIntroduce(submitPartIntroduce(paramsMap));
+                if(!applyCreateResultVo.isSuccess()){
+                    LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+                    throw new RuntimeException("创建流程失败");
+                }
+            }
+
+            if(programStatus==ProgramStatusNewEnum.QMTG.getCode()) {
+                //提交全面推广创建流程
+                applyCreateResultVo = ProgramBpmUtils.submitAllSpread(submitAllSpread(paramsMap));
+                if(!applyCreateResultVo.isSuccess()){
+                    LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+                    throw new RuntimeException("创建流程失败");
+                }
+            }
+
+            if(programStatus==ProgramStatusNewEnum.XMFP.getCode()) {
+                //提交项目复盘创建流程
+                applyCreateResultVo = ProgramBpmUtils.submitProgramReplay(submitProgramReplay(paramsMap));
                 if(!applyCreateResultVo.isSuccess()){
                     LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
                     throw new RuntimeException("创建流程失败");
