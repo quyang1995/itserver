@@ -29,6 +29,8 @@ public interface ProgramMapper extends BeeMapper<Program> {
 
     List<Program> myFollowProgram(Map<String,Object> map);
 
+    Integer myFollowProgramTotal(Map<String,Object> map);
+
     List<Map<String,Object>> changeTopFive(Map<String,Object> map);
 
     List<Map<String,Object>> yearCost();

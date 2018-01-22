@@ -1,6 +1,7 @@
 package com.longfor.itserver.controller.api;
 
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageInfo;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
@@ -901,6 +902,7 @@ public class APIProgramBpmController extends BaseController {
 			//我關注的項目
 			this.buildPageParams(paramsMap);
 			List<Map<String,Object>> myFollowProgram = getProgramService().myFollowProgram(paramsMap);
+			resultMap.put(APIHelper.TOTAL, getProgramService().myFollowProgramTotal(paramsMap));
 			resultMap.put("data",myFollowProgram);
 		} catch ( Exception e) {
 			e.printStackTrace();

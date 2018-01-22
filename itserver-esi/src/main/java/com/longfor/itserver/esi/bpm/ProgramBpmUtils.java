@@ -78,8 +78,18 @@ public class ProgramBpmUtils
      */
     public static ApplyCreateResultVo submitBrd(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
-        //********************添加业务及技术审批**********begin********************
+
+
+        //********************标题**********begin********************
         JSONObject jsonObject = new JSONObject();
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "workflowInstanceTitle");
+        jsonObject.put("ItemValue", paramsMap.get("workflowInstanceTitle"));
+        jsonArray.add(jsonObject);
+        //********************标题**********end********************
+
+        //********************添加业务及技术审批**********begin********************
+        jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessAccount").split(",");
         String [] developAccountGuid = paramsMap.get("developAccount").split(",");
@@ -156,8 +166,17 @@ public class ProgramBpmUtils
      */
     public static ApplyCreateResultVo submitDemo(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
-        //********************添加相关负责人审批**********begin********************
+
+        //********************标题**********begin********************
         JSONObject jsonObject = new JSONObject();
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "workflowInstanceTitle");
+        jsonObject.put("ItemValue", paramsMap.get("workflowInstanceTitle"));
+        jsonArray.add(jsonObject);
+        //********************标题**********end********************
+
+        //********************添加相关负责人审批**********begin********************
+        jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessAccount").split(",");
         String [] developAccountGuid = paramsMap.get("developAccount").split(",");
@@ -232,8 +251,17 @@ public class ProgramBpmUtils
      */
     public static ApplyCreateResultVo submitProductReview(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
-        //********************添加相关负责人审批**********begin********************
+
+        //********************标题**********begin********************
         JSONObject jsonObject = new JSONObject();
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "workflowInstanceTitle");
+        jsonObject.put("ItemValue", paramsMap.get("workflowInstanceTitle"));
+        jsonArray.add(jsonObject);
+        //********************标题**********end********************
+
+        //********************添加相关负责人审批**********begin********************
+        jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessAccount").split(",");
         jsonObject.put("ItemValue", businessAccountGuid[0]);//业务人（业务人员）
@@ -287,8 +315,16 @@ public class ProgramBpmUtils
     public static ApplyCreateResultVo submitDevelopReview(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
 
-        //********************添加产品经理审批**********begin********************
+        //********************标题**********begin********************
         JSONObject jsonObject = new JSONObject();
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "workflowInstanceTitle");
+        jsonObject.put("ItemValue", paramsMap.get("workflowInstanceTitle"));
+        jsonArray.add(jsonObject);
+        //********************标题**********end********************
+
+        //********************添加产品经理审批**********begin********************
+        jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] productManagerList = paramsMap.get("productManagerList").split(",");
         String str = productManagerList[0]+","+paramsMap.get("ifZqs");
@@ -330,8 +366,17 @@ public class ProgramBpmUtils
      */
     public static ApplyCreateResultVo submitTestReview(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
-        //********************添加x相关负责人审批**********begin********************
+
+        //********************标题**********begin********************
         JSONObject jsonObject = new JSONObject();
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "workflowInstanceTitle");
+        jsonObject.put("ItemValue", paramsMap.get("workflowInstanceTitle"));
+        jsonArray.add(jsonObject);
+        //********************标题**********end********************
+
+        //********************添加x相关负责人审批**********begin********************
+        jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] productManagerList = paramsMap.get("productManagerList").split(",");
         String str = productManagerList[0]+","+ paramsMap.get("ifZqs");
@@ -384,8 +429,17 @@ public class ProgramBpmUtils
      */
     public static ApplyCreateResultVo submitOnlinePlan(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
-        //********************添加相关负责人审批**********begin********************
+
+        //********************标题**********begin********************
         JSONObject jsonObject = new JSONObject();
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "workflowInstanceTitle");
+        jsonObject.put("ItemValue", paramsMap.get("workflowInstanceTitle"));
+        jsonArray.add(jsonObject);
+        //********************标题**********end********************
+
+        //********************添加相关负责人审批**********begin********************
+        jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessAccount").split(",");
         String [] developAccountGuid = paramsMap.get("developAccount").split(",");
@@ -445,8 +499,17 @@ public class ProgramBpmUtils
      */
     public static ApplyCreateResultVo submitPartIntroduce(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
-        //********************添加相关负责人审批**********begin********************
+
+        //********************标题**********begin********************
         JSONObject jsonObject = new JSONObject();
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "workflowInstanceTitle");
+        jsonObject.put("ItemValue", paramsMap.get("workflowInstanceTitle"));
+        jsonArray.add(jsonObject);
+        //********************标题**********end********************
+
+        //********************添加相关负责人审批**********begin********************
+        jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessAccount").split(",");
         String str = businessAccountGuid[0];
@@ -501,8 +564,17 @@ public class ProgramBpmUtils
      */
     public static ApplyCreateResultVo submitAllSpread(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
-        //********************添加相关负责人审批**********begin********************
+
+        //********************标题**********begin********************
         JSONObject jsonObject = new JSONObject();
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "workflowInstanceTitle");
+        jsonObject.put("ItemValue", paramsMap.get("workflowInstanceTitle"));
+        jsonArray.add(jsonObject);
+        //********************标题**********end********************
+
+        //********************添加相关负责人审批**********begin********************
+        jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessAccount").split(",");
         String str = businessAccountGuid[0];
@@ -555,8 +627,16 @@ public class ProgramBpmUtils
     public static ApplyCreateResultVo submitProgramReplay(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
 
-        //********************集团审批**********begin********************
+        //********************标题**********begin********************
         JSONObject jsonObject = new JSONObject();
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "workflowInstanceTitle");
+        jsonObject.put("ItemValue", paramsMap.get("workflowInstanceTitle"));
+        jsonArray.add(jsonObject);
+        //********************标题**********end********************
+
+        //********************集团审批**********begin********************
+        jsonObject = new JSONObject();
         jsonObject.put("ItemName", "Originator");
         jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));//提交人guid
         jsonArray.add(jsonObject);
@@ -595,8 +675,17 @@ public class ProgramBpmUtils
      */
     public static ApplyCreateResultVo submitDelayOnline(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
-        //********************添加业务人员及项目技术负责人**********begin********************
+
+        //********************标题**********begin********************
         JSONObject jsonObject = new JSONObject();
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "workflowInstanceTitle");
+        jsonObject.put("ItemValue", paramsMap.get("workflowInstanceTitle"));
+        jsonArray.add(jsonObject);
+        //********************标题**********end********************
+
+        //********************添加业务人员及项目技术负责人**********begin********************
+        jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessList").split(",");
         String [] developAccountGuid = paramsMap.get("developerList").split(",");
@@ -655,8 +744,16 @@ public class ProgramBpmUtils
     public static ApplyCreateResultVo submitDemandChangeAdvise(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
 
-        //********************集团审批**********begin********************
+        //********************标题**********begin********************
         JSONObject jsonObject = new JSONObject();
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "workflowInstanceTitle");
+        jsonObject.put("ItemValue", paramsMap.get("workflowInstanceTitle"));
+        jsonArray.add(jsonObject);
+        //********************标题**********end********************
+
+        //********************集团审批**********begin********************
+        jsonObject = new JSONObject();
         jsonObject.put("ItemName", "Originator");
         jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));
         jsonArray.add(jsonObject);
@@ -700,8 +797,17 @@ public class ProgramBpmUtils
      */
     public static ApplyCreateResultVo submitDemandChangeApprove(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
-        //********************添加业务人员及项目技术负责人**********begin********************
+
+        //********************标题**********begin********************
         JSONObject jsonObject = new JSONObject();
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "workflowInstanceTitle");
+        jsonObject.put("ItemValue", paramsMap.get("workflowInstanceTitle"));
+        jsonArray.add(jsonObject);
+        //********************标题**********end********************
+
+        //********************添加业务人员及项目技术负责人**********begin********************
+        jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessList").split(",");
         String [] developAccountGuid = paramsMap.get("developerList").split(",");
@@ -767,8 +873,17 @@ public class ProgramBpmUtils
     public static ApplyCreateResultVo submitFinishProgram(Map<String, String> paramsMap){
 
         JSONArray jsonArray = new JSONArray();
-        //********************添加业务人员及项目技术负责人**********begin********************
+
+        //********************标题**********begin********************
         JSONObject jsonObject = new JSONObject();
+        jsonObject = new JSONObject();
+        jsonObject.put("ItemName", "workflowInstanceTitle");
+        jsonObject.put("ItemValue", paramsMap.get("workflowInstanceTitle"));
+        jsonArray.add(jsonObject);
+        //********************标题**********end********************
+
+        //********************添加业务人员及项目技术负责人**********begin********************
+        jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessList").split(",");
         String [] developAccountGuid = paramsMap.get("developerList").split(",");
