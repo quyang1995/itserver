@@ -810,6 +810,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             if("1".equals(paramsMap.get("reportPoor"))){
                 paramsMap.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
             }
+            paramsMap.put("workflowInstanceTitle",program.getName()+ProgramStatusNewEnum.YQSX.getText());//流程名称
             //创建流程
             ApplyCreateResultVo applyCreateResultVo = new ApplyCreateResultVo();
             applyCreateResultVo = ProgramBpmUtils.submitDelayOnline(paramsMap);
@@ -901,7 +902,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             }else if("2".equals(paramsMap.get("tApproval"))){
                 paramsMap.put("lorf",edsService.getEmpGuidByPfAcc("fuzhihua"));//lorf:傅志华    string 1-李，2-傅
             }
-
+            paramsMap.put("workflowInstanceTitle",program.getName()+ProgramStatusNewEnum.XQBG.getText());//流程名称
             ApplyCreateResultVo applyCreateResultVo = new ApplyCreateResultVo();
             if (overallCost.compareTo(ten) != -1) {//大于10万走审批
                 //创建流程
@@ -1001,6 +1002,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             if("1".equals(paramsMap.get("reportPoor"))){
                 paramsMap.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
             }
+            paramsMap.put("workflowInstanceTitle",program.getName()+ProgramStatusNewEnum.ZZ.getText());//流程名称
             //创建流程
             ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtils.submitFinishProgram(paramsMap);
             if(!applyCreateResultVo.isSuccess()){
@@ -1091,6 +1093,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      */
     private Map submitBrdMap(Map paramsMap){
         Map map = new HashMap();
+        map.put("workflowInstanceTitle",paramsMap.get("workflowInstanceTitle"));//l流程名称
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
         map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
         map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
@@ -1120,6 +1123,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      */
     private Map submitDemo(Map paramsMap){
         Map map = new HashMap();
+        map.put("workflowInstanceTitle",paramsMap.get("workflowInstanceTitle"));//l流程名称
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
         map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
         map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
@@ -1139,6 +1143,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      */
     private Map submitProductReview(Map paramsMap){
         Map map = new HashMap();
+        map.put("workflowInstanceTitle",paramsMap.get("workflowInstanceTitle"));//l流程名称
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
         map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
         map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
@@ -1158,6 +1163,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      */
     private Map submitDevelopReview(Map paramsMap){
         Map map = new HashMap();
+        map.put("workflowInstanceTitle",paramsMap.get("workflowInstanceTitle"));//l流程名称
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
         map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
         map.put("productManagerList",edsService.getEmpGuidByPfAcc(paramsMap.get("productManagerList").toString()));//产品经理
@@ -1177,6 +1183,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      */
     private Map submitTestReview(Map paramsMap){
         Map map = new HashMap();
+        map.put("workflowInstanceTitle",paramsMap.get("workflowInstanceTitle"));//l流程名称
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
         map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
         map.put("productManagerList",edsService.getEmpGuidByPfAcc(paramsMap.get("productManagerList").toString()));//产品经理
@@ -1195,6 +1202,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      */
     private Map submitOnlinePlan(Map paramsMap){
         Map map = new HashMap();
+        map.put("workflowInstanceTitle",paramsMap.get("workflowInstanceTitle"));//l流程名称
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
         map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
         map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
@@ -1217,6 +1225,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      */
     private Map submitPartIntroduce(Map paramsMap){
         Map map = new HashMap();
+        map.put("workflowInstanceTitle",paramsMap.get("workflowInstanceTitle"));//l流程名称
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
         map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
         map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
@@ -1236,6 +1245,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      */
     private Map submitAllSpread(Map paramsMap){
         Map map = new HashMap();
+        map.put("workflowInstanceTitle",paramsMap.get("workflowInstanceTitle"));//l流程名称
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
         map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
         map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
@@ -1255,6 +1265,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      */
     private Map submitProgramReplay(Map paramsMap){
         Map map = new HashMap();
+        map.put("workflowInstanceTitle",paramsMap.get("workflowInstanceTitle"));//l流程名称
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
         map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
         map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
@@ -1272,6 +1283,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             ApplyCreateResultVo applyCreateResultVo = new ApplyCreateResultVo();
             if(programStatus==ProgramStatusNewEnum.LX.getCode()) {
                 //立项创建流程
+                paramsMap.put("workflowInstanceTitle",program.getName()+ProgramStatusNewEnum.LX.getText());
                 applyCreateResultVo = ProgramBpmUtils.submitBrd(submitBrdMap(paramsMap));
                 if(!applyCreateResultVo.isSuccess()){
                     LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
@@ -1280,6 +1292,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             }
             if(programStatus==ProgramStatusNewEnum.DPS.getCode()) {
                 //Demo评审创建流程
+                paramsMap.put("workflowInstanceTitle",program.getName()+ProgramStatusNewEnum.DPS.getText());
                 applyCreateResultVo = ProgramBpmUtils.submitDemo(submitDemo(paramsMap));
                 if(!applyCreateResultVo.isSuccess()){
                     LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
@@ -1288,6 +1301,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             }
             if(programStatus==ProgramStatusNewEnum.CPPS.getCode()) {
                 //产品评审创建流程
+                paramsMap.put("workflowInstanceTitle",program.getName()+ProgramStatusNewEnum.CPPS.getText());
                 applyCreateResultVo = ProgramBpmUtils.submitProductReview(submitProductReview(paramsMap));
                 if(!applyCreateResultVo.isSuccess()){
                     LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
@@ -1297,6 +1311,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             if(programStatus==ProgramStatusNewEnum.KFPS.getCode()) {
                 //提交开发评审创建流程
+                paramsMap.put("workflowInstanceTitle",program.getName()+ProgramStatusNewEnum.KFPS.getText());
                 applyCreateResultVo = ProgramBpmUtils.submitDevelopReview(submitDevelopReview(paramsMap));
                 if(!applyCreateResultVo.isSuccess()){
                     LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
@@ -1306,6 +1321,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             if(programStatus==ProgramStatusNewEnum.CSPS.getCode()) {
                 //提交测试评审创建流程
+                paramsMap.put("workflowInstanceTitle",program.getName()+ProgramStatusNewEnum.CSPS.getText());
                 applyCreateResultVo = ProgramBpmUtils.submitTestReview(submitTestReview(paramsMap));
                 if(!applyCreateResultVo.isSuccess()){
                     LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
@@ -1314,6 +1330,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             }
             if(programStatus==ProgramStatusNewEnum.SXPS.getCode()) {
                 //提交上线计划创建流程
+                paramsMap.put("workflowInstanceTitle",program.getName()+ProgramStatusNewEnum.SXPS.getText());
                 applyCreateResultVo = ProgramBpmUtils.submitOnlinePlan(submitOnlinePlan(paramsMap));
                 if(!applyCreateResultVo.isSuccess()){
                     LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
@@ -1323,6 +1340,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             if(programStatus==ProgramStatusNewEnum.HDFB.getCode()) {
                 //提交灰度发布创建流程
+                paramsMap.put("workflowInstanceTitle",program.getName()+ProgramStatusNewEnum.HDFB.getText());
                 applyCreateResultVo = ProgramBpmUtils.submitPartIntroduce(submitPartIntroduce(paramsMap));
                 if(!applyCreateResultVo.isSuccess()){
                     LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
@@ -1332,6 +1350,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             if(programStatus==ProgramStatusNewEnum.QMTG.getCode()) {
                 //提交全面推广创建流程
+                paramsMap.put("workflowInstanceTitle",program.getName()+ProgramStatusNewEnum.QMTG.getText());
                 applyCreateResultVo = ProgramBpmUtils.submitAllSpread(submitAllSpread(paramsMap));
                 if(!applyCreateResultVo.isSuccess()){
                     LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
@@ -1341,6 +1360,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             if(programStatus==ProgramStatusNewEnum.XMFP.getCode()) {
                 //提交项目复盘创建流程
+                paramsMap.put("workflowInstanceTitle",program.getName()+ProgramStatusNewEnum.XMFP.getText());
                 applyCreateResultVo = ProgramBpmUtils.submitProgramReplay(submitProgramReplay(paramsMap));
                 if(!applyCreateResultVo.isSuccess()){
                     LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
@@ -1830,6 +1850,29 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             mapList.add(resultMap);
         }
         return mapList;
+    }
+
+    /***
+     * 我關注的項目总数
+     */
+    @Override
+    public Integer myFollowProgramTotal(Map<String,Object> paramMap){
+        List<Product> productList = getListByLikeAnalyzingConditions(paramMap,0);
+        if (productList==null || productList.isEmpty()) {
+            return null;
+        }
+        StringBuffer sb = new StringBuffer();
+        for (Product model:productList) {
+            sb.append(model.getId());
+            sb.append(",");
+        }
+        sb.deleteCharAt(sb.length()-1);
+        Map<String,Object> map = new HashMap<>();
+        map.put("productIdList",sb.toString().split(","));
+        map.put("startRow", paramMap.get("startRow") );
+        map.put("endRow", paramMap.get("endRow") );
+        map.put("pfAcc", paramMap.get("pfAcc") );
+        return programMapper.myFollowProgramTotal(map);
     }
 
     /***

@@ -221,6 +221,19 @@
         LIMIT #{startRow},#{endRow}
     </select>
 
+    <select id="myFollowProgramTotal" parameterType="map" resultType="int">
+        SELECT COUNT(0) from program where id in (
+        SELECT program_id from program_follow where pf_acc = #{pfAcc} ORDER BY create_time desc
+        )
+        <if test="productIdList!=null">
+            and product_id in
+            <foreach item="item" index="index" collection="productIdList" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY create_time desc
+    </select>
+
     <select id="changeTopFive" parameterType="map" resultType="map">
         select a.programId programId,a.name programName,a.coun count from (
         SELECT program_id programId,name,COUNT(1) coun from program_approval_snapshot
@@ -236,12 +249,12 @@
     </select>
 
     <select id="yearCost" resultType="map">
+        select pc.type,pc.descr,pc.total,a.overAllCost from  program_count pc LEFT JOIN (
         select
-        analyzing_conditions as analyzingConditions,sum(overall_cost) as overAllCost,SUM(bid_overall_cost) as bidOverAllCost
-        from program
-        where
+        analyzing_conditions as analyzingConditions,sum(overall_cost) as overAllCost
+        from program where
         (program_status=110 and approval_status=110 or program_status!=100 and program_status!=110)
         and YEAR(create_time)=YEAR(NOW())
-        GROUP BY analyzing_conditions
+        GROUP BY analyzing_conditions) a on pc.type=a.analyzingConditions
     </select>
 </mapper>

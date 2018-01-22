@@ -68,6 +68,8 @@ public interface IProgramService extends IAdminService<Program> {
 
     List<Map<String,Object>> myFollowProgram(Map<String, Object> paramsMap) throws Exception;
 
+    Integer myFollowProgramTotal(Map<String, Object> paramsMap);
+
     List<Map<String,Object>> changeTopFive(List<Product> productList,Map<String, Object> paramsMap);
 
     List<Map<String,Object>> yearCost();
