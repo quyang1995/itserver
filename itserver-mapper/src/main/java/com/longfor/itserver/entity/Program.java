@@ -177,11 +177,11 @@ public class Program implements Serializable {
     private String newCode;
 
     @Column(name = "replay_date")
-    @JsonSerialize(using = CustomFullDateSerializer.class)
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date replayDate;
 
     @Column(name = "all_extension_date")
-    @JsonSerialize(using = CustomFullDateSerializer.class)
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date allExtensionDate;
 
     /**

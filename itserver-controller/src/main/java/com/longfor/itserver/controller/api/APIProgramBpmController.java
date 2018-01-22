@@ -12,11 +12,13 @@ import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.common.vo.MoApprove.MoApproveListVo;
 import com.longfor.itserver.common.vo.programBpm.ApproveListVo;
 import com.longfor.itserver.common.vo.programBpm.ApproveVo;
+import com.longfor.itserver.common.vo.programBpm.common.FileVo;
 import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.*;
 import com.longfor.itserver.esi.IEdsService;
 import com.longfor.itserver.esi.MoApproveUtil;
 import net.mayee.commons.helper.APIHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +60,10 @@ public class APIProgramBpmController extends BaseController {
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+			}
+			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+			if (StringUtils.isNotBlank(repeatFile)){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
 			}
 			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString())==null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
@@ -137,6 +143,10 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
+			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+			if (StringUtils.isNotBlank(repeatFile)){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+			}
 			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString())==null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
 			}
@@ -167,6 +177,10 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
+			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+			if (StringUtils.isNotBlank(repeatFile)){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+			}
 			getProgramService().submit(paramsMap,program,ProgramStatusNewEnum.ZTBSQ.getCode());
 		}catch (Exception e){
 			e.printStackTrace();
@@ -190,6 +204,10 @@ public class APIProgramBpmController extends BaseController {
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+			}
+			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+			if (StringUtils.isNotBlank(repeatFile)){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
 			}
 			getProgramService().submit(paramsMap,program,ProgramStatusNewEnum.ZBSQ.getCode());
 		}catch (Exception e){
@@ -215,6 +233,10 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
+			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+			if (StringUtils.isNotBlank(repeatFile)){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+			}
 			getProgramService().submit(paramsMap,program,ProgramStatusNewEnum.CPPS.getCode());
 		}catch (Exception e){
 			e.printStackTrace();
@@ -238,6 +260,10 @@ public class APIProgramBpmController extends BaseController {
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.DEVEAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+			}
+			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+			if (StringUtils.isNotBlank(repeatFile)){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
 			}
 			if (edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString())==null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1031);
@@ -266,6 +292,10 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.TESTINGAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
+			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+			if (StringUtils.isNotBlank(repeatFile)){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+			}
 			if (edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString())==null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1031);
 			}
@@ -292,6 +322,10 @@ public class APIProgramBpmController extends BaseController {
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+			}
+			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+			if (StringUtils.isNotBlank(repeatFile)){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
 			}
 			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString())==null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
@@ -323,6 +357,10 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
+			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+			if (StringUtils.isNotBlank(repeatFile)){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+			}
 			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString())==null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
 			}
@@ -352,6 +390,10 @@ public class APIProgramBpmController extends BaseController {
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+			}
+			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+			if (StringUtils.isNotBlank(repeatFile)){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
 			}
 			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString())==null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
@@ -383,6 +425,10 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
+			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+			if (StringUtils.isNotBlank(repeatFile)){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+			}
 			getProgramService().submit(paramsMap,program,ProgramStatusNewEnum.XMFP.getCode());
 		}catch (Exception e){
 			e.printStackTrace();
@@ -408,7 +454,10 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
-
+			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+			if (StringUtils.isNotBlank(repeatFile)){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+			}
 			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()) == null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
 			}
@@ -439,7 +488,10 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
-
+			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+			if (StringUtils.isNotBlank(repeatFile)){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+			}
 			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()) == null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
 			}
@@ -469,6 +521,10 @@ public class APIProgramBpmController extends BaseController {
             if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+			}
+			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+			if (StringUtils.isNotBlank(repeatFile)){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
 			}
 			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()) == null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
@@ -855,8 +911,7 @@ public class APIProgramBpmController extends BaseController {
 			LOG.info("------exceptionProgram:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			//异常项目
 			this.buildPageParams(paramsMap);
-			List<ExceptionProgramVo> exceptionProgramList = getProgramService().getExceptionProgramList(paramsMap);
-			resultMap.put("data",exceptionProgramList);
+			getProgramService().getExceptionProgramList(paramsMap,resultMap);
 		} catch ( Exception e) {
 			e.printStackTrace();
 			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
@@ -878,8 +933,7 @@ public class APIProgramBpmController extends BaseController {
 			LOG.info("------latelyChangeList:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			//最新的需求变更
 			this.buildPageParams(paramsMap);
-			List<ProgramApprovalSnapshot> exceptionProgramList = getProgramService().latelyChangeList(paramsMap);
-			resultMap.put("data",exceptionProgramList);
+			getProgramService().latelyChangeList(paramsMap,resultMap);
 		} catch ( Exception e) {
 			e.printStackTrace();
 			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
@@ -901,13 +955,33 @@ public class APIProgramBpmController extends BaseController {
 			LOG.info("------myFollowProgram:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			//我關注的項目
 			this.buildPageParams(paramsMap);
-			List<Map<String,Object>> myFollowProgram = getProgramService().myFollowProgram(paramsMap);
-			resultMap.put(APIHelper.TOTAL, getProgramService().myFollowProgramTotal(paramsMap));
-			resultMap.put("data",myFollowProgram);
+			getProgramService().myFollowProgram(paramsMap,resultMap);
 		} catch ( Exception e) {
 			e.printStackTrace();
 			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
 		}
 		return  resultMap;
+	}
+
+	private String checkFileName(String programId,String fileList){
+		List<FileVo> fileListVo = JSON.parseArray(fileList, FileVo.class);
+		if (fileList == null || fileList.isEmpty()) {
+			return null;
+		}
+		List<String> strList = new ArrayList<String>();
+		for (FileVo fileVo : fileListVo) {
+			strList.add(fileVo.getFileName());
+		}
+		Map<String,Object> paramsMap = new HashMap<String,Object>();
+		paramsMap.put("programId",programId);
+		paramsMap.put("fileNameList",strList);
+		List<ProgramFile> repeatFileList = getProgramService().getFileListByWhere(paramsMap);
+		StringBuffer sb = new StringBuffer();
+		for (ProgramFile file:repeatFileList){
+			sb.append(file.getFileName());
+			sb.append(",");
+		}
+		sb.deleteCharAt(sb.length()-1);
+		return sb.toString();
 	}
 }

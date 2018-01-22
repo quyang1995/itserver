@@ -18,4 +18,6 @@ public interface ProgramFileMapper extends BeeMapper<ProgramFile> {
 
     List<ProgramFileVo> getFileListByMap(Map<String,Object> map);
 
+    List<ProgramFile> getFileListByWhere(Map<String,Object> map);
+
 }

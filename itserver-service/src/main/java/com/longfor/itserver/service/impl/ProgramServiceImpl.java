@@ -24,6 +24,7 @@ import com.longfor.itserver.service.IProgramService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.TimeUtils;
+import net.mayee.commons.helper.APIHelper;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -731,10 +732,11 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programMapper.updateByPrimaryKey(program);
 
             //program快照表
+            int oldProgramStatus = programApprovalSnapshot.getProgramStatus();
             this.copyProperties(programApprovalSnapshot,program);
             if (programApprovalSnapshot.getProgramStatus() == ProgramStatusNewEnum.XQBG.getCode()
                     || programApprovalSnapshot.getProgramStatus() == ProgramStatusNewEnum.YQSX.getCode()) {
-                programApprovalSnapshot.setProgramStatus(programApprovalSnapshot.getProgramStatus());
+                programApprovalSnapshot.setProgramStatus(oldProgramStatus);
             }
 //            programApprovalSnapshot.setId(null);
 //            programApprovalSnapshot.setProgramStatus(program.getProgramStatus());
@@ -1047,7 +1049,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         if (org.apache.commons.lang.StringUtils.isNotBlank(fileStr)) {
             List<FileVo> fileList = JSON.parseArray(fileStr, FileVo.class);
             if (fileList != null && !fileList.isEmpty()) {
-                String a = fileList.get(0).getFileName();
+//                String a = fileList.get(0).getFileName();
                 for (FileVo fileVo : fileList) {
                     ProgramFile programFile = new ProgramFile();
                     programFile.setProgramId(programId);
@@ -1098,13 +1100,13 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
         map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
         map.put("businessFunctionsList",paramsMap.get("businessFunctionsList"));//业务职能人guid
-        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
+//        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
         map.put("businessCenterList",paramsMap.get("businessCenterList"));//业务中心负责人
         map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
         if("1".equals(paramsMap.get("reportPoor"))){
             map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
         }
-        map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
+//        map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
         map.put("cOrZ",paramsMap.get("tApproval"));//string 1-李，2-傅   IT部门副总经理
         map.put("businessPresidentList",paramsMap.get("businessPresidentList"));//业务副总裁
         if(paramsMap.get("productId")!=null){
@@ -1127,7 +1129,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
         map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
         map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
-        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
+//        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
         map.put("businessCenterList",paramsMap.get("businessCenterList"));//业务中心负责人
         map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
         if("1".equals(paramsMap.get("reportPoor"))){
@@ -1147,7 +1149,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
         map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
         map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
-        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
+//        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
         map.put("businessCenterList",paramsMap.get("businessCenterList"));//业务中心负责人
         map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
         if("1".equals(paramsMap.get("reportPoor"))){
@@ -1207,7 +1209,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
         map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
         map.put("businessFunctionsList",paramsMap.get("businessFunctionsList"));//业务职能人guid
-        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
+//        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
         map.put("businessCenterList",paramsMap.get("businessCenterList"));//业务中心负责人
         map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
         if("1".equals(paramsMap.get("reportPoor"))){
@@ -1229,7 +1231,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
         map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
         map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
-        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
+//        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
         map.put("businessCenterList",paramsMap.get("businessCenterList"));//业务中心负责人
         map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
         if("1".equals(paramsMap.get("reportPoor"))){
@@ -1249,7 +1251,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
         map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
         map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
-        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
+//        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
         map.put("businessCenterList",paramsMap.get("businessCenterList"));//业务中心负责人
         map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
         if("1".equals(paramsMap.get("reportPoor"))){
@@ -1268,7 +1270,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         map.put("workflowInstanceTitle",paramsMap.get("workflowInstanceTitle"));//l流程名称
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
         map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
-        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
+//        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
         if("1".equals(paramsMap.get("reportPoor"))){
             map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
         }
@@ -1732,7 +1734,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      * 异常项目
      */
     @Override
-    public List<ExceptionProgramVo> getExceptionProgramList(Map<String,Object> paramMap){
+    public Map getExceptionProgramList(Map<String,Object> paramMap,Map resultMap){
         List<Product> productList = getListByLikeAnalyzingConditions(paramMap,0);
         if (productList==null || productList.isEmpty()) {
             return null;
@@ -1748,6 +1750,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         map.put("startRow", paramMap.get("startRow") );
         map.put("endRow", paramMap.get("endRow") );
         List<ExceptionProgramVo> exceptionList = programApprovalSnapshotMapper.getExceptionProgram(map);
+        //总数
+        resultMap.put(APIHelper.TOTAL, programApprovalSnapshotMapper.getExceptionProgramTotal(map));
         for (ExceptionProgramVo model:exceptionList) {
             /* 产品经理 */
             Map productManager = new HashMap();
@@ -1757,14 +1761,16 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             List<ProgramEmployee> programManagerList = programEmployeeService.selectTypeList(productManager);
             model.setProductManagerList(programManagerList);
         }
-        return exceptionList;
+        //列表
+        resultMap.put("data",exceptionList);
+        return resultMap;
     }
 
     /***
      * 最新的需求变更
      */
     @Override
-    public List<ProgramApprovalSnapshot> latelyChangeList(Map<String,Object> paramMap){
+    public Map latelyChangeList(Map<String,Object> paramMap,Map resultMap){
         List<Product> productList = getListByLikeAnalyzingConditions(paramMap,0);
         if (productList==null || productList.isEmpty()) {
             return null;
@@ -1780,11 +1786,15 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         map.put("startRow", paramMap.get("startRow") );
         map.put("endRow", paramMap.get("endRow") );
         List<ProgramApprovalSnapshot> resultList = programApprovalSnapshotMapper.latelychangeList(map);
+        //总数
+        resultMap.put(APIHelper.TOTAL, programApprovalSnapshotMapper.latelychangeListTotal(map));
         for (ProgramApprovalSnapshot model:resultList) {
             /* 产品经理 */
             productManagerList(model);
         }
-        return resultList;
+        //列表
+        resultMap.put("data",resultList);
+        return resultMap;
     }
 
     /* 产品经理 */
@@ -1801,7 +1811,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      * 我關注的項目
      */
     @Override
-    public List<Map<String,Object>> myFollowProgram(Map<String,Object> paramMap) throws Exception{
+    public Map myFollowProgram(Map<String,Object> paramMap,Map rMap) throws Exception{
         List<Product> productList = getListByLikeAnalyzingConditions(paramMap,0);
         if (productList==null || productList.isEmpty()) {
             return null;
@@ -1818,6 +1828,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         map.put("endRow", paramMap.get("endRow") );
         map.put("pfAcc", paramMap.get("pfAcc") );
         List<Program> list = programMapper.myFollowProgram(map);
+        //总数
+        rMap.put(APIHelper.TOTAL,  programMapper.myFollowProgramTotal(map));
         List<Map<String,Object>> mapList = new ArrayList<>();
         for (Program model:list) {
             Map shopMap = new HashMap();
@@ -1849,30 +1861,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             }
             mapList.add(resultMap);
         }
-        return mapList;
-    }
-
-    /***
-     * 我關注的項目总数
-     */
-    @Override
-    public Integer myFollowProgramTotal(Map<String,Object> paramMap){
-        List<Product> productList = getListByLikeAnalyzingConditions(paramMap,0);
-        if (productList==null || productList.isEmpty()) {
-            return null;
-        }
-        StringBuffer sb = new StringBuffer();
-        for (Product model:productList) {
-            sb.append(model.getId());
-            sb.append(",");
-        }
-        sb.deleteCharAt(sb.length()-1);
-        Map<String,Object> map = new HashMap<>();
-        map.put("productIdList",sb.toString().split(","));
-        map.put("startRow", paramMap.get("startRow") );
-        map.put("endRow", paramMap.get("endRow") );
-        map.put("pfAcc", paramMap.get("pfAcc") );
-        return programMapper.myFollowProgramTotal(map);
+        //列表
+        rMap.put("data",mapList);
+        return rMap;
     }
 
     /***
@@ -1903,6 +1894,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     @Override
     public List<Map<String,Object>> yearCost(){
         return programMapper.yearCost();
+    }
+
+    /***
+     * 根据一定条件查询文件列表
+     */
+    @Override
+    public List<ProgramFile> getFileListByWhere(Map<String,Object> map){
+        return programFileMapper.getFileListByWhere(map);
     }
 
 }

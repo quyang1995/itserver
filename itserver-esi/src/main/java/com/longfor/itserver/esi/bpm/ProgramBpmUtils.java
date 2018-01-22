@@ -67,11 +67,11 @@ public class ProgramBpmUtils
      * businessAccount:业务对接人guid
      * businessFunctionsList:业务职能人guid
      * businessCenterList:业务中心负责人guid
-     * itCenterLeaderList:IT中心负责人guid
+     * itCenterLeaderList:IT中心负责人guid   (暂时去掉)
      * developAccount:项目技术负责人/开发人员guid
      * businessPresidentList : 业务副总裁
      * ifZqs:是否周琼硕审批guid
-     * counterSigners:会签人  string 逗号分隔
+     * counterSigners:会签人  string 逗号分隔   (暂时去掉)
      * cOrZ:李川还是傅志华   string 1-李，2-傅   IT部门副总经理
      * ifGj:是否光建总审批   string 0-否，1-是
      * isFirst 是否产品下第一个项目
@@ -106,7 +106,8 @@ public class ProgramBpmUtils
 
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval300AppendActors");
-        str = paramsMap.get("ifZqs")+","+paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList")+","+paramsMap.get("counterSigners");
+//        str = paramsMap.get("ifZqs")+","+paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList")+","+paramsMap.get("counterSigners");
+        str = paramsMap.get("ifZqs")+","+paramsMap.get("businessCenterList");
         jsonObject.put("ItemValue", str.split(","));
         jsonArray.add(jsonObject);
         //********************集团审批1**********end********************
@@ -160,7 +161,7 @@ public class ProgramBpmUtils
      * businessAccount:业务对接人guid
      * developAccount:项目技术负责人/开发人员guid
      * businessCenterList:业务中心负责人guid
-     * itCenterLeaderList:IT中心负责人guid
+     * itCenterLeaderList:IT中心负责人guid   (暂时去掉)
      * ifZqs:是否周琼硕审批guid
      * cOrZ:李川还是傅志华   string 1-李，2-傅
      */
@@ -193,7 +194,8 @@ public class ProgramBpmUtils
 
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval300AppendActors");
-        str = paramsMap.get("ifZqs")+","+paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList");
+//        str = paramsMap.get("ifZqs")+","+paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList");
+        str = paramsMap.get("ifZqs")+","+paramsMap.get("businessCenterList");
         jsonObject.put("ItemValue", str.split(","));
         jsonArray.add(jsonObject);
         //********************集团审批1**********end********************
@@ -276,7 +278,8 @@ public class ProgramBpmUtils
 
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval300AppendActors");
-        String str = paramsMap.get("ifZqs")+","+paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList");
+//        String str = paramsMap.get("ifZqs")+","+paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList");
+        String str = paramsMap.get("ifZqs")+","+paramsMap.get("businessCenterList");
         jsonObject.put("ItemValue", str.split(","));
         jsonArray.add(jsonObject);
         //********************审批**********end********************
@@ -456,7 +459,8 @@ public class ProgramBpmUtils
 
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval300AppendActors");
-        str = paramsMap.get("ifZqs")+","+paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList");//周琼硕审批guid + IT中心负责人 + businessCenterList
+//        str = paramsMap.get("ifZqs")+","+paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList");//周琼硕审批guid + IT中心负责人 + businessCenterList
+        str = paramsMap.get("ifZqs")+","+paramsMap.get("businessCenterList");
         jsonObject.put("ItemValue", str.split(","));
         jsonArray.add(jsonObject);
         //********************集团审批1**********end********************
@@ -525,7 +529,8 @@ public class ProgramBpmUtils
 
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval300AppendActors");
-        str = paramsMap.get("ifZqs")+","+paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList");//周琼硕审批guid + IT中心负责人 + 业务中心负责人
+//        str = paramsMap.get("ifZqs")+","+paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList");//周琼硕审批guid + IT中心负责人 + 业务中心负责人
+        str = paramsMap.get("ifZqs")+","+paramsMap.get("businessCenterList");
         jsonObject.put("ItemValue", str.split(","));
         jsonArray.add(jsonObject);
         //********************中心负责人审批1**********end********************
@@ -590,7 +595,8 @@ public class ProgramBpmUtils
 
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval300AppendActors");
-        str = paramsMap.get("ifZqs")+","+paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList");//周琼硕审批guid + IT中心负责人 + 业务中心负责人
+//        str = paramsMap.get("ifZqs")+","+paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList");//周琼硕审批guid + IT中心负责人 + 业务中心负责人
+        str = paramsMap.get("ifZqs")+","+paramsMap.get("businessCenterList");
         jsonObject.put("ItemValue", str.split(","));
         jsonArray.add(jsonObject);
         //********************中心负责人审批1**********end********************
@@ -643,7 +649,8 @@ public class ProgramBpmUtils
 
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval300AppendActors");
-        String str = paramsMap.get("itCenterLeaderList")+","+ paramsMap.get("ifZqs");
+//        String str = paramsMap.get("itCenterLeaderList")+","+ paramsMap.get("ifZqs");
+        String str = paramsMap.get("ifZqs");
         jsonObject.put("ItemValue", str.split(","));//IT中心负责人+周琼硕审批
         jsonArray.add(jsonObject);
         //********************集团审批**********end********************
@@ -702,7 +709,8 @@ public class ProgramBpmUtils
 
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval300AppendActors");
-        str = paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList");
+//        str = paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList");
+        str = paramsMap.get("businessCenterList");
         if("1".equals(paramsMap.get("reportPoor"))){
             str += "," + paramsMap.get("ifZqs");
         }
@@ -769,7 +777,8 @@ public class ProgramBpmUtils
         jsonObject.put("ItemName", "read600AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessList").split(",");
         String [] developAccountGuid = paramsMap.get("developerList").split(",");
-        String str = paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList")+ "," + paramsMap.get("businessFunctionsList") +","+ businessAccountGuid[0]+","+ developAccountGuid[0]+","+ paramsMap.get("lorf");
+//        String str = paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList")+ "," + paramsMap.get("businessFunctionsList") +","+ businessAccountGuid[0]+","+ developAccountGuid[0]+","+ paramsMap.get("lorf");
+        String str = paramsMap.get("businessCenterList")+ "," + paramsMap.get("businessFunctionsList") +","+ businessAccountGuid[0]+","+ developAccountGuid[0]+","+ paramsMap.get("lorf");
         if("1".equals(paramsMap.get("reportPoor"))){
             str += "," + paramsMap.get("ifZqs");
         }
@@ -824,7 +833,8 @@ public class ProgramBpmUtils
 
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval300AppendActors");
-        str = paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList");
+//        str = paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList");
+        str = paramsMap.get("businessCenterList");
         if("1".equals(paramsMap.get("reportPoor"))){
             str += "," + paramsMap.get("ifZqs");
         }
@@ -900,7 +910,8 @@ public class ProgramBpmUtils
 
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval300AppendActors");
-        str = paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList");
+//        str = paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList");
+        str = paramsMap.get("businessCenterList");
         if("1".equals(paramsMap.get("reportPoor"))){
             str += "," + paramsMap.get("ifZqs");
         }

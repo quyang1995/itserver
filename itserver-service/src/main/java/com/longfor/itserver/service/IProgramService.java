@@ -2,10 +2,7 @@ package com.longfor.itserver.service;
 
 import com.longfor.itserver.common.vo.MoApprove.MoApproveListVo;
 import com.longfor.itserver.common.vo.programBpm.ApproveListVo;
-import com.longfor.itserver.entity.ExceptionProgramVo;
-import com.longfor.itserver.entity.Product;
-import com.longfor.itserver.entity.Program;
-import com.longfor.itserver.entity.ProgramApprovalSnapshot;
+import com.longfor.itserver.entity.*;
 import com.longfor.itserver.service.base.IAdminService;
 
 import java.util.List;
@@ -62,15 +59,15 @@ public interface IProgramService extends IAdminService<Program> {
 
     int getProgramSum(List<Product> productList,int type);
 
-    List<ExceptionProgramVo> getExceptionProgramList(Map<String, Object> paramsMap);
+    Map getExceptionProgramList(Map<String, Object> paramsMap,Map resultMap);
 
-    List<ProgramApprovalSnapshot> latelyChangeList(Map<String, Object> paramsMap);
+    Map latelyChangeList(Map<String, Object> paramsMap,Map resultMap);
 
-    List<Map<String,Object>> myFollowProgram(Map<String, Object> paramsMap) throws Exception;
-
-    Integer myFollowProgramTotal(Map<String, Object> paramsMap);
+    Map myFollowProgram(Map<String, Object> paramsMap,Map resultMap) throws Exception;
 
     List<Map<String,Object>> changeTopFive(List<Product> productList,Map<String, Object> paramsMap);
 
     List<Map<String,Object>> yearCost();
+
+    List<ProgramFile> getFileListByWhere(Map<String,Object> map);
 }

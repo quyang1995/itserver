@@ -161,6 +161,22 @@
     LIMIT #{startRow},#{endRow}
   </select>
 
+  <select id="getExceptionProgramTotal" parameterType="map" resultType="int">
+    select COUNT(program_id) from (
+      SELECT program_id,name,product_id,program_status,create_time from program_approval_snapshot
+      where
+      program_status in ('999','200') and approval_status = 110
+      <if test="programIdList != null">
+        and product_id in
+        <foreach item="item" index="index" collection="programIdList" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+      GROUP BY program_id
+      order by create_time DESC
+    ) a
+  </select>
+
   <select id="latelychangeList" parameterType="map" resultMap="BaseResultMap">
     SELECT * from program_approval_snapshot
     where program_status=210 and approval_status=110
@@ -172,6 +188,17 @@
     </if>
     ORDER BY create_time desc
     LIMIT #{startRow},#{endRow}
+  </select>
+
+  <select id="latelychangeListTotal" parameterType="map" resultType="int">
+    SELECT COUNT(0) from program_approval_snapshot
+    where program_status=210 and approval_status=110
+    <if test="programIdList != null">
+      and product_id in
+      <foreach item="item" index="index" collection="programIdList" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
   </select>
 
   <select id="getOneByWhere" resultMap="BaseResultMap">
