@@ -1549,8 +1549,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
         //循环生成返回页面对象视图
         List<ApproveVo> resultList = new ArrayList<>();
-        ApproveVo resultVo = new ApproveVo();
         for(MoApproveVo moApproveVo:moApproveVoList){
+            ApproveVo resultVo = new ApproveVo();
             String bpmCode = moApproveVo.getFlowNo();
             ProgramApprovalSnapshot tmpSna = map.get(bpmCode);
             if(tmpSna==null)continue;
