@@ -122,10 +122,12 @@ public class ProgramBpmUtils
         jsonObject.put("ItemValue", getIsFirst(a));
         jsonArray.add(jsonObject);
 
-        jsonObject = new JSONObject();
-        jsonObject.put("ItemName", "approval303AppendActors");
-        jsonObject.put("ItemValue", paramsMap.get("businessPresidentList").split(","));
-        jsonArray.add(jsonObject);
+        if(StringUtils.isNotBlank(paramsMap.get("businessPresidentList"))){
+            jsonObject = new JSONObject();
+            jsonObject.put("ItemName", "approval303AppendActors");
+            jsonObject.put("ItemValue", paramsMap.get("businessPresidentList").split(","));
+            jsonArray.add(jsonObject);
+        }
         //********************集团审批4**********end********************
 
         //********************抄送**********begin********************
