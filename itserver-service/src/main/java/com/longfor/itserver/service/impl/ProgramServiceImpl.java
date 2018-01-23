@@ -724,6 +724,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             paraMap.put("bpmCode",bpmCode);
             List<ProgramApprovalSnapshot> tmpList = programApprovalSnapshotMapper.grayLevelList(paraMap);
             ProgramApprovalSnapshot programApprovalSnapshot = tmpList.get(0);
+            int oldProgramStatus = programApprovalSnapshot.getProgramStatus();
 
             //更新项目表
             program.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
@@ -732,10 +733,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programMapper.updateByPrimaryKey(program);
 
             //program快照表
-            int oldProgramStatus = programApprovalSnapshot.getProgramStatus();
             this.copyProperties(programApprovalSnapshot,program);
-            if (programApprovalSnapshot.getProgramStatus() == ProgramStatusNewEnum.XQBG.getCode()
-                    || programApprovalSnapshot.getProgramStatus() == ProgramStatusNewEnum.YQSX.getCode()) {
+            if (oldProgramStatus == ProgramStatusNewEnum.XQBG.getCode()
+                    || oldProgramStatus == ProgramStatusNewEnum.YQSX.getCode()) {
                 programApprovalSnapshot.setProgramStatus(oldProgramStatus);
             }
 //            programApprovalSnapshot.setId(null);

@@ -976,6 +976,9 @@ public class APIProgramBpmController extends BaseController {
 		paramsMap.put("programId",programId);
 		paramsMap.put("fileNameList",strList);
 		List<ProgramFile> repeatFileList = getProgramService().getFileListByWhere(paramsMap);
+		if (repeatFileList == null || repeatFileList.isEmpty()) {
+			return null;
+		}
 		StringBuffer sb = new StringBuffer();
 		for (ProgramFile file:repeatFileList){
 			sb.append(file.getFileName());
