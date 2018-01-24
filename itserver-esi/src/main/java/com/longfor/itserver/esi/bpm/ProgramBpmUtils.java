@@ -61,6 +61,19 @@ public class ProgramBpmUtils
     }
 
     /***
+     *
+     * @param oaAccount
+     * @param workItemId
+     * @param suggestion
+     * @return
+     */
+//    public static ApplySubmitResultVo cancelInstance(String oaAccount,String instanceId, String workItemId,int f){
+//        boolean result = BpmUtils.cancelInstance(oaAccount,instanceId,workItemId,f);
+//        ApplySubmitResultVo pplySubmitResultVo = JSONObject.parseObject(result, ApplySubmitResultVo.class);
+//        return p撤销流程plySubmitResultVo;
+//    }
+
+    /***
      * 创建流程_提交BRD
      * modifiedAccountId:提交人oa账号
      * modifiedAccountGuid:提交人guid
@@ -473,7 +486,7 @@ public class ProgramBpmUtils
 
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval301AppendActors");
-        str = paramsMap.get("businessCenterList")+","+paramsMap.get("businessPresidentList");
+        str = paramsMap.get("businessFunctionsList")+","+paramsMap.get("businessPresidentList");
         jsonObject.put("ItemValue", str.split(","));
         jsonArray.add(jsonObject);
         //********************集团审批2**********end********************

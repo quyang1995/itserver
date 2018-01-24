@@ -172,7 +172,7 @@ public class ProgramApprovalSnapshot implements Serializable {
      * 判断条件：1=地产，2=商业，3=数据，4=冠寓，5=养老，6=产城，7=基础中心
      */
     @Column(name = "analyzing_conditions")
-    private Integer analyzingConditions;
+    private String analyzingConditions;
 
     /**
      * 研发工作量预估
@@ -919,7 +919,7 @@ public class ProgramApprovalSnapshot implements Serializable {
      *
      * @return analyzing_conditions - 判断条件：1=地产，2=商业，3=数据，4=冠寓，5=养老，6=产城，7=基础中心
      */
-    public Integer getAnalyzingConditions() {
+    public String getAnalyzingConditions() {
         return analyzingConditions;
     }
 
@@ -928,7 +928,7 @@ public class ProgramApprovalSnapshot implements Serializable {
      *
      * @param analyzingConditions 判断条件：1=地产，2=商业，3=数据，4=冠寓，5=养老，6=产城，7=基础中心
      */
-    public void setAnalyzingConditions(Integer analyzingConditions) {
+    public void setAnalyzingConditions(String analyzingConditions) {
         this.analyzingConditions = analyzingConditions;
     }
 

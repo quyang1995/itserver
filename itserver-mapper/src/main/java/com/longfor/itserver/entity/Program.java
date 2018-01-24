@@ -35,7 +35,7 @@ public class Program implements Serializable {
     @Column(name = "dev_type")
     private int devType;
     @Column(name = "analyzing_conditions")
-    private int analyzingConditions;
+    private String analyzingConditions;
     @Column(name = "dev_workload")
     private int devWorkload;
     @Column(name = "overall_cost")
@@ -638,11 +638,11 @@ public class Program implements Serializable {
         this.devType = devType;
     }
 
-    public int getAnalyzingConditions() {
+    public String getAnalyzingConditions() {
         return analyzingConditions;
     }
 
-    public void setAnalyzingConditions(int analyzingConditions) {
+    public void setAnalyzingConditions(String analyzingConditions) {
         this.analyzingConditions = analyzingConditions;
     }
 

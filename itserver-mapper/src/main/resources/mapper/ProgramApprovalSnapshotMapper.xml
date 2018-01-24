@@ -35,7 +35,7 @@
     <result column="test_approval_date" property="testApprovalDate" jdbcType="TIMESTAMP" />
     <result column="online_plan_date" property="onlinePlanDate" jdbcType="TIMESTAMP" />
     <result column="dev_type" property="devType" jdbcType="INTEGER" />
-    <result column="analyzing_conditions" property="analyzingConditions" jdbcType="INTEGER" />
+    <result column="analyzing_conditions" property="analyzingConditions" jdbcType="VARCHAR" />
     <result column="dev_workload" property="devWorkload" jdbcType="INTEGER" />
     <result column="overall_cost" property="overallCost" jdbcType="DECIMAL" />
     <result column="bid_dev_workload" property="bidDevWorkload" jdbcType="INTEGER" />
@@ -78,20 +78,6 @@
     , uid, replay_date, all_extension_date
   </sql>
 
-  <sql id="Base_Column_List1" >
-    <!--
-      WARNING - @mbggenerated
-    -->
-    id, program_id, product_id, product_name, product_code, name, descp, commit_date, start_date,
-    gray_release_date, release_date, ued_date, architecture_date, like_product, like_program,
-    type, program_status, modified_account_id, modified_name, create_time, modified_time,
-    account_type, demo_approval_date, bidding_date, winning_bid_date, prod_approval_date,
-    dev_approval_date, test_approval_date, online_plan_date, dev_type,
-    dev_workload, overall_cost, bid_dev_workload, bid_overall_cost, approval_status,
-    bpm_code, remark, approval_view, bid_oversingle_cost, suggestion, apply_account, cause_delay
-    , uid, replay_date, all_extension_date
-  </sql>
-
   <select id="getListByProgramIdAndStatus" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
@@ -121,9 +107,8 @@
 
   <select id="grayLevelList" resultMap="BaseResultMap">
     select
-    <include refid="Base_Column_List1"/>,
-    (select p.analyzing_conditions from product p where p.id=a.product_id) as analyzing_conditions
-    from program_approval_snapshot a
+    <include refid="Base_Column_List"/>
+    from program_approval_snapshot
     <where>
       <if test=" id != null and id != '' ">
         id = #{id}

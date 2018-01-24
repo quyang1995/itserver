@@ -34,7 +34,7 @@
         <result column="test_approval_date" jdbcType="TIMESTAMP" property="testApprovalDate"/>
         <result column="online_plan_date" jdbcType="TIMESTAMP" property="onlinePlanDate"/>
         <result column="dev_type" jdbcType="INTEGER" property="devType"/>
-        <result column="analyzing_conditions" jdbcType="INTEGER" property="analyzingConditions"/>
+        <result column="analyzing_conditions" jdbcType="VARCHAR" property="analyzingConditions"/>
         <result column="dev_workload" jdbcType="INTEGER" property="devWorkload"/>
         <result column="overall_cost" jdbcType="DECIMAL" property="overallCost"/>
         <result column="bid_dev_workload" jdbcType="INTEGER" property="bidDevWorkload"/>
@@ -217,6 +217,9 @@
                 #{item}
             </foreach>
         </if>
+        <if test=" programStatus != null and  programStatus != '' ">
+            and program_status = #{programStatus}
+        </if>
         ORDER BY create_time desc
         LIMIT #{startRow},#{endRow}
     </select>
@@ -230,6 +233,9 @@
             <foreach item="item" index="index" collection="productIdList" open="(" separator="," close=")">
                 #{item}
             </foreach>
+        </if>
+        <if test=" programStatus != null and  programStatus != '' ">
+            and program_status = #{programStatus}
         </if>
         ORDER BY create_time desc
     </select>

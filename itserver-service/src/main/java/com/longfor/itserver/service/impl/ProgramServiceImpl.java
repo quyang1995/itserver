@@ -925,8 +925,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             //program表
 //			program.setProgramStatus(ProgramStatusNewEnum.XQBG.getCode());
 
-            program.setDevWorkload(Integer.parseInt(paramsMap.get("devWorkloadChange")));
-            program.setOverallCost(overallCost);
+            program.setDevWorkload(program.getDevWorkload()+Integer.parseInt(paramsMap.get("devWorkloadChange")));
+            program.setOverallCost(program.getOverallCost().add(overallCost));
             program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("grayReleaseDate"),DateUtil.PATTERN_DATE));
             program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("demandDate"),DateUtil.PATTERN_DATE));
             program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("developmentDate"),DateUtil.PATTERN_DATE));
@@ -956,6 +956,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                 programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
             }
 
+            programApprovalSnapshot.setDevWorkload(Integer.parseInt(paramsMap.get("devWorkloadChange")));
+            programApprovalSnapshot.setOverallCost(overallCost);
             programApprovalSnapshot.setRemark(paramsMap.get("remark"));
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
@@ -1398,7 +1400,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             //program表
             if(StringUtils.isNotBlank(devType))program.setDevType(Integer.parseInt(devType));//研发方式
-            if(StringUtils.isNotBlank(analyzingConditions))program.setAnalyzingConditions(Integer.parseInt(analyzingConditions));//判断条件
+            if(StringUtils.isNotBlank(analyzingConditions))program.setAnalyzingConditions(analyzingConditions);//判断条件
             if(StringUtils.isNotBlank(devWorkload))program.setDevWorkload(Integer.parseInt(devWorkload));//研发工作量预估
             if(StringUtils.isNotBlank(overallCost))program.setOverallCost(new BigDecimal(overallCost));//整体费用预估
             if(StringUtils.isNotBlank(commitDate))program.setCommitDate(DateUtil.string2Date(commitDate,DateUtil.PATTERN_DATE));//立项时间
@@ -1859,6 +1861,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             if(model!=null && model.getGrayReleaseDate()!=null){
                 resultMap.put("hdfbTime",DateUtil.date2String(model.getGrayReleaseDate(),DateUtil.PATTERN_DATE));//灰度发布时间
             }
+            resultMap.put("devWorkload",model.getDevWorkload());//评估人天
+            resultMap.put("overallCost",model.getOverallCost());//总预算
             mapList.add(resultMap);
         }
         //列表

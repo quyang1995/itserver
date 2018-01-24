@@ -18,7 +18,7 @@ public class ApplyViewVo {
     private List<FileVo> fileList;
     private String proveStatus;
     private int devType;
-    private int analyzingConditions;
+    private String analyzingConditions;
     private int devWorkload;
     private BigDecimal overallCost;
     @JsonSerialize(using = CustomDateSerializer.class)
@@ -58,11 +58,11 @@ public class ApplyViewVo {
         this.devType = devType;
     }
 
-    public int getAnalyzingConditions() {
+    public String getAnalyzingConditions() {
         return analyzingConditions;
     }
 
-    public void setAnalyzingConditions(int analyzingConditions) {
+    public void setAnalyzingConditions(String analyzingConditions) {
         this.analyzingConditions = analyzingConditions;
     }
 
