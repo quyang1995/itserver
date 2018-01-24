@@ -115,7 +115,7 @@ public class ProgramBpmUtils
         //********************集团审批2**********begin********************
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "textCondition");
-        jsonObject.put("ItemValue", getApplyApproval2(paramsMap.get("cOrZ")));
+        jsonObject.put("ItemValue", getApplyApproval2(paramsMap.get("cOrZ"))+";"+getIsFirst(paramsMap.get("isFirst")));
         jsonArray.add(jsonObject);
         //********************集团审批2**********end********************
 
@@ -127,11 +127,11 @@ public class ProgramBpmUtils
         //********************集团审批3**********end********************
 
         //********************集团审批4**********begin********************
-        jsonObject = new JSONObject();
-        jsonObject.put("ItemName", "textCondition");
-        String a = paramsMap.get("isFirst");
-        jsonObject.put("ItemValue", getIsFirst(a));
-        jsonArray.add(jsonObject);
+//        jsonObject = new JSONObject();
+//        jsonObject.put("ItemName", "textCondition");
+//        String a = paramsMap.get("isFirst");
+//        jsonObject.put("ItemValue", getIsFirst(a));
+//        jsonArray.add(jsonObject);
 
         if(StringUtils.isNotBlank(paramsMap.get("businessPresidentList"))){
             jsonObject = new JSONObject();
