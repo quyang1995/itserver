@@ -796,6 +796,48 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     }
 
     /***
+     * 终止流程
+     */
+    @Override
+    @Transactional(value="transactionManager")
+    public void cancelInstance(Map<String, String> paramsMap,Program program) {
+        try{
+            //提交流程
+            boolean f = ProgramBpmUtils.cancelInstance(
+                    paramsMap.get("modifiedAccountId"),paramsMap.get("instanceId"),paramsMap.get("workItemId"),1);
+            if(!f){
+                LOG.error("提交流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+                throw new RuntimeException("提交流程失败");
+            }
+
+            //获取快照表最新一条数据
+            Map<String,Object> paraMap = new HashMap<>();
+            paraMap.put("bpmCode",paramsMap.get("instanceId"));
+            List<ProgramApprovalSnapshot> tmpList = programApprovalSnapshotMapper.grayLevelList(paraMap);
+            ProgramApprovalSnapshot programApprovalSnapshot = tmpList.get(0);
+            Date now = new Date();
+
+            //更新项目表
+            program.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
+            program.setModifiedTime(now);
+            programMapper.updateByPrimaryKey(program);
+
+            programApprovalSnapshot.setId(null);
+            programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
+            programApprovalSnapshot.setCreateTime(now);
+            programApprovalSnapshot.setModifiedTime(now);
+            programApprovalSnapshot.setBpmCode(paramsMap.get("instanceId"));
+            programApprovalSnapshot.setSuggestion(paramsMap.get("suggestion"));
+            programApprovalSnapshot.setReportPoor(paramsMap.get("reportPoor"));
+            programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("发生异常");
+        }
+    }
+
+    /***
      * 延期上线
      */
     @Override
@@ -1829,6 +1871,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         map.put("startRow", paramMap.get("startRow") );
         map.put("endRow", paramMap.get("endRow") );
         map.put("pfAcc", paramMap.get("pfAcc") );
+        map.put("programStatus", paramMap.get("programStatus") );
         List<Program> list = programMapper.myFollowProgram(map);
         //总数
         rMap.put(APIHelper.TOTAL,  programMapper.myFollowProgramTotal(map));

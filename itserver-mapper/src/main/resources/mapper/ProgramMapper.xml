@@ -82,7 +82,7 @@
     <select id="programList" parameterType="map" resultMap="BaseResultMap">
         SELECT DISTINCT
         p.id, p.product_id, p.product_name, p.product_code, p.name, p.descp, p.commit_date, p.start_date, p.gray_release_date,
-        p.release_date,p.ued_date,p.architecture_date,
+        p.release_date,p.ued_date,p.architecture_date,p.overall_cost,p.dev_workload,
         p.like_product, p.like_program, p.type, p.program_status, p.modified_account_id, p.modified_name,
         p.create_time, p.modified_time,p.approval_status,p.uid
         FROM program p JOIN program_employee pe ON p.id = pe.program_id
@@ -217,7 +217,7 @@
                 #{item}
             </foreach>
         </if>
-        <if test=" programStatus != null and  programStatus != '' ">
+        <if test=" programStatus != null and  programStatus != '' and  programStatus != 0">
             and program_status = #{programStatus}
         </if>
         ORDER BY create_time desc
@@ -234,7 +234,7 @@
                 #{item}
             </foreach>
         </if>
-        <if test=" programStatus != null and  programStatus != '' ">
+        <if test=" programStatus != null and  programStatus != ''  and  programStatus != 0">
             and program_status = #{programStatus}
         </if>
         ORDER BY create_time desc

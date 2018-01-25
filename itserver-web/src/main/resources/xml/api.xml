@@ -1114,6 +1114,22 @@
 
     <!--
         URL:
+        /api/program/bpm/cancelInstance
+        说明:终止流程
+    -->
+    <item id="api_program_bpm_cancelInstance" description="终止流程">
+        <request>
+            <property name="programId" type="string" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true"/>
+            <property name="modifiedName" type="string" required="true"/>
+            <property name="workItemId" type="string" required="true"/>
+            <property name="suggestion" type="string" required="false"/>
+            <property name="instanceId" type="string" required="true"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
         /api/program/bpm/applyView
         说明:查看立项申请
     -->
@@ -1438,7 +1454,7 @@
             <property name="developerList" type="string" required="true" description="开发人员"/>
             <property name="businessList" type="string" required="true" description="业务中心人员"/>
             <property name="businessCenterList" type="string" required="true" description="业务中心负责人"/>
-            <property name="itCenterLeaderList" type="string" required="true" description="IT中心负责人guid"/>
+            <property name="itCenterLeaderList" type="string" required="false" description="IT中心负责人guid"/>
             <property name="businessFunctionsList" type="string" required="true" description="业务职能人"/>
             <property name="businessPresidentList" type="string" required="false" description="业务副总裁"/>
             <!--<property name="counterSigners" type="string" required="true"/>-->

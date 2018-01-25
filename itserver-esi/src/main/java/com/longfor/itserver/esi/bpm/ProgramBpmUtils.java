@@ -64,14 +64,12 @@ public class ProgramBpmUtils
      *
      * @param oaAccount
      * @param workItemId
-     * @param suggestion
      * @return
      */
-//    public static ApplySubmitResultVo cancelInstance(String oaAccount,String instanceId, String workItemId,int f){
-//        boolean result = BpmUtils.cancelInstance(oaAccount,instanceId,workItemId,f);
-//        ApplySubmitResultVo pplySubmitResultVo = JSONObject.parseObject(result, ApplySubmitResultVo.class);
-//        return p撤销流程plySubmitResultVo;
-//    }
+   public static boolean cancelInstance(String oaAccount,String instanceId, String workItemId,int f){
+        boolean result = BpmUtils.cancelInstance(oaAccount,instanceId,workItemId,f);
+        return result;
+    }
 
     /***
      * 创建流程_提交BRD

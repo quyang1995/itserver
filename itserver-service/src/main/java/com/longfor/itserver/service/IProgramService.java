@@ -38,6 +38,8 @@ public interface IProgramService extends IAdminService<Program> {
 
     void approvalRebut(Map<String, String> paramsMap,Program program);
 
+    void cancelInstance(Map<String, String> paramsMap,Program program);
+
     void delay(Map<String, String> paramsMap,Program program);
 
     void demandChange(Map<String, String> paramsMap,Program program);
