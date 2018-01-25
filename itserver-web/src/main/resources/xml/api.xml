@@ -1383,9 +1383,9 @@
             <!--<property name="fileList" type="string" required="true"/>-->
 
             <property name="grayReleaseDate" type="string" required="true"/>
-            <property name="demandDate" type="string" required="true"/>
-            <property name="developmentDate" type="string" required="true"/>
-            <property name="testReviewDate" type="string" required="true"/>
+            <!--<property name="demandDate" type="string" required="false"/>-->
+            <!--<property name="developmentDate" type="string" required="false"/>-->
+            <!--<property name="testReviewDate" type="string" required="false"/>-->
             <property name="onlineDate" type="string" required="true"/>
             <!--<property name="devWorkloadChange" type="string" required="false"/>-->
             <!--<property name="overallCost" type="string" required="false"/>-->
