@@ -66,7 +66,7 @@ public class ProgramBpmUtils
      * @param workItemId
      * @return
      */
-   public static boolean cancelInstance(String oaAccount,String instanceId, String workItemId,int f){
+   public static boolean cancelInstance(String oaAccount,String instanceId, String workItemId,String f){
         boolean result = BpmUtils.cancelInstance(oaAccount,instanceId,workItemId,f);
         return result;
     }

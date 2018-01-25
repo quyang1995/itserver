@@ -155,7 +155,7 @@ public class BpmUtils {
      * @param type
      * @return true成功 false失败
      */
-    public static boolean cancelInstance(String userCode, String instanceId, String workItemId, int type){
+    public static boolean cancelInstance(String userCode, String instanceId, String workItemId, String type){
         BPMServiceSoap_BindingStub bpmServiceStub = getBpmStub("CancelInstance");
         boolean resultMessage = false;
         try {

@@ -1351,7 +1351,7 @@ public class BPMServiceSoap_BindingStub extends org.apache.axis.client.Stub impl
 }
     }
 
-    public boolean cancelInstance(String userCode, String instanceId, String workItemId, int type) throws java.rmi.RemoteException {
+    public boolean cancelInstance(String userCode, String instanceId, String workItemId, String type) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1359,6 +1359,7 @@ public class BPMServiceSoap_BindingStub extends org.apache.axis.client.Stub impl
         _call.setOperation(_operations[10]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("http://tempuri.org/CancelInstance");
+        _call.setOperationName(new QName("http://tempuri.org/","CancelInstance"));
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -1366,7 +1367,7 @@ public class BPMServiceSoap_BindingStub extends org.apache.axis.client.Stub impl
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        Object _resp = _call.invoke(new Object[] {userCode, instanceId, workItemId, new Integer(type)});
+ try {        Object _resp = _call.invoke(new Object[] {userCode, instanceId, workItemId, type});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;

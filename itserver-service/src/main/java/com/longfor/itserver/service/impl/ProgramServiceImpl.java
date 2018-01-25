@@ -773,6 +773,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             paraMap.put("bpmCode",paramsMap.get("instanceId"));
             List<ProgramApprovalSnapshot> tmpList = programApprovalSnapshotMapper.grayLevelList(paraMap);
             ProgramApprovalSnapshot programApprovalSnapshot = tmpList.get(0);
+            int oldProgramStatus = programApprovalSnapshot.getProgramStatus();
             Date now = new Date();
 
             //更新项目表
@@ -780,8 +781,13 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             program.setModifiedTime(now);
             programMapper.updateByPrimaryKey(program);
 
+            if (oldProgramStatus == ProgramStatusNewEnum.XQBG.getCode()
+                    || oldProgramStatus == ProgramStatusNewEnum.YQSX.getCode()) {
+                programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.BGSHBH.getCode());
+            } else {
+                programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
+            }
             programApprovalSnapshot.setId(null);
-            programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
             programApprovalSnapshot.setBpmCode(paramsMap.get("instanceId"));
@@ -802,9 +808,16 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     @Transactional(value="transactionManager")
     public void cancelInstance(Map<String, String> paramsMap,Program program) {
         try{
+            ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.returnWorkflowToStart(
+                    paramsMap.get("modifiedAccountId"),paramsMap.get("workItemId"),paramsMap.get("suggestion"));
+            if(pplySubmitResultVo.getIsSuccess().equals("false")){
+                LOG.error("提交流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+                throw new RuntimeException("提交流程失败");
+            }
+
             //提交流程
             boolean f = ProgramBpmUtils.cancelInstance(
-                    paramsMap.get("modifiedAccountId"),paramsMap.get("instanceId"),paramsMap.get("workItemId"),1);
+                    "admin",paramsMap.get("instanceId"),null,"1");
             if(!f){
                 LOG.error("提交流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
                 throw new RuntimeException("提交流程失败");
@@ -815,15 +828,28 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             paraMap.put("bpmCode",paramsMap.get("instanceId"));
             List<ProgramApprovalSnapshot> tmpList = programApprovalSnapshotMapper.grayLevelList(paraMap);
             ProgramApprovalSnapshot programApprovalSnapshot = tmpList.get(0);
+            int oldProgramStatus = programApprovalSnapshot.getProgramStatus();
             Date now = new Date();
 
             //更新项目表
-            program.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
+//            program.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
+            if (oldProgramStatus == ProgramStatusNewEnum.XQBG.getCode()
+                    || oldProgramStatus == ProgramStatusNewEnum.YQSX.getCode()) {
+                program.setApprovalStatus(ProgramApprovalStatusEnum.BGSHBH.getCode());
+            } else {
+                program.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
+            }
             program.setModifiedTime(now);
             programMapper.updateByPrimaryKey(program);
 
             programApprovalSnapshot.setId(null);
-            programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
+//            programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
+            if (oldProgramStatus == ProgramStatusNewEnum.XQBG.getCode()
+                    || oldProgramStatus == ProgramStatusNewEnum.YQSX.getCode()) {
+                programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.BGSHBH.getCode());
+            } else {
+                programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
+            }
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
             programApprovalSnapshot.setBpmCode(paramsMap.get("instanceId"));

@@ -103,13 +103,13 @@ public class APIProgramBpmController extends BaseController {
 	/**
 	 * 审核驳回
 	 */
-	@RequestMapping(value = "/approvalRebut", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@RequestMapping(value = "/cancelInstance", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public Map approvalRebut(HttpServletRequest request) throws IOException {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-			LOG.info("------approvalRebut:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+			LOG.info("------cancelInstance:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
@@ -124,13 +124,13 @@ public class APIProgramBpmController extends BaseController {
 	/**
 	 * 终止流程
 	 */
-	@RequestMapping(value = "/cancelInstance", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@RequestMapping(value = "/approvalRebut", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public Map cancelInstance(HttpServletRequest request) throws IOException {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-			LOG.info("------cancelInstance:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+			LOG.info("------approvalRebut:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);

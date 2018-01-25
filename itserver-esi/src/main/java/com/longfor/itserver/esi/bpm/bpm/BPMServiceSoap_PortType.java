@@ -67,7 +67,7 @@ public interface BPMServiceSoap_PortType extends java.rmi.Remote {
     /**
      * CancelInstance
      */
-    public boolean cancelInstance(String userCode, String instanceId, String workItemId, int type) throws java.rmi.RemoteException;
+    public boolean cancelInstance(String userCode, String instanceId, String workItemId, String type) throws java.rmi.RemoteException;
 
     /**
      * GetInstanceActivityCode
