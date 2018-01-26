@@ -986,7 +986,7 @@ public class APIProgramBpmController extends BaseController {
 
 	private String checkFileName(String programId,String fileList){
 		List<FileVo> fileListVo = JSON.parseArray(fileList, FileVo.class);
-		if (fileList == null || fileList.isEmpty()) {
+		if (fileListVo == null || fileListVo.isEmpty()) {
 			return null;
 		}
 		List<String> strList = new ArrayList<String>();

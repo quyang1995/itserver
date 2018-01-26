@@ -900,11 +900,11 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 //                BigDecimal overallCostBig = new BigDecimal(overallCost);
 //                program.setOverallCost(overallCostBig);
 //            }
-            program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("grayReleaseDate"),DateUtil.PATTERN_DATE));
-            program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("demandDate"),DateUtil.PATTERN_DATE));
-            program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("developmentDate"),DateUtil.PATTERN_DATE));
-            program.setTestApprovalDate(DateUtil.string2Date(paramsMap.get("testReviewDate"),DateUtil.PATTERN_DATE));
-            program.setOnlinePlanDate(DateUtil.string2Date(paramsMap.get("onlineDate"),DateUtil.PATTERN_DATE));
+            if(StringUtils.isNotBlank(paramsMap.get("grayReleaseDate")))program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("grayReleaseDate"),DateUtil.PATTERN_DATE));
+            if(StringUtils.isNotBlank(paramsMap.get("demandDate")))program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("demandDate"),DateUtil.PATTERN_DATE));
+            if(StringUtils.isNotBlank(paramsMap.get("developmentDate")))program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("developmentDate"),DateUtil.PATTERN_DATE));
+            if(StringUtils.isNotBlank(paramsMap.get("testReviewDate")))program.setTestApprovalDate(DateUtil.string2Date(paramsMap.get("testReviewDate"),DateUtil.PATTERN_DATE));
+            if(StringUtils.isNotBlank(paramsMap.get("onlineDate")))program.setOnlinePlanDate(DateUtil.string2Date(paramsMap.get("onlineDate"),DateUtil.PATTERN_DATE));
             if(StringUtils.isNotBlank(paramsMap.get("replayDate")))program.setReplayDate(DateUtil.string2Date(paramsMap.get("replayDate"),DateUtil.PATTERN_DATE));
             if(StringUtils.isNotBlank(paramsMap.get("allExtensionDate")))program.setAllExtensionDate(DateUtil.string2Date(paramsMap.get("allExtensionDate"),DateUtil.PATTERN_DATE));
 
