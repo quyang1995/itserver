@@ -23,6 +23,9 @@ public class PsProgramDetail extends Program implements Serializable {
     private Integer changeStatus;
 
     @Transient
+    private Integer changeApprovalStatus;
+
+    @Transient
     private List<Product> productList;
 
     @Transient
@@ -61,6 +64,14 @@ public class PsProgramDetail extends Program implements Serializable {
 
     public void setChangeStatus(Integer changeStatus) {
         this.changeStatus = changeStatus;
+    }
+
+    public Integer getChangeApprovalStatus() {
+        return changeApprovalStatus;
+    }
+
+    public void setChangeApprovalStatus(Integer changeApprovalStatus) {
+        this.changeApprovalStatus = changeApprovalStatus;
     }
 
     public void setOperationList(List<ProgramEmployee> operationList) {

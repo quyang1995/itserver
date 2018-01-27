@@ -1218,6 +1218,7 @@
             <property name="fileList" type="string" required="true"/>
             <property name="productReviewDate" type="string" required="true"/>
             <property name="researchDate" type="string" required="true"/>
+            <property name="grayReleaseDate" type="string" required="true"/>
             <property name="testDate" type="string" required="true"/>
             <property name="onlineDate" type="string" required="true"/>
             <property name="replayDate" type="string" required="false"/>

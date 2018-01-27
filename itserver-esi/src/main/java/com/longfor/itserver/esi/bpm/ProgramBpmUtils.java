@@ -658,12 +658,13 @@ public class ProgramBpmUtils
         jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));//提交人guid
         jsonArray.add(jsonObject);
 
-        jsonObject = new JSONObject();
-        jsonObject.put("ItemName", "approval300AppendActors");
-//        String str = paramsMap.get("itCenterLeaderList")+","+ paramsMap.get("ifZqs");
         String str = paramsMap.get("ifZqs");
-        jsonObject.put("ItemValue", str.split(","));//IT中心负责人+周琼硕审批
-        jsonArray.add(jsonObject);
+        if(StringUtils.isNotBlank(str)){
+            jsonObject = new JSONObject();
+            jsonObject.put("ItemName", "approval300AppendActors");
+            jsonObject.put("ItemValue", str);//周琼硕审批
+            jsonArray.add(jsonObject);
+        }
         //********************集团审批**********end********************
 
         //********************抄送**********begin********************
@@ -945,10 +946,12 @@ public class ProgramBpmUtils
         //********************业务职能负责人审批**********end********************
 
         //********************集团审批4**********begin********************
-        jsonObject = new JSONObject();
-        jsonObject.put("ItemName", "approval303AppendActors");
-        jsonObject.put("ItemValue", paramsMap.get("businessPresidentList").split(","));
-        jsonArray.add(jsonObject);
+        if (StringUtils.isNotBlank(paramsMap.get("businessPresidentList"))){
+            jsonObject = new JSONObject();
+            jsonObject.put("ItemName", "approval303AppendActors");
+            jsonObject.put("ItemValue", paramsMap.get("businessPresidentList").split(","));
+            jsonArray.add(jsonObject);
+        }
         //********************集团审批4**********end********************
 
         //********************抄送**********begin********************
