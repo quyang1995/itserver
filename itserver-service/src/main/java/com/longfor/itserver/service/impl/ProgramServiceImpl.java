@@ -240,7 +240,6 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             return false;
         }
         program.setProgramStatus(ProgramStatusNewEnum.WLX.getCode());
-        program.setUid(UUID.randomUUID().toString());
         program.setProductName(product.getName());
         program.setProductCode(product.getCode());
         program.setCreateTime(TimeUtils.getTodayByDateTime());

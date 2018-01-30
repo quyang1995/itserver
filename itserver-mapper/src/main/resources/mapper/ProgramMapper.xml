@@ -41,7 +41,6 @@
         <result column="bid_overall_cost" jdbcType="DECIMAL" property="bidOverallCost"/>
         <result column="approval_status" jdbcType="DECIMAL" property="approvalStatus"/>
         <result column="bid_oversingle_cost" property="bidOversingleCost" jdbcType="DECIMAL" />
-        <result column="uid" jdbcType="VARCHAR" property="uid"/>
         <result column="new_code" jdbcType="VARCHAR" property="newCode"/>
         <result column="replay_date" jdbcType="TIMESTAMP" property="replayDate"/>
         <result column="all_extension_date" jdbcType="TIMESTAMP" property="allExtensionDate"/>
@@ -75,7 +74,7 @@
         ued_date, architecture_date, like_product, like_program, type, program_status, modified_account_id, modified_name,
         create_time, modified_time,demo_approval_date,bidding_date,winning_bid_date,prod_approval_date,dev_approval_date
         ,test_approval_date,online_plan_date,dev_type,analyzing_conditions,dev_workload,overall_cost,bid_dev_workload
-        ,bid_overall_cost,approval_status,bid_oversingle_cost,uid,new_code,replay_date,all_extension_date
+        ,bid_overall_cost,approval_status,bid_oversingle_cost,new_code,replay_date,all_extension_date
     </sql>
 
     <!-- 项目列表 -->
@@ -84,7 +83,7 @@
         p.id, p.product_id, p.product_name, p.product_code, p.name, p.descp, p.commit_date, p.start_date, p.gray_release_date,
         p.release_date,p.ued_date,p.architecture_date,p.overall_cost,p.dev_workload,p.analyzing_conditions,
         p.like_product, p.like_program, p.type, p.program_status, p.modified_account_id, p.modified_name,
-        p.create_time, p.modified_time,p.approval_status,p.uid
+        p.create_time, p.modified_time,p.approval_status
         FROM program p JOIN program_employee pe ON p.id = pe.program_id
         WHERE 1=1
         <if test=" isMove != null and isMove != '' and isMove == 1">
