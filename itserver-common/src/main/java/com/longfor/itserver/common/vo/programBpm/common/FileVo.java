@@ -14,7 +14,7 @@ public class FileVo {
     }
 
     public void setFileName(String fileName) {
-        this.fileName = fileName;
+        this.fileName = fileName.trim();
     }
 
     public String getFileSuffix() {

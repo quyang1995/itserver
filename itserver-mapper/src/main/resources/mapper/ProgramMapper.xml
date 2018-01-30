@@ -82,11 +82,14 @@
     <select id="programList" parameterType="map" resultMap="BaseResultMap">
         SELECT DISTINCT
         p.id, p.product_id, p.product_name, p.product_code, p.name, p.descp, p.commit_date, p.start_date, p.gray_release_date,
-        p.release_date,p.ued_date,p.architecture_date,p.overall_cost,p.dev_workload,
+        p.release_date,p.ued_date,p.architecture_date,p.overall_cost,p.dev_workload,p.analyzing_conditions,
         p.like_product, p.like_program, p.type, p.program_status, p.modified_account_id, p.modified_name,
         p.create_time, p.modified_time,p.approval_status,p.uid
         FROM program p JOIN program_employee pe ON p.id = pe.program_id
         WHERE 1=1
+        <if test=" isMove != null and isMove != '' and isMove == 1">
+            and p.program_status != 100
+        </if>
         <if test="isAdmin == 0">
             <if test='isPart == 0'>
                 and (pe.account_id = #{accountId, jdbcType=VARCHAR} OR p.type = 1)
@@ -113,7 +116,9 @@
             and (p.name like concat(concat('%',#{searchText}),'%') OR pe.employee_name like
             concat(concat('%',#{searchText}),'%'))
         </if>
-
+        <if test='analyzingConditions != "" and analyzingConditions != null  and analyzingConditions != -1'>
+            and p.analyzing_conditions = #{analyzingConditions}
+        </if>
         ORDER BY p.create_time DESC
     </select>
 
@@ -204,6 +209,9 @@
             <if test=" type != null and  type == 2 ">
                 and program_status != 100 and program_status != 900 and program_status != 999
             </if>
+            <if test=" analyzingConditions != null and  analyzingConditions != '' and analyzingConditions != -1 ">
+                and analyzing_conditions = #{analyzingConditions}
+            </if>
         </where>
     </select>
 
@@ -219,6 +227,9 @@
         </if>
         <if test=" programStatus != null and  programStatus != '' and  programStatus != 0">
             and program_status = #{programStatus}
+        </if>
+        <if test=" analyzingConditions != null and  analyzingConditions != '' and  analyzingConditions != -1">
+            and analyzing_conditions = #{analyzingConditions}
         </if>
         ORDER BY create_time desc
         LIMIT #{startRow},#{endRow}
@@ -237,6 +248,9 @@
         <if test=" programStatus != null and  programStatus != ''  and  programStatus != 0">
             and program_status = #{programStatus}
         </if>
+        <if test=" analyzingConditions != null and  analyzingConditions != '' and  analyzingConditions != -1">
+            and analyzing_conditions = #{analyzingConditions}
+        </if>
         ORDER BY create_time desc
     </select>
 
@@ -249,6 +263,9 @@
             <foreach item="item" index="index" collection="productIdList" open="(" separator="," close=")">
                 #{item}
             </foreach>
+        </if>
+        <if test=" analyzingConditions != null and  analyzingConditions != '' and  analyzingConditions != -1">
+            and analyzing_conditions = #{analyzingConditions}
         </if>
         GROUP BY program_id
         ) a ORDER BY coun desc LIMIT 0,5

@@ -154,6 +154,9 @@
             #{item}
           </foreach>
         </if>
+        <if test=" analyzingConditions != null and  analyzingConditions != '' and  analyzingConditions != -1">
+          and analyzing_conditions = #{analyzingConditions}
+        </if>
       order by create_time DESC
     ) a
     GROUP BY a.program_id
@@ -172,6 +175,9 @@
           #{item}
         </foreach>
       </if>
+      <if test=" analyzingConditions != null and  analyzingConditions != '' and  analyzingConditions != -1">
+        and analyzing_conditions = #{analyzingConditions}
+      </if>
       GROUP BY program_id
       order by create_time DESC
     ) a
@@ -186,6 +192,9 @@
         #{item}
       </foreach>
     </if>
+    <if test=" analyzingConditions != null and  analyzingConditions != '' and  analyzingConditions != -1">
+      and analyzing_conditions = #{analyzingConditions}
+    </if>
     ORDER BY create_time desc
     LIMIT #{startRow},#{endRow}
   </select>
@@ -198,6 +207,9 @@
       <foreach item="item" index="index" collection="programIdList" open="(" separator="," close=")">
         #{item}
       </foreach>
+    </if>
+    <if test=" analyzingConditions != null and  analyzingConditions != '' and  analyzingConditions != -1">
+      and analyzing_conditions = #{analyzingConditions}
     </if>
   </select>
 

@@ -1,5 +1,6 @@
 package com.longfor.itserver.service.impl;
 
+import com.alibaba.druid.sql.visitor.functions.Trim;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.ads.entity.AccountLongfor;
@@ -411,6 +412,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         JSONObject json = (JSONObject) JSONObject.toJSON(map);
         Program program = JSONObject.toJavaObject(json, Program.class);
         Program selectOneProgram = programMapper.selectByPrimaryKey(program.getId());
+        Product product = productMapper.selectByPrimaryKey(program.getProductId());
         Integer accountType = AccountUitl.getAccountType(map);
         //先生成变动日志
         List<String> changeLogTextList = getChangeLogText(selectOneProgram, program);
@@ -419,7 +421,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             return false;
         }
         selectOneProgram.setName(program.getName());
-        selectOneProgram.setProductId(program.getProductId());
+        selectOneProgram.setProductId(product.getId());
+        selectOneProgram.setProductName(product.getName());
+        selectOneProgram.setProductCode(product.getCode());
         selectOneProgram.setDescp(program.getDescp());
 //        selectOneProgram.setCommitDate(program.getCommitDate());
 //        selectOneProgram.setStartDate(program.getStartDate());
@@ -848,7 +852,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             //更新项目表
             // 延期和需求变更审核不通过时，项目状态不变
             if (oldProgramStatus != ProgramStatusNewEnum.XQBG.getCode()
-                    && oldProgramStatus != ProgramStatusNewEnum.YQSX.getCode()) {
+                    && oldProgramStatus != ProgramStatusNewEnum.YQSX.getCode()
+                    && oldProgramStatus != ProgramStatusNewEnum.ZZ.getCode()) {
                 program.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
             }
             program.setModifiedTime(now);
@@ -930,6 +935,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programApprovalSnapshot.setRemark(paramsMap.get("remark"));
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
+            programApprovalSnapshot.setApplyAccount(paramsMap.get("modifiedAccountId"));
             programApprovalSnapshot.setReportPoor(paramsMap.get("reportPoor"));
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
@@ -1001,11 +1007,11 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             program.setDevWorkload(program.getDevWorkload()+Integer.parseInt(paramsMap.get("devWorkloadChange")));
             program.setOverallCost(program.getOverallCost().add(overallCost));
-            program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("grayReleaseDate"),DateUtil.PATTERN_DATE));
-            program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("demandDate"),DateUtil.PATTERN_DATE));
-            program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("developmentDate"),DateUtil.PATTERN_DATE));
-            program.setTestApprovalDate(DateUtil.string2Date(paramsMap.get("testReviewDate"),DateUtil.PATTERN_DATE));
-            program.setOnlinePlanDate(DateUtil.string2Date(paramsMap.get("onlineDate"),DateUtil.PATTERN_DATE));
+            if(StringUtils.isNoneBlank(paramsMap.get("grayReleaseDate")))program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("grayReleaseDate"),DateUtil.PATTERN_DATE));
+            if(StringUtils.isNoneBlank(paramsMap.get("demandDate")))program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("demandDate"),DateUtil.PATTERN_DATE));
+            if(StringUtils.isNoneBlank(paramsMap.get("developmentDate")))program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("developmentDate"),DateUtil.PATTERN_DATE));
+            if(StringUtils.isNoneBlank(paramsMap.get("testReviewDate")))program.setTestApprovalDate(DateUtil.string2Date(paramsMap.get("testReviewDate"),DateUtil.PATTERN_DATE));
+            if(StringUtils.isNoneBlank(paramsMap.get("onlineDate")))program.setOnlinePlanDate(DateUtil.string2Date(paramsMap.get("onlineDate"),DateUtil.PATTERN_DATE));
             if(StringUtils.isNoneBlank(paramsMap.get("replayDate")))program.setReplayDate(DateUtil.string2Date(paramsMap.get("replayDate"),DateUtil.PATTERN_DATE));
             if(StringUtils.isNoneBlank(paramsMap.get("allExtensionDate")))program.setAllExtensionDate(DateUtil.string2Date(paramsMap.get("allExtensionDate"),DateUtil.PATTERN_DATE));
 
@@ -1043,6 +1049,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programApprovalSnapshot.setRemark(paramsMap.get("remark"));
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
+            programApprovalSnapshot.setApplyAccount(paramsMap.get("modifiedAccountId"));
             programApprovalSnapshot.setReportPoor(paramsMap.get("reportPoor"));
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
@@ -1097,7 +1104,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             }
 
             //program表
-            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
+//            program.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
             program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
             program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
             program.setModifiedName(paramsMap.get("modifiedName"));
@@ -1107,10 +1114,12 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
             this.copyProperties(programApprovalSnapshot,program);
             programApprovalSnapshot.setProgramStatus(ProgramStatusNewEnum.ZZ.getCode());
+            programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHZ.getCode());
             programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
-            programApprovalSnapshot.setReportPoor(paramsMap.get("remark"));
+            programApprovalSnapshot.setRemark(paramsMap.get("remark"));
+            programApprovalSnapshot.setApplyAccount(paramsMap.get("modifiedAccountId"));
             programApprovalSnapshot.setReportPoor(paramsMap.get("reportPoor"));
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
@@ -1135,7 +1144,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                 for (FileVo fileVo : fileList) {
                     ProgramFile programFile = new ProgramFile();
                     programFile.setProgramId(programId);
-                    programFile.setFileName(fileVo.getFileName());
+                    programFile.setFileName(StringUtils.trim(fileVo.getFileName()));
                     programFile.setFileSuffix(fileVo.getFileSuffix());
                     programFile.setFileSize(fileVo.getFileSize());
                     programFile.setType(programStatus);
@@ -1455,11 +1464,6 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             int approvalStatus = ProgramApprovalStatusEnum.SHZ.getCode();
 
-            program.setApprovalStatus(approvalStatus);
-            program.setProgramStatus(programStatus);
-            program.setModifiedTime(now);
-            programMapper.updateByPrimaryKey(program);
-
             String devType = paramsMap.get("devType");
             String analyzingConditions = paramsMap.get("analyzingConditions");
             String devWorkload = paramsMap.get("devWorkload");
@@ -1477,33 +1481,45 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             String testDate = paramsMap.get("testDate");
             String onlineDate = paramsMap.get("onlineDate");
             String productId = paramsMap.get("productId");
-            String productName = paramsMap.get("productName");
             String likeProduct = paramsMap.get("likeProduct");
             String type = paramsMap.get("type");
             String replayDate = paramsMap.get("replayDate");
             String allExtensionDate = paramsMap.get("allExtensionDate");
 
-            //program表
+            //基本信息实时修改
             if(StringUtils.isNotBlank(devType))program.setDevType(Integer.parseInt(devType));//研发方式
             if(StringUtils.isNotBlank(analyzingConditions))program.setAnalyzingConditions(analyzingConditions);//判断条件
             if(StringUtils.isNotBlank(devWorkload))program.setDevWorkload(Integer.parseInt(devWorkload));//研发工作量预估
             if(StringUtils.isNotBlank(overallCost))program.setOverallCost(new BigDecimal(overallCost));//整体费用预估
+            if(StringUtils.isNotBlank(bidOverallCost))program.setBidOverallCost(new BigDecimal(bidOverallCost));//整体费用
+            if(StringUtils.isNotBlank(bidDevWorkload))program.setBidDevWorkload(Integer.parseInt(bidDevWorkload));//人天（框架合同填写）
+            if(StringUtils.isNotBlank(bidOversingleCost))program.setBidOversingleCost(new BigDecimal(bidOversingleCost));//人天单价（框架合同填写）
+            if(StringUtils.isNotBlank(likeProduct))program.setLikeProduct(likeProduct);
+            if(StringUtils.isNotBlank(type))program.setType(Integer.parseInt(type));
+            if(StringUtils.isNotBlank(productId)){
+                Product product = productMapper.selectByPrimaryKey(Long.valueOf(productId));
+                if (product!=null) {
+                    program.setProductId(product.getId());
+                    program.setProductName(product.getName());
+                    program.setProductCode(product.getCode());
+                }
+            }
+            program.setApprovalStatus(approvalStatus);
+            program.setProgramStatus(programStatus);
+            program.setModifiedTime(now);
+            programMapper.updateByPrimaryKey(program);
+
+            //program表
+            //相关日期审核通过之后，修改项目信息
             if(StringUtils.isNotBlank(commitDate))program.setCommitDate(DateUtil.string2Date(commitDate,DateUtil.PATTERN_DATE));//立项时间
             if(StringUtils.isNotBlank(demoApprovalDate))program.setDemoApprovalDate(DateUtil.string2Date(demoApprovalDate,DateUtil.PATTERN_DATE));//demo评审时间
             if(StringUtils.isNotBlank(grayReleaseDate))program.setGrayReleaseDate(DateUtil.string2Date(grayReleaseDate,DateUtil.PATTERN_DATE));//灰度发布时间
             if(StringUtils.isNotBlank(biddingDate))program.setBiddingDate(DateUtil.string2Date(biddingDate,DateUtil.PATTERN_DATE));//招标时间
             if(StringUtils.isNotBlank(winningBidDate))program.setWinningBidDate(DateUtil.string2Date(winningBidDate,DateUtil.PATTERN_DATE));//中标时间
-            if(StringUtils.isNotBlank(bidOverallCost))program.setBidOverallCost(new BigDecimal(bidOverallCost));//整体费用
-            if(StringUtils.isNotBlank(bidDevWorkload))program.setBidDevWorkload(Integer.parseInt(bidDevWorkload));//人天（框架合同填写）
-            if(StringUtils.isNotBlank(bidOversingleCost))program.setBidOversingleCost(new BigDecimal(bidOversingleCost));//人天单价（框架合同填写）
             if(StringUtils.isNotBlank(productReviewDate))program.setProdApprovalDate(DateUtil.string2Date(productReviewDate,DateUtil.PATTERN_DATE));//产品评审时间
             if(StringUtils.isNotBlank(researchDate))program.setDevApprovalDate(DateUtil.string2Date(researchDate,DateUtil.PATTERN_DATE));//研发评审时间
             if(StringUtils.isNotBlank(testDate))program.setTestApprovalDate(DateUtil.string2Date(testDate,DateUtil.PATTERN_DATE));//测试评审时间
             if(StringUtils.isNotBlank(onlineDate))program.setOnlinePlanDate(DateUtil.string2Date(onlineDate,DateUtil.PATTERN_DATE));//上线计划时间
-            if(StringUtils.isNotBlank(productId))program.setProductId(Long.parseLong(productId));
-            if(StringUtils.isNotBlank(productName))program.setProductName(productName);
-            if(StringUtils.isNotBlank(likeProduct))program.setLikeProduct(likeProduct);
-            if(StringUtils.isNotBlank(type))program.setType(Integer.parseInt(type));
             if(StringUtils.isNotBlank(replayDate))program.setReplayDate(DateUtil.string2Date(replayDate,DateUtil.PATTERN_DATE));//项目复盘时间
             if(StringUtils.isNotBlank(allExtensionDate))program.setAllExtensionDate(DateUtil.string2Date(allExtensionDate,DateUtil.PATTERN_DATE));//全面推广时间
 
@@ -1511,8 +1527,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 //            program.setProgramStatus(programStatus);
 //            program.setModifiedTime(now);
 //            programMapper.updateByPrimaryKey(program);
-
-            this.dealProgramEmployee(paramsMap, program);
+            if(programStatus==ProgramStatusNewEnum.LX.getCode()) {
+                this.dealProgramEmployee(paramsMap, program);
+            }
 
             //program快照表
             ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
@@ -1654,7 +1671,12 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             resultVo.setProgramName(tmpSna.getName());
             resultVo.setProgramStatus(tmpSna.getProgramStatus());
             resultVo.setProgramStatusCh(ProgramStatusNewEnum.getByCode(tmpSna.getProgramStatus()).getText());
-            resultVo.setApplyName(tmpSna.getApplyAccount());
+//            resultVo.setApplyName(tmpSna.getApplyAccount());
+            for(MoApproveVo approveVo:moApproveVoList){
+                if(approveVo.getFlowNo().equals(bpmCode)){
+                    resultVo.setApplyName(approveVo.getPubTrueName());
+                }
+            }
             resultVo.setApplyTime(DateUtil.date2String(tmpSna.getCreateTime(),"yyyy-MM-dd HH:mm:ss"));
             resultList.add(resultVo);
         }
@@ -1807,20 +1829,20 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      * 項目数
      */
     @Override
-    public int getProgramSum(List<Product> productList,int type){
-        if (productList == null || productList.isEmpty()) {
-            return 0;
-        }
-        StringBuffer sb = new StringBuffer();
-        for (Product model:productList) {
-            sb.append(model.getId());
-            sb.append(",");
-        }
-        sb.deleteCharAt(sb.length()-1);
-        Map<String,Object> map = new HashMap<>();
-        map.put("productIdList",sb.toString().split(","));
-        map.put("type",type);
-        return  programMapper.getCountByProductId(map);
+    public int getProgramSum(Map<String, Object> paramsMap,int type){
+//        if (productList == null || productList.isEmpty()) {
+//            return 0;
+//        }
+//        StringBuffer sb = new StringBuffer();
+//        for (Product model:productList) {
+//            sb.append(model.getId());
+//            sb.append(",");
+//        }
+//        sb.deleteCharAt(sb.length()-1);
+//        Map<String,Object> map = new HashMap<>();
+//        map.put("productIdList",sb.toString().split(","));
+        paramsMap.put("type",type);
+        return  programMapper.getCountByProductId(paramsMap);
     }
 
     /***
@@ -1828,20 +1850,21 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      */
     @Override
     public Map getExceptionProgramList(Map<String,Object> paramMap,Map resultMap){
-        List<Product> productList = getListByLikeAnalyzingConditions(paramMap,0);
-        if (productList==null || productList.isEmpty()) {
-            return null;
-        }
-        StringBuffer sb = new StringBuffer();
-        for (Product model:productList) {
-            sb.append(model.getId());
-            sb.append(",");
-        }
-        sb.deleteCharAt(sb.length()-1);
+//        List<Product> productList = getListByLikeAnalyzingConditions(paramMap,0);
+//        if (productList==null || productList.isEmpty()) {
+//            return null;
+//        }
+//        StringBuffer sb = new StringBuffer();
+//        for (Product model:productList) {
+//            sb.append(model.getId());
+//            sb.append(",");
+//        }
+//        sb.deleteCharAt(sb.length()-1);
         Map<String,Object> map = new HashMap<>();
-        map.put("programIdList",sb.toString().split(","));
+//        map.put("programIdList",sb.toString().split(","));
         map.put("startRow", paramMap.get("startRow") );
         map.put("endRow", paramMap.get("endRow") );
+        map.put("analyzingConditions", paramMap.get("analyzingConditions") );
         List<ExceptionProgramVo> exceptionList = programApprovalSnapshotMapper.getExceptionProgram(map);
         //总数
         resultMap.put(APIHelper.TOTAL, programApprovalSnapshotMapper.getExceptionProgramTotal(map));
@@ -1864,20 +1887,21 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      */
     @Override
     public Map latelyChangeList(Map<String,Object> paramMap,Map resultMap){
-        List<Product> productList = getListByLikeAnalyzingConditions(paramMap,0);
-        if (productList==null || productList.isEmpty()) {
-            return null;
-        }
-        StringBuffer sb = new StringBuffer();
-        for (Product model:productList) {
-            sb.append(model.getId());
-            sb.append(",");
-        }
-        sb.deleteCharAt(sb.length()-1);
+//        List<Product> productList = getListByLikeAnalyzingConditions(paramMap,0);
+//        if (productList==null || productList.isEmpty()) {
+//            return null;
+//        }
+//        StringBuffer sb = new StringBuffer();
+//        for (Product model:productList) {
+//            sb.append(model.getId());
+//            sb.append(",");
+//        }
+//        sb.deleteCharAt(sb.length()-1);
         Map<String,Object> map = new HashMap<>();
-        map.put("programIdList",sb.toString().split(","));
+//        map.put("programIdList",sb.toString().split(","));
         map.put("startRow", paramMap.get("startRow") );
         map.put("endRow", paramMap.get("endRow") );
+        map.put("analyzingConditions", paramMap.get("analyzingConditions") );
         List<ProgramApprovalSnapshot> resultList = programApprovalSnapshotMapper.latelychangeList(map);
         //总数
         resultMap.put(APIHelper.TOTAL, programApprovalSnapshotMapper.latelychangeListTotal(map));
@@ -1905,22 +1929,23 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      */
     @Override
     public Map myFollowProgram(Map<String,Object> paramMap,Map rMap) throws Exception{
-        List<Product> productList = getListByLikeAnalyzingConditions(paramMap,0);
-        if (productList==null || productList.isEmpty()) {
-            return null;
-        }
-        StringBuffer sb = new StringBuffer();
-        for (Product model:productList) {
-            sb.append(model.getId());
-            sb.append(",");
-        }
-        sb.deleteCharAt(sb.length()-1);
+//        List<Product> productList = getListByLikeAnalyzingConditions(paramMap,0);
+//        if (productList==null || productList.isEmpty()) {
+//            return null;
+//        }
+//        StringBuffer sb = new StringBuffer();
+//        for (Product model:productList) {
+//            sb.append(model.getId());
+//            sb.append(",");
+//        }
+//        sb.deleteCharAt(sb.length()-1);
         Map<String,Object> map = new HashMap<>();
-        map.put("productIdList",sb.toString().split(","));
+//        map.put("productIdList",sb.toString().split(","));
         map.put("startRow", paramMap.get("startRow") );
         map.put("endRow", paramMap.get("endRow") );
         map.put("pfAcc", paramMap.get("pfAcc") );
         map.put("programStatus", paramMap.get("programStatus") );
+        map.put("analyzingConditions", paramMap.get("analyzingConditions") );
         List<Program> list = programMapper.myFollowProgram(map);
         //总数
         rMap.put(APIHelper.TOTAL,  programMapper.myFollowProgramTotal(map));
@@ -1967,20 +1992,21 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      */
     @Override
     public List<Map<String,Object>> changeTopFive(List<Product> productList,Map<String,Object> paramMap){
-        if (productList==null || productList.isEmpty()) {
-            return null;
-        }
-        StringBuffer sb = new StringBuffer();
-        for (Product model:productList) {
-            sb.append(model.getId());
-            sb.append(",");
-        }
-        sb.deleteCharAt(sb.length()-1);
+//        if (productList==null || productList.isEmpty()) {
+//            return null;
+//        }
+//        StringBuffer sb = new StringBuffer();
+//        for (Product model:productList) {
+//            sb.append(model.getId());
+//            sb.append(",");
+//        }
+//        sb.deleteCharAt(sb.length()-1);
         Map<String,Object> map = new HashMap<>();
-        map.put("productIdList",sb.toString().split(","));
+//        map.put("productIdList",sb.toString().split(","));
         map.put("startRow", paramMap.get("startRow") );
         map.put("endRow", paramMap.get("endRow") );
         map.put("pfAcc", paramMap.get("pfAcc") );
+        map.put("analyzingConditions", paramMap.get("analyzingConditions") );
         return programMapper.changeTopFive(map);
     }
 

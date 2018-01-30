@@ -185,7 +185,7 @@
         id
         FROM product
         <where>
-            <if test=" analyzingConditions != null and analyzingConditions != '' and analyzingConditions != 0">
+            <if test=" analyzingConditions != null and analyzingConditions != '' and analyzingConditions != -1">
                 analyzing_conditions like concat('%',#{analyzingConditions},'%')
             </if>
 

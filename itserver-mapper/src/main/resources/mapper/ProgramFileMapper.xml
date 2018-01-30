@@ -91,6 +91,9 @@
       <if test="snapshotId != null and snapshotId != ''">
         and pf.snapshot_id = #{snapshotId}
       </if>
+      <if test="fileName != null and fileName != ''">
+        and pf.file_name LIKE CONCAT('%', #{fileName}, '%')
+      </if>
     </where>
   </select>
 
@@ -116,6 +119,9 @@
         </if>
         <if test="snapshotId != null and snapshotId != ''">
           and pf.snapshot_id = #{snapshotId}
+        </if>
+        <if test="fileName != null and fileName != ''">
+          and pf.file_name LIKE CONCAT('%', #{fileName}, '%')
         </if>
       </where>
       ORDER BY pf.create_time DESC

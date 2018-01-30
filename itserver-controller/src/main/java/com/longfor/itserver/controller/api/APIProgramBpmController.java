@@ -898,11 +898,11 @@ public class APIProgramBpmController extends BaseController {
 			}
 			dataMap.put("productDoing",productDoing.size());
 			//项目总数
-			dataMap.put("programSum",getProgramService().getProgramSum(productList,0));
+			dataMap.put("programSum",getProgramService().getProgramSum(paramsMap,0));
 			//本月新增项目
-			dataMap.put("programYue",getProgramService().getProgramSum(productList,1));
+			dataMap.put("programYue",getProgramService().getProgramSum(paramsMap,1));
 			//进行中的项目
-			dataMap.put("programDoing",getProgramService().getProgramSum(productList,2));
+			dataMap.put("programDoing",getProgramService().getProgramSum(paramsMap,2));
 			//需求变更--近三个月变更次数TOP5
 			List<Map<String,Object>> changeTopFive = getProgramService().changeTopFive(productList,paramsMap);
 			dataMap.put("changeTopFive",changeTopFive);

@@ -47,7 +47,6 @@ public interface IProgramService extends IAdminService<Program> {
     void stopProgram(Map<String, String> paramsMap,Program program);
 
     void submit(Map<String, String> paramsMap,Program program,int programStatus);
-//    ApplyViewVo applyView(Map<String, String> paramsMap, Program program) throws Exception;
 
     ProgramApprovalSnapshot getSnapshot(Long id) throws Exception;
 
@@ -59,7 +58,7 @@ public interface IProgramService extends IAdminService<Program> {
 
     List<Product> getListByLikeAnalyzingConditions(Map<String,Object> paramMap,int type);
 
-    int getProgramSum(List<Product> productList,int type);
+    int getProgramSum(Map<String, Object> paramsMap,int type);
 
     Map getExceptionProgramList(Map<String, Object> paramsMap,Map resultMap);
 

@@ -205,9 +205,11 @@
             <property name="accountId" type="string" required="true" maxLength="30"/>
             <property name="programStatus" type="int" required="true" area="0,100,110,120,130,140,150,160,170,180,190,193,195,200,210,900,999"/>
             <property name="approvalStatus" type="int" required="true" area="0,100,110,120,130,140"/>
+            <property name="analyzingConditions" type="int" required="false" area="-1,1,2,3,4,5,6,7"/>
             <property name="isPart" type="int" required="true" area="0,1"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
             <property name="productId" type="int" required="false" />
+            <property name="isMove" type="int" required="false" />
         </request>
     </item>
 
@@ -997,6 +999,13 @@
     </item>
     <!--
         URL:
+        /down/load/programFile
+        说明:下载项目文件
+    -->
+    <item id="down_load_programFile" description="下载项目文件">
+    </item>
+    <!--
+        URL:
         /api/download/demand
         说明:下载需求文件
     -->
@@ -1066,7 +1075,7 @@
             <property name="businessFunctionsList" type="string" required="true" description="业务职能人"/>
             <property name="businessPresidentList" type="string" required="false" description="业务副总裁"/>
 
-            <property name="productId" type="string" required="false" description="归属产品"/>
+            <property name="productId" type="string" required="true" description="归属产品"/>
             <property name="productName" type="string" required="false" description="归属产品名称"/>
             <property name="likeProduct" type="string" required="false" description="关联产品id字符串，e.g. 1,2,3,..."/>
             <property name="type" type="string" required="false" description="公开性"/>
@@ -1533,6 +1542,7 @@
             <property name="type" type="string" required="false"/>
             <property name="pageNum" type="int" required="true"/>
             <property name="pageSize" type="int" required="true"/>
+            <property name="fileName" type="string" required="false"/>
         </request>
     </item>
 
