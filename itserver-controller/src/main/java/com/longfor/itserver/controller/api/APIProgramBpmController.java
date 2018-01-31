@@ -802,7 +802,8 @@ public class APIProgramBpmController extends BaseController {
 			LOG.info("------getApprovelapprovList:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 
 			//调用移动审批接口获取列表
-			MoApproveListVo moApproveListVo = MoApproveUtil.flowapiList(Integer.parseInt(paramsMap.get("approveStatus")),
+			MoApproveListVo moApproveListVo = MoApproveUtil.flowapiList(paramsMap.get("isMyLaunch"),
+										Integer.parseInt(paramsMap.get("approveStatus")),
 										paramsMap.get("oaAccount"),
 										paramsMap.get("searchType"),
 										Integer.parseInt(paramsMap.get("page")),

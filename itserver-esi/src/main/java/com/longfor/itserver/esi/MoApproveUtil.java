@@ -18,6 +18,7 @@ public class MoApproveUtil{
     private static String token;
     private static String systemCode;
     private static final String FLOWAPI_LIST = "/flowapi/list";
+    private static final String FLOWAPI_SPONSOR_LIST = "/flowapi/sponsorlist";
 
     static {
         Props props = JoddHelper.getInstance().getJoddProps();
@@ -26,7 +27,7 @@ public class MoApproveUtil{
         systemCode = props.getValue("moApprovel.systemCode");
     }
 
-    public static MoApproveListVo flowapiList(int status,String userName,String searchType,int page,int pageSize){
+    public static MoApproveListVo flowapiList(String isMyLaunch,int status,String userName,String searchType,int page,int pageSize){
         String paraR = "";
         String resultR = "";
         try{
@@ -38,7 +39,13 @@ public class MoApproveUtil{
             para.put("pageSize",pageSize);
             para.put("systemNo",systemCode);
             paraR = para.toString();
-            JSONObject result = HttpUtil.post(url + FLOWAPI_LIST,token,paraR);
+            JSONObject result = new JSONObject();
+            if ("0".equals(isMyLaunch)) {
+                result = HttpUtil.post(url + FLOWAPI_LIST,token,paraR);
+            }
+            if ("1".equals(isMyLaunch)) {
+                result = HttpUtil.post(url + FLOWAPI_SPONSOR_LIST,token,paraR);
+            }
             resultR = result.toJSONString();
             if ("0".equals(result.get("code").toString())) {
                 String data = JSON.toJSONString(result.get("data"));

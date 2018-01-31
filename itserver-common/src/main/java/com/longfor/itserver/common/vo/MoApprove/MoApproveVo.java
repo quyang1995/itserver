@@ -6,26 +6,47 @@ import java.util.List;
 
 
 public class MoApproveVo {
+    /** id */
     private int id;
+    /** 待办id/已办id */
     private String todoId;
+    /** 系统编号 */
     private String systemNo;
+    /** 标题 */
     private String title;
+    /**DOHALFDATA 状态 0:待审批，1:已审批，2:已取消 3:已删除 4:审批中 5:审批失败 */
     private int todoStatus;
+    /** 流程编号 */
     private String flowNo;
+    /** 业务类型 */
     private String business_type;
+    /** 发布人用户名 */
     private String pubUsername;
+    /** 审批人用户名 */
     private String appvUsername;
+    /** 待办数据 */
     private String dohalfData;
+    /** 创建时间 */
     private String createDate;
+    /** 更新时间 */
     private String updateDate;
+    /** 步骤id */
     private String runnote_id;
+    /** oa_url(bmp需传) */
     private String oa_url;
+    /** 发布人真实姓名 */
     private String pubTrueName;
+    /** 催办 0为催办 */
     private String otherStatus;
+    /** 未开放数据 0为未开放 */
     private String notOpen;
+    /** 是否是滑动删除 0为删除 */
     private String slideDel;
+    /** 点击次数 */
     private String opentimer;
+    /** 逻辑删除 0为删除 */
     private String logicDel;
+    /** 待办类型 0待办，1通知，2传阅 3、催办、4归档 */
     private int todo_type;
 
     public int getId() {

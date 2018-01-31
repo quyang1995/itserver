@@ -1558,6 +1558,7 @@
             <property name="searchType" type="string" required="false"/>
             <property name="page" type="int" required="false"/>
             <property name="pageSize" type="int" required="false"/>
+            <property name="isMyLaunch" type="string" required="true"/>
         </request>
     </item>
 

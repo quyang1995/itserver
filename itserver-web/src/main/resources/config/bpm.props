@@ -10,6 +10,6 @@ systemCode=ITplus_
 viewApprovalNode=http://demobpm.longhu.net/portal/InstanceDetailToOANewStart.aspx?instanceId=
 
 [bpm<production>]
-url=http://192.168.33.95:9090/com.longfor.esb.DC.BPM.bpmService
+url=http://192.168.10.153:9090/com.longfor.esb.DC.BPM.bpmService
 systemCode=ITplus_
 viewApprovalNode=http://bpm.longhu.net/portal/InstanceDetailToOANewStart.aspx?instanceId=
