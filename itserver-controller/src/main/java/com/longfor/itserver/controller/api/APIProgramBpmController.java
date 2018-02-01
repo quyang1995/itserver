@@ -800,10 +800,9 @@ public class APIProgramBpmController extends BaseController {
 		try {
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 			LOG.info("------getApprovelapprovList:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
-
 			//调用移动审批接口获取列表
 			MoApproveListVo moApproveListVo = MoApproveUtil.flowapiList(paramsMap.get("isMyLaunch"),
-										Integer.parseInt(paramsMap.get("approveStatus")),
+										paramsMap.get("approveStatus"),
 										paramsMap.get("oaAccount"),
 										paramsMap.get("searchType"),
 										Integer.parseInt(paramsMap.get("page")),

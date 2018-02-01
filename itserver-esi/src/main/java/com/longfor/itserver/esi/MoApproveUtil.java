@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.itserver.common.helper.JoddHelper;
 import com.longfor.itserver.common.util.HttpUtil;
+import com.longfor.itserver.common.util.StringUtil;
 import com.longfor.itserver.common.vo.MoApprove.MoApproveListVo;
 import jodd.props.Props;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,12 +29,14 @@ public class MoApproveUtil{
         systemCode = props.getValue("moApprovel.systemCode");
     }
 
-    public static MoApproveListVo flowapiList(String isMyLaunch,int status,String userName,String searchType,int page,int pageSize){
+    public static MoApproveListVo flowapiList(String isMyLaunch,String status,String userName,String searchType,int page,int pageSize){
         String paraR = "";
         String resultR = "";
         try{
             JSONObject para = new JSONObject();
-            para.put("status",status);
+            if (StringUtils.isNotEmpty(status)) {
+                para.put("status",status);
+            }
             para.put("username",userName);
             para.put("searchType",searchType);
             para.put("page",page);

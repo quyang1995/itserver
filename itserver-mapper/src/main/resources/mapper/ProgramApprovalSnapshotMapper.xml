@@ -46,8 +46,10 @@
     <result column="approval_view" property="approvalView" jdbcType="VARCHAR" />
     <result column="bid_oversingle_cost" property="bidOversingleCost" jdbcType="DECIMAL" />
     <result column="suggestion" property="suggestion" jdbcType="VARCHAR" />
-    <result column="applyAccount" property="apply_account" jdbcType="VARCHAR" />
+    <result column="apply_account" property="applyAccount" jdbcType="VARCHAR" />
     <result column="cause_delay" property="causeDelay" jdbcType="VARCHAR" />
+    <result column="report_poor" property="reportPoor" jdbcType="INTEGER" />
+    <result column="new_code" property="newCode" jdbcType="VARCHAR" />
     <result column="replay_date" jdbcType="TIMESTAMP" property="replayDate"/>
     <result column="all_extension_date" jdbcType="TIMESTAMP" property="allExtensionDate"/>
   </resultMap>
@@ -74,7 +76,7 @@
     dev_approval_date, test_approval_date, online_plan_date, dev_type, analyzing_conditions, 
     dev_workload, overall_cost, bid_dev_workload, bid_overall_cost, approval_status, 
     bpm_code, remark, approval_view, bid_oversingle_cost, suggestion, apply_account, cause_delay
-    , replay_date, all_extension_date
+    , new_code, report_poor, replay_date, all_extension_date
   </sql>
 
   <select id="getListByProgramIdAndStatus" resultMap="BaseResultMap">

@@ -732,6 +732,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             int currProgramStatus = program.getProgramStatus();
             int currApprovalStatus = program.getApprovalStatus();
 
+            String newCode = programApprovalSnapshot.getNewCode();
+            String applyAccount = programApprovalSnapshot.getApplyAccount();
+
             this.copyPropertiesToProgram(program,programApprovalSnapshot);
 
             //更新项目表
@@ -753,13 +756,20 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                     || oldProgramStatus == ProgramStatusNewEnum.YQSX.getCode()) {
                 programApprovalSnapshot.setProgramStatus(oldProgramStatus);
             }
+            programApprovalSnapshot.setNewCode(newCode);
+            programApprovalSnapshot.setApplyAccount(applyAccount);
             programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
             programApprovalSnapshot.setSuggestion(paramsMap.get("suggestion"));
             programApprovalSnapshot.setReportPoor(paramsMap.get("reportPoor"));
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
-
+            //如果是项目复盘的话，数据库里添加一条项目复盘审核通过的信息
+            if(oldProgramStatus==ProgramStatusNewEnum.XMFP.getCode()){
+                programApprovalSnapshot.setId(null);
+                programApprovalSnapshot.setProgramStatus(ProgramStatusNewEnum.XMFP.getCode());
+                programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+            }
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException("发生异常");
@@ -787,24 +797,31 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             List<ProgramApprovalSnapshot> tmpList = programApprovalSnapshotMapper.grayLevelList(paraMap);
             ProgramApprovalSnapshot programApprovalSnapshot = tmpList.get(0);
             int oldProgramStatus = programApprovalSnapshot.getProgramStatus();
+
+            String newCode = programApprovalSnapshot.getNewCode();
+            String applyAccount = programApprovalSnapshot.getApplyAccount();
             Date now = new Date();
 
             //更新项目表
-            // 延期和需求变更审核通过时，项目状态不变
+            // 延期和需求变更审核不通过时，项目状态不变
             if (oldProgramStatus != ProgramStatusNewEnum.XQBG.getCode()
-                    && oldProgramStatus != ProgramStatusNewEnum.YQSX.getCode()) {
-                program.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
+                    && oldProgramStatus != ProgramStatusNewEnum.YQSX.getCode()
+                    && oldProgramStatus != ProgramStatusNewEnum.ZZ.getCode()) {
+                program.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
             }
             program.setModifiedTime(now);
             programMapper.updateByPrimaryKey(program);
 
+            programApprovalSnapshot.setId(null);
+//            programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
             if (oldProgramStatus == ProgramStatusNewEnum.XQBG.getCode()
                     || oldProgramStatus == ProgramStatusNewEnum.YQSX.getCode()) {
                 programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.BGSHBH.getCode());
             } else {
                 programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
             }
-            programApprovalSnapshot.setId(null);
+            programApprovalSnapshot.setNewCode(newCode);
+            programApprovalSnapshot.setApplyAccount(applyAccount);
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
             programApprovalSnapshot.setBpmCode(paramsMap.get("instanceId"));
@@ -846,6 +863,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             List<ProgramApprovalSnapshot> tmpList = programApprovalSnapshotMapper.grayLevelList(paraMap);
             ProgramApprovalSnapshot programApprovalSnapshot = tmpList.get(0);
             int oldProgramStatus = programApprovalSnapshot.getProgramStatus();
+
+            String newCode = programApprovalSnapshot.getNewCode();
+            String applyAccount = programApprovalSnapshot.getApplyAccount();
             Date now = new Date();
 
             //更新项目表
@@ -866,6 +886,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             } else {
                 programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHBH.getCode());
             }
+            programApprovalSnapshot.setNewCode(newCode);
+            programApprovalSnapshot.setApplyAccount(applyAccount);
             programApprovalSnapshot.setCreateTime(now);
             programApprovalSnapshot.setModifiedTime(now);
             programApprovalSnapshot.setBpmCode(paramsMap.get("instanceId"));
@@ -1671,11 +1693,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             resultVo.setProgramStatus(tmpSna.getProgramStatus());
             resultVo.setProgramStatusCh(ProgramStatusNewEnum.getByCode(tmpSna.getProgramStatus()).getText());
 //            resultVo.setApplyName(tmpSna.getApplyAccount());
-            for(MoApproveVo approveVo:moApproveVoList){
-                if(approveVo.getFlowNo().equals(bpmCode)){
-                    resultVo.setApplyName(approveVo.getPubTrueName());
-                }
-            }
+//            for(MoApproveVo approveVo:moApproveVoList){
+//                if(approveVo.getFlowNo().equals(bpmCode)){
+//                    resultVo.setApplyName(approveVo.getPubTrueName());
+//                    resultVo.setTodoStatus(approveVo.getTodoStatus());
+//                }
+//            }
+            resultVo.setApplyName(moApproveVo.getPubTrueName());
+            resultVo.setTodoStatus(moApproveVo.getTodoStatus());
             resultVo.setApplyTime(DateUtil.date2String(tmpSna.getCreateTime(),"yyyy-MM-dd HH:mm:ss"));
             resultList.add(resultVo);
         }
