@@ -1,6 +1,5 @@
 package com.longfor.itserver.service.impl;
 
-import com.alibaba.druid.sql.visitor.functions.Trim;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.ads.entity.AccountLongfor;
@@ -1661,8 +1660,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     @Override
     public ApproveListVo getApprovelapprovList(MoApproveListVo moApproveListVo) throws Exception{
         ApproveListVo approveListVo = new ApproveListVo();
-        approveListVo.setTotal(moApproveListVo.getTotal());
-        approveListVo.setPageNo(moApproveListVo.getPage());
+//        approveListVo.setTotal(moApproveListVo.getTotal());
+//        approveListVo.setPageNo(moApproveListVo.getPage());
 
         //循环获取bpmcode list，然后查询快照表获取 每个bpmcode获取最后一条对应快照
         List<String> bmpCodeList = new ArrayList<>();
@@ -1692,13 +1691,6 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             resultVo.setProgramName(tmpSna.getName());
             resultVo.setProgramStatus(tmpSna.getProgramStatus());
             resultVo.setProgramStatusCh(ProgramStatusNewEnum.getByCode(tmpSna.getProgramStatus()).getText());
-//            resultVo.setApplyName(tmpSna.getApplyAccount());
-//            for(MoApproveVo approveVo:moApproveVoList){
-//                if(approveVo.getFlowNo().equals(bpmCode)){
-//                    resultVo.setApplyName(approveVo.getPubTrueName());
-//                    resultVo.setTodoStatus(approveVo.getTodoStatus());
-//                }
-//            }
             resultVo.setApplyName(moApproveVo.getPubTrueName());
             resultVo.setTodoStatus(moApproveVo.getTodoStatus());
             resultVo.setApplyTime(DateUtil.date2String(tmpSna.getCreateTime(),"yyyy-MM-dd HH:mm:ss"));
@@ -1854,17 +1846,6 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      */
     @Override
     public int getProgramSum(Map<String, Object> paramsMap,int type){
-//        if (productList == null || productList.isEmpty()) {
-//            return 0;
-//        }
-//        StringBuffer sb = new StringBuffer();
-//        for (Product model:productList) {
-//            sb.append(model.getId());
-//            sb.append(",");
-//        }
-//        sb.deleteCharAt(sb.length()-1);
-//        Map<String,Object> map = new HashMap<>();
-//        map.put("productIdList",sb.toString().split(","));
         paramsMap.put("type",type);
         return  programMapper.getCountByProductId(paramsMap);
     }
@@ -1874,24 +1855,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      */
     @Override
     public Map getExceptionProgramList(Map<String,Object> paramMap,Map resultMap){
-//        List<Product> productList = getListByLikeAnalyzingConditions(paramMap,0);
-//        if (productList==null || productList.isEmpty()) {
-//            return null;
-//        }
-//        StringBuffer sb = new StringBuffer();
-//        for (Product model:productList) {
-//            sb.append(model.getId());
-//            sb.append(",");
-//        }
-//        sb.deleteCharAt(sb.length()-1);
-        Map<String,Object> map = new HashMap<>();
-//        map.put("programIdList",sb.toString().split(","));
-        map.put("startRow", paramMap.get("startRow") );
-        map.put("endRow", paramMap.get("endRow") );
-        map.put("analyzingConditions", paramMap.get("analyzingConditions") );
-        List<ExceptionProgramVo> exceptionList = programApprovalSnapshotMapper.getExceptionProgram(map);
+        List<ExceptionProgramVo> exceptionList = programApprovalSnapshotMapper.getExceptionProgram(paramMap);
         //总数
-        resultMap.put(APIHelper.TOTAL, programApprovalSnapshotMapper.getExceptionProgramTotal(map));
+        resultMap.put(APIHelper.TOTAL, programApprovalSnapshotMapper.getExceptionProgramTotal(paramMap));
         for (ExceptionProgramVo model:exceptionList) {
             /* 产品经理 */
             Map productManager = new HashMap();
@@ -1911,24 +1877,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      */
     @Override
     public Map latelyChangeList(Map<String,Object> paramMap,Map resultMap){
-//        List<Product> productList = getListByLikeAnalyzingConditions(paramMap,0);
-//        if (productList==null || productList.isEmpty()) {
-//            return null;
-//        }
-//        StringBuffer sb = new StringBuffer();
-//        for (Product model:productList) {
-//            sb.append(model.getId());
-//            sb.append(",");
-//        }
-//        sb.deleteCharAt(sb.length()-1);
-        Map<String,Object> map = new HashMap<>();
-//        map.put("programIdList",sb.toString().split(","));
-        map.put("startRow", paramMap.get("startRow") );
-        map.put("endRow", paramMap.get("endRow") );
-        map.put("analyzingConditions", paramMap.get("analyzingConditions") );
-        List<ProgramApprovalSnapshot> resultList = programApprovalSnapshotMapper.latelychangeList(map);
+        List<ProgramApprovalSnapshot> resultList = programApprovalSnapshotMapper.latelyChangeList(paramMap);
         //总数
-        resultMap.put(APIHelper.TOTAL, programApprovalSnapshotMapper.latelychangeListTotal(map));
+        resultMap.put(APIHelper.TOTAL, programApprovalSnapshotMapper.latelyChangeListTotal(paramMap));
         for (ProgramApprovalSnapshot model:resultList) {
             /* 产品经理 */
             productManagerList(model);
@@ -1953,33 +1904,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      */
     @Override
     public Map myFollowProgram(Map<String,Object> paramMap,Map rMap) throws Exception{
-//        List<Product> productList = getListByLikeAnalyzingConditions(paramMap,0);
-//        if (productList==null || productList.isEmpty()) {
-//            return null;
-//        }
-//        StringBuffer sb = new StringBuffer();
-//        for (Product model:productList) {
-//            sb.append(model.getId());
-//            sb.append(",");
-//        }
-//        sb.deleteCharAt(sb.length()-1);
-        Map<String,Object> map = new HashMap<>();
-//        map.put("productIdList",sb.toString().split(","));
-        map.put("startRow", paramMap.get("startRow") );
-        map.put("endRow", paramMap.get("endRow") );
-        map.put("pfAcc", paramMap.get("pfAcc") );
-        map.put("programStatus", paramMap.get("programStatus") );
-        map.put("analyzingConditions", paramMap.get("analyzingConditions") );
-        List<Program> list = programMapper.myFollowProgram(map);
+        List<Program> list = programMapper.myFollowProgram(paramMap);
         //总数
-        rMap.put(APIHelper.TOTAL,  programMapper.myFollowProgramTotal(map));
+        rMap.put(APIHelper.TOTAL,  programMapper.myFollowProgramTotal(paramMap));
         List<Map<String,Object>> mapList = new ArrayList<>();
         for (Program model:list) {
             Map shopMap = new HashMap();
             //d当前项目
             shopMap.put("programId",model.getId());
-//            shopMap.put("programStatus",model.getProgramStatus());
-//            ProgramApprovalSnapshot currShot = programApprovalSnapshotMapper.getOneByWhere(shopMap);
             //立项时的状态
             shopMap.put("programStatus", ProgramStatusNewEnum.LX.getCode());
             shopMap.put("approvalStatus",ProgramApprovalStatusEnum.SHTG.getCode());
@@ -2016,22 +1948,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      */
     @Override
     public List<Map<String,Object>> changeTopFive(List<Product> productList,Map<String,Object> paramMap){
-//        if (productList==null || productList.isEmpty()) {
-//            return null;
-//        }
-//        StringBuffer sb = new StringBuffer();
-//        for (Product model:productList) {
-//            sb.append(model.getId());
-//            sb.append(",");
-//        }
-//        sb.deleteCharAt(sb.length()-1);
-        Map<String,Object> map = new HashMap<>();
-//        map.put("productIdList",sb.toString().split(","));
-        map.put("startRow", paramMap.get("startRow") );
-        map.put("endRow", paramMap.get("endRow") );
-        map.put("pfAcc", paramMap.get("pfAcc") );
-        map.put("analyzingConditions", paramMap.get("analyzingConditions") );
-        return programMapper.changeTopFive(map);
+        return programMapper.changeTopFive(paramMap);
     }
 
     /***

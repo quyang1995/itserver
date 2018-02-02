@@ -19,9 +19,9 @@ public interface ProgramApprovalSnapshotMapper extends BeeMapper<ProgramApproval
 
     Integer getExceptionProgramTotal(Map<String, Object> map);
 
-    List<ProgramApprovalSnapshot> latelychangeList(Map<String, Object> map);
+    List<ProgramApprovalSnapshot> latelyChangeList(Map<String, Object> map);
 
-    Integer latelychangeListTotal(Map<String, Object> map);
+    Integer latelyChangeListTotal(Map<String, Object> map);
 
     ProgramApprovalSnapshot getOneByWhere(Map<String, Object> map);
 }

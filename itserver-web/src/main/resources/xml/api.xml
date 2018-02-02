@@ -1554,7 +1554,7 @@
     <item id="api_program_bpm_getApprovelapprovList" description="查看审批列表页面">
         <request>
             <property name="oaAccount" type="string" required="true"/>
-            <property name="approveStatus" type="int" required="false"/>
+            <property name="approveStatus" type="string" required="false"/>
             <property name="searchType" type="string" required="false"/>
             <property name="page" type="int" required="false"/>
             <property name="pageSize" type="int" required="false"/>

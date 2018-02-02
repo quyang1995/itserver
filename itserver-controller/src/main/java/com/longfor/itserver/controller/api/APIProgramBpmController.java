@@ -1,7 +1,6 @@
 package com.longfor.itserver.controller.api;
 
 import com.alibaba.fastjson.JSON;
-import com.github.pagehelper.PageInfo;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;

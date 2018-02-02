@@ -184,7 +184,7 @@
     ) a
   </select>
 
-  <select id="latelychangeList" parameterType="map" resultMap="BaseResultMap">
+  <select id="latelyChangeList" parameterType="map" resultMap="BaseResultMap">
     SELECT * from program_approval_snapshot
     where program_status=210 and approval_status=110
     <if test="programIdList != null">
@@ -200,7 +200,7 @@
     LIMIT #{startRow},#{endRow}
   </select>
 
-  <select id="latelychangeListTotal" parameterType="map" resultType="int">
+  <select id="latelyChangeListTotal" parameterType="map" resultType="int">
     SELECT COUNT(0) from program_approval_snapshot
     where program_status=210 and approval_status=110
     <if test="programIdList != null">
