@@ -98,7 +98,8 @@ public class DownLoadController extends BaseController {
         //设置文件MIME类型
         response.setContentType(request.getSession().getServletContext().getMimeType(filename));
         //设置Content-Disposition
-        filename = URLEncoder.encode(filename,"UTF-8");
+//        filename = URLEncoder.encode(filename,"UTF-8");
+        filename = new String(filename.getBytes(),"ISO8859-1");
         response.setHeader("Content-Disposition", "attachment;filename="+filename);
         response.setContentType("application/x-msdownload;");
         //读取目标文件，通过response将目标文件写到客户端
