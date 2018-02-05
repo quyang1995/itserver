@@ -1660,8 +1660,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     @Override
     public ApproveListVo getApprovelapprovList(MoApproveListVo moApproveListVo) throws Exception{
         ApproveListVo approveListVo = new ApproveListVo();
-//        approveListVo.setTotal(moApproveListVo.getTotal());
-//        approveListVo.setPageNo(moApproveListVo.getPage());
+        approveListVo.setTotal(moApproveListVo.getTotal());
+        approveListVo.setPageNo(moApproveListVo.getPage());
 
         //循环获取bpmcode list，然后查询快照表获取 每个bpmcode获取最后一条对应快照
         List<String> bmpCodeList = new ArrayList<>();
