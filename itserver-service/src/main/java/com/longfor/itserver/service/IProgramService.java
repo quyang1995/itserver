@@ -50,7 +50,7 @@ public interface IProgramService extends IAdminService<Program> {
 
     ProgramApprovalSnapshot getSnapshot(Long id) throws Exception;
 
-    ApproveListVo getApprovelapprovList(MoApproveListVo moApproveListVo) throws Exception;
+    ApproveListVo getApprovelapprovList(MoApproveListVo moApproveListVo,String isMyLaunch) throws Exception;
 
     void addProgramFollow(Map<String,String> paramMap);
 

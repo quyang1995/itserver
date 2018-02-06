@@ -44,6 +44,7 @@ public class MoApproveUtil{
             para.put("systemNo",systemCode);
             paraR = para.toString();
             JSONObject result = new JSONObject();
+            //0=获取移动审批列表,1=获取我的发起列表
             if ("0".equals(isMyLaunch)) {
                 result = HttpUtil.post(url + FLOWAPI_LIST,token,paraR);
             }

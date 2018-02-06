@@ -1658,7 +1658,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     }
 
     @Override
-    public ApproveListVo getApprovelapprovList(MoApproveListVo moApproveListVo) throws Exception{
+    public ApproveListVo getApprovelapprovList(MoApproveListVo moApproveListVo,String isMyLaunch) throws Exception{
         ApproveListVo approveListVo = new ApproveListVo();
         approveListVo.setTotal(moApproveListVo.getTotal());
         approveListVo.setPageNo(moApproveListVo.getPage());
@@ -1692,7 +1692,13 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             resultVo.setProgramStatus(tmpSna.getProgramStatus());
             resultVo.setProgramStatusCh(ProgramStatusNewEnum.getByCode(tmpSna.getProgramStatus()).getText());
             resultVo.setApplyName(moApproveVo.getPubTrueName());
-            resultVo.setTodoStatus(moApproveVo.getTodoStatus());
+            //0=获取移动审批列表,1=获取我的发起列表
+            if ("0".equals(isMyLaunch)) {
+                resultVo.setTodoStatus(moApproveVo.getTodoStatus());
+            }
+            if ("1".equals(isMyLaunch)) {
+                resultVo.setTodoStatus(moApproveVo.getFlowStatus());
+            }
             resultVo.setApplyTime(DateUtil.date2String(tmpSna.getCreateTime(),"yyyy-MM-dd HH:mm:ss"));
             resultList.add(resultVo);
         }

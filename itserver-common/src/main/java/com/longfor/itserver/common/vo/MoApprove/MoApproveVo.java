@@ -49,6 +49,18 @@ public class MoApproveVo {
     /** 待办类型 0待办，1通知，2传阅 3、催办、4归档 */
     private int todo_type;
 
+    /** 流程状态 0:未完成,1:已完成,2:已取消 */
+    //我的发起列表，流程状态
+    private Integer flowStatus;
+
+    public Integer getFlowStatus() {
+        return flowStatus;
+    }
+
+    public void setFlowStatus(Integer flowStatus) {
+        this.flowStatus = flowStatus;
+    }
+
     public int getId() {
         return id;
     }

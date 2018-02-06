@@ -815,7 +815,7 @@ public class APIProgramBpmController extends BaseController {
 				return  resultMap;
 			}
 
-			ApproveListVo result = getProgramService().getApprovelapprovList(moApproveListVo);
+			ApproveListVo result = getProgramService().getApprovelapprovList(moApproveListVo,paramsMap.get("isMyLaunch"));
 			result.setPageNo(Integer.parseInt(paramsMap.get("page")));
 			resultMap.put("data",result);
 		} catch ( Exception e) {
