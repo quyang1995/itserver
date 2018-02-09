@@ -8,7 +8,7 @@ package com.longfor.itserver.common.enums;
 public enum ProductStatusEnum {
 
     /* 状态 */
-    AUTO(2, "自动", "label label-sm label-info"),
+    AUTO(2, "正常", "label label-sm label-info"),
     ONLINE(1, "已上线", "label label-sm label-info"),
     OFFLINE(0, "已下线", "label label-sm label-danger");
 
