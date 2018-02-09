@@ -104,6 +104,171 @@ public class Product implements Serializable {
     @Column(name = "analyzing_conditions")
     private String analyzingConditions;
 
+    @Column(name = "contact_account_id1")
+    private String contactAccountId1;
+
+    @Column(name = "contact_employee_code1")
+    private Long contactEmployeeCode1;
+
+    @Column(name = "contact_employee_name1")
+    private String contactEmployeeName1   ;
+
+    @Column(name = "contact_full_dept_path1")
+    private String contactFullDeptPath1;
+
+    @Column(name = "logo")
+    private String logo;
+
+    @Column(name = "is_top")
+    private String isTop;
+
+    @Column(name = "label")
+    private String label;
+
+    @Column(name = "pc_url")
+    private String pcUrl;
+
+    @Column(name = "h5_url")
+    private String h5Url;
+
+    @Column(name = "ios_url")
+    private String iosUrl;
+
+    @Column(name = "android_url")
+    private String androidUrl;
+
+    @Column(name = "pc_qrcode")
+    private String pcQrCode;
+
+    @Column(name = "h5_qrcode")
+    private String h5QrCode;
+
+    @Column(name = "ios_qrcode")
+    private String iosQrCode;
+
+    @Column(name = "android_qrcode")
+    private String androidQrCode;
+
+    public String getContactAccountId1() {
+        return contactAccountId1;
+    }
+
+    public void setContactAccountId1(String contactAccountId1) {
+        this.contactAccountId1 = contactAccountId1;
+    }
+
+    public Long getContactEmployeeCode1() {
+        return contactEmployeeCode1;
+    }
+
+    public void setContactEmployeeCode1(Long contactEmployeeCode1) {
+        this.contactEmployeeCode1 = contactEmployeeCode1;
+    }
+
+    public String getContactEmployeeName1() {
+        return contactEmployeeName1;
+    }
+
+    public void setContactEmployeeName1(String contactEmployeeName1) {
+        this.contactEmployeeName1 = contactEmployeeName1;
+    }
+
+    public String getContactFullDeptPath1() {
+        return contactFullDeptPath1;
+    }
+
+    public void setContactFullDeptPath1(String contactFullDeptPath1) {
+        this.contactFullDeptPath1 = contactFullDeptPath1;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
+    public String getIsTop() {
+        return isTop;
+    }
+
+    public void setIsTop(String isTop) {
+        this.isTop = isTop;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getPcUrl() {
+        return pcUrl;
+    }
+
+    public void setPcUrl(String pcUrl) {
+        this.pcUrl = pcUrl;
+    }
+
+    public String getH5Url() {
+        return h5Url;
+    }
+
+    public void setH5Url(String h5Url) {
+        this.h5Url = h5Url;
+    }
+
+    public String getIosUrl() {
+        return iosUrl;
+    }
+
+    public void setIosUrl(String iosUrl) {
+        this.iosUrl = iosUrl;
+    }
+
+    public String getAndroidUrl() {
+        return androidUrl;
+    }
+
+    public void setAndroidUrl(String androidUrl) {
+        this.androidUrl = androidUrl;
+    }
+
+    public String getPcQrCode() {
+        return pcQrCode;
+    }
+
+    public void setPcQrCode(String pcQrCode) {
+        this.pcQrCode = pcQrCode;
+    }
+
+    public String getH5QrCode() {
+        return h5QrCode;
+    }
+
+    public void setH5QrCode(String h5QrCode) {
+        this.h5QrCode = h5QrCode;
+    }
+
+    public String getIosQrCode() {
+        return iosQrCode;
+    }
+
+    public void setIosQrCode(String iosQrCode) {
+        this.iosQrCode = iosQrCode;
+    }
+
+    public String getAndroidQrCode() {
+        return androidQrCode;
+    }
+
+    public void setAndroidQrCode(String androidQrCode) {
+        this.androidQrCode = androidQrCode;
+    }
+
     public String getAnalyzingConditions() {
         return analyzingConditions;
     }

@@ -1,8 +1,8 @@
 package com.longfor.itserver.controller.api;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
@@ -350,4 +350,59 @@ public class APIProductController extends BaseController {
             return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
         }
     }
+
+    /**
+     * 置顶，取消置顶
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/productIsTop" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+    @ResponseBody
+    public Map productIsTop(HttpServletRequest request){
+        Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        try {
+            Map<String,String> paramsMap = (Map<String,String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+            LOG.info("------productIsTop:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+            Product product = new Product();
+            product.setId(Long.valueOf(paramsMap.get("id")));
+            product.setIsTop(paramsMap.get("isTop"));
+            this.getProductService().updateByIdSelective(product);
+        } catch ( Exception e) {
+            e.printStackTrace();
+            resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+        }
+        return  resultMap;
+    }
+
+    /**
+     * 产品汇列表
+     *
+     * @param response
+     * @param request
+     * @return Map
+     */
+    @RequestMapping(value = "/productHui", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Map productHui(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        try{
+            /* 获得已经验证过的参数map */
+            @SuppressWarnings("unchecked")
+            Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+            CommonUtils.buildPageParams(paramsMap);
+            List<PsProductCount> productHui = this.getProductService().productHui(paramsMap);
+
+            resultMap.put("productList", productHui);
+            resultMap.put(APIHelper.PAGE_NUM, paramsMap.get("pageNum"));
+            resultMap.put(APIHelper.PAGE_SIZE, paramsMap.get("pageSize"));
+            resultMap.put(APIHelper.TOTAL, this.getProductService().productHuiNum(paramsMap));
+        }catch (Exception e){
+            e.printStackTrace();
+            resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+        }
+        return resultMap;
+    }
+
+
 }

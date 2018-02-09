@@ -18,4 +18,7 @@ public interface ProductMapper extends BeeMapper<Product> {
     String getNewCode();
 
     List<Product> getListByLikeAnalyzingConditions(Map map);
+
+    List<PsProductCount> productHui(Map map);
+    int productHuiNum(Map map);
 }

@@ -19,4 +19,8 @@ public interface IProductService extends IAdminService<Product> {
     List<Product> productCountList(Map map);
 
     boolean updateStatus(Map paramsMap);
+
+    List<PsProductCount> productHui(Map map);
+
+    int productHuiNum(Map map);
 }

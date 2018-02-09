@@ -141,7 +141,7 @@
             <property name="contactAccountId" type="string" required="true" maxLength="500" />
             <property name="likeProgram" type="string" required="false" maxLength="20" />
             <property name="type" type="int" required="true" area="0,1" />
-            <property name="status" type="int" required="true" area="0,1" />
+            <property name="status" type="int" required="true" area="0,1,2" />
             <property name="personLiableList" type="string" required="true"/>
             <property name="programManagerList" type="string" required="false"/>
             <property name="productManagerList" type="string" required="false"/>
@@ -152,6 +152,18 @@
             <property name="modifiedAccountId" type="string" required="true" maxLength="50" />
             <property name="modifiedName" type="string" required="true" maxLength="50" />
             <property name="accountType" type="string" required="false" />
+
+            <property name="logo" type="string" required="false" />
+            <property name="label" type="string" required="false" />
+            <property name="contactAccountId1" type="string" required="true" />
+            <property name="pcUrl" type="string" required="false" />
+            <property name="h5Url" type="string" required="false" />
+            <property name="iosUrl" type="string" required="false" />
+            <property name="androidUrl" type="string" required="false" />
+            <property name="pcQrCode" type="string" required="false" />
+            <property name="h5QrCode" type="string" required="false" />
+            <property name="iosQrCode" type="string" required="false" />
+            <property name="androidQrCode" type="string" required="false" />
         </request>
     </item>
 
@@ -171,7 +183,7 @@
             <property name="contactAccountId" type="string" required="true" maxLength="500" />
             <property name="likeProgram" type="string" required="false" maxLength="20" />
             <property name="type" type="int" required="true" area="0,1" />
-            <property name="status" type="int" required="true" area="0,1" />
+            <property name="status" type="int" required="true" area="0,1,2" />
             <property name="personLiableList" type="string" required="true"/>
             <property name="programManagerList" type="string" required="false"/>
             <property name="productManagerList" type="string" required="false"/>
@@ -182,10 +194,31 @@
             <property name="modifiedAccountId" type="string" required="true" maxLength="50" />
             <property name="modifiedName" type="string" required="true" maxLength="50" />
             <property name="accountType" type="string" required="false" />
+
+            <property name="logo" type="string" required="false" />
+            <property name="label" type="string" required="false" />
+            <property name="contactAccountId1" type="string" required="true" />
+            <property name="pcUrl" type="string" required="false" />
+            <property name="h5Url" type="string" required="false" />
+            <property name="iosUrl" type="string" required="false" />
+            <property name="androidUrl" type="string" required="false" />
+            <property name="pcQrCode" type="string" required="false" />
+            <property name="h5QrCode" type="string" required="false" />
+            <property name="iosQrCode" type="string" required="false" />
+            <property name="androidQrCode" type="string" required="false" />
         </request>
     </item>
-
-
+    <!--
+              URL:
+              /api/product/productIsTop
+              说明:产品置顶，取消置顶
+          -->
+    <item id="api_product_productIsTop" description="产品置顶，取消置顶">
+        <request>
+            <property name="id" type="string" required="true" />
+            <property name="isTop" type="int" required="true" area="0,1"/>
+        </request>
+    </item>
 
 
     <!--
@@ -1638,6 +1671,24 @@
             <property name="programStatus" type="string" required="false"/>
             <property name="pageSize" type="string" required="true"/>
             <property name="pageNum" type="string" required="true"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
+        /api/product/productHui
+        说明:产品汇列表
+    -->
+    <item id="api_product_productHui" description="产品汇列表">
+        <request>
+            <property name="pageNum" type="int" required="true"/>
+            <property name="pageSize" type="int" required="true"/>
+            <property name="accountId" type="string" required="true"/>
+            <property name="status" type="int" required="true" area="-1,0,1,2,3,4"/>
+            <property name="analyzingConditions" type="int" required="false"/>
+            <property name="label" type="string" required="false"/>
+            <property name="programStatus" type="string" required="false"/>
+            <property name="searchText" type="string" required="false"/>
         </request>
     </item>
 

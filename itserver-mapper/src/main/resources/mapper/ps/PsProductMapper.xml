@@ -20,7 +20,23 @@
     <result column="modified_name" property="modifiedName" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
-    <result column="analyzing_conditions" property="analyzingConditions" jdbcType="TIMESTAMP" />
+    <result column="analyzing_conditions" property="analyzingConditions" jdbcType="VARCHAR" />
+
+    <result column="contact_account_id1" property="contactAccountId1" jdbcType="VARCHAR"/>
+    <result column="contact_employee_code1" property="contactEmployeeCode1" jdbcType="BIGINT"/>
+    <result column="contact_employee_name1" property="contactEmployeeName1" jdbcType="VARCHAR"/>
+    <result column="contact_full_dept_path1" property="contactFullDeptPath1" jdbcType="VARCHAR"/>
+    <result column="logo" property="logo" jdbcType="VARCHAR"/>
+    <result column="is_top" property="isTop" jdbcType="VARCHAR"/>
+    <result column="label" property="label" jdbcType="VARCHAR"/>
+    <result column="pc_url" property="pcUrl" jdbcType="VARCHAR"/>
+    <result column="h5_url" property="h5Url" jdbcType="VARCHAR"/>
+    <result column="ios_url" property="iosUrl" jdbcType="VARCHAR"/>
+    <result column="android_url" property="androidUrl" jdbcType="VARCHAR"/>
+    <result column="pc_qrcode" property="pcQrCode" jdbcType="VARCHAR"/>
+    <result column="h5_qrcode" property="h5QrCode" jdbcType="VARCHAR"/>
+    <result column="ios_qrcode" property="iosQrCode" jdbcType="VARCHAR"/>
+    <result column="android_qrcode" property="androidQrCode" jdbcType="VARCHAR"/>
   </resultMap>
   <resultMap id="ApiBaseResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsProductAll">
   </resultMap>
@@ -30,7 +46,9 @@
     -->
     id, name,code, descp, contact_account_id, contact_employee_code, contact_employee_name,
     contact_full_dept_path, like_program, type, status, modified_account_id, modified_name,
-    create_time, modified_time, analyzing_conditions
+    create_time, modified_time, analyzing_conditions, contact_account_id1, contact_employee_code1,
+    contact_employee_name1, contact_full_dept_path1, logo,is_top,label, pc_url, h5_url, ios_url, android_url,
+    pc_qrcode, h5_qrcode, ios_qrcode, android_qrcode
   </sql>
 
   <select id="selectLikeList" resultMap="ApiBaseResultMap">

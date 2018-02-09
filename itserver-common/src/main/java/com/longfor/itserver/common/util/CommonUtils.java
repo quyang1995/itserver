@@ -622,6 +622,24 @@ public class CommonUtils {
         }
     }
 
+    public static void buildPageParams(Map<String, Object> paramsMap) {
+        if(paramsMap.containsKey("pageNum") && paramsMap.containsKey("pageSize")) {
+            int pageNum = Integer.parseInt((String)paramsMap.get("pageNum"));
+            int pageSize = Integer.parseInt((String)paramsMap.get("pageSize"));
+            if(pageSize < 1) {
+                paramsMap.put("pageSize", "10");
+            }
+
+            if(pageSize > 50) {
+                paramsMap.put("pageSize", "50");
+            }
+
+            int page_start = (pageNum - 1) * pageSize;
+            int page_end = pageSize;
+            paramsMap.put("startRow", page_start );
+            paramsMap.put("endRow", page_end );
+        }
+    }
 
 
 }

@@ -86,6 +86,18 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		product.setContactAccountId(jsonObject.getString("contactAccountId"));
 		product.setLikeProgram(jsonObject.getString("likeProgram"));
 		Integer accountType = AccountUitl.getAccountType(map);
+
+		product.setLogo(jsonObject.getString("logo"));
+		product.setContactAccountId1(jsonObject.getString("contactAccountId1"));
+		product.setLabel(jsonObject.getString("label"));
+		product.setPcUrl(jsonObject.getString("pcUrl"));
+		product.setH5Url(jsonObject.getString("h5Url"));
+		product.setIosUrl(jsonObject.getString("iosUrl"));
+		product.setAndroidUrl(jsonObject.getString("androidUrl"));
+		product.setPcQrCode(jsonObject.getString("pcQrCode"));
+		product.setH5QrCode(jsonObject.getString("h5QrCode"));
+		product.setIosQrCode(jsonObject.getString("iosQrCode"));
+		product.setAndroidQrCode(jsonObject.getString("androidQrCode"));
 		/* 接口人相关信息 */
 		getAccountInfo(0, product, null);
 		/* 添加产品 */
@@ -94,6 +106,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		product.setAccountType(accountType);
 		product.setNewCode(code);
 		product.setCode(code);
+        product.setIsTop("0");
 		product.setAnalyzingConditions(jsonObject.getString("analyzingConditions"));
 		int insert = productMapper.insert(product);
 		/* 产品责任人 */
@@ -182,6 +195,18 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		oldProduct.setStatus(jsonObject.getInteger("status"));
 		oldProduct.setContactAccountId(jsonObject.getString("contactAccountId"));
 		oldProduct.setType(jsonObject.getInteger("type"));
+
+		oldProduct.setContactAccountId1(jsonObject.getString("contactAccountId1"));
+		oldProduct.setLabel(jsonObject.getString("label"));
+		if(StringUtils.isNoneBlank(jsonObject.getString("logo")))oldProduct.setLogo(jsonObject.getString("logo"));
+		if(StringUtils.isNoneBlank(jsonObject.getString("pcUrl")))oldProduct.setPcUrl(jsonObject.getString("pcUrl"));
+		if(StringUtils.isNoneBlank(jsonObject.getString("h5Url")))oldProduct.setH5Url(jsonObject.getString("h5Url"));
+		if(StringUtils.isNoneBlank(jsonObject.getString("iosUrl")))oldProduct.setIosUrl(jsonObject.getString("iosUrl"));
+		if(StringUtils.isNoneBlank(jsonObject.getString("androidUrl")))oldProduct.setAndroidUrl(jsonObject.getString("androidUrl"));
+		if(StringUtils.isNoneBlank(jsonObject.getString("pcQrCode")))oldProduct.setPcQrCode(jsonObject.getString("pcQrCode"));
+		if(StringUtils.isNoneBlank(jsonObject.getString("h5QrCode")))oldProduct.setH5QrCode(jsonObject.getString("h5QrCode"));
+		if(StringUtils.isNoneBlank(jsonObject.getString("iosQrCode")))oldProduct.setIosQrCode(jsonObject.getString("iosQrCode"));
+		if(StringUtils.isNoneBlank(jsonObject.getString("androidQrCode")))oldProduct.setAndroidQrCode(jsonObject.getString("androidQrCode"));
 		/* 接口人相关信息 */
 		getAccountInfo(0, oldProduct, null);
 		/* 关联项目 */
@@ -251,12 +276,21 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 
 	public boolean getAccountInfo(int num, Product product, String str) {
 		if (num == 0) {
+			//功能建议反馈接口人
 			AccountLongfor accountInfo =
 					AccountUitl.getAccountByAccountTypes(product.getContactAccountId(),adsHelp);
 			if (accountInfo != null) {
 				product.setContactEmployeeCode(StringUtil.getLongValue(accountInfo.getPsEmployeeCode()));
 				product.setContactEmployeeName(accountInfo.getName());
 				product.setContactFullDeptPath(accountInfo.getPsDeptFullName());
+			}
+			//功能异常反馈接口人
+			AccountLongfor accountInfo1 =
+					AccountUitl.getAccountByAccountTypes(product.getContactAccountId1(),adsHelp);
+			if (accountInfo1 != null) {
+				product.setContactEmployeeCode1(StringUtil.getLongValue(accountInfo1.getPsEmployeeCode()));
+				product.setContactEmployeeName1(accountInfo1.getName());
+				product.setContactFullDeptPath1(accountInfo1.getPsDeptFullName());
 			}
 		} else {
 			if (str != null && str != "") {
@@ -411,5 +445,22 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 					.append("] ");
 		}
 		return  sb.toString();
+	}
+
+	@Override
+	public List<PsProductCount> productHui(Map map) {
+		List<PsProductCount> list= productMapper.productHui(map);
+		for(PsProductCount model:list){
+			ProductEmployee productEmployee  = new ProductEmployee();
+			productEmployee.setEmployeeType(AvaStatusEnum.LIABLEAVA.getCode());
+			productEmployee.setProductId(model.getId());
+			model.setPersonLiableList(productEmployeeMapper.select(productEmployee));
+		}
+		return list;
+	}
+
+	@Override
+	public int productHuiNum(Map map) {
+		return productMapper.productHuiNum(map);
 	}
 }

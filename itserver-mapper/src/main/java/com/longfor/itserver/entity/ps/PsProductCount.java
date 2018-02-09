@@ -20,6 +20,17 @@ public class PsProductCount extends Product  implements Serializable {
     private String newestProgramName;
     @Transient
     private List<ProductEmployee> personLiableList;
+    /*产品汇列表第一个项目状态*/
+    @Transient
+    private String programStatus;
+
+    public String getProgramStatus() {
+        return programStatus;
+    }
+
+    public void setProgramStatus(String programStatus) {
+        this.programStatus = programStatus;
+    }
 
     public List<ProductEmployee> getPersonLiableList() {
         return personLiableList;
