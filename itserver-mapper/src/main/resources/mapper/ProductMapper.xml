@@ -295,7 +295,7 @@
             WHERE p.`status`=0 and p.is_top=0 /** 已下线*/
             <include refid="productHui_Where"/>
         </if>
-        ORDER BY is_top desc,field(`status`,1,2,0),program_status desc,create_time desc
+        ORDER BY is_top desc,field(`status`,1,2,0),programStatus desc,create_time desc
         LIMIT #{startRow},#{endRow}
     </select>
 
