@@ -67,7 +67,7 @@
             <property ref="pageNum"/>
             <property ref="pageSize"/>
             <property name="accountId" type="string" required="true" maxLength="30" />
-            <property name="status" type="int" required="true" area="0,1,-1"/>
+            <property name="status" type="int" required="true" area="0,1,-1,2"/>
             <property name="mySelf" type="string" required="true" maxLength="30"/>
             <property name="analyzingConditions" type="string" required="true" area="1,2,3,4,5,6,7,-1"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
@@ -995,7 +995,7 @@
     <item id="api_product_update_status" description="产品状态变更">
         <request>
             <property name="productId" type="int" required="true"/>
-            <property name="status" type="int" required="true" area="0,1"/>
+            <property name="status" type="int" required="true" area="0,1,2"/>
             <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
             <property name="modifiedName" type="string" required="true" maxLength="50"/>
             <property name="accountType" type="string" required="false" />
