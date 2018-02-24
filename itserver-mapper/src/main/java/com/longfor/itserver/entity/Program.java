@@ -33,7 +33,7 @@ public class Program implements Serializable {
     @JsonSerialize(using = CustomDateSerializer.class)
     private Date onlinePlanDate;
     @Column(name = "dev_type")
-    private int devType;
+    private Integer devType;
     @Column(name = "analyzing_conditions")
     private String analyzingConditions;
     @Column(name = "dev_workload")
@@ -619,11 +619,11 @@ public class Program implements Serializable {
         this.onlinePlanDate = onlinePlanDate;
     }
 
-    public int getDevType() {
+    public Integer getDevType() {
         return devType;
     }
 
-    public void setDevType(int devType) {
+    public void setDevType(Integer devType) {
         this.devType = devType;
     }
 
