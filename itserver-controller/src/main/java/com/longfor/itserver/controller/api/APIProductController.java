@@ -19,6 +19,7 @@ import com.longfor.itserver.entity.ps.PsProductAll;
 import com.longfor.itserver.entity.ps.PsProductCount;
 import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.helper.APIHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,7 +66,7 @@ public class APIProductController extends BaseController {
 
         /* 查询数据 and admin权限判断 */
         String accountId = paramsMap.get("accountId");
-        paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
+//        paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
         PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
         List<PsProductCount> products = this.getProductService().searchList(paramsMap);
 
@@ -156,7 +158,9 @@ public class APIProductController extends BaseController {
     public Map get(HttpServletRequest request, HttpServletResponse response) {
         /* 获得已经验证过的参数map*/
         Map<String, String> map = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         String id = map.get("id");
+        String accountId = map.get("accountId");
         ProductEmployee productEmployee = new ProductEmployee();
         productEmployee.setProductId(Long.parseLong(id));
         /*查询数据*/
@@ -165,6 +169,21 @@ public class APIProductController extends BaseController {
         /*责任人*/
         List<ProductEmployee> personLiableList = this.getProductEmployeeService()
                 .searchTypeList(new Long(id), AvaStatusEnum.LIABLEAVA.getCode(), null);
+
+        //验证当前人员权限********beg
+        if (0 == psProduct.getType() && StringUtils.isNotBlank(accountId)){
+            Map<String, Object> accountMap = new HashMap<String, Object>();
+            accountMap.put("accountId", accountId);
+            accountMap.put("productId", id);
+            List<ProductEmployee> accountList = this.getProductEmployeeService().searchTypeListMap(accountMap);
+            if (accountList==null || accountList.isEmpty()){
+                resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1036,personLiableList.get(0).getEmployeeName());
+                return resultMap;
+            }
+            map.remove("accountId");
+        }
+        //验证当前人员权限********end
+
         /*产品经理*/
         List<ProductEmployee> productManagerList = this.getProductEmployeeService()
                 .searchTypeList(new Long(id), AvaStatusEnum.MEMBERAVA.getCode(), new Long(AvaStatusEnum.PRODAVA.getCode()));
@@ -201,7 +220,6 @@ public class APIProductController extends BaseController {
         psProduct.setTestingList(testingList);
         psProduct.setBusinessList(businessList);
         /*返回数据*/
-        Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         resultMap.put("pro", psProduct);
         return resultMap;
     }

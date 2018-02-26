@@ -755,7 +755,7 @@ public class APIProgramBpmController extends BaseController {
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try {
 			//获取文件
-			this.buildPageParams(paramsMap);
+			CommonUtils.buildPageParams(paramsMap);
 			List<ProgramFileVo> fileList = this.getProgramFileService().getFileListByMap(paramsMap);
 			resultMap.put(APIHelper.PAGE_NUM, paramsMap.get("pageNum"));
 			resultMap.put(APIHelper.PAGE_SIZE, paramsMap.get("pageSize"));
@@ -766,25 +766,6 @@ public class APIProgramBpmController extends BaseController {
 			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
 		}
 		return  resultMap;
-	}
-
-	private void buildPageParams(Map<String, Object> paramsMap) {
-		if(paramsMap.containsKey("pageNum") && paramsMap.containsKey("pageSize")) {
-			int pageNum = Integer.parseInt((String)paramsMap.get("pageNum"));
-			int pageSize = Integer.parseInt((String)paramsMap.get("pageSize"));
-			if(pageSize < 1) {
-				paramsMap.put("pageSize", "10");
-			}
-
-			if(pageSize > 50) {
-				paramsMap.put("pageSize", "50");
-			}
-
-			int page_start = (pageNum - 1) * pageSize;
-			int page_end = pageSize;
-			paramsMap.put("startRow", page_start );
-			paramsMap.put("endRow", page_end );
-		}
 	}
 
 	/**
@@ -930,7 +911,7 @@ public class APIProgramBpmController extends BaseController {
 			Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 			LOG.info("------exceptionProgram:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			//异常项目
-			this.buildPageParams(paramsMap);
+			CommonUtils.buildPageParams(paramsMap);
 			getProgramService().getExceptionProgramList(paramsMap,resultMap);
 		} catch ( Exception e) {
 			e.printStackTrace();
@@ -952,7 +933,7 @@ public class APIProgramBpmController extends BaseController {
 			Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 			LOG.info("------latelyChangeList:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			//最新的需求变更
-			this.buildPageParams(paramsMap);
+			CommonUtils.buildPageParams(paramsMap);
 			getProgramService().latelyChangeList(paramsMap,resultMap);
 		} catch ( Exception e) {
 			e.printStackTrace();
@@ -974,7 +955,7 @@ public class APIProgramBpmController extends BaseController {
 			Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 			LOG.info("------myFollowProgram:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			//我關注的項目
-			this.buildPageParams(paramsMap);
+			CommonUtils.buildPageParams(paramsMap);
 			getProgramService().myFollowProgram(paramsMap,resultMap);
 		} catch ( Exception e) {
 			e.printStackTrace();

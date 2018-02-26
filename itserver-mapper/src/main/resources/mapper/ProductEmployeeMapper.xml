@@ -39,4 +39,15 @@
             </if>
   </select>
 
+    <select id="searchTypeListMap" resultMap="BaseResultMap" parameterType="map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM product_employee
+        WHERE product_id=#{productId}
+        <if test="accountId != null and accountId != ''" >
+            and account_id = #{accountId}
+        </if>
+
+    </select>
+
 </mapper>

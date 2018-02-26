@@ -58,7 +58,7 @@ public class APIProgramController extends BaseController {
 		ELExample elExample = new ELExample(request, Program.class);
 		/* 查询数据 and admin权限判断 */
 		String accountId = paramsMap.get("accountId");
-		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
+//		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
 		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
 		List<Program> programList = this.getProgramService().programList(paramsMap);
 
@@ -142,6 +142,7 @@ public class APIProgramController extends BaseController {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try {
 			long id = Long.parseLong(paramsMap.get("id").toString());
+			Object accountId = paramsMap.get("accountId");
 
 			PsProgramDetail program = (PsProgramDetail) this.getProgramService().getProgramId(id);
 			if(program.getLikeProduct() != null && !"".equals(program.getLikeProduct())){
@@ -158,6 +159,19 @@ public class APIProgramController extends BaseController {
 			map.put("employeeType", AvaStatusEnum.LIABLEAVA.getCode());
 			List<ProgramEmployee> personLiableList = this.getProgramEmployeeService().selectTypeList(map);
 			program.setPersonLiableList(personLiableList);
+
+			//验证当前人员权限********beg
+			if (accountId != null && 0 == program.getType() && StringUtils.isNotBlank(accountId.toString())){
+				map.put("accountId", accountId);
+				List<ProgramEmployee> accountList = this.getProgramEmployeeService().selectTypeList(map);
+				if (accountList==null || accountList.isEmpty()){
+					resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1035,personLiableList.get(0).getEmployeeName());
+					return resultMap;
+				}
+				map.remove("accountId");
+			}
+			//验证当前人员权限********end
+
 			/* 产品经理 */
 			map.put("employeeType", AvaStatusEnum.MEMBERAVA.getCode());
 			map.put("employeeTypeId", new Long(AvaStatusEnum.PRODAVA.getCode()));
@@ -196,8 +210,6 @@ public class APIProgramController extends BaseController {
 			grayLevelMap.put("programId", new Long(id));
 			List<ProgramApprovalSnapshot> productList =  this.getProgramApprovalSnapshotService().grayLevelList(grayLevelMap);
 			this.setChangeStatus(program,productList);
-//			program.setChangeStatus(this.getChangeStatus(productList));
-//			program.setChangeApprovalStatus(this.getChangeApprovalStatus(productList));
 			/* 灰度时间变更记录 */
 			List<ProgramApprovalSnapshot> grayLevelList =  this.getGrayLevelList(productList);
 			program.setGrayLevelList(grayLevelList);
@@ -366,7 +378,8 @@ public class APIProgramController extends BaseController {
 		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
-			this.buildPageParams(paramsMap);
+//			this.buildPageParams(paramsMap);
+			CommonUtils.buildPageParams(paramsMap);
 			resultMap.put("list",this.getProgramEmployeeChangeLogService().orderLimitList(paramsMap));
 			resultMap.put(APIHelper.PAGE_NUM, paramsMap.get("pageNum"));
 			resultMap.put(APIHelper.PAGE_SIZE, paramsMap.get("pageSize"));
@@ -378,26 +391,6 @@ public class APIProgramController extends BaseController {
 
 		return resultMap;
 	}
-
-	private void buildPageParams(Map<String, Object> paramsMap) {
-		if(paramsMap.containsKey("pageNum") && paramsMap.containsKey("pageSize")) {
-			int pageNum = Integer.parseInt((String)paramsMap.get("pageNum"));
-			int pageSize = Integer.parseInt((String)paramsMap.get("pageSize"));
-			if(pageSize < 1) {
-				paramsMap.put("pageSize", "10");
-			}
-
-			if(pageSize > 50) {
-				paramsMap.put("pageSize", "50");
-			}
-
-			int page_start = (pageNum - 1) * pageSize;
-			int page_end = pageSize;
-			paramsMap.put("startRow", page_start );
-			paramsMap.put("endRow", page_end );
-		}
-	}
-
 
 	/**
 	 * 根据accountId productId 删除产品相关人员

@@ -94,10 +94,9 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		product.setH5Url(jsonObject.getString("h5Url"));
 		product.setIosUrl(jsonObject.getString("iosUrl"));
 		product.setAndroidUrl(jsonObject.getString("androidUrl"));
-		product.setPcQrCode(jsonObject.getString("pcQrCode"));
-		product.setH5QrCode(jsonObject.getString("h5QrCode"));
-		product.setIosQrCode(jsonObject.getString("iosQrCode"));
-		product.setAndroidQrCode(jsonObject.getString("androidQrCode"));
+		product.setLabelName(jsonObject.getString("labelName"));
+		product.setWindowsUrl(jsonObject.getString("windowsUrl"));
+		product.setMacUrl(jsonObject.getString("macUrl"));
 		/* 接口人相关信息 */
 		getAccountInfo(0, product, null);
 		/* 添加产品 */
@@ -203,10 +202,9 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		if(StringUtils.isNoneBlank(jsonObject.getString("h5Url")))oldProduct.setH5Url(jsonObject.getString("h5Url"));
 		if(StringUtils.isNoneBlank(jsonObject.getString("iosUrl")))oldProduct.setIosUrl(jsonObject.getString("iosUrl"));
 		if(StringUtils.isNoneBlank(jsonObject.getString("androidUrl")))oldProduct.setAndroidUrl(jsonObject.getString("androidUrl"));
-		if(StringUtils.isNoneBlank(jsonObject.getString("pcQrCode")))oldProduct.setPcQrCode(jsonObject.getString("pcQrCode"));
-		if(StringUtils.isNoneBlank(jsonObject.getString("h5QrCode")))oldProduct.setH5QrCode(jsonObject.getString("h5QrCode"));
-		if(StringUtils.isNoneBlank(jsonObject.getString("iosQrCode")))oldProduct.setIosQrCode(jsonObject.getString("iosQrCode"));
-		if(StringUtils.isNoneBlank(jsonObject.getString("androidQrCode")))oldProduct.setAndroidQrCode(jsonObject.getString("androidQrCode"));
+		if(StringUtils.isNoneBlank(jsonObject.getString("labelName")))oldProduct.setLabelName(jsonObject.getString("labelName"));
+		if(StringUtils.isNoneBlank(jsonObject.getString("windowsUrl")))oldProduct.setWindowsUrl(jsonObject.getString("windowsUrl"));
+		if(StringUtils.isNoneBlank(jsonObject.getString("macUrl")))oldProduct.setMacUrl(jsonObject.getString("macUrl"));
 		/* 接口人相关信息 */
 		getAccountInfo(0, oldProduct, null);
 		/* 关联项目 */

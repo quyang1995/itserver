@@ -33,10 +33,9 @@
         <result column="h5_url" property="h5Url" jdbcType="VARCHAR"/>
         <result column="ios_url" property="iosUrl" jdbcType="VARCHAR"/>
         <result column="android_url" property="androidUrl" jdbcType="VARCHAR"/>
-        <result column="pc_qrcode" property="pcQrCode" jdbcType="VARCHAR"/>
-        <result column="h5_qrcode" property="h5QrCode" jdbcType="VARCHAR"/>
-        <result column="ios_qrcode" property="iosQrCode" jdbcType="VARCHAR"/>
-        <result column="android_qrcode" property="androidQrCode" jdbcType="VARCHAR"/>
+        <result column="label_name" property="labelName" jdbcType="VARCHAR"/>
+        <result column="windows_url" property="windowsUrl" jdbcType="VARCHAR"/>
+        <result column="mac_url" property="macUrl" jdbcType="VARCHAR"/>
     </resultMap>
 
 
@@ -73,7 +72,7 @@
         contact_full_dept_path, like_program, type, status, modified_account_id, modified_name,
         create_time, modified_time, new_code, analyzing_conditions,contact_account_id1,contact_employee_code1,
         contact_employee_name1,contact_full_dept_path1,logo,is_top,label,pc_url,h5_url,ios_url,android_url,
-        pc_qrcode,h5_qrcode,ios_qrcode,android_qrcode
+        label_name,windows_url,mac_url
     </sql>
     <select id="selectList" parameterType="map" resultMap="CountBaseResultMap">
         SELECT DISTINCT ta.*,
@@ -224,7 +223,7 @@
             and p.analyzing_conditions like concat('%',#{analyzingConditions},'%')
         </if>
         <if test=" searchText != null and searchText != '' ">
-            and p.name like concat('%',#{searchText},'%')
+            and (p.name like concat('%',#{searchText},'%')  or p.label_name like concat('%',#{searchText},'%'))
         </if>
         <if test=" label != null and label != '' ">
             and p.label like concat('%',#{label},'%')
@@ -244,12 +243,12 @@
             WHERE p.`status`=1 and p.is_top=0 /** 已上线*/
             <include refid="productHui_Where"/>
         </if>
-        <if test="status == 2">
+        <if test="status != -1 and status != 0 and status != 1 and status != 3 and status != 4">
             select p.*,pro.program_status as programStatus from product p
             LEFT JOIN (SELECT id,product_id,program_status from program GROUP BY product_id) pro on pro.product_id=p.id
             WHERE p.`status`=2 and p.is_top=0 and pro.program_status!=100/** 9步法*/
-            <if test="status == 2 and programStatus != null and programStatus != ''">
-                and pro.program_status= #{programStatus}
+            <if test="status != -1 and status != 0 and status != 1 and status != 3 and status != 4">
+                and pro.program_status= #{status}
             </if>
             <include refid="productHui_Where"/>
         </if>
@@ -312,12 +311,12 @@
             WHERE p.`status`=1 and p.is_top=0 /** 已上线*/
             <include refid="productHui_Where"/>
         </if>
-        <if test="status == 2">
+        <if test="status != -1 and status != 0 and status != 1 and status != 3 and status != 4">
             select COUNT(1) from product p
             LEFT JOIN (SELECT id,product_id,program_status from program GROUP BY product_id) pro on pro.product_id=p.id
             WHERE p.`status`=2 and p.is_top=0 and pro.program_status!=100/** 9步法*/
-            <if test="status == 2 and programStatus != null and programStatus != ''">
-                and pro.program_status= #{programStatus}
+            <if test="status != -1 and status != 0 and status != 1 and status != 3 and status != 4">
+                and pro.program_status= #{status}
             </if>
             <include refid="productHui_Where"/>
         </if>

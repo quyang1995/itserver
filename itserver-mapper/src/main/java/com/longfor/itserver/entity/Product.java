@@ -137,17 +137,14 @@ public class Product implements Serializable {
     @Column(name = "android_url")
     private String androidUrl;
 
-    @Column(name = "pc_qrcode")
-    private String pcQrCode;
+    @Column(name = "label_name")
+    private String labelName;
 
-    @Column(name = "h5_qrcode")
-    private String h5QrCode;
+    @Column(name = "windows_url")
+    private String windowsUrl;
 
-    @Column(name = "ios_qrcode")
-    private String iosQrCode;
-
-    @Column(name = "android_qrcode")
-    private String androidQrCode;
+    @Column(name = "mac_url")
+    private String macUrl;
 
     public String getContactAccountId1() {
         return contactAccountId1;
@@ -237,38 +234,6 @@ public class Product implements Serializable {
         this.androidUrl = androidUrl;
     }
 
-    public String getPcQrCode() {
-        return pcQrCode;
-    }
-
-    public void setPcQrCode(String pcQrCode) {
-        this.pcQrCode = pcQrCode;
-    }
-
-    public String getH5QrCode() {
-        return h5QrCode;
-    }
-
-    public void setH5QrCode(String h5QrCode) {
-        this.h5QrCode = h5QrCode;
-    }
-
-    public String getIosQrCode() {
-        return iosQrCode;
-    }
-
-    public void setIosQrCode(String iosQrCode) {
-        this.iosQrCode = iosQrCode;
-    }
-
-    public String getAndroidQrCode() {
-        return androidQrCode;
-    }
-
-    public void setAndroidQrCode(String androidQrCode) {
-        this.androidQrCode = androidQrCode;
-    }
-
     public String getAnalyzingConditions() {
         return analyzingConditions;
     }
@@ -283,6 +248,30 @@ public class Product implements Serializable {
 
     public void setNewCode(String newCode) {
         this.newCode = newCode;
+    }
+
+    public String getLabelName() {
+        return labelName;
+    }
+
+    public void setLabelName(String labelName) {
+        this.labelName = labelName;
+    }
+
+    public String getWindowsUrl() {
+        return windowsUrl;
+    }
+
+    public void setWindowsUrl(String windowsUrl) {
+        this.windowsUrl = windowsUrl;
+    }
+
+    public String getMacUrl() {
+        return macUrl;
+    }
+
+    public void setMacUrl(String macUrl) {
+        this.macUrl = macUrl;
     }
 
     /**

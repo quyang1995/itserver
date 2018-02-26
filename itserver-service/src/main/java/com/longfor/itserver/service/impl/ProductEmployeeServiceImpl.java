@@ -44,6 +44,11 @@ public class ProductEmployeeServiceImpl extends AdminBaseService<ProductEmployee
     }
 
     @Override
+    public List<ProductEmployee> searchTypeListMap(Map<String,Object> map) {
+        return productEmployeeMapper.searchTypeListMap(map);
+    }
+
+    @Override
     public boolean delEmployee(ProductEmployee employee,String accountType) {
         List<ProductEmployee>employeeList =  productEmployeeMapper.select(employee);
         //添加日志
