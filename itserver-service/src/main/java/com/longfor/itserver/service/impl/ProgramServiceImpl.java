@@ -1925,7 +1925,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
             Map resultMap = new HashMap();
             resultMap.put("programId",model.getId()); //项目id
-            resultMap.put("programName",model.getName());//项目名臣
+            resultMap.put("programName",model.getName());//项目名称
             resultMap.put("currProgramStatus",model.getProgramStatus());//当前项目节点
             if(model!=null && model.getCreateTime()!=null) {
                 resultMap.put("currProgramStatusTime", DateUtil.date2String(model.getCreateTime(), DateUtil.PATTERN_DATE));//当前项目节点时间

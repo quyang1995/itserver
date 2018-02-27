@@ -2,9 +2,8 @@ package com.longfor.itserver.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.itserver.controller.base.BaseController;
-import com.longfor.itserver.entity.BugFile;
-import com.longfor.itserver.entity.DemandFile;
-import com.longfor.itserver.entity.ProgramFile;
+import com.longfor.itserver.entity.*;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -117,6 +116,36 @@ public class DownLoadController extends BaseController {
         }
         in.close();
         out.close();
+    }
+
+    @RequestMapping(value = "/productLogo/{i}")
+    public void productLogo(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "i") Long id, Model model) throws IOException {
+        Product product = this.getProductService().selectById(id);
+        if (product != null && StringUtils.isNotBlank(product.getLogo())){
+            //获得请求文件名
+            String [] filePathStr = product.getLogo().split("/");
+            String filename = filePathStr[filePathStr.length-1];
+            //设置文件MIME类型
+            response.setContentType(request.getSession().getServletContext().getMimeType(filename));
+            //设置Content-Disposition
+            filename = new String(filename.getBytes(),"ISO8859-1");
+            response.setHeader("Content-Disposition", "attachment;filename="+filename);
+            response.setContentType("application/x-msdownload;");
+            //读取目标文件，通过response将目标文件写到客户端
+            //获取目标文件的绝对路径
+            String fullFileName = product.getLogo();
+            //读取文件
+            InputStream in = new FileInputStream(fullFileName);
+            OutputStream out = response.getOutputStream();
+            //写文件
+            int b;
+            while((b=in.read())!= -1)
+            {
+                out.write(b);
+            }
+            in.close();
+            out.close();
+        }
     }
 
 }
