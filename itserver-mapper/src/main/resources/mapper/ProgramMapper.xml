@@ -78,7 +78,7 @@
     </sql>
 
     <!-- 项目列表 -->
-    <select id="programList" parameterType="map" resultMap="BaseResultMap">
+    <select id="programList" parameterType="map" resultMap="ProgramDetailResultMap">
         SELECT DISTINCT
         p.id, p.product_id, p.product_name, p.product_code, p.name, p.descp, p.commit_date, p.start_date, p.gray_release_date,
         p.release_date,p.ued_date,p.architecture_date,p.overall_cost,p.dev_workload,p.analyzing_conditions,
@@ -168,6 +168,16 @@
         WHERE name LIKE CONCAT('%', #{name, jdbcType=VARCHAR}, '%')
         ORDER BY modified_time DESC
         LIMIT 0, 20
+    </select>
+
+
+    <select id="getListByMap" parameterType="map" resultMap="BaseResultMap">
+        SELECT * FROM program
+       <where>
+           <if test="productId != null and productId != ''">
+               product_id = #{productId}
+           </if>
+       </where>
     </select>
 
     <!-- 查询关联项目 -->

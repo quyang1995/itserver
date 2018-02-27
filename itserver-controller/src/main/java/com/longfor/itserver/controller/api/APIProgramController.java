@@ -59,8 +59,9 @@ public class APIProgramController extends BaseController {
 		/* 查询数据 and admin权限判断 */
 		String accountId = paramsMap.get("accountId");
 //		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
+		paramsMap.put("isAdmin", "1");
 		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
-		List<Program> programList = this.getProgramService().programList(paramsMap);
+		List<PsProgramDetail> programList = this.getProgramService().programList(paramsMap);
 
 		/* 返回报文 */
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);

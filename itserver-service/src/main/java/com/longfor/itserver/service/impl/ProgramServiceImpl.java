@@ -15,6 +15,7 @@ import com.longfor.itserver.common.vo.programBpm.common.ApplyCreateResultVo;
 import com.longfor.itserver.common.vo.programBpm.common.ApplySubmitResultVo;
 import com.longfor.itserver.common.vo.programBpm.common.FileVo;
 import com.longfor.itserver.entity.*;
+import com.longfor.itserver.entity.ps.PsProgramDetail;
 import com.longfor.itserver.esi.IEdsService;
 import com.longfor.itserver.esi.bpm.ProgramBpmUtil;
 import com.longfor.itserver.esi.bpm.ProgramBpmUtils;
@@ -72,13 +73,18 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     @Autowired
     private ProgramFileMapper programFileMapper;
     @Override
-    public List<Program> programList(Map map) {
-        List<Program> programList = programMapper.programList(map);
-        for (Program model:programList) {
+    public List<PsProgramDetail> programList(Map map) {
+        List<PsProgramDetail> programList = programMapper.programList(map);
+        for (PsProgramDetail model:programList) {
             ProgramFollow follow = new ProgramFollow();
             follow.setPfAcc(map.get("accountId").toString());
             follow.setProgramId(model.getId());
             model.setIsFollow(programFollowMapper.selectCount(follow));
+
+            ProgramEmployee programEmployee  = new ProgramEmployee();
+            programEmployee.setEmployeeType(AvaStatusEnum.LIABLEAVA.getCode());
+            programEmployee.setProgramId(model.getId());
+            model.setPersonLiableList(programEmployeeMapper.select(programEmployee));
         }
         return programList;
     }
@@ -654,11 +660,11 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
     @Override
     public List<Program> productIdAllList(Map parsmsMap) {
-        Long productId = Long.valueOf((String) parsmsMap.get("productId"));
-        Program program = new Program();
-        program.setProductId(productId);
-        List<Program> programList =	programMapper.select(program);
-        Product product = productMapper.selectByPrimaryKey(productId);
+//        Long productId = Long.valueOf((String) parsmsMap.get("productId"));
+//        Program program = new Program();
+//        program.setProductId(productId);
+        List<Program> programList =	programMapper.getListByMap(parsmsMap);
+        Product product = productMapper.selectByPrimaryKey(Long.valueOf((String) parsmsMap.get("productId")));
         if(null != product) {
             for (Program p : programList) {
                 p.setProductName(product.getName());

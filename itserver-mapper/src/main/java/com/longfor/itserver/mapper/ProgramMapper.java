@@ -2,6 +2,7 @@ package com.longfor.itserver.mapper;
 
 
 import com.longfor.itserver.entity.Program;
+import com.longfor.itserver.entity.ps.PsProgramDetail;
 import com.longfor.itserver.mapper.base.BeeMapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -10,7 +11,9 @@ import java.util.Map;
 
 public interface ProgramMapper extends BeeMapper<Program> {
 
-    List<Program> programList(Map map);
+    List<Program> getListByMap(Map map);
+
+    List<PsProgramDetail> programList(Map map);
 
     List<Program>  programLimitList(Map map);
 

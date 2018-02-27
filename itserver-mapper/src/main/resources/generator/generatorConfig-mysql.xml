@@ -102,7 +102,7 @@
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
         -->
-        <table tableName="program_file" domainObjectName="ProgramFile">
+        <table tableName="product_label_type" domainObjectName="ProductLabelType">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
 

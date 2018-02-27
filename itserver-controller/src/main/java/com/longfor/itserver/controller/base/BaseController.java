@@ -75,6 +75,18 @@ public class BaseController {
     private IProgramFileService programFileService;
     @Autowired
     private ADSHelper adsHelper;
+    @Autowired
+    private IProductLabelService productLabelService;
+    @Autowired
+    private IProductLabelTypeService productLabelTypeService;
+
+    public IProductLabelService getProductLabelService() {
+        return productLabelService;
+    }
+
+    public IProductLabelTypeService getProductLabelTypeService() {
+        return productLabelTypeService;
+    }
 
     public ADSHelper getAdsHelper() {
         return adsHelper;

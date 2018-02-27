@@ -255,7 +255,7 @@
         <if test="status == 3">
             select p.*,pro.program_status as programStatus from product p
             LEFT JOIN (SELECT id,product_id,program_status from program GROUP BY product_id) pro on pro.product_id=p.id
-            WHERE p.`status`=2 and p.is_top=0 and pro.program_status=100/** 待立项*/
+            WHERE p.`status`=2 and p.is_top=0 and (pro.program_status=100 or pro.program_status is null)/** 待立项*/
             <include refid="productHui_Where"/>
         </if>
         <if test="status == 4">
@@ -287,12 +287,12 @@
             LEFT JOIN (SELECT id,product_id,program_status from program GROUP BY product_id) pro on pro.product_id=p.id
             WHERE p.`status`=2 and p.is_top=0 and (pro.program_status=100 or pro.program_status is null)/** 待立项*/
             <include refid="productHui_Where"/>
-            UNION ALL
 
-            select p.*,pro.program_status as programStatus from product p
+            /**UNION ALL
+             select p.*,pro.program_status as programStatus from product p
             LEFT JOIN (SELECT id,product_id,program_status from program GROUP BY product_id) pro on pro.product_id=p.id
-            WHERE p.`status`=0 and p.is_top=0 /** 已下线*/
-            <include refid="productHui_Where"/>
+            WHERE p.`status`=0 and p.is_top=0 已下线*/
+            <!--<include refid="productHui_Where"/>-->
         </if>
         ORDER BY is_top desc,field(`status`,1,2,0),programStatus desc,create_time desc
         LIMIT #{startRow},#{endRow}
@@ -323,7 +323,7 @@
         <if test="status == 3">
             select COUNT(1) from product p
             LEFT JOIN (SELECT id,product_id,program_status from program GROUP BY product_id) pro on pro.product_id=p.id
-            WHERE p.`status`=2 and p.is_top=0 and pro.program_status=100/** 待立项*/
+            WHERE p.`status`=2 and p.is_top=0 and (pro.program_status=100 or pro.program_status is null)/** 待立项*/
             <include refid="productHui_Where"/>
         </if>
         <if test="status == 4">
@@ -334,7 +334,7 @@
         </if>
         <if test="status == -1">
             SELECT COUNT(1) from product p
-            where 1=1
+            where 1=1 and `status`!=0
             <include refid="productHui_Where"/>
         </if>
     </select>

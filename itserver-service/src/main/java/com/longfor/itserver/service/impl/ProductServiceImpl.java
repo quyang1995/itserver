@@ -197,14 +197,14 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 
 		oldProduct.setContactAccountId1(jsonObject.getString("contactAccountId1"));
 		oldProduct.setLabel(jsonObject.getString("label"));
-		if(StringUtils.isNoneBlank(jsonObject.getString("logo")))oldProduct.setLogo(jsonObject.getString("logo"));
-		if(StringUtils.isNoneBlank(jsonObject.getString("pcUrl")))oldProduct.setPcUrl(jsonObject.getString("pcUrl"));
-		if(StringUtils.isNoneBlank(jsonObject.getString("h5Url")))oldProduct.setH5Url(jsonObject.getString("h5Url"));
-		if(StringUtils.isNoneBlank(jsonObject.getString("iosUrl")))oldProduct.setIosUrl(jsonObject.getString("iosUrl"));
-		if(StringUtils.isNoneBlank(jsonObject.getString("androidUrl")))oldProduct.setAndroidUrl(jsonObject.getString("androidUrl"));
-		if(StringUtils.isNoneBlank(jsonObject.getString("labelName")))oldProduct.setLabelName(jsonObject.getString("labelName"));
-		if(StringUtils.isNoneBlank(jsonObject.getString("windowsUrl")))oldProduct.setWindowsUrl(jsonObject.getString("windowsUrl"));
-		if(StringUtils.isNoneBlank(jsonObject.getString("macUrl")))oldProduct.setMacUrl(jsonObject.getString("macUrl"));
+		if(StringUtils.isNotBlank(jsonObject.getString("logo")))oldProduct.setLogo(jsonObject.getString("logo"));
+		oldProduct.setPcUrl(jsonObject.getString("pcUrl"));
+		oldProduct.setH5Url(jsonObject.getString("h5Url"));
+		oldProduct.setIosUrl(jsonObject.getString("iosUrl"));
+		oldProduct.setAndroidUrl(jsonObject.getString("androidUrl"));
+		oldProduct.setLabelName(jsonObject.getString("labelName"));
+		oldProduct.setWindowsUrl(jsonObject.getString("windowsUrl"));
+		oldProduct.setMacUrl(jsonObject.getString("macUrl"));
 		/* 接口人相关信息 */
 		getAccountInfo(0, oldProduct, null);
 		/* 关联项目 */
