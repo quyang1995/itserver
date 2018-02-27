@@ -28,10 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 项目 -- 状态变更 bpm审批流程
@@ -887,7 +884,12 @@ public class APIProgramBpmController extends BaseController {
 			List<Map<String,Object>> changeTopFive = getProgramService().changeTopFive(productList,paramsMap);
 			dataMap.put("changeTopFive",changeTopFive);
 			//本年度费用使用情况
-			List<Map<String,Object>> yearCost = getProgramService().yearCost();
+			Object yearObj = paramsMap.get("year");
+			if (yearObj==null) {
+				yearObj = DateUtil.date2String(new Date(),"yyyy");
+			}
+			String year = yearObj.toString();
+			List<Map<String,Object>> yearCost = getProgramService().yearCost(year);
 			dataMap.put("yearCost",yearCost);
 
 			resultMap.put("data",dataMap);

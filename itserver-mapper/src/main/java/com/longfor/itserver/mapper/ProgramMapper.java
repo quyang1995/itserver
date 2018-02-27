@@ -3,6 +3,7 @@ package com.longfor.itserver.mapper;
 
 import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.mapper.base.BeeMapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,6 @@ public interface ProgramMapper extends BeeMapper<Program> {
 
     List<Map<String,Object>> changeTopFive(Map<String,Object> map);
 
-    List<Map<String,Object>> yearCost();
+    List<Map<String,Object>> yearCost(@Param(value = "year")String year);
 
 }

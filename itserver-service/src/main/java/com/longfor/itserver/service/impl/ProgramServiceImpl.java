@@ -1916,7 +1916,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         List<Map<String,Object>> mapList = new ArrayList<>();
         for (Program model:list) {
             Map shopMap = new HashMap();
-            //d当前项目
+            //当前项目
             shopMap.put("programId",model.getId());
             //立项时的状态
             shopMap.put("programStatus", ProgramStatusNewEnum.LX.getCode());
@@ -1961,8 +1961,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      * 本年度费用使用情况
      */
     @Override
-    public List<Map<String,Object>> yearCost(){
-        return programMapper.yearCost();
+    public List<Map<String,Object>> yearCost(String year){
+        return programMapper.yearCost(year);
     }
 
     /***

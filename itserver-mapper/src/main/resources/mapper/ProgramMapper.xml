@@ -276,7 +276,9 @@
         analyzing_conditions as analyzingConditions,sum(overall_cost) as overAllCost
         from program where
         (program_status=110 and approval_status=110 or program_status!=100 and program_status!=110)
-        and YEAR(create_time)=YEAR(NOW())
+        /**and YEAR(create_time)=YEAR(NOW())**/
+        and DATE_FORMAT(create_time,'%Y')= #{year}
         GROUP BY analyzing_conditions) a on pc.type=a.analyzingConditions
+        where pc.year = #{year}
     </select>
 </mapper>

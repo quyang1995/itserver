@@ -68,7 +68,7 @@ public interface IProgramService extends IAdminService<Program> {
 
     List<Map<String,Object>> changeTopFive(List<Product> productList,Map<String, Object> paramsMap);
 
-    List<Map<String,Object>> yearCost();
+    List<Map<String,Object>> yearCost(String year);
 
     List<ProgramFile> getFileListByWhere(Map<String,Object> map);
 }

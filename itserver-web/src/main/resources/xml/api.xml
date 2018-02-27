@@ -1628,6 +1628,7 @@
         <request>
             <property name="pfAcc" type="string" required="true"/>
             <property name="analyzingConditions" type="string" required="false"/>
+            <property name="year" type="string" required="false"/>
         </request>
     </item>
 
