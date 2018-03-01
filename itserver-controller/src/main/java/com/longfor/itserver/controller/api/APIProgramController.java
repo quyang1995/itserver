@@ -163,13 +163,17 @@ public class APIProgramController extends BaseController {
 
 			//验证当前人员权限********beg
 			if (accountId != null && 0 == program.getType() && StringUtils.isNotBlank(accountId.toString())){
-				map.put("accountId", accountId);
-				List<ProgramEmployee> accountList = this.getProgramEmployeeService().selectTypeList(map);
-				if (accountList==null || accountList.isEmpty()){
-					resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1035,personLiableList.get(0).getEmployeeName());
-					return resultMap;
+				String isAdmin = DataPermissionHelper.getInstance().isShowAllData(accountId.toString()) ? "1" : "0";
+				//判断管理员角色，若为管理员，可以直接查看 0=非管理员，1=管理员
+				if ("0".equals(isAdmin)) {
+					map.put("accountId", accountId);
+					List<ProgramEmployee> accountList = this.getProgramEmployeeService().selectTypeList(map);
+					if (accountList == null || accountList.isEmpty()) {
+						resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1035, personLiableList.get(0).getEmployeeName());
+						return resultMap;
+					}
+					map.remove("accountId");
 				}
-				map.remove("accountId");
 			}
 			//验证当前人员权限********end
 

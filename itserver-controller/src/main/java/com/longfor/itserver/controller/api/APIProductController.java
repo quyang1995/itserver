@@ -166,16 +166,21 @@ public class APIProductController extends BaseController {
                 .searchTypeList(new Long(id), AvaStatusEnum.LIABLEAVA.getCode(), null);
 
         //验证当前人员权限********beg
+
         if (0 == psProduct.getType() && StringUtils.isNotBlank(accountId)
                 && !psProduct.getContactAccountId().equals(accountId)
                 && !psProduct.getContactAccountId1().equals(accountId)){
-            Map<String, Object> accountMap = new HashMap<String, Object>();
-            accountMap.put("accountId", accountId);
-            accountMap.put("productId", id);
-            List<ProductEmployee> accountList = this.getProductEmployeeService().searchTypeListMap(accountMap);
-            if (accountList==null || accountList.isEmpty()){
-                resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1036,personLiableList.get(0).getEmployeeName());
-                return resultMap;
+            String isAdmin = DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0";
+            //判断管理员角色，若为管理员，可以直接查看 0=非管理员，1=管理员
+            if ("0".equals(isAdmin)) {
+                Map<String, Object> accountMap = new HashMap<String, Object>();
+                accountMap.put("accountId", accountId);
+                accountMap.put("productId", id);
+                List<ProductEmployee> accountList = this.getProductEmployeeService().searchTypeListMap(accountMap);
+                if (accountList==null || accountList.isEmpty()){
+                    resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1036,personLiableList.get(0).getEmployeeName());
+                    return resultMap;
+                }
             }
             map.remove("accountId");
         }
@@ -505,6 +510,7 @@ public class APIProductController extends BaseController {
             ProductLabelType  productLabelType = new ProductLabelType();
             productLabelType.setLabelName(paramsMap.get("labelName").toString());
             productLabelType.setModifiedAccountId(paramsMap.get("accountId").toString());
+            productLabelType.setModifiedName(paramsMap.get("modifiedName").toString());
             productLabelType.setCreateTime(date);
             productLabelType.setModifiedTime(date);
             this.getProductLabelTypeService().insert(productLabelType);
@@ -536,6 +542,7 @@ public class APIProductController extends BaseController {
             productLabel.setLabelTypeId(Long.valueOf(paramsMap.get("labelTypeId").toString()));
             productLabel.setLabelName(paramsMap.get("labelName").toString());
             productLabel.setModifiedAccountId(paramsMap.get("accountId").toString());
+            productLabel.setModifiedName(paramsMap.get("modifiedName").toString());
             productLabel.setCreateTime(date);
             productLabel.setModifiedTime(date);
             this.getProductLabelService().insert(productLabel);
@@ -618,6 +625,7 @@ public class APIProductController extends BaseController {
             productLabelType.setId(Long.valueOf(paramsMap.get("id").toString()));
             productLabelType.setLabelName(paramsMap.get("labelName").toString());
             productLabelType.setModifiedAccountId(paramsMap.get("accountId").toString());
+            productLabelType.setModifiedName(paramsMap.get("modifiedName").toString());
             this.getProductLabelTypeService().updateByIdSelective(productLabelType);
         }catch (Exception e){
             e.printStackTrace();
@@ -647,6 +655,7 @@ public class APIProductController extends BaseController {
             productLabel.setLabelTypeId(Long.valueOf(paramsMap.get("labelTypeId").toString()));
             productLabel.setLabelName(paramsMap.get("labelName").toString());
             productLabel.setModifiedAccountId(paramsMap.get("accountId").toString());
+            productLabel.setModifiedName(paramsMap.get("modifiedName").toString());
             this.getProductLabelService().updateByIdSelective(productLabel);
         }catch (Exception e){
             e.printStackTrace();
@@ -673,7 +682,7 @@ public class APIProductController extends BaseController {
             LOG.info("------getProductLabelType:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
             ProductLabelType productLabelType = new ProductLabelType();
             productLabelType.setId(Long.valueOf(paramsMap.get("id").toString()));
-            resultMap.put("data",this.getProductLabelTypeService().select(productLabelType));
+            resultMap.put("data",this.getProductLabelTypeService().selectOne(productLabelType));
         }catch (Exception e){
             e.printStackTrace();
             resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
@@ -699,6 +708,32 @@ public class APIProductController extends BaseController {
             LOG.info("------getProductLabel:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
             ProductLabel productLabel = new ProductLabel();
             productLabel.setId(Long.valueOf(paramsMap.get("id").toString()));
+            resultMap.put("data",this.getProductLabelService().selectOne(productLabel));
+        }catch (Exception e){
+            e.printStackTrace();
+            resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 根据标签类型id获取标签列表
+     *
+     * @param response
+     * @param request
+     * @return Map
+     */
+    @RequestMapping(value = "/getLabelListByTypeId", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Map getLabelListByTypeId(HttpServletRequest request, HttpServletResponse response) {
+        /* 获得已经验证过的参数map */
+        @SuppressWarnings("unchecked")
+        Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        try{
+            LOG.info("------getLabelListByTypeId:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+            ProductLabel productLabel = new ProductLabel();
+            productLabel.setLabelTypeId(Long.valueOf(paramsMap.get("labelTypeId").toString()));
             resultMap.put("data",this.getProductLabelService().select(productLabel));
         }catch (Exception e){
             e.printStackTrace();
@@ -706,4 +741,26 @@ public class APIProductController extends BaseController {
         }
         return resultMap;
     }
+
+    /**
+     * 产品标签类型列表All
+     *
+     * @param response
+     * @param request
+     * @return Map
+     */
+    @RequestMapping(value = "/getAllLabelTypeList", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Map getAllLabelTypeList(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        try{
+            /*返回数据*/
+            resultMap.put("productLabelTypeList", this.getProductLabelTypeService().select(null));
+        }catch (Exception e){
+            e.printStackTrace();
+            resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+        }
+        return resultMap;
+    }
+
 }

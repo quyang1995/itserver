@@ -2,14 +2,11 @@ package com.longfor.itserver.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Lists;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
-import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.*;
 import com.longfor.itserver.common.helper.JoddHelper;
 import com.longfor.itserver.common.util.CommonUtils;
-import com.longfor.itserver.common.util.StringUtil;
 import com.longfor.itserver.entity.*;
 import com.longfor.itserver.entity.ps.PsFeedBackStatus;
 import com.longfor.itserver.esi.impl.LongforServiceImpl;
@@ -123,10 +120,19 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
         Product product = productMapper.selectOne(obj);
         feedBack.setName(product.getName());
         feedBack.setProductCode(product.getCode());
-        feedBack.setContactAccountId(product.getContactAccountId());
-        feedBack.setContactEmployeeCode(product.getContactEmployeeCode());
-        feedBack.setContactEmployeeName(product.getContactEmployeeName());
-        feedBack.setContactFullDeptPath(product.getContactFullDeptPath());
+        //反馈类型：0=功能异常，1=功能建议
+        if(feedBack.getType()==0){
+            feedBack.setContactAccountId(product.getContactAccountId1());
+            feedBack.setContactEmployeeCode(product.getContactEmployeeCode1());
+            feedBack.setContactEmployeeName(product.getContactEmployeeName1());
+            feedBack.setContactFullDeptPath(product.getContactFullDeptPath1());
+        }
+        if(feedBack.getType()==1){
+            feedBack.setContactAccountId(product.getContactAccountId());
+            feedBack.setContactEmployeeCode(product.getContactEmployeeCode());
+            feedBack.setContactEmployeeName(product.getContactEmployeeName());
+            feedBack.setContactFullDeptPath(product.getContactFullDeptPath());
+        }
         feedBack.setCreateTime(TimeUtils.getTodayByDateTime());
         feedBack.setModifiedTime(TimeUtils.getTodayByDateTime());
         //状态
@@ -172,10 +178,10 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
             bugInfo.setChannel(feedBack.getChannel());
 
             //指派人
-            bugInfo.setCallonAccountId(product.getContactAccountId());
-            bugInfo.setCallonEmployeeCode(product.getContactEmployeeCode());
-            bugInfo.setCallonEmployeeName(product.getContactEmployeeName());
-            bugInfo.setCallonFullDeptPath(product.getContactFullDeptPath());
+            bugInfo.setCallonAccountId(product.getContactAccountId1());
+            bugInfo.setCallonEmployeeCode(product.getContactEmployeeCode1());
+            bugInfo.setCallonEmployeeName(product.getContactEmployeeName1());
+            bugInfo.setCallonFullDeptPath(product.getContactFullDeptPath1());
 
             //起草人
             if (hadAccount) {

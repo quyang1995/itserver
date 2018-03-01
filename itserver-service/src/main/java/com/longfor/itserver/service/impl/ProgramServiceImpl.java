@@ -1935,6 +1935,40 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             resultMap.put("currProgramStatus",model.getProgramStatus());//当前项目节点
             if(model!=null && model.getCreateTime()!=null) {
                 resultMap.put("currProgramStatusTime", DateUtil.date2String(model.getCreateTime(), DateUtil.PATTERN_DATE));//当前项目节点时间
+                //判断项目到那个节点，取那个节点的计划时间
+                if(model.getProgramStatus()==ProgramStatusNewEnum.LX.getCode() && model.getCommitDate()!=null){
+                    resultMap.put("planProgramStatusTime", DateUtil.date2String(model.getCommitDate(), DateUtil.PATTERN_DATE));//当前项目节点计划时间
+                }
+                if(model.getProgramStatus()==ProgramStatusNewEnum.DPS.getCode() && model.getDemoApprovalDate()!=null){
+                    resultMap.put("planProgramStatusTime", DateUtil.date2String(model.getDemoApprovalDate(), DateUtil.PATTERN_DATE));//当前项目节点计划时间
+                }
+                if(model.getProgramStatus()==ProgramStatusNewEnum.ZTBSQ.getCode() && model.getBiddingDate()!=null){
+                    resultMap.put("planProgramStatusTime", DateUtil.date2String(model.getBiddingDate(), DateUtil.PATTERN_DATE));//当前项目节点计划时间
+                }
+                if(model.getProgramStatus()==ProgramStatusNewEnum.ZBSQ.getCode() && model.getWinningBidDate()!=null){
+                    resultMap.put("planProgramStatusTime", DateUtil.date2String(model.getWinningBidDate(), DateUtil.PATTERN_DATE));//当前项目节点计划时间
+                }
+                if(model.getProgramStatus()==ProgramStatusNewEnum.CPPS.getCode() && model.getProdApprovalDate()!=null){
+                    resultMap.put("planProgramStatusTime", DateUtil.date2String(model.getProdApprovalDate(), DateUtil.PATTERN_DATE));//当前项目节点计划时间
+                }
+                if(model.getProgramStatus()==ProgramStatusNewEnum.KFPS.getCode() && model.getDevApprovalDate()!=null){
+                    resultMap.put("planProgramStatusTime", DateUtil.date2String(model.getDevApprovalDate(), DateUtil.PATTERN_DATE));//当前项目节点计划时间
+                }
+                if(model.getProgramStatus()==ProgramStatusNewEnum.CSPS.getCode() && model.getTestApprovalDate()!=null){
+                    resultMap.put("planProgramStatusTime", DateUtil.date2String(model.getTestApprovalDate(), DateUtil.PATTERN_DATE));//当前项目节点计划时间
+                }
+                if(model.getProgramStatus()==ProgramStatusNewEnum.SXPS.getCode() && model.getOnlinePlanDate()!=null){
+                    resultMap.put("planProgramStatusTime", DateUtil.date2String(model.getOnlinePlanDate(), DateUtil.PATTERN_DATE));//当前项目节点计划时间
+                }
+                if(model.getProgramStatus()==ProgramStatusNewEnum.HDFB.getCode() && model.getGrayReleaseDate()!=null){
+                    resultMap.put("planProgramStatusTime", DateUtil.date2String(model.getGrayReleaseDate(), DateUtil.PATTERN_DATE));//当前项目节点计划时间
+                }
+                if(model.getProgramStatus()==ProgramStatusNewEnum.XMFP.getCode() && model.getReplayDate()!=null){
+                    resultMap.put("planProgramStatusTime", DateUtil.date2String(model.getReplayDate(), DateUtil.PATTERN_DATE));//当前项目节点计划时间
+                }
+                if(model.getProgramStatus()==ProgramStatusNewEnum.XMFP.getCode() && model.getReplayDate()!=null){
+                    resultMap.put("planProgramStatusTime", DateUtil.date2String(model.getReplayDate(), DateUtil.PATTERN_DATE));//当前项目节点计划时间
+                }
             }
 
 

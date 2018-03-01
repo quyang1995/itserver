@@ -42,6 +42,12 @@ public class ProductLabelType {
     private String modifiedAccountId;
 
     /**
+     * 最后修改人账户name
+     */
+    @Column(name = "modified_name")
+    private String modifiedName;
+
+    /**
      * 获取主键id
      *
      * @return id - 主键id
@@ -129,5 +135,23 @@ public class ProductLabelType {
      */
     public void setModifiedAccountId(String modifiedAccountId) {
         this.modifiedAccountId = modifiedAccountId == null ? null : modifiedAccountId.trim();
+    }
+
+    /**
+     * 获取最后修改人账户name
+     *
+     * @return modified_account_name - 最后修改人账户name
+     */
+    public String getModifiedName() {
+        return modifiedName;
+    }
+
+    /**
+     * 设置最后修改人账户name
+     *
+     * @param modifiedName 最后修改人账户iname
+     */
+    public void setModifiedName(String modifiedName) {
+        this.modifiedName = modifiedName == null ? null : modifiedName.trim();
     }
 }

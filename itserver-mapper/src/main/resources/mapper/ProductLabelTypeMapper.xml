@@ -10,13 +10,14 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
     <result column="modified_account_id" property="modifiedAccountId" jdbcType="VARCHAR" />
+    <result column="modified_name" jdbcType="VARCHAR" property="modifiedName" />
   </resultMap>
 
   <sql id="Base_Column_List" >
     <!--
       WARNING - @mbggenerated
     -->
-    id, label_name, create_time, modified_time, modified_account_id
+    id, label_name, create_time, modified_time, modified_account_id, modified_name
   </sql>
 
   <select id="getLabelTypeList" parameterType="map" resultMap="BaseResultMap">
