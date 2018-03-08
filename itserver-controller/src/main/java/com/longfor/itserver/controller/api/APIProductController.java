@@ -116,7 +116,7 @@ public class APIProductController extends BaseController {
         /* 获得已经验证过的参数map*/
         Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         /*查询数据*/
-        List<Product> products = this.getProductService().searchLikeList(paramsMap);
+        List<PsProductCount> products = this.getProductService().searchLikeList(paramsMap);
         /*返回数据*/
         Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         map.put("productList", products);
@@ -134,8 +134,10 @@ public class APIProductController extends BaseController {
     @RequestMapping(value = "/getListSort", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
     public Map sortList(HttpServletRequest request, HttpServletResponse response) {
+          /* 获得已经验证过的参数map*/
+        Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         /*查询数据*/
-        List<Product> products = this.getProductService().getListSort();
+        List<Product> products = this.getProductService().getListSort(paramsMap);
         /*返回数据*/
         Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         map.put("productList", products);
@@ -511,9 +513,12 @@ public class APIProductController extends BaseController {
             productLabelType.setLabelName(paramsMap.get("labelName").toString());
             productLabelType.setModifiedAccountId(paramsMap.get("accountId").toString());
             productLabelType.setModifiedName(paramsMap.get("modifiedName").toString());
+            productLabelType.setCreateAccountId(paramsMap.get("accountId").toString());
+            productLabelType.setCreateName(paramsMap.get("modifiedName").toString());
             productLabelType.setCreateTime(date);
             productLabelType.setModifiedTime(date);
             this.getProductLabelTypeService().insert(productLabelType);
+            resultMap.put("data",productLabelType);
         }catch (Exception e){
             e.printStackTrace();
             resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
@@ -543,9 +548,12 @@ public class APIProductController extends BaseController {
             productLabel.setLabelName(paramsMap.get("labelName").toString());
             productLabel.setModifiedAccountId(paramsMap.get("accountId").toString());
             productLabel.setModifiedName(paramsMap.get("modifiedName").toString());
+            productLabel.setCreateAccountId(paramsMap.get("accountId").toString());
+            productLabel.setCreateName(paramsMap.get("modifiedName").toString());
             productLabel.setCreateTime(date);
             productLabel.setModifiedTime(date);
             this.getProductLabelService().insert(productLabel);
+            resultMap.put("data",productLabel);
         }catch (Exception e){
             e.printStackTrace();
             resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
@@ -569,8 +577,15 @@ public class APIProductController extends BaseController {
         Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         try{
             LOG.info("------delProductLabelType:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+            Long id = Long.valueOf(paramsMap.get("id").toString());
+            ProductLabel productLabel = new ProductLabel();
+            productLabel.setLabelTypeId(id);
+            if(this.getProductLabelService().selectCount(productLabel)>0){
+                resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1039);
+                return resultMap;
+            }
             ProductLabelType productLabelType = new ProductLabelType();
-            productLabelType.setId(Long.valueOf(paramsMap.get("id").toString()));
+            productLabelType.setId(id);
             this.getProductLabelTypeService().delete(productLabelType);
         }catch (Exception e){
             e.printStackTrace();
@@ -595,8 +610,14 @@ public class APIProductController extends BaseController {
         Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         try{
             LOG.info("------delProductLabel:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+            Long id = Long.valueOf(paramsMap.get("id").toString());
+            int i = this.getProductService().getCountByLabelId(","+paramsMap.get("id").toString()+",");
+            if(i > 0){
+                resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1040);
+                return resultMap;
+            }
             ProductLabel productLabel = new ProductLabel();
-            productLabel.setId(Long.valueOf(paramsMap.get("id").toString()));
+            productLabel.setId(id);
             this.getProductLabelService().delete(productLabel);
         }catch (Exception e){
             e.printStackTrace();
@@ -734,6 +755,9 @@ public class APIProductController extends BaseController {
             LOG.info("------getLabelListByTypeId:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
             ProductLabel productLabel = new ProductLabel();
             productLabel.setLabelTypeId(Long.valueOf(paramsMap.get("labelTypeId").toString()));
+            if(paramsMap.get("createAccountId")!=null){
+                productLabel.setCreateAccountId(paramsMap.get("createAccountId").toString());
+            }
             resultMap.put("data",this.getProductLabelService().select(productLabel));
         }catch (Exception e){
             e.printStackTrace();
@@ -756,6 +780,30 @@ public class APIProductController extends BaseController {
         try{
             /*返回数据*/
             resultMap.put("productLabelTypeList", this.getProductLabelTypeService().select(null));
+        }catch (Exception e){
+            e.printStackTrace();
+            resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 获取标签树形结构
+     *
+     * @param response
+     * @param request
+     * @return Map
+     */
+    @RequestMapping(value = "/getLabelTree", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Map getLabelTree(HttpServletRequest request, HttpServletResponse response) {
+        /* 获得已经验证过的参数map */
+        @SuppressWarnings("unchecked")
+        Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        try{
+            LOG.info("------getLabelTree:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+            resultMap.put("data",this.getProductLabelTypeService().getLabelTree(paramsMap));
         }catch (Exception e){
             e.printStackTrace();
             resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);

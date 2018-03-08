@@ -45,13 +45,21 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 	@Override
 	public List<PsProductCount> searchList(Map map) {
 		List<PsProductCount> list= productMapper.selectList(map);
+		this.getPersonLiableList(list);
+		return list;
+	}
+
+	/**
+	 * 产品责任人
+	 * @param list
+	 */
+	private void getPersonLiableList(List<PsProductCount> list){
 		for(PsProductCount model:list){
 			ProductEmployee productEmployee  = new ProductEmployee();
 			productEmployee.setEmployeeType(AvaStatusEnum.LIABLEAVA.getCode());
 			productEmployee.setProductId(model.getId());
 			model.setPersonLiableList(productEmployeeMapper.select(productEmployee));
 		}
-		return list;
 	}
 
 	@Override
@@ -60,8 +68,10 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 	}
 
 	@Override
-	public List<Product> searchLikeList(Map map) {
-		return productMapper.selectLikeList(map);
+	public List<PsProductCount> searchLikeList(Map map) {
+		List<PsProductCount> productList = productMapper.selectLikeList(map);
+		this.getPersonLiableList(productList);
+		return productList;
 	}
 
 	@Transactional
@@ -70,9 +80,17 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		JSONObject jsonObject = (JSONObject) JSONObject.toJSON(map);
 		Product product = JSONObject.toJavaObject(jsonObject, Product.class);
 
+		Product codeCheckProduct = new Product();
+		//name唯一检查
+		String productName = product.getName();
+		codeCheckProduct.setName(productName);
+		if(StringUtils.isBlank(productName) || productMapper.select(codeCheckProduct).size() > 0){
+			return CommonUtils.getResultMapByBizEnum(BizEnum.E1037, productName);
+		}
+
 		//code唯一检查
 		String code = this.generateProductNewCode();
-		Product codeCheckProduct = new Product();
+		codeCheckProduct.setName(null);
 		codeCheckProduct.setCode(code);
 		if(StringUtils.isBlank(code) || productMapper.select(codeCheckProduct).size() > 0){
 			return CommonUtils.getResultMapByBizEnum(BizEnum.E1028, code);
@@ -268,8 +286,8 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 	/**
 	 * 查询所有数据A-Z排序
 	 */
-	public List<Product> getListSort(){
-		return productMapper.getListSort();
+	public List<Product> getListSort(Map map){
+		return productMapper.getListSort(map);
 	}
 
 	public boolean getAccountInfo(int num, Product product, String str) {
@@ -446,19 +464,19 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 	}
 
 	@Override
-	public List<PsProductCount> productHui(Map map) {
+	public List<PsProductCount> productHui(Map<String,Object> map) {
 		List<PsProductCount> list= productMapper.productHui(map);
-		for(PsProductCount model:list){
-			ProductEmployee productEmployee  = new ProductEmployee();
-			productEmployee.setEmployeeType(AvaStatusEnum.LIABLEAVA.getCode());
-			productEmployee.setProductId(model.getId());
-			model.setPersonLiableList(productEmployeeMapper.select(productEmployee));
-		}
+		this.getPersonLiableList(list);
 		return list;
 	}
 
 	@Override
 	public int productHuiNum(Map map) {
 		return productMapper.productHuiNum(map);
+	}
+
+	@Override
+	public int getCountByLabelId(String label) {
+		return productMapper.getCountByLabelId(label);
 	}
 }

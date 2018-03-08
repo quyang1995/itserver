@@ -12,4 +12,6 @@ public interface IProductLabelTypeService extends IAdminService<ProductLabelType
 
     int getLabelTypeCount(Map<String,Object> map);
 
+    List<ProductLabelType> getLabelTree(Map<String,Object> map);
+
 }

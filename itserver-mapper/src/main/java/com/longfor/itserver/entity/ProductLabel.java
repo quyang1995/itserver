@@ -54,6 +54,18 @@ public class ProductLabel {
     private String modifiedName;
 
     /**
+     * 创建人账户id
+     */
+    @Column(name = "create_account_id")
+    private String createAccountId;
+
+    /**
+     * 创建人账户name
+     */
+    @Column(name = "create_name")
+    private String createName;
+
+    /**
      * 获取主键id
      *
      * @return id - 主键id
@@ -177,5 +189,41 @@ public class ProductLabel {
      */
     public void setModifiedName(String modifiedName) {
         this.modifiedName = modifiedName == null ? null : modifiedName.trim();
+    }
+
+    /**
+     * 获取创建人账户name
+     *
+     * @return create_account_name - 创建人账户name
+     */
+    public String getCreateName() {
+        return createName;
+    }
+
+    /**
+     * 设置创建人账户name
+     *
+     * @param createName 创建人账户iname
+     */
+    public void setCreateName(String createName) {
+        this.createName = createName == null ? null : createName.trim();
+    }
+
+    /**
+     * 获取最后创建人账户id
+     *
+     * @return create_account_id - 创建人账户id
+     */
+    public String getCreateAccountId() {
+        return createAccountId;
+    }
+
+    /**
+     * 设置创建人账户id
+     *
+     * @param createAccountId 创建人账户id
+     */
+    public void setCreateAccountId(String createAccountId) {
+        this.createAccountId = createAccountId == null ? null : createAccountId.trim();
     }
 }

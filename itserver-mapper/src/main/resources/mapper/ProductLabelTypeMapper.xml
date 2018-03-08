@@ -11,13 +11,15 @@
     <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
     <result column="modified_account_id" property="modifiedAccountId" jdbcType="VARCHAR" />
     <result column="modified_name" jdbcType="VARCHAR" property="modifiedName" />
+    <result column="create_account_id" property="createAccountId" jdbcType="VARCHAR" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
   </resultMap>
 
   <sql id="Base_Column_List" >
     <!--
       WARNING - @mbggenerated
     -->
-    id, label_name, create_time, modified_time, modified_account_id, modified_name
+    id, label_name, create_time, modified_time, modified_account_id, modified_name, create_account_id, create_name
   </sql>
 
   <select id="getLabelTypeList" parameterType="map" resultMap="BaseResultMap">
@@ -28,7 +30,9 @@
       </if>
     </where>
     ORDER BY create_time DESC
-    LIMIT #{startRow},#{endRow}
+    <if test="startRow != null and startRow != ''">
+      LIMIT #{startRow},#{endRow}
+    </if>
   </select>
 
   <select id="getLabelTypeCount" parameterType="map" resultType="int">

@@ -54,6 +54,10 @@ public class APIProgramBpmController extends BaseController {
 
 			Program program = this.getProgram(paramsMap);
 			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
+			if(program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
+					&& program.getApprovalStatus()==ProgramApprovalStatusEnum.SHZ.getCode()){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+			}
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
@@ -893,6 +897,33 @@ public class APIProgramBpmController extends BaseController {
 			dataMap.put("yearCost",yearCost);
 
 			resultMap.put("data",dataMap);
+		} catch ( Exception e) {
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return  resultMap;
+	}
+
+	/**
+	 * 移动首页
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/cost" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+	@ResponseBody
+	public Map cost(HttpServletRequest request){
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try {
+			Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------cost:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+			//本年度费用使用情况
+			Object yearObj = paramsMap.get("year");
+			if (yearObj==null) {
+				yearObj = DateUtil.date2String(new Date(),"yyyy");
+			}
+			String year = yearObj.toString();
+			List<Map<String,Object>> yearCost = getProgramService().yearCost(year);
+			resultMap.put("data",yearCost);
 		} catch ( Exception e) {
 			e.printStackTrace();
 			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);

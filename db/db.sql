@@ -216,7 +216,7 @@ CREATE TABLE IF NOT EXISTS `itplus`.`program` (
   COMMENT '整体费用',
 
   `program_status`       INT             NOT NULL
-  COMMENT '项目状态：100=未立项，110=立项，120=Demo评审，130=招投标申请，140=中标申请，150=产品评审，160=开发评审，170=测试评审，180=上线计划，190=灰度发布，195=灰度发布，200=延期上线，210=需求变更，900=完成，999=终止',
+  COMMENT '项目状态：100=未立项，110=立项，120=Demo评审，130=招投标申请，140=中标申请，150=产品评审，160=开发评审，170=测试评审，180=上线计划，190=灰度发布，193=全面推广，195=项目复盘，200=延期上线，210=需求变更，900=完成，999=终止',
   `approval_status`      INT             NULL
   COMMENT '审批状态：100=审核中，110=审核通过，120=审核驳回，130=变更审核中，140=变更审核驳回',
   `modified_account_id`  VARCHAR(50)     NULL
@@ -237,7 +237,7 @@ CREATE TABLE IF NOT EXISTS `itplus`.`program_change_log` (
   `program_id`          BIGINT          NOT NULL
   COMMENT '项目id',
   `program_status`      INT             NOT NULL
-  COMMENT '项目状态：100=未立项，110=立项，120=Demo评审，130=招投标申请，140=中标申请，150=产品评审，160=开发评审，170=测试评审，180=上线计划，190=灰度发布，195=项目复盘，200=延期上线，210=需求变更，900=完成，999=终止',
+  COMMENT '项目状态：100=未立项，110=立项，120=Demo评审，130=招投标申请，140=中标申请，150=产品评审，160=开发评审，170=测试评审，180=上线计划，190=灰度发布，193=全面推广，195=项目复盘，200=延期上线，210=需求变更，900=完成，999=终止',
   `action_change_info`  VARCHAR(500)    NULL
   COMMENT '日志信息',
   `modified_account_id` VARCHAR(50)     NULL
@@ -367,7 +367,7 @@ CREATE TABLE IF NOT EXISTS `itplus`.`program_approval_snapshot` (
   `program_id`             BIGINT          NOT NULL
   COMMENT '项目id',
   `approval_target_status` INT             NOT NULL
-  COMMENT '项目状态：100=未立项，110=立项，120=Demo评审，130=招投标申请，140=中标申请，150=产品评审，160=开发评审，170=测试评审，180=上线计划，190=灰度发布，195=项目复盘，200=延期上线，210=需求变更，900=完成，999=终止',
+  COMMENT '项目状态：100=未立项，110=立项，120=Demo评审，130=招投标申请，140=中标申请，150=产品评审，160=开发评审，170=测试评审，180=上线计划，190=灰度发布，193=全面推广，195=项目复盘，200=延期上线，210=需求变更，900=完成，999=终止',
   `approval_result_status` INT             NULL
   COMMENT '审批结果状态：100=审核中，110=审核通过，120=审核驳回，130=变更审核中，140=变更审核驳回',
   `bpm_code`               VARCHAR(100)    NOT NULL

@@ -37,17 +37,17 @@ public class Program implements Serializable {
     @Column(name = "analyzing_conditions")
     private String analyzingConditions;
     @Column(name = "dev_workload")
-    private int devWorkload;
+    private Integer devWorkload;
     @Column(name = "overall_cost")
     private BigDecimal overallCost;
     @Column(name = "bid_dev_workload")
-    private int bidDevWorkload;
+    private Integer bidDevWorkload;
     @Column(name = "bid_overall_cost")
     private BigDecimal bidOverallCost;
     @Column(name = "bid_oversingle_cost")
     private BigDecimal bidOversingleCost;
     @Column(name = "approval_status")
-    private int approvalStatus;
+    private Integer approvalStatus;
 
 
     @Id
@@ -635,11 +635,11 @@ public class Program implements Serializable {
         this.analyzingConditions = analyzingConditions;
     }
 
-    public int getDevWorkload() {
+    public Integer getDevWorkload() {
         return devWorkload;
     }
 
-    public void setDevWorkload(int devWorkload) {
+    public void setDevWorkload(Integer devWorkload) {
         this.devWorkload = devWorkload;
     }
 
@@ -651,11 +651,11 @@ public class Program implements Serializable {
         this.overallCost = overallCost;
     }
 
-    public int getBidDevWorkload() {
+    public Integer getBidDevWorkload() {
         return bidDevWorkload;
     }
 
-    public void setBidDevWorkload(int bidDevWorkload) {
+    public void setBidDevWorkload(Integer bidDevWorkload) {
         this.bidDevWorkload = bidDevWorkload;
     }
 
@@ -667,11 +667,11 @@ public class Program implements Serializable {
         this.bidOverallCost = bidOverallCost;
     }
 
-    public int getApprovalStatus() {
+    public Integer getApprovalStatus() {
         return approvalStatus;
     }
 
-    public void setApprovalStatus(int approvalStatus) {
+    public void setApprovalStatus(Integer approvalStatus) {
         this.approvalStatus = approvalStatus;
     }
 }

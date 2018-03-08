@@ -72,4 +72,11 @@ public interface IProgramService extends IAdminService<Program> {
     List<Map<String,Object>> yearCost(String year);
 
     List<ProgramFile> getFileListByWhere(Map<String,Object> map);
+
+    /**
+     * 导出项目列表
+     * @param map
+     * @return
+     */
+    List<Map<String,Object>> exportProgramList(Map<String,Object> map);
 }

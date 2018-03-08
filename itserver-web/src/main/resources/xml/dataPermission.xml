@@ -4,15 +4,22 @@
 
     <accounts>
         <account loginName="wang" />
-        <account loginName="chengxiujin" />
+        <account loginName="wanggj" />
+        <account loginName="gaojianxiong" />
         <account loginName="lichuan" />
-        <account loginName="wenting" />
+        <account loginName="liufq" />
         <account loginName="zhouqiongshuo" />
-        <account loginName="zhangchi4" />
-        <account loginName="lixia14" />
-        <account loginName="wangfajin" />
+        <account loginName="fuzhihua" />
         <account loginName="zuoenze" />
+        <account loginName="jiangzhenghao" />
+        <account loginName="wangfajin" />
         <account loginName="dujie1" />
+        <account loginName="wenting" />
+        <account loginName="liangliang3" />
+        <account loginName="chengxiujin" />
+        <account loginName="zhangchi4" />
+        <account loginName="lijyan" />
+        <account loginName="chenzongning" />
     </accounts>
 
 </dataPermission>

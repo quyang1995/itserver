@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.*;
+import com.longfor.itserver.common.helper.DataPermissionHelper;
+import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.common.util.StringUtil;
 import com.longfor.itserver.common.vo.MoApprove.MoApproveListVo;
@@ -84,7 +86,23 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             ProgramEmployee programEmployee  = new ProgramEmployee();
             programEmployee.setEmployeeType(AvaStatusEnum.LIABLEAVA.getCode());
             programEmployee.setProgramId(model.getId());
-            model.setPersonLiableList(programEmployeeMapper.select(programEmployee));
+            List<ProgramEmployee> personLiableList = programEmployeeMapper.select(programEmployee);
+            model.setPersonLiableList(personLiableList);
+            //当前登录人员为管理员或项目责任人时，就可以看到“评估人天”和“总预算”
+            String accountId = map.get("accountId").toString();
+            String isAdmin = DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0";
+            if ("0".equals(isAdmin)){
+                Boolean f = true ;
+                for(ProgramEmployee emp:personLiableList){
+                    if(emp.getAccountId().equals(accountId)){
+                        f = false;
+                    }
+                }
+                if (f) {
+                    model.setDevWorkload(-1);
+                    model.setOverallCost(new BigDecimal(-1));
+                }
+            }
         }
         return programList;
     }
@@ -250,6 +268,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         program.setCreateTime(TimeUtils.getTodayByDateTime());
         program.setModifiedTime(TimeUtils.getTodayByDateTime());
         program.setAccountType(accountType);
+        program.setApprovalStatus(0);
         program.setNewCode(this.generateProgramNewCode());
         programMapper.insert(program);
 
@@ -429,18 +448,24 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         selectOneProgram.setProductName(product.getName());
         selectOneProgram.setProductCode(product.getCode());
         selectOneProgram.setDescp(program.getDescp());
-//        selectOneProgram.setCommitDate(program.getCommitDate());
-//        selectOneProgram.setStartDate(program.getStartDate());
-//        selectOneProgram.setUedDate(program.getUedDate());
-//        selectOneProgram.setArchitectureDate(program.getArchitectureDate());
-//        selectOneProgram.setGrayReleaseDate(program.getGrayReleaseDate());
-//        selectOneProgram.setReleaseDate(program.getReleaseDate());
         selectOneProgram.setLikeProduct(program.getLikeProduct());
         selectOneProgram.setLikeProgram(program.getLikeProgram());
         selectOneProgram.setType(program.getType());
-//        selectOneProgram.setProgramStatus(program.getProgramStatus());
         selectOneProgram.setAccountType(accountType);
         selectOneProgram.setModifiedTime(TimeUtils.getTodayByDateTime());
+        //节点日期
+        if(program.getCommitDate()!=null)selectOneProgram.setCommitDate(program.getCommitDate());
+        if(program.getDemoApprovalDate()!=null)selectOneProgram.setDemoApprovalDate(program.getDemoApprovalDate());
+        if(program.getBiddingDate()!=null)selectOneProgram.setBiddingDate(program.getBiddingDate());
+        if(program.getWinningBidDate()!=null)selectOneProgram.setWinningBidDate(program.getWinningBidDate());
+        if(program.getProdApprovalDate()!=null)selectOneProgram.setProdApprovalDate(program.getProdApprovalDate());
+        if(program.getDevApprovalDate()!=null)selectOneProgram.setDevApprovalDate(program.getDevApprovalDate());
+        if(program.getTestApprovalDate()!=null)selectOneProgram.setTestApprovalDate(program.getTestApprovalDate());
+        if(program.getOnlinePlanDate()!=null)selectOneProgram.setOnlinePlanDate(program.getOnlinePlanDate());
+        if(program.getGrayReleaseDate()!=null)selectOneProgram.setGrayReleaseDate(program.getGrayReleaseDate());
+        if(program.getReplayDate()!=null)selectOneProgram.setReplayDate(program.getReplayDate());
+        if(program.getAllExtensionDate()!=null)selectOneProgram.setAllExtensionDate(program.getAllExtensionDate());
+        //节点日期
         programMapper.updateByPrimaryKey(selectOneProgram);
 
         // 项目责任人
@@ -2011,6 +2036,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     @Override
     public List<ProgramFile> getFileListByWhere(Map<String,Object> map){
         return programFileMapper.getFileListByWhere(map);
+    }
+
+    /***
+     * 导出项目列表
+     */
+    @Override
+    public List<Map<String,Object>> exportProgramList(Map<String,Object> map){
+        return programMapper.exportProgramList(map);
     }
 
 }

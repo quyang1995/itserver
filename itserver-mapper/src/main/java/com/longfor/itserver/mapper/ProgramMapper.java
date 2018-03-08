@@ -37,6 +37,18 @@ public interface ProgramMapper extends BeeMapper<Program> {
 
     List<Map<String,Object>> changeTopFive(Map<String,Object> map);
 
+    /**
+     * 年度费用统计
+     * @param year
+     * @return
+     */
     List<Map<String,Object>> yearCost(@Param(value = "year")String year);
+
+    /**
+     * 导出项目列表
+     * @param map
+     * @return
+     */
+    List<Map<String,Object>> exportProgramList(Map<String,Object> map);
 
 }

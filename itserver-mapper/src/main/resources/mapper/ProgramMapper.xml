@@ -85,6 +85,7 @@
         p.like_product, p.like_program, p.type, p.program_status, p.modified_account_id, p.modified_name,
         p.create_time, p.modified_time,p.approval_status
         FROM program p JOIN program_employee pe ON p.id = pe.program_id
+        left join product pt on pt.id = p.product_id
         WHERE 1=1
         <if test=" isMove != null and isMove != '' and isMove == 1">
             and p.program_status != 100
@@ -117,6 +118,9 @@
         </if>
         <if test='analyzingConditions != "" and analyzingConditions != null  and analyzingConditions != -1'>
             and p.analyzing_conditions = #{analyzingConditions}
+        </if>
+        <if test='label != "" and label != null  and label != ",-1,"'>
+            and pt.label like concat(concat('%',#{label}),'%')
         </if>
         ORDER BY p.create_time DESC
     </select>
@@ -290,5 +294,103 @@
         and DATE_FORMAT(create_time,'%Y')= #{year}
         GROUP BY analyzing_conditions) a on pc.type=a.analyzingConditions
         where pc.year = #{year}
+    </select>
+
+    <select id="exportProgramList" parameterType="map" resultType="map">
+        SELECT
+            p.id id,
+            p.product_id productId,
+            p.product_name productName,
+            p.product_code productCode,
+            p.`name` name,
+            p.descp descp,
+            substring(p.commit_date,1,10) commitDate,"",
+            substring(p.demo_approval_date,1,10) demoApprovalDate,"",
+            substring(p.bidding_date,1,10) biddingDate,"",
+            substring(p.winning_bid_date,1,10) winningBidDate,"",
+            substring(p.prod_approval_date,1,10) prodApprovalDate,"",
+            substring(p.dev_approval_date,1,10) devApprovalDate,"",
+            substring(p.test_approval_date,1,10) testApprovalDate,"",
+            substring(p.online_plan_date,1,10) onlinePlanDate,"",
+            substring(p.gray_release_date,1,10) grayReleaseDate,"",
+            substring(p.all_extension_date,1,10) allExtensionDate,"",
+            substring(p.replay_date,1,10) replayDate,"",
+            CASE
+            WHEN p.program_status = '100' THEN  '未立项'
+            WHEN p.program_status = '110' THEN  '立项'
+            WHEN p.program_status = '120' THEN  'Demo评审'
+            WHEN p.program_status = '130' THEN  '招投标申请'
+            WHEN p.program_status = '140' THEN  '中标申请'
+            WHEN p.program_status = '150' THEN  '产品评审'
+            WHEN p.program_status = '160' THEN  '开发评审'
+            WHEN p.program_status = '170' THEN  '测试评审'
+            WHEN p.program_status = '180' THEN  '上线计划'
+            WHEN p.program_status = '190' THEN  '灰度发布'
+            WHEN p.program_status = '193' THEN  '全面推广'
+            WHEN p.program_status = '195' THEN  '项目复盘'
+            WHEN p.program_status = '900' THEN  '完成'
+            WHEN p.program_status = '999' THEN  '终止'
+            ELSE '其他' END programStatus,
+            CASE
+            WHEN p.approval_status = '100' THEN  '审核中'
+            WHEN p.approval_status = '110' THEN  '审核通过'
+            WHEN p.approval_status = '120' THEN  '审核驳回'
+            WHEN p.approval_status = '130' THEN  '变更审核中'
+            WHEN p.approval_status = '140' THEN  '变更审核驳回'
+            ELSE '其他' END approvalStatus,
+            CASE
+            WHEN p.analyzing_conditions = '1' THEN  '地产'
+            WHEN p.analyzing_conditions = '2' THEN  '商业'
+            WHEN p.analyzing_conditions = '3' THEN  '数据'
+            WHEN p.analyzing_conditions = '4' THEN  '冠寓'
+            WHEN p.analyzing_conditions = '5' THEN  '养老'
+            WHEN p.analyzing_conditions = '6' THEN  '产城'
+            WHEN p.analyzing_conditions = '7' THEN  '基础中心'
+            ELSE '其他' END analyzingConditions,
+            p.dev_workload devWorkload,
+            p.overall_cost overallCost,
+            pd.label label,
+            pd.label_name labelName,
+            GROUP_CONCAT(e.employee_name) employeeName,
+            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=110 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d')  actualCommitDate
+            ,
+            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=120 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualDemoApprovalDate
+            ,
+            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=130 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualBiddingDate
+            ,
+            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=140 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualWinningBidDate
+            ,
+            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=150 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualProdApprovalDate
+            ,
+            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=160 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualDevApprovalDate
+            ,
+            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=170 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualTestApprovalDate
+            ,
+            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=180 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualOnlinePlanDate
+            ,
+            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=190 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualGrayReleaseDate
+            ,
+            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=193 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualReplayDate
+            ,
+            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=195 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualAllExtensionDate
+            from program p
+            LEFT JOIN program_employee e ON p.id = e.program_id
+            LEFT JOIN product pd on pd.id=p.product_id
+            where e.employee_type = 1
+            <if test=" programStatus != null and  programStatus != '' and  programStatus != -1">
+                AND p.program_status = #{programStatus}
+            </if>
+            <if test=" analyzingConditions != null and  analyzingConditions != '' and  analyzingConditions != -1">
+                AND pd.analyzing_conditions  LIKE CONCAT('%', #{analyzingConditions, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test=" label != null and  label != '' and  label != ',-1,'">
+                AND pd.label  LIKE CONCAT('%', #{label, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test=" isMyself != null and  isMyself != '' and isMyself == 1 ">
+                <if test=" accountId != null and  accountId != '' ">
+                    AND (e.account_id = #{accountId} OR pd.contact_account_id = #{accountId})
+                </if>
+            </if>
+            GROUP BY p.id
     </select>
 </mapper>

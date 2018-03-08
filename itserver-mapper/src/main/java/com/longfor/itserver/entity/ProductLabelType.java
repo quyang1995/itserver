@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.mayee.commons.CustomDateSerializer;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 @Table(name = "product_label_type")
@@ -46,6 +47,32 @@ public class ProductLabelType {
      */
     @Column(name = "modified_name")
     private String modifiedName;
+
+    /**
+     * 创建人账户id
+     */
+    @Column(name = "create_account_id")
+    private String createAccountId;
+
+    /**
+     * 创建人账户name
+     */
+    @Column(name = "create_name")
+    private String createName;
+
+    /**
+     * 标签类型下的标签列表
+     */
+    @Transient
+    private List<ProductLabel> productLabelList;
+
+    public List<ProductLabel> getProductLabelList() {
+        return productLabelList;
+    }
+
+    public void setProductLabelList(List<ProductLabel> productLabelList) {
+        this.productLabelList = productLabelList;
+    }
 
     /**
      * 获取主键id
@@ -153,5 +180,41 @@ public class ProductLabelType {
      */
     public void setModifiedName(String modifiedName) {
         this.modifiedName = modifiedName == null ? null : modifiedName.trim();
+    }
+
+    /**
+     * 获取创建人账户name
+     *
+     * @return create_account_name - 创建人账户name
+     */
+    public String getCreateName() {
+        return createName;
+    }
+
+    /**
+     * 设置创建人账户name
+     *
+     * @param createName 创建人账户iname
+     */
+    public void setCreateName(String createName) {
+        this.createName = createName == null ? null : createName.trim();
+    }
+
+    /**
+     * 获取最后创建人账户id
+     *
+     * @return create_account_id - 创建人账户id
+     */
+    public String getCreateAccountId() {
+        return createAccountId;
+    }
+
+    /**
+     * 设置创建人账户id
+     *
+     * @param createAccountId 创建人账户id
+     */
+    public void setCreateAccountId(String createAccountId) {
+        this.createAccountId = createAccountId == null ? null : createAccountId.trim();
     }
 }

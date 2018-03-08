@@ -162,7 +162,7 @@ public class APIProgramController extends BaseController {
 			program.setPersonLiableList(personLiableList);
 
 			//验证当前人员权限********beg
-			if (accountId != null && 0 == program.getType() && StringUtils.isNotBlank(accountId.toString())){
+			if (accountId != null && 0 == program.getType() ){
 				String isAdmin = DataPermissionHelper.getInstance().isShowAllData(accountId.toString()) ? "1" : "0";
 				//判断管理员角色，若为管理员，可以直接查看 0=非管理员，1=管理员
 				if ("0".equals(isAdmin)) {
@@ -324,6 +324,13 @@ public class APIProgramController extends BaseController {
 	public Map programAdd(HttpServletResponse response, HttpServletRequest request) throws IOException, JSONException {
 		try{
 			Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			//name唯一检查
+			Program checkProgram = new Program();
+			String programName = paramsMap.get("name").toString();
+			checkProgram.setName(programName);
+			if(StringUtils.isBlank(programName) || this.getProgramService().select(checkProgram).size() > 0){
+				return CommonUtils.getResultMapByBizEnum(BizEnum.E1038, programName);
+			}
 			this.getProgramService().addProgram(paramsMap);
 			// 返回报文
 			return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_C);
@@ -480,5 +487,22 @@ public class APIProgramController extends BaseController {
 			e.printStackTrace();
 			return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
 		}
+	}
+	/**
+	 * 导出项目列表
+	 * @return
+	 */
+	@RequestMapping(value = "/exportProgramList" ,method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public Map exportProgramList(HttpServletResponse response,HttpServletRequest request){
+		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try{
+			resultMap.put("list",this.getProgramService().exportProgramList(paramsMap));
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return resultMap;
 	}
 }

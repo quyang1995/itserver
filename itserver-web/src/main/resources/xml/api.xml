@@ -69,6 +69,7 @@
             <property name="accountId" type="string" required="true" maxLength="30" />
             <property name="status" type="int" required="true" area="0,1,-1,2"/>
             <property name="mySelf" type="string" required="true" maxLength="30"/>
+            <property name="label" type="string" required="false" />
             <property name="analyzingConditions" type="string" required="true" area="1,2,3,4,5,6,7,-1"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
         </request>
@@ -112,6 +113,7 @@
     -->
     <item id="api_product_getListSort" description="根据产品名字查询产品信息A-Z排序">
         <request>
+            <property name="status" type="string" required="false" description="项目上线下线状态，0=已下线,1=已上线,2=未上线"/>
         </request>
     </item>
     <!--
@@ -242,6 +244,7 @@
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
             <property name="productId" type="int" required="false" />
             <property name="isMove" type="int" required="false" />
+            <property name="label" type="string" required="false" />
         </request>
     </item>
 
@@ -329,6 +332,18 @@
             <property name="operationList" type="string" required="false"/>
             <property name="operateList" type="string" required="false"/>
             <property name="accountType" type="string" required="false" />
+
+            <property name="commitDate" type="string" required="false" description="立项时间"/>
+            <property name="demoApprovalDate" type="string" required="false" description="Demo评审时间"/>
+            <property name="biddingDate" type="string" required="false" description="招投标时间"/>
+            <property name="winningBidDate" type="string" required="false" description="中标时间"/>
+            <property name="prodApprovalDate" type="string" required="false" description="产品评审时间"/>
+            <property name="devApprovalDate" type="string" required="false" description="开发评审时间"/>
+            <property name="testApprovalDate" type="string" required="false" description="测试评审时间"/>
+            <property name="onlinePlanDate" type="string" required="false" description="上线计划时间"/>
+            <property name="grayReleaseDate" type="string" required="false" description="灰度发布时间"/>
+            <property name="replayDate" type="string" required="false" description="项目复盘时间"/>
+            <property name="allExtensionDate" type="string" required="false" description="全面推广时间"/>
         </request>
     </item>
 
@@ -353,6 +368,18 @@
             <property name="operationList" type="string" required="false"/>
             <property name="operateList" type="string" required="false"/>
             <property name="accountType" type="string" required="false" />
+
+            <property name="commitDate" type="string" required="false" description="立项时间"/>
+            <property name="demoApprovalDate" type="string" required="false" description="Demo评审时间"/>
+            <property name="biddingDate" type="string" required="false" description="招投标时间"/>
+            <property name="winningBidDate" type="string" required="false" description="中标时间"/>
+            <property name="prodApprovalDate" type="string" required="false" description="产品评审时间"/>
+            <property name="devApprovalDate" type="string" required="false" description="开发评审时间"/>
+            <property name="testApprovalDate" type="string" required="false" description="测试评审时间"/>
+            <property name="onlinePlanDate" type="string" required="false" description="上线计划时间"/>
+            <property name="grayReleaseDate" type="string" required="false" description="灰度发布时间"/>
+            <property name="replayDate" type="string" required="false" description="项目复盘时间"/>
+            <property name="allExtensionDate" type="string" required="false" description="全面推广时间"/>
         </request>
     </item>
 
@@ -1634,6 +1661,17 @@
 
     <!--
         URL:
+        /api/program/bpm/cost
+        说明:年度预算费用
+    -->
+    <item id="api_program_bpm_cost" description="年度预算费用">
+        <request>
+            <property name="year" type="string" required="false"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
         /api/program/bpm/exceptionProgram
         说明:异常项目
     -->
@@ -1820,6 +1858,7 @@
     <item id="api_product_getLabelListByTypeId" description="根据标签类型id获取标签列表">
         <request>
             <property name="labelTypeId" type="string" required="true"/>
+            <property name="createAccountId" type="string" required="false"/>
         </request>
     </item>
 
@@ -1830,6 +1869,31 @@
         -->
     <item id="api_product_getAllLabelTypeList" description="产品标签类型列表All">
         <request>
+        </request>
+    </item>
+
+    <!--
+            URL:
+            /api/product/getLabelTree
+            说明:获取标签树形结构
+        -->
+    <item id="api_product_getLabelTree" description="获取标签树形结构">
+        <request>
+        </request>
+    </item>
+
+    <!--
+            URL:
+            /api/program/exportProgramList
+            说明:导出项目列表
+        -->
+    <item id="api_program_exportProgramList" description="导出项目列表">
+        <request>
+            <property name="accountId" type="string" required="true"/>
+            <property name="isMyself" type="string" required="false" description="1:我参与的，0：全部"/>
+            <property name="programStatus" type="string" required="false"/>
+            <property name="analyzingConditions" type="string" required="false"/>
+            <property name="label" type="string" required="false"/>
         </request>
     </item>
 </api>

@@ -100,9 +100,12 @@
         <if test="status != null and status != '' and status != -1 ">
             AND ta.status= #{status}
         </if>
+        <if test="label != null and label != '' and label != ',-1,' ">
+            AND ta.label  LIKE concat('%',#{label},'%')
+        </if>
         <if test="searchText != null and searchText != ''">
             AND (tb.employee_name LIKE concat('%',#{searchText},'%') OR ta.name LIKE concat('%',#{searchText},'%') OR
-            ta.contact_employee_name LIKE concat('%',#{searchText},'%'))
+            ta.contact_employee_name LIKE concat('%',#{searchText},'%') OR ta.label LIKE concat('%',#{searchText},'%'))
         </if>
         <if test="analyzingConditions != null and analyzingConditions != '' and analyzingConditions != -1">
             AND ta.analyzing_conditions LIKE concat('%',#{analyzingConditions},'%')
@@ -163,7 +166,7 @@
         ORDER BY ta.create_time DESC
     </select>
 
-    <select id="selectLikeList" resultMap="BaseResultMap">
+    <select id="selectLikeList" resultMap="CountBaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM product
@@ -176,10 +179,15 @@
     </select>
 
     <!-- 产品列表A-Z排序 -->
-    <select id="getListSort" resultMap="BaseResultMap">
+    <select id="getListSort" resultMap="BaseResultMap" parameterType="map">
         SELECT
         <include refid="Base_Column_List"/>
         FROM product
+        <where>
+            <if test="status != null and status != ''">
+                `status`=#{status}
+            </if>
+        </where>
         ORDER by convert(substr(name,1,1) using 'GBK')
     </select>
 
@@ -225,7 +233,7 @@
         <if test=" searchText != null and searchText != '' ">
             and (p.name like concat('%',#{searchText},'%')  or p.label_name like concat('%',#{searchText},'%'))
         </if>
-        <if test=" label != null and label != '' ">
+        <if test=" label != null and label != '' and label != ',-1,'">
             and p.label like concat('%',#{label},'%')
         </if>
     </sql>
@@ -337,5 +345,9 @@
             where 1=1 and `status`!=0
             <include refid="productHui_Where"/>
         </if>
+    </select>
+
+    <select id="getCountByLabelId" resultType="int" >
+        select COUNT(1) from product WHERE label LIKE  concat('%',#{label},'%')
     </select>
 </mapper>
