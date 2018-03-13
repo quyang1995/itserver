@@ -34,7 +34,7 @@
       </if>
     </where>
     ORDER BY create_time DESC
-    <if test="startRow != null and startRow != ''">
+    <if test="endRow != null and endRow != ''">
       LIMIT #{startRow},#{endRow}
     </if>
   </select>

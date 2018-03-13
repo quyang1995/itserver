@@ -79,4 +79,6 @@ public interface IProgramService extends IAdminService<Program> {
      * @return
      */
     List<Map<String,Object>> exportProgramList(Map<String,Object> map);
+
+    void programTask() throws Exception;
 }

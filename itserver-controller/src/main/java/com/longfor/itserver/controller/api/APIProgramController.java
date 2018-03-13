@@ -10,11 +10,11 @@ import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.*;
 import com.longfor.itserver.entity.ps.PsProgramDetail;
-import com.longfor.itserver.mapper.ProgramFollowMapper;
 import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.helper.APIHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -390,7 +389,6 @@ public class APIProgramController extends BaseController {
 		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
-//			this.buildPageParams(paramsMap);
 			CommonUtils.buildPageParams(paramsMap);
 			resultMap.put("list",this.getProgramEmployeeChangeLogService().orderLimitList(paramsMap));
 			resultMap.put(APIHelper.PAGE_NUM, paramsMap.get("pageNum"));
@@ -505,4 +503,12 @@ public class APIProgramController extends BaseController {
 		}
 		return resultMap;
 	}
+
+	/**
+	 * 定时任务 发送龙信小秘书提示流程节点信息
+	 */
+//	@Scheduled(cron = "0 0/3 * * * ?")
+//	public void bugTask() throws Exception{
+//		this.getProgramService().programTask();
+//	}
 }

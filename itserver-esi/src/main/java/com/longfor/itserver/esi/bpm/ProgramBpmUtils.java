@@ -86,6 +86,7 @@ public class ProgramBpmUtils
      * cOrZ:李川还是傅志华   string 1-李，2-傅   IT部门副总经理
      * ifGj:是否光建总审批   string 0-否，1-是
      * isFirst 是否产品下第一个项目
+     * d815be69-9d5d-45d1-a7d4-2823d0a33631:刘富强guid,审批节点必须他审批
      */
     public static ApplyCreateResultVo submitBrd(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
@@ -104,7 +105,7 @@ public class ProgramBpmUtils
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessAccount").split(",");
         String [] developAccountGuid = paramsMap.get("developAccount").split(",");
-        String str = businessAccountGuid[0]+","+developAccountGuid[0];
+        String str = businessAccountGuid[0]+","+developAccountGuid[0]+",d815be69-9d5d-45d1-a7d4-2823d0a33631";
         jsonObject.put("ItemValue", str.split(","));//业务人（业务人员）+项目技术负责人（开发人员第一个）
         jsonArray.add(jsonObject);
         //********************添加业务及技术审批**********end********************
@@ -325,6 +326,7 @@ public class ProgramBpmUtils
      * developAccount:项目技术负责人/开发人员guid
      * counterSigners:会签人  string 逗号分隔
      * testingList:项目测试负责人
+     * d815be69-9d5d-45d1-a7d4-2823d0a33631:刘富强guid,审批节点必须他审批
      */
     public static ApplyCreateResultVo submitDevelopReview(Map<String, String> paramsMap){
         JSONArray jsonArray = new JSONArray();
@@ -341,7 +343,7 @@ public class ProgramBpmUtils
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] productManagerList = paramsMap.get("productManagerList").split(",");
-        String str = productManagerList[0]+","+paramsMap.get("ifZqs");
+        String str = productManagerList[0]+","+paramsMap.get("ifZqs")+",d815be69-9d5d-45d1-a7d4-2823d0a33631";
         jsonObject.put("ItemValue", str.split(","));//产品经理 + 周琼硕审批guid
         jsonArray.add(jsonObject);
         //********************添加产品经理审批**********end********************

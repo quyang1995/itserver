@@ -6,7 +6,7 @@ import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.enums.*;
 import com.longfor.itserver.common.helper.DataPermissionHelper;
-import com.longfor.itserver.common.util.CommonUtils;
+import com.longfor.itserver.common.helper.JoddHelper;
 import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.common.util.StringUtil;
 import com.longfor.itserver.common.vo.MoApprove.MoApproveListVo;
@@ -17,19 +17,23 @@ import com.longfor.itserver.common.vo.programBpm.common.ApplyCreateResultVo;
 import com.longfor.itserver.common.vo.programBpm.common.ApplySubmitResultVo;
 import com.longfor.itserver.common.vo.programBpm.common.FileVo;
 import com.longfor.itserver.entity.*;
+import com.longfor.itserver.entity.ps.APIProgramTask;
 import com.longfor.itserver.entity.ps.PsProgramDetail;
 import com.longfor.itserver.esi.IEdsService;
 import com.longfor.itserver.esi.bpm.ProgramBpmUtil;
 import com.longfor.itserver.esi.bpm.ProgramBpmUtils;
+import com.longfor.itserver.esi.impl.LongforServiceImpl;
 import com.longfor.itserver.mapper.*;
 import com.longfor.itserver.service.IProgramEmployeeService;
 import com.longfor.itserver.service.IProgramService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import com.longfor.itserver.service.util.AccountUitl;
+import jodd.props.Props;
 import net.mayee.commons.TimeUtils;
 import net.mayee.commons.helper.APIHelper;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +78,11 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     private ProgramApprovalSnapshotMapper programApprovalSnapshotMapper;
     @Autowired
     private ProgramFileMapper programFileMapper;
+
+    @Autowired
+    private LongforServiceImpl longforServiceImpl;
+
+
     @Override
     public List<PsProgramDetail> programList(Map map) {
         List<PsProgramDetail> programList = programMapper.programList(map);
@@ -1102,6 +1111,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programApprovalSnapshot.setModifiedTime(now);
             programApprovalSnapshot.setApplyAccount(paramsMap.get("modifiedAccountId"));
             programApprovalSnapshot.setReportPoor(paramsMap.get("reportPoor"));
+            programApprovalSnapshot.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
+            programApprovalSnapshot.setModifiedName(paramsMap.get("modifiedName"));
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
             //附件表
@@ -1591,6 +1602,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programApprovalSnapshot.setModifiedTime(now);
             programApprovalSnapshot.setApplyAccount(paramsMap.get("modifiedAccountId"));
             programApprovalSnapshot.setReportPoor(paramsMap.get("reportPoor"));
+            programApprovalSnapshot.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
+            programApprovalSnapshot.setModifiedName(paramsMap.get("modifiedName"));
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
             //附件表
@@ -2044,6 +2057,159 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     @Override
     public List<Map<String,Object>> exportProgramList(Map<String,Object> map){
         return programMapper.exportProgramList(map);
+    }
+
+    /***
+     * 移动端龙信小秘书提醒
+     */
+    @Override
+    public void programTask() throws Exception{
+        List<APIProgramTask> apiProgramTaskList = this.getProgramTask();
+        for(int i = 0; i < apiProgramTaskList.size(); i++){
+            APIProgramTask apiProgramTask = apiProgramTaskList.get(i);
+            Map paramMap = longforServiceImpl.param();
+            Props props = JoddHelper.getInstance().getJoddProps();
+            String openUrl = props.getValue("openUrl.programListPath")+apiProgramTask.getProgramId();
+            paramMap.put("ruser",apiProgramTask.getAccountId());
+            JSONObject paramMapCont = (JSONObject) paramMap.get("content");
+            paramMapCont.put("topTitle",apiProgramTask.getTitle());
+            paramMapCont.put("centerWords",apiProgramTask.getContent());
+            paramMapCont.put("openUrl",openUrl);
+            longforServiceImpl.msgcenter(paramMap);
+        }
+    }
+
+    private List<APIProgramTask> getProgramTask () throws Exception {
+        List<APIProgramTask> apiProgramTasks = new ArrayList<>();
+        List<Program> programList = programMapper.selectAll();
+        String now = DateUtil.date2String(new Date(),DateUtil.PATTERN_DATE);
+        for(Program model:programList){
+            if(model.getProgramStatus()==ProgramStatusNewEnum.ZZ.getCode() ||
+                    model.getProgramStatus()==ProgramStatusNewEnum.WC.getCode() ){
+                continue;
+            }
+            //提示立项
+            if (model.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()
+                    && model.getApprovalStatus()==0
+                    && model.getCommitDate()!=null){
+                String date = DateUtil.date2String(model.getCommitDate(),DateUtil.PATTERN_DATE);
+                if(date.equals(now)){
+                    APIProgramTask apiProgramTask = new APIProgramTask();
+                    apiProgramTask.setProgramId(model.getId());
+                    apiProgramTask.setAccountId("liuyilei");
+                    apiProgramTask.setTitle("项目进度提醒");
+                    apiProgramTask.setContent("您的项目【"+model.getName()+"】还没有立项，请尽快完成。");
+                    apiProgramTasks.add(apiProgramTask);
+                }
+            }
+            //提示Demo评审
+            if (model.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
+                    && model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+                    && model.getDemoApprovalDate()!=null ){
+                String date = DateUtil.date2String(model.getDemoApprovalDate(),DateUtil.PATTERN_DATE);
+                if(date.equals(now)){
+                    APIProgramTask apiProgramTask = new APIProgramTask();
+                    apiProgramTask.setProgramId(model.getId());
+                    apiProgramTask.setTitle("项目进度提醒");
+                    apiProgramTask.setContent("您的项目【"+model.getName()+"】还没有Demo评审，请尽快完成。");
+//                    apiProgramTasks.add(apiProgramTask);
+                }
+            }
+            //提示产品评审
+            if (model.getProgramStatus()==ProgramStatusNewEnum.DPS.getCode()
+                    && model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+                    && model.getProdApprovalDate()!=null ){
+                String date = DateUtil.date2String(model.getProdApprovalDate(),DateUtil.PATTERN_DATE);
+                if(date.equals(now)){
+                    APIProgramTask apiProgramTask = new APIProgramTask();
+                    apiProgramTask.setProgramId(model.getId());
+                    apiProgramTask.setTitle("项目进度提醒");
+                    apiProgramTask.setContent("您的项目【"+model.getName()+"】还没有产品评审，请尽快完成。");
+//                    apiProgramTasks.add(apiProgramTask);
+                }
+            }
+            //提示开发评审
+            if (model.getProgramStatus()==ProgramStatusNewEnum.CPPS.getCode()
+                    && model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+                    && model.getDevApprovalDate()!=null ){
+                String date = DateUtil.date2String(model.getDevApprovalDate(),DateUtil.PATTERN_DATE);
+                if(date.equals(now)){
+                    APIProgramTask apiProgramTask = new APIProgramTask();
+                    apiProgramTask.setProgramId(model.getId());
+                    apiProgramTask.setTitle("项目进度提醒");
+                    apiProgramTask.setContent("您的项目【"+model.getName()+"】还没有开发评审，请尽快完成。");
+//                    apiProgramTasks.add(apiProgramTask);
+                }
+            }
+            //提示测试评审
+            if (model.getProgramStatus()==ProgramStatusNewEnum.KFPS.getCode()
+                    && model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+                    && model.getTestApprovalDate()!=null){
+                String date = DateUtil.date2String(model.getTestApprovalDate(),DateUtil.PATTERN_DATE);
+                if(date.equals(now)){
+                    APIProgramTask apiProgramTask = new APIProgramTask();
+                    apiProgramTask.setProgramId(model.getId());
+                    apiProgramTask.setTitle("项目进度提醒");
+                    apiProgramTask.setContent("您的项目【"+model.getName()+"】还没有测试评审，请尽快完成。");
+//                    apiProgramTasks.add(apiProgramTask);
+                }
+            }
+            //提示上线计划
+            if (model.getProgramStatus()==ProgramStatusNewEnum.CSPS.getCode()
+                    && model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+                    && model.getOnlinePlanDate()!=null ){
+                String date = DateUtil.date2String(model.getOnlinePlanDate(),DateUtil.PATTERN_DATE);
+                if(date.equals(now)){
+                    APIProgramTask apiProgramTask = new APIProgramTask();
+                    apiProgramTask.setProgramId(model.getId());
+                    apiProgramTask.setTitle("项目进度提醒");
+                    apiProgramTask.setContent("您的项目【"+model.getName()+"】还没有上线，请尽快完成。");
+//                    apiProgramTasks.add(apiProgramTask);
+                }
+            }
+            //提示灰度发布
+            if (model.getProgramStatus()==ProgramStatusNewEnum.SXPS.getCode()
+                    && model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+                    && model.getGrayReleaseDate()!=null ){
+                String date = DateUtil.date2String(model.getGrayReleaseDate(),DateUtil.PATTERN_DATE);
+                if(date.equals(now)){
+                    APIProgramTask apiProgramTask = new APIProgramTask();
+                    apiProgramTask.setProgramId(model.getId());
+                    apiProgramTask.setTitle("项目进度提醒");
+                    apiProgramTask.setContent("您的项目【"+model.getName()+"】还没有灰度发布，请尽快完成。");
+//                    apiProgramTasks.add(apiProgramTask);
+                }
+            }
+            //提示全面推广
+            if (model.getProgramStatus()==ProgramStatusNewEnum.HDFB.getCode()
+                    && model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+                    && model.getAllExtensionDate()!=null){
+                String date = DateUtil.date2String(model.getAllExtensionDate(),DateUtil.PATTERN_DATE);
+                if(date.equals(now) ){
+                    APIProgramTask apiProgramTask = new APIProgramTask();
+                    apiProgramTask.setProgramId(model.getId());
+                    apiProgramTask.setTitle("项目进度提醒");
+                    apiProgramTask.setContent("您的项目【"+model.getName()+"】还没有全面推广，请尽快完成。");
+//                    apiProgramTasks.add(apiProgramTask);
+                }
+            }
+            //提示项目复盘
+            if (model.getProgramStatus()==ProgramStatusNewEnum.QMTG.getCode()
+                    && model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+                    && model.getReplayDate()!=null ){
+                String date = DateUtil.date2String(model.getReplayDate(),DateUtil.PATTERN_DATE);
+                if(date.equals(now)){
+                    APIProgramTask apiProgramTask = new APIProgramTask();
+                    apiProgramTask.setProgramId(model.getId());
+                    apiProgramTask.setTitle("项目进度提醒");
+                    apiProgramTask.setContent("您的项目【"+model.getName()+"】还没有复盘，请尽快完成。");
+//                    apiProgramTasks.add(apiProgramTask);
+                }
+            }
+
+        }
+
+        return apiProgramTasks;
     }
 
 }

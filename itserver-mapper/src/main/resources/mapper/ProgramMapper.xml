@@ -80,10 +80,12 @@
     <!-- 项目列表 -->
     <select id="programList" parameterType="map" resultMap="ProgramDetailResultMap">
         SELECT DISTINCT
-        p.id, p.product_id, p.product_name, p.product_code, p.name, p.descp, p.commit_date, p.start_date, p.gray_release_date,
-        p.release_date,p.ued_date,p.architecture_date,p.overall_cost,p.dev_workload,p.analyzing_conditions,
+        p.id, p.product_id, p.product_name, p.product_code, p.name, p.descp,p.architecture_date,p.overall_cost,
+        p.dev_workload,p.analyzing_conditions,
         p.like_product, p.like_program, p.type, p.program_status, p.modified_account_id, p.modified_name,
-        p.create_time, p.modified_time,p.approval_status
+        p.create_time, p.modified_time,p.approval_status,p.commit_date,p.demo_approval_date,p.bidding_date,p.winning_bid_date,
+        p.prod_approval_date,p.dev_approval_date,p.test_approval_date,p.online_plan_date,p.gray_release_date,p.replay_date,
+        p.all_extension_date
         FROM program p JOIN program_employee pe ON p.id = pe.program_id
         left join product pt on pt.id = p.product_id
         WHERE 1=1
@@ -377,7 +379,7 @@
             LEFT JOIN program_employee e ON p.id = e.program_id
             LEFT JOIN product pd on pd.id=p.product_id
             where e.employee_type = 1
-            <if test=" programStatus != null and  programStatus != '' and  programStatus != -1">
+            <if test=" programStatus != null and  programStatus != '' and  programStatus != 0">
                 AND p.program_status = #{programStatus}
             </if>
             <if test=" analyzingConditions != null and  analyzingConditions != '' and  analyzingConditions != -1">
