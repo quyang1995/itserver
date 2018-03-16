@@ -94,7 +94,7 @@ demandPath=http://111.207.120.1:9091/requireDetail
 demandListPath=http://111.207.120.1:9091/itallList?VIEWSHOW_NOHEAD&index=3
 bugPath=http://111.207.120.1:9091/bugDetail
 bugListPath=http://111.207.120.1:9091/itallList?VIEWSHOW_NOHEAD&index=4
-programListPath=http://111.207.120.1:9091/projectView?VNK=b4752974&projectId=
+programListPath=http://111.207.120.1:9091/projectView?VIEWSHOW_NOHEAD&VNK=b4752974&projectId=
 longforPath=http://114.251.168.251:8090
 
 [openUrl<uat>]
@@ -102,7 +102,7 @@ demandPath=http://111.207.120.1:9091/requireDetail
 demandListPath=http://111.207.120.1:9091/itallList?VIEWSHOW_NOHEAD&index=3
 bugPath=http://111.207.120.1:9091/bugDetail
 bugListPath=http://111.207.120.1:9091/itallList?VIEWSHOW_NOHEAD&index=4
-programListPath=http://111.207.120.1:9091/projectView?VNK=b4752974&projectId=
+programListPath=http://111.207.120.1:9091/projectView?VIEWSHOW_NOHEAD&VNK=b4752974&projectId=
 longforPath=http://192.168.33.45:8090
 
 [openUrl<production>]
@@ -110,6 +110,6 @@ demandPath=https://mop.longfor.com:27242/requireDetail
 demandListPath=https://mop.longfor.com:27242/itallList?VIEWSHOW_NOHEAD&index=3
 bugPath=https://mop.longfor.com:27242/bugDetail
 bugListPath=https://mop.longfor.com:27242/itallList?VIEWSHOW_NOHEAD&index=4
-programListPath==https://mop.longfor.com:27242/projectView?VNK=b4752974&projectId=
+programListPath==https://mop.longfor.com:27242/projectView?VIEWSHOW_NOHEAD&VNK=b4752974&projectId=
 longforPath=https://mop.longfor.com:27234
 ##———————————————————————————————————————————

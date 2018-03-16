@@ -263,7 +263,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
     @Override
     @Transactional
-    public boolean addProgram(Map map) {
+    public boolean addProgram(Map map) throws Exception{
         JSONObject json = (JSONObject) JSONObject.toJSON(map);
         Integer accountType = AccountUitl.getAccountType(map);
         Program program = JSONObject.toJavaObject(json, Program.class);
@@ -280,6 +280,10 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         program.setApprovalStatus(0);
         program.setNewCode(this.generateProgramNewCode());
         programMapper.insert(program);
+        //记录新增项目时的信息
+        ProgramApprovalSnapshot pas = new ProgramApprovalSnapshot();
+        this.copyProperties(pas,program);
+        programApprovalSnapshotMapper.insert(pas);
 
         // 项目责任人
         String jsonArrPl = json.get("personLiableList").toString();
@@ -787,6 +791,50 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             program.setProgramStatus(currProgramStatus);
             program.setModifiedTime(now);
             getApprovelAfterProgramStatus(programApprovalSnapshot.getBpmCode(),program,programApprovalSnapshot.getProgramStatus());
+            //实际立项时间
+            if(program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()){
+                program.setActualCommitDate(now);
+            }
+            //实际Demo评审时间
+            if(program.getProgramStatus()==ProgramStatusNewEnum.DPS.getCode()){
+                program.setActualDemoApprovalDate(now);
+            }
+            //实际招投标时间
+            if(program.getProgramStatus()==ProgramStatusNewEnum.ZTBSQ.getCode()){
+                program.setActualBiddingDate(now);
+            }
+            //实际中标申请时间
+            if(program.getProgramStatus()==ProgramStatusNewEnum.ZBSQ.getCode()){
+                program.setActualWinningBidDate(now);
+            }
+            //实际产品评审时间
+            if(program.getProgramStatus()==ProgramStatusNewEnum.CPPS.getCode()){
+                program.setActualProdApprovalDate(now);
+            }
+            //实际开发评审时间
+            if(program.getProgramStatus()==ProgramStatusNewEnum.KFPS.getCode()){
+                program.setActualDevApprovalDate(now);
+            }
+            //实际测试评审时间
+            if(program.getProgramStatus()==ProgramStatusNewEnum.CSPS.getCode()){
+                program.setActualTestApprovalDate(now);
+            }
+            //实际上线计划时间
+            if(program.getProgramStatus()==ProgramStatusNewEnum.SXPS.getCode()){
+                program.setActualOnlinePlanDate(now);
+            }
+            //实际灰度发布时间
+            if(program.getProgramStatus()==ProgramStatusNewEnum.HDFB.getCode()){
+                program.setActualGrayReleaseDate(now);
+            }
+            //实际全面推广时间
+            if(program.getProgramStatus()==ProgramStatusNewEnum.QMTG.getCode()){
+                program.setActualAllExtensionDate(now);
+            }
+            //实际项目复盘时间
+            if(program.getProgramStatus()==ProgramStatusNewEnum.XMFP.getCode()){
+                program.setActualReplayDate(now);
+            }
             programMapper.updateByPrimaryKey(program);
 
             //program快照表
@@ -1268,6 +1316,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             int i = programMapper.selectCount(program);
             map.put("isFirst",String.valueOf(i));//是否产品下第一个项目
         }
+        //地产、冠寓、基础架构、技术管理相关加刘富强会签人，添加节点：立项、开发评审
+        if(paramsMap.get("analyzingConditions")!=null){
+            if("1".equals(paramsMap.get("analyzingConditions"))
+                    || "4".equals(paramsMap.get("analyzingConditions"))
+                    || "7".equals(paramsMap.get("analyzingConditions"))){
+                map.put("isLfq","d815be69-9d5d-45d1-a7d4-2823d0a33631");//刘富强审批
+            }
+        }
         return map;
     }
 
@@ -1327,6 +1383,17 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
         if("1".equals(paramsMap.get("reportPoor"))){
             map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+        }
+        //地产、冠寓、基础架构、技术管理相关加刘富强会签人，添加节点：立项、开发评审
+        if(paramsMap.get("programId")!=null){
+            Program program = new Program();
+            program.setId(Long.valueOf(paramsMap.get("programId").toString()));
+            program = programMapper.selectOne(program);
+            if("1".equals(program.getAnalyzingConditions())
+                    || "4".equals(program.getAnalyzingConditions())
+                    || "7".equals(program.getAnalyzingConditions())){
+                map.put("isLfq","d815be69-9d5d-45d1-a7d4-2823d0a33631");//刘富强审批
+            }
         }
         return map;
     }
@@ -1623,12 +1690,23 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         }
     }
 
+    /**
+     * 拷贝program信息到programApprovalSnapshot
+     * @param programApprovalSnapshot
+     * @param program
+     * @throws Exception
+     */
     private void copyProperties(ProgramApprovalSnapshot programApprovalSnapshot,Program program) throws Exception{
         BeanUtils.copyProperties(programApprovalSnapshot,program);
         programApprovalSnapshot.setId(null);
         programApprovalSnapshot.setProgramId(program.getId());
     }
-
+    /**
+     * 拷贝programApprovalSnapshot信息到program
+     * @param programApprovalSnapshot
+     * @param program
+     * @throws Exception
+     */
     private void copyPropertiesToProgram(Program program,ProgramApprovalSnapshot programApprovalSnapshot) throws Exception{
         Long programId = program.getId();
         BeanUtils.copyProperties(program,programApprovalSnapshot);
@@ -2066,10 +2144,13 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     public void programTask() throws Exception{
         List<APIProgramTask> apiProgramTaskList = this.getProgramTask();
         for(int i = 0; i < apiProgramTaskList.size(); i++){
+//            if(apiProgramTaskList.get(i).getProgramId().equals("303")){
+//                continue;
+//            }
             APIProgramTask apiProgramTask = apiProgramTaskList.get(i);
             Map paramMap = longforServiceImpl.param();
             Props props = JoddHelper.getInstance().getJoddProps();
-            String openUrl = props.getValue("openUrl.programListPath")+apiProgramTask.getProgramId();
+            String openUrl = props.getValue("openUrl.programListPath")+apiProgramTask.getProgramId()+"&isweb=true";
             paramMap.put("ruser",apiProgramTask.getAccountId());
             JSONObject paramMapCont = (JSONObject) paramMap.get("content");
             paramMapCont.put("topTitle",apiProgramTask.getTitle());
@@ -2082,134 +2163,200 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     private List<APIProgramTask> getProgramTask () throws Exception {
         List<APIProgramTask> apiProgramTasks = new ArrayList<>();
         List<Program> programList = programMapper.selectAll();
-        String now = DateUtil.date2String(new Date(),DateUtil.PATTERN_DATE);
-        for(Program model:programList){
-            if(model.getProgramStatus()==ProgramStatusNewEnum.ZZ.getCode() ||
-                    model.getProgramStatus()==ProgramStatusNewEnum.WC.getCode() ){
+        for(Program program:programList){
+            if(program.getProgramStatus()==ProgramStatusNewEnum.ZZ.getCode() ||
+                    program.getProgramStatus()==ProgramStatusNewEnum.WC.getCode() ){
                 continue;
             }
             //提示立项
-            if (model.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()
-                    && model.getApprovalStatus()==0
-                    && model.getCommitDate()!=null){
-                String date = DateUtil.date2String(model.getCommitDate(),DateUtil.PATTERN_DATE);
-                if(date.equals(now)){
-                    APIProgramTask apiProgramTask = new APIProgramTask();
-                    apiProgramTask.setProgramId(model.getId());
-                    apiProgramTask.setAccountId("liuyilei");
-                    apiProgramTask.setTitle("项目进度提醒");
-                    apiProgramTask.setContent("您的项目【"+model.getName()+"】还没有立项，请尽快完成。");
-                    apiProgramTasks.add(apiProgramTask);
-                }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()
+                    && program.getApprovalStatus()==0
+                    && program.getCommitDate()!=null){
+                this.getTaskList(apiProgramTasks,program,program.getCommitDate());
             }
             //提示Demo评审
-            if (model.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
-                    && model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                    && model.getDemoApprovalDate()!=null ){
-                String date = DateUtil.date2String(model.getDemoApprovalDate(),DateUtil.PATTERN_DATE);
-                if(date.equals(now)){
-                    APIProgramTask apiProgramTask = new APIProgramTask();
-                    apiProgramTask.setProgramId(model.getId());
-                    apiProgramTask.setTitle("项目进度提醒");
-                    apiProgramTask.setContent("您的项目【"+model.getName()+"】还没有Demo评审，请尽快完成。");
-//                    apiProgramTasks.add(apiProgramTask);
-                }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
+                    && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+                    && program.getDemoApprovalDate()!=null ){
+                this.getTaskList(apiProgramTasks,program,program.getDemoApprovalDate());
             }
             //提示产品评审
-            if (model.getProgramStatus()==ProgramStatusNewEnum.DPS.getCode()
-                    && model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                    && model.getProdApprovalDate()!=null ){
-                String date = DateUtil.date2String(model.getProdApprovalDate(),DateUtil.PATTERN_DATE);
-                if(date.equals(now)){
-                    APIProgramTask apiProgramTask = new APIProgramTask();
-                    apiProgramTask.setProgramId(model.getId());
-                    apiProgramTask.setTitle("项目进度提醒");
-                    apiProgramTask.setContent("您的项目【"+model.getName()+"】还没有产品评审，请尽快完成。");
-//                    apiProgramTasks.add(apiProgramTask);
-                }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.DPS.getCode()
+                    && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+                    && program.getProdApprovalDate()!=null ){
+                this.getTaskList(apiProgramTasks,program,program.getProdApprovalDate());
             }
             //提示开发评审
-            if (model.getProgramStatus()==ProgramStatusNewEnum.CPPS.getCode()
-                    && model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                    && model.getDevApprovalDate()!=null ){
-                String date = DateUtil.date2String(model.getDevApprovalDate(),DateUtil.PATTERN_DATE);
-                if(date.equals(now)){
-                    APIProgramTask apiProgramTask = new APIProgramTask();
-                    apiProgramTask.setProgramId(model.getId());
-                    apiProgramTask.setTitle("项目进度提醒");
-                    apiProgramTask.setContent("您的项目【"+model.getName()+"】还没有开发评审，请尽快完成。");
-//                    apiProgramTasks.add(apiProgramTask);
-                }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.CPPS.getCode()
+                    && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+                    && program.getDevApprovalDate()!=null ){
+                this.getTaskList(apiProgramTasks,program,program.getDevApprovalDate());
             }
             //提示测试评审
-            if (model.getProgramStatus()==ProgramStatusNewEnum.KFPS.getCode()
-                    && model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                    && model.getTestApprovalDate()!=null){
-                String date = DateUtil.date2String(model.getTestApprovalDate(),DateUtil.PATTERN_DATE);
-                if(date.equals(now)){
-                    APIProgramTask apiProgramTask = new APIProgramTask();
-                    apiProgramTask.setProgramId(model.getId());
-                    apiProgramTask.setTitle("项目进度提醒");
-                    apiProgramTask.setContent("您的项目【"+model.getName()+"】还没有测试评审，请尽快完成。");
-//                    apiProgramTasks.add(apiProgramTask);
-                }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.KFPS.getCode()
+                    && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+                    && program.getTestApprovalDate()!=null){
+                this.getTaskList(apiProgramTasks,program,program.getTestApprovalDate());
             }
             //提示上线计划
-            if (model.getProgramStatus()==ProgramStatusNewEnum.CSPS.getCode()
-                    && model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                    && model.getOnlinePlanDate()!=null ){
-                String date = DateUtil.date2String(model.getOnlinePlanDate(),DateUtil.PATTERN_DATE);
-                if(date.equals(now)){
-                    APIProgramTask apiProgramTask = new APIProgramTask();
-                    apiProgramTask.setProgramId(model.getId());
-                    apiProgramTask.setTitle("项目进度提醒");
-                    apiProgramTask.setContent("您的项目【"+model.getName()+"】还没有上线，请尽快完成。");
-//                    apiProgramTasks.add(apiProgramTask);
-                }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.CSPS.getCode()
+                    && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+                    && program.getOnlinePlanDate()!=null ){
+                this.getTaskList(apiProgramTasks,program,program.getOnlinePlanDate());
             }
             //提示灰度发布
-            if (model.getProgramStatus()==ProgramStatusNewEnum.SXPS.getCode()
-                    && model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                    && model.getGrayReleaseDate()!=null ){
-                String date = DateUtil.date2String(model.getGrayReleaseDate(),DateUtil.PATTERN_DATE);
-                if(date.equals(now)){
-                    APIProgramTask apiProgramTask = new APIProgramTask();
-                    apiProgramTask.setProgramId(model.getId());
-                    apiProgramTask.setTitle("项目进度提醒");
-                    apiProgramTask.setContent("您的项目【"+model.getName()+"】还没有灰度发布，请尽快完成。");
-//                    apiProgramTasks.add(apiProgramTask);
-                }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.SXPS.getCode()
+                    && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+                    && program.getGrayReleaseDate()!=null ){
+                this.getTaskList(apiProgramTasks,program,program.getGrayReleaseDate());
             }
             //提示全面推广
-            if (model.getProgramStatus()==ProgramStatusNewEnum.HDFB.getCode()
-                    && model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                    && model.getAllExtensionDate()!=null){
-                String date = DateUtil.date2String(model.getAllExtensionDate(),DateUtil.PATTERN_DATE);
-                if(date.equals(now) ){
-                    APIProgramTask apiProgramTask = new APIProgramTask();
-                    apiProgramTask.setProgramId(model.getId());
-                    apiProgramTask.setTitle("项目进度提醒");
-                    apiProgramTask.setContent("您的项目【"+model.getName()+"】还没有全面推广，请尽快完成。");
-//                    apiProgramTasks.add(apiProgramTask);
-                }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.HDFB.getCode()
+                    && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+                    && program.getAllExtensionDate()!=null){
+                this.getTaskList(apiProgramTasks,program,program.getAllExtensionDate());
             }
             //提示项目复盘
-            if (model.getProgramStatus()==ProgramStatusNewEnum.QMTG.getCode()
-                    && model.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                    && model.getReplayDate()!=null ){
-                String date = DateUtil.date2String(model.getReplayDate(),DateUtil.PATTERN_DATE);
-                if(date.equals(now)){
-                    APIProgramTask apiProgramTask = new APIProgramTask();
-                    apiProgramTask.setProgramId(model.getId());
-                    apiProgramTask.setTitle("项目进度提醒");
-                    apiProgramTask.setContent("您的项目【"+model.getName()+"】还没有复盘，请尽快完成。");
-//                    apiProgramTasks.add(apiProgramTask);
-                }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.QMTG.getCode()
+                    && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+                    && program.getReplayDate()!=null ){
+                this.getTaskList(apiProgramTasks,program,program.getReplayDate());
             }
-
         }
-
         return apiProgramTasks;
+    }
+
+    private void getTaskList(List<APIProgramTask> apiProgramTasks,Program program,Date planDate){
+        Date now = new Date();
+        int differentDays = DateUtil.differentDays(now,planDate);
+        if (differentDays<=3) {
+            //获取发送小秘书的人员
+            List<ProgramEmployee> empList = this.taskProgramEmployee(program);
+            for(ProgramEmployee emp:empList){
+                APIProgramTask apiProgramTask = new APIProgramTask();
+                apiProgramTask.setProgramId(program.getId());
+                apiProgramTask.setTitle("项目进度提醒");
+                apiProgramTask.setContent(this.taskContent(differentDays,program,1));
+                apiProgramTask.setAccountId(emp.getAccountId());
+                apiProgramTasks.add(apiProgramTask);
+            }
+            //逾期提示管理层：蒋正浩、左恩泽、李骏岩、傅志华
+            if(differentDays<0){
+                //蒋正浩
+                APIProgramTask apiProgramTask = new APIProgramTask();
+                apiProgramTask.setProgramId(program.getId());
+                apiProgramTask.setTitle("项目进度提醒");
+                apiProgramTask.setContent(this.taskContent(differentDays,program,0));
+                apiProgramTask.setAccountId("jiangzhenghao");
+                apiProgramTasks.add(apiProgramTask);
+                //左恩泽
+                APIProgramTask apiProgramTask1 = new APIProgramTask();
+                apiProgramTask1.setProgramId(program.getId());
+                apiProgramTask1.setTitle("项目进度提醒");
+                apiProgramTask1.setContent(this.taskContent(differentDays,program,0));
+                apiProgramTask1.setAccountId("zuoenze");
+                apiProgramTasks.add(apiProgramTask1);
+                //李骏岩
+                APIProgramTask apiProgramTask2 = new APIProgramTask();
+                apiProgramTask2.setProgramId(program.getId());
+                apiProgramTask2.setTitle("项目进度提醒");
+                apiProgramTask2.setContent(this.taskContent(differentDays,program,0));
+                apiProgramTask2.setAccountId("lijyan");
+                apiProgramTasks.add(apiProgramTask2);
+                //傅志华
+                APIProgramTask apiProgramTask3 = new APIProgramTask();
+                apiProgramTask3.setProgramId(program.getId());
+                apiProgramTask3.setTitle("项目进度提醒");
+                apiProgramTask3.setContent(this.taskContent(differentDays,program,0));
+                apiProgramTask3.setAccountId("fuzhihua");
+                apiProgramTasks.add(apiProgramTask3);
+            }
+        }
+    }
+
+    /**
+     * 龙信小秘书提示信息人员
+     * @param program
+     * @return
+     */
+    private List<ProgramEmployee> taskProgramEmployee(Program program){
+        List<ProgramEmployee> taskEmployee = new ArrayList<ProgramEmployee>();
+        Map map = new HashMap();
+        map.put("programId",program.getId());
+        /*产品评审通过，提示开发人员*/
+        if (program.getProgramStatus()==ProgramStatusNewEnum.CPPS.getCode()){
+            /* 开发人员 */
+            map.put("employeeTypeId", new Long(AvaStatusEnum.DEVEAVA.getCode()));
+        }
+        /*开发评审通过，提示测试人员*/
+        if (program.getProgramStatus()==ProgramStatusNewEnum.KFPS.getCode()){
+            /* 测试人员 */
+            map.put("employeeTypeId", new Long(AvaStatusEnum.TESTINGAVA.getCode()));
+        }
+        taskEmployee.addAll(programEmployeeService.selectPersonList(map));
+        return taskEmployee;
+    }
+    /**
+     * 龙信小秘书提示信息内容
+     * @param program
+     * @return
+     */
+    private String taskContent(int differentDays, Program program,int role){
+        String text = "";
+        String noteName = "";
+        String noteAction = "";
+        if (program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()){
+            noteName = ProgramStatusNewEnum.LX.getText();
+            noteAction = ProgramStatusNewEnum.LX.getText();
+        }
+        if (program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()){
+            noteName = ProgramStatusNewEnum.DPS.getText();
+            noteAction = ProgramStatusNewEnum.DPS.getText();
+        }
+        if (program.getProgramStatus()==ProgramStatusNewEnum.DPS.getCode()){
+            noteName = ProgramStatusNewEnum.CPPS.getText();
+            noteAction = ProgramStatusNewEnum.CPPS.getText();
+        }
+        if (program.getProgramStatus()==ProgramStatusNewEnum.CPPS.getCode()){
+            noteName = ProgramStatusNewEnum.KFPS.getText();
+            noteAction = ProgramStatusNewEnum.KFPS.getText();
+        }
+        if (program.getProgramStatus()==ProgramStatusNewEnum.KFPS.getCode()){
+            noteName = ProgramStatusNewEnum.CSPS.getText();
+            noteAction = ProgramStatusNewEnum.CSPS.getText();
+        }
+        if (program.getProgramStatus()==ProgramStatusNewEnum.CSPS.getCode()){
+            noteName = ProgramStatusNewEnum.SXPS.getText();
+            noteAction = ProgramStatusNewEnum.SXPS.getText();
+        }
+        if (program.getProgramStatus()==ProgramStatusNewEnum.SXPS.getCode()){
+            noteName = ProgramStatusNewEnum.HDFB.getText();
+            noteAction = ProgramStatusNewEnum.HDFB.getText();
+        }
+        if (program.getProgramStatus()==ProgramStatusNewEnum.HDFB.getCode()){
+            noteName = ProgramStatusNewEnum.QMTG.getText();
+            noteAction = ProgramStatusNewEnum.QMTG.getText();
+        }
+        if (program.getProgramStatus()==ProgramStatusNewEnum.QMTG.getCode()){
+            noteName = ProgramStatusNewEnum.XMFP.getText();
+            noteAction = ProgramStatusNewEnum.XMFP.getText();
+        }
+        //管理层蒋正浩、左恩泽、李骏岩、傅志华,提示信息
+        if (role == 0) {
+            text = "【"+program.getName()+"】已逾期，请及时关注。";
+            return text;
+        }
+        //项目负责人提示信息
+        if(differentDays>0){
+            text = "【"+program.getName()+"】将于"+differentDays+"天后到达"+noteName+"节点，请及时完成"+noteAction;
+        }
+        if(differentDays==0){
+            text = "【"+program.getName()+"】于今日到达"+noteName+"节点，请及时完成"+noteAction;
+        }
+        if(differentDays<0){
+            text = "【"+program.getName()+"】已在"+noteName+"节点超时"+Math.abs(differentDays)+"天，请及时完成";
+        }
+        return text;
     }
 
 }

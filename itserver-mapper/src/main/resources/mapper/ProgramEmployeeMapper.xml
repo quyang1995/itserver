@@ -41,4 +41,17 @@
     </if>
     ORDER BY modified_time DESC
   </select>
+
+  <select id="selectPersonList" parameterType="map" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM program_employee
+    WHERE program_id=#{programId} and
+    (employee_type = 1 or employee_type_id = 1
+      <if test="employeeTypeId!=null and employeeTypeId!=''">
+        or employee_type_id = #{employeeTypeId}
+      </if>
+    )
+    GROUP BY account_id
+  </select>
 </mapper>

@@ -35,6 +35,11 @@ public class ProgramEmployeeServiceImpl extends AdminBaseService<ProgramEmployee
     }
 
     @Override
+    public List<ProgramEmployee> selectPersonList(Map map){
+        return programEmployeeMapper.selectPersonList(map);
+    }
+
+    @Override
     public boolean delEmployee(ProgramEmployee employee,String accountType) {
 
 

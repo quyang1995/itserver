@@ -51,15 +51,20 @@ public class APIProgramController extends BaseController {
 	@RequestMapping(value = "/list", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public Map programList(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
 		/* 生成查询用Example */
 		ELExample elExample = new ELExample(request, Program.class);
 		/* 查询数据 and admin权限判断 */
-		String accountId = paramsMap.get("accountId");
+//		String accountId = paramsMap.get("accountId").toString();
 //		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
 		paramsMap.put("isAdmin", "1");
 		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
+		String programStatus = paramsMap.get("programStatus").toString();
+		if(StringUtils.isNotBlank(programStatus) && !"0".equals(programStatus)){
+			String [] programStatusList = programStatus.split(",");
+			paramsMap.put("programStatusList",programStatusList);
+		}
 		List<PsProgramDetail> programList = this.getProgramService().programList(paramsMap);
 
 		/* 返回报文 */
@@ -166,6 +171,7 @@ public class APIProgramController extends BaseController {
 				//判断管理员角色，若为管理员，可以直接查看 0=非管理员，1=管理员
 				if ("0".equals(isAdmin)) {
 					map.put("accountId", accountId);
+					map.remove("employeeType");
 					List<ProgramEmployee> accountList = this.getProgramEmployeeService().selectTypeList(map);
 					if (accountList == null || accountList.isEmpty()) {
 						resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1035, personLiableList.get(0).getEmployeeName());
@@ -508,7 +514,12 @@ public class APIProgramController extends BaseController {
 	 * 定时任务 发送龙信小秘书提示流程节点信息
 	 */
 //	@Scheduled(cron = "0 0/3 * * * ?")
-//	public void bugTask() throws Exception{
-//		this.getProgramService().programTask();
-//	}
+//	@Scheduled(cron = "0 44 15 ? * *")
+	public void bugTask() throws Exception{
+		try{
+			this.getProgramService().programTask();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

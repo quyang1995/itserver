@@ -181,6 +181,50 @@ public class Program implements Serializable {
     @JsonSerialize(using = CustomDateSerializer.class)
     private Date allExtensionDate;
 
+    @Column(name = "actual_commit_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    private Date actualCommitDate;
+
+    @Column(name = "actual_demo_approval_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    private Date actualDemoApprovalDate;
+
+    @Column(name = "actual_bidding_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    private Date actualBiddingDate;
+
+    @Column(name = "actual_winning_bid_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    private Date actualWinningBidDate;
+
+    @Column(name = "actual_prod_approval_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    private Date actualProdApprovalDate;
+
+    @Column(name = "actual_dev_approval_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    private Date actualDevApprovalDate;
+
+    @Column(name = "actual_test_approval_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    private Date actualTestApprovalDate;
+
+    @Column(name = "actual_online_plan_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    private Date actualOnlinePlanDate;
+
+    @Column(name = "actual_gray_release_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    private Date actualGrayReleaseDate;
+
+    @Column(name = "actual_all_extension_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    private Date actualAllExtensionDate;
+
+    @Column(name = "actual_replay_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    private Date actualReplayDate;
+
     /**
      * 是否关注，0：未关注，1：已关注
      */
@@ -673,5 +717,93 @@ public class Program implements Serializable {
 
     public void setApprovalStatus(Integer approvalStatus) {
         this.approvalStatus = approvalStatus;
+    }
+
+    public Date getActualCommitDate() {
+        return actualCommitDate;
+    }
+
+    public void setActualCommitDate(Date actualCommitDate) {
+        this.actualCommitDate = actualCommitDate;
+    }
+
+    public Date getActualDemoApprovalDate() {
+        return actualDemoApprovalDate;
+    }
+
+    public void setActualDemoApprovalDate(Date actualDemoApprovalDate) {
+        this.actualDemoApprovalDate = actualDemoApprovalDate;
+    }
+
+    public Date getActualBiddingDate() {
+        return actualBiddingDate;
+    }
+
+    public void setActualBiddingDate(Date actualBiddingDate) {
+        this.actualBiddingDate = actualBiddingDate;
+    }
+
+    public Date getActualWinningBidDate() {
+        return actualWinningBidDate;
+    }
+
+    public void setActualWinningBidDate(Date actualWinningBidDate) {
+        this.actualWinningBidDate = actualWinningBidDate;
+    }
+
+    public Date getActualProdApprovalDate() {
+        return actualProdApprovalDate;
+    }
+
+    public void setActualProdApprovalDate(Date actualProdApprovalDate) {
+        this.actualProdApprovalDate = actualProdApprovalDate;
+    }
+
+    public Date getActualDevApprovalDate() {
+        return actualDevApprovalDate;
+    }
+
+    public void setActualDevApprovalDate(Date actualDevApprovalDate) {
+        this.actualDevApprovalDate = actualDevApprovalDate;
+    }
+
+    public Date getActualTestApprovalDate() {
+        return actualTestApprovalDate;
+    }
+
+    public void setActualTestApprovalDate(Date actualTestApprovalDate) {
+        this.actualTestApprovalDate = actualTestApprovalDate;
+    }
+
+    public Date getActualOnlinePlanDate() {
+        return actualOnlinePlanDate;
+    }
+
+    public void setActualOnlinePlanDate(Date actualOnlinePlanDate) {
+        this.actualOnlinePlanDate = actualOnlinePlanDate;
+    }
+
+    public Date getActualGrayReleaseDate() {
+        return actualGrayReleaseDate;
+    }
+
+    public void setActualGrayReleaseDate(Date actualGrayReleaseDate) {
+        this.actualGrayReleaseDate = actualGrayReleaseDate;
+    }
+
+    public Date getActualAllExtensionDate() {
+        return actualAllExtensionDate;
+    }
+
+    public void setActualAllExtensionDate(Date actualAllExtensionDate) {
+        this.actualAllExtensionDate = actualAllExtensionDate;
+    }
+
+    public Date getActualReplayDate() {
+        return actualReplayDate;
+    }
+
+    public void setActualReplayDate(Date actualReplayDate) {
+        this.actualReplayDate = actualReplayDate;
     }
 }

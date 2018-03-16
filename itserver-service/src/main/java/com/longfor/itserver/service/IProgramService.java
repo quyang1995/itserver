@@ -15,7 +15,7 @@ public interface IProgramService extends IAdminService<Program> {
 
     List<Program>  programLimitList(Map map);
 
-    boolean addProgram(Map map);
+    boolean addProgram(Map map) throws Exception;
 
     List<Program> inProgramId(String likeProgram);
 

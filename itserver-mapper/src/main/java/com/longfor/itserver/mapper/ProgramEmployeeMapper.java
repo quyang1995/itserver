@@ -13,4 +13,11 @@ public interface ProgramEmployeeMapper extends BeeMapper<ProgramEmployee> {
 
     List<ProgramEmployee> selectTypeList(Map map);
 
+    /**
+     * 查询责任人，产品经理，以及测试或开发人员
+     * @param map
+     * @return
+     */
+    List<ProgramEmployee> selectPersonList(Map map);
+
 }

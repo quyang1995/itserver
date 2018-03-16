@@ -44,6 +44,18 @@
         <result column="new_code" jdbcType="VARCHAR" property="newCode"/>
         <result column="replay_date" jdbcType="TIMESTAMP" property="replayDate"/>
         <result column="all_extension_date" jdbcType="TIMESTAMP" property="allExtensionDate"/>
+
+        <result column="actual_commit_date" jdbcType="TIMESTAMP" property="actualCommitDate"/>
+        <result column="actual_demo_approval_date" jdbcType="TIMESTAMP" property="actualDemoApprovalDate"/>
+        <result column="actual_bidding_date" jdbcType="TIMESTAMP" property="actualBiddingDate"/>
+        <result column="actual_winning_bid_date" jdbcType="TIMESTAMP" property="actualWinningBidDate"/>
+        <result column="actual_prod_approval_date" jdbcType="TIMESTAMP" property="actualProdApprovalDate"/>
+        <result column="actual_dev_approval_date" jdbcType="TIMESTAMP" property="actualDevApprovalDate"/>
+        <result column="actual_test_approval_date" jdbcType="TIMESTAMP" property="actualTestApprovalDate"/>
+        <result column="actual_online_plan_date" jdbcType="TIMESTAMP" property="actualOnlinePlanDate"/>
+        <result column="actual_gray_release_date" jdbcType="TIMESTAMP" property="actualGrayReleaseDate"/>
+        <result column="actual_all_extension_date" jdbcType="TIMESTAMP" property="actualAllExtensionDate"/>
+        <result column="actual_replay_date" jdbcType="TIMESTAMP" property="actualReplayDate"/>
     </resultMap>
 
     <resultMap id="ProgramResultMap" type="com.longfor.itserver.entity.ps.PsProgram">
@@ -75,6 +87,9 @@
         create_time, modified_time,demo_approval_date,bidding_date,winning_bid_date,prod_approval_date,dev_approval_date
         ,test_approval_date,online_plan_date,dev_type,analyzing_conditions,dev_workload,overall_cost,bid_dev_workload
         ,bid_overall_cost,approval_status,bid_oversingle_cost,new_code,replay_date,all_extension_date
+        ,actual_commit_date,actual_demo_approval_date,actual_bidding_date,actual_winning_bid_date,actual_prod_approval_date
+        ,actual_dev_approval_date,actual_test_approval_date,actual_online_plan_date,actual_gray_release_date
+        ,actual_all_extension_date,actual_replay_date
     </sql>
 
     <!-- 项目列表 -->
@@ -85,7 +100,9 @@
         p.like_product, p.like_program, p.type, p.program_status, p.modified_account_id, p.modified_name,
         p.create_time, p.modified_time,p.approval_status,p.commit_date,p.demo_approval_date,p.bidding_date,p.winning_bid_date,
         p.prod_approval_date,p.dev_approval_date,p.test_approval_date,p.online_plan_date,p.gray_release_date,p.replay_date,
-        p.all_extension_date
+        p.all_extension_date,p.actual_commit_date,p.actual_demo_approval_date,p.actual_bidding_date,p.actual_winning_bid_date,
+        p.actual_prod_approval_date,p.actual_dev_approval_date,p.actual_test_approval_date,p.actual_online_plan_date,
+        p.actual_gray_release_date,p.actual_all_extension_date,p.actual_replay_date
         FROM program p JOIN program_employee pe ON p.id = pe.program_id
         left join product pt on pt.id = p.product_id
         WHERE 1=1
@@ -105,9 +122,15 @@
                 and pe.account_id = #{accountId, jdbcType=VARCHAR}
             </if>
         </if>
-        <if test='programStatus != "" and programStatus != null  and programStatus != 0'>
-            and p.program_status = #{programStatus}
+        <if test="programStatusList!=null">
+            and p.program_status in
+            <foreach item="item" index="index" collection="programStatusList" open="(" separator="," close=")">
+                #{item}
+            </foreach>
         </if>
+        <!--<if test='programStatus != "" and programStatus != null  and programStatus != 0'>-->
+            <!--and p.program_status = #{programStatus}-->
+        <!--</if>-->
         <if test='approvalStatus != "" and approvalStatus != null  and approvalStatus != 0'>
             and p.approval_status = #{approvalStatus}
         </if>
@@ -354,6 +377,18 @@
             pd.label label,
             pd.label_name labelName,
             GROUP_CONCAT(e.employee_name) employeeName,
+            DATE_FORMAT(p.actual_commit_date,'%Y-%m-%d') actualCommitDate,
+            DATE_FORMAT(p.actual_demo_approval_date,'%Y-%m-%d') actualDemoApprovalDate,
+            DATE_FORMAT(p.actual_bidding_date,'%Y-%m-%d') actualBiddingDate,
+            DATE_FORMAT(p.actual_winning_bid_date,'%Y-%m-%d') actualWinningBidDate,
+            DATE_FORMAT(p.actual_prod_approval_date,'%Y-%m-%d') actualProdApprovalDate,
+            DATE_FORMAT(p.actual_dev_approval_date,'%Y-%m-%d') actualDevApprovalDate,
+            DATE_FORMAT(p.actual_test_approval_date,'%Y-%m-%d') actualTestApprovalDate,
+            DATE_FORMAT(p.actual_online_plan_date,'%Y-%m-%d') actualOnlinePlanDate,
+            DATE_FORMAT(p.actual_gray_release_date,'%Y-%m-%d') actualGrayReleaseDate,
+            DATE_FORMAT(p.actual_all_extension_date,'%Y-%m-%d') actualAllExtensionDate,
+            DATE_FORMAT(p.actual_replay_date,'%Y-%m-%d') actualReplayDate
+        /**
             DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=110 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d')  actualCommitDate
             ,
             DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=120 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualDemoApprovalDate
@@ -375,6 +410,7 @@
             DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=193 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualReplayDate
             ,
             DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=195 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualAllExtensionDate
+            **/
             from program p
             LEFT JOIN program_employee e ON p.id = e.program_id
             LEFT JOIN product pd on pd.id=p.product_id
