@@ -502,6 +502,11 @@ public class APIProgramController extends BaseController {
 		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
+			String programStatus = paramsMap.get("programStatus").toString();
+			if(StringUtils.isNotBlank(programStatus) && !"0".equals(programStatus)){
+				String [] programStatusList = programStatus.split(",");
+				paramsMap.put("programStatusList",programStatusList);
+			}
 			resultMap.put("list",this.getProgramService().exportProgramList(paramsMap));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -513,8 +518,10 @@ public class APIProgramController extends BaseController {
 	/**
 	 * 定时任务 发送龙信小秘书提示流程节点信息
 	 */
+	//每三分钟触发一次
 //	@Scheduled(cron = "0 0/3 * * * ?")
-//	@Scheduled(cron = "0 44 15 ? * *")
+	//每天九点触发
+	@Scheduled(cron = "0 0 9 ? * *")
 	public void bugTask() throws Exception{
 		try{
 			this.getProgramService().programTask();

@@ -67,7 +67,8 @@
 
     <resultMap id="ProgramDetailResultMap" extends="BaseResultMap"
                type="com.longfor.itserver.entity.ps.PsProgramDetail">
-
+        <result column="warning" property="warning" jdbcType="VARCHAR"/>
+        <result column="warningRemark" property="warningRemark" jdbcType="VARCHAR"/>
     </resultMap>
 
     <resultMap id="ApiBaseResultMap" type="com.longfor.itserver.entity.ps.PsAPIProgram">
@@ -102,7 +103,9 @@
         p.prod_approval_date,p.dev_approval_date,p.test_approval_date,p.online_plan_date,p.gray_release_date,p.replay_date,
         p.all_extension_date,p.actual_commit_date,p.actual_demo_approval_date,p.actual_bidding_date,p.actual_winning_bid_date,
         p.actual_prod_approval_date,p.actual_dev_approval_date,p.actual_test_approval_date,p.actual_online_plan_date,
-        p.actual_gray_release_date,p.actual_all_extension_date,p.actual_replay_date
+        p.actual_gray_release_date,p.actual_all_extension_date,p.actual_replay_date,
+        (SELECT warning from program_warning where program_id=p.id and program_status=p.program_status ORDER BY create_time desc LIMIT 0,1) as warning ,
+        (SELECT remark from program_warning where program_id=p.id and program_status=p.program_status ORDER BY create_time desc LIMIT 0,1) as warningRemark
         FROM program p JOIN program_employee pe ON p.id = pe.program_id
         left join product pt on pt.id = p.product_id
         WHERE 1=1
@@ -192,10 +195,14 @@
 
     <!-- 项目列表模糊搜索返回20条 -->
     <select id="programLimitList" parameterType="map" resultMap="BaseResultMap">
-        SELECT *
-        FROM program
-        WHERE name LIKE CONCAT('%', #{name, jdbcType=VARCHAR}, '%')
-        ORDER BY modified_time DESC
+        SELECT a.* from (SELECT *,to_pinyin(`name`) pinyin FROM program) a
+        <where>
+            <if test="name!=null and name!=''">
+                a.name LIKE CONCAT('%', #{name, jdbcType=VARCHAR}, '%')
+                or a.pinyin LIKE CONCAT('%', #{name, jdbcType=VARCHAR}, '%')
+            </if>
+        </where>
+        ORDER BY a.modified_time DESC
         LIMIT 0, 20
     </select>
 
@@ -222,9 +229,11 @@
 
     <!-- 通过ID查询项目 -->
     <select id="getProgramId" parameterType="java.lang.Long" resultMap="ProgramDetailResultMap">
-        SELECT *
-        FROM program
-        WHERE id = #{id}
+        SELECT p.*,
+				(SELECT pw.warning from program_warning pw where pw.program_id=p.id and pw.program_status=p.program_status ORDER BY pw.create_time desc LIMIT 0,1) as warning ,
+				(SELECT pw.remark from program_warning pw where pw.program_id=p.id and pw.program_status=p.program_status ORDER BY pw.create_time desc LIMIT 0,1) as warningRemark
+        FROM program p
+        WHERE p.id = #{id}
     </select>
 
     <!-- 获取最新的newCode -->
@@ -415,11 +424,17 @@
             LEFT JOIN program_employee e ON p.id = e.program_id
             LEFT JOIN product pd on pd.id=p.product_id
             where e.employee_type = 1
-            <if test=" programStatus != null and  programStatus != '' and  programStatus != 0">
-                AND p.program_status = #{programStatus}
+            <if test="programStatusList!=null">
+                and p.program_status in
+                <foreach item="item" index="index" collection="programStatusList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
             </if>
+            <!--<if test=" programStatus != null and  programStatus != '' and  programStatus != '0'">-->
+                <!--AND p.program_status = #{programStatus}-->
+            <!--</if>-->
             <if test=" analyzingConditions != null and  analyzingConditions != '' and  analyzingConditions != -1">
-                AND pd.analyzing_conditions  LIKE CONCAT('%', #{analyzingConditions, jdbcType=VARCHAR}, '%')
+                AND p.analyzing_conditions  LIKE CONCAT('%', #{analyzingConditions, jdbcType=VARCHAR}, '%')
             </if>
             <if test=" label != null and  label != '' and  label != ',-1,'">
                 AND pd.label  LIKE CONCAT('%', #{label, jdbcType=VARCHAR}, '%')

@@ -249,12 +249,22 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         ProgramApprovalSnapshot shot = allList.get(0);
         Map pMap = new HashMap();
         pMap.put("bpmCode", shot.getBpmCode());
-        pMap.put("approvalStatus", ProgramApprovalStatusEnum.SHZ.getCode());
-        List<ProgramApprovalSnapshot> s = programApprovalSnapshotMapper.grayLevelList(pMap);
-        if (s==null || s.isEmpty()) {
-            pMap.put("approvalStatus", ProgramApprovalStatusEnum.BGSHZ.getCode());
-            s = programApprovalSnapshotMapper.grayLevelList(pMap);
+        if(shot.getProgramStatus()==ProgramStatusNewEnum.YQSX.getCode()
+                || shot.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode()){
+            BigDecimal ten = new BigDecimal(100000);
+            if (shot.getOverallCost().compareTo(ten) != -1 || shot.getProgramStatus()==ProgramStatusNewEnum.YQSX.getCode()) {//大于10万,取审批变更数据
+                //需求变更或延期时，取变更审核中的历史数据
+                pMap.put("approvalStatus", ProgramApprovalStatusEnum.BGSHZ.getCode());
+            } else {
+                //需求变更走通知时，取审核通过的历史数据（通知没有审核中的数据）
+                pMap.put("approvalStatus", ProgramApprovalStatusEnum.SHTG.getCode());
+            }
+        } else {
+            //九步法，取审核中的历史数据
+            pMap.put("approvalStatus", ProgramApprovalStatusEnum.SHZ.getCode());
         }
+        List<ProgramApprovalSnapshot> s = programApprovalSnapshotMapper.grayLevelList(pMap);
+        //取s.get(0)对象，是去找shot对应的文件信息
         if (s != null && !s.isEmpty()) {
             this.setProgramApprovalSnapshotInfo(s.get(0),shot);
         }
@@ -1599,6 +1609,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             String overallCost = paramsMap.get("overallCost");
             String commitDate = paramsMap.get("commitDate");
             String demoApprovalDate = paramsMap.get("demoApprovalDate");
+            String prodApprovalDate = paramsMap.get("prodApprovalDate");
             String grayReleaseDate = paramsMap.get("grayReleaseDate");
             String biddingDate = paramsMap.get("biddingDate");
             String winningBidDate = paramsMap.get("winningBidDate");
@@ -1645,7 +1656,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             if(StringUtils.isNotBlank(grayReleaseDate))program.setGrayReleaseDate(DateUtil.string2Date(grayReleaseDate,DateUtil.PATTERN_DATE));//灰度发布时间
             if(StringUtils.isNotBlank(biddingDate))program.setBiddingDate(DateUtil.string2Date(biddingDate,DateUtil.PATTERN_DATE));//招标时间
             if(StringUtils.isNotBlank(winningBidDate))program.setWinningBidDate(DateUtil.string2Date(winningBidDate,DateUtil.PATTERN_DATE));//中标时间
-            if(StringUtils.isNotBlank(productReviewDate))program.setProdApprovalDate(DateUtil.string2Date(productReviewDate,DateUtil.PATTERN_DATE));//产品评审时间
+            if(StringUtils.isNotBlank(prodApprovalDate))program.setProdApprovalDate(DateUtil.string2Date(prodApprovalDate,DateUtil.PATTERN_DATE));//产品评审时间
             if(StringUtils.isNotBlank(researchDate))program.setDevApprovalDate(DateUtil.string2Date(researchDate,DateUtil.PATTERN_DATE));//研发评审时间
             if(StringUtils.isNotBlank(testDate))program.setTestApprovalDate(DateUtil.string2Date(testDate,DateUtil.PATTERN_DATE));//测试评审时间
             if(StringUtils.isNotBlank(onlineDate))program.setOnlinePlanDate(DateUtil.string2Date(onlineDate,DateUtil.PATTERN_DATE));//上线计划时间
@@ -1719,7 +1730,27 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     @Override
     public ProgramApprovalSnapshot getSnapshot(Long id)  throws Exception{
         ProgramApprovalSnapshot shot = programApprovalSnapshotMapper.selectByPrimaryKey(id);
-        this.setProgramApprovalSnapshotInfo(shot,shot);
+        Map pMap = new HashMap();
+        pMap.put("bpmCode", shot.getBpmCode());
+        if(shot.getProgramStatus()==ProgramStatusNewEnum.YQSX.getCode()
+                || shot.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode()){
+            BigDecimal ten = new BigDecimal(100000);
+            if (shot.getOverallCost().compareTo(ten) != -1 || shot.getProgramStatus()==ProgramStatusNewEnum.YQSX.getCode()) {//大于10万,取审批变更数据
+                //需求变更或延期时，取变更审核中的历史数据
+                pMap.put("approvalStatus", ProgramApprovalStatusEnum.BGSHZ.getCode());
+            } else {
+                //需求变更走通知时，取审核通过的历史数据（通知没有审核中的数据）
+                pMap.put("approvalStatus", ProgramApprovalStatusEnum.SHTG.getCode());
+            }
+        } else {
+            //九步法，取审核中的历史数据
+            pMap.put("approvalStatus", ProgramApprovalStatusEnum.SHZ.getCode());
+        }
+        List<ProgramApprovalSnapshot> s = programApprovalSnapshotMapper.grayLevelList(pMap);
+        //取s.get(0)对象，是去找shot对应的文件信息
+        if (s != null && !s.isEmpty()) {
+            this.setProgramApprovalSnapshotInfo(s.get(0),shot);
+        }
         return shot;
     }
 
@@ -2144,7 +2175,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     public void programTask() throws Exception{
         List<APIProgramTask> apiProgramTaskList = this.getProgramTask();
         for(int i = 0; i < apiProgramTaskList.size(); i++){
-//            if(apiProgramTaskList.get(i).getProgramId().equals("303")){
+//            if(!apiProgramTaskList.get(i).getProgramId().equals("303")){
 //                continue;
 //            }
             APIProgramTask apiProgramTask = apiProgramTaskList.get(i);

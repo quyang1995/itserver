@@ -79,6 +79,12 @@ public class BaseController {
     private IProductLabelService productLabelService;
     @Autowired
     private IProductLabelTypeService productLabelTypeService;
+    @Autowired
+    private IProgramWarningService programWarningService;
+
+    public IProgramWarningService getProgramWarningService() {
+        return programWarningService;
+    }
 
     public IProductLabelService getProductLabelService() {
         return productLabelService;

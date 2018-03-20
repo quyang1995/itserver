@@ -167,15 +167,15 @@
     </select>
 
     <select id="selectLikeList" resultMap="CountBaseResultMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM product
-        WHERE 1=1
-        <if test="name != null and name != ''">
-            and name LIKE concat('%',#{name},'%')
-        </if>
-        ORDER BY create_time DESC
-        limit 0,20
+        SELECT a.* from (SELECT *,to_pinyin(`name`) pinyin FROM product) a
+        <where>
+            <if test="name!=null and name!=''">
+                a.name LIKE CONCAT('%', #{name, jdbcType=VARCHAR}, '%')
+                or a.pinyin LIKE CONCAT('%', #{name, jdbcType=VARCHAR}, '%')
+            </if>
+        </where>
+        ORDER BY a.modified_time DESC
+        LIMIT 0, 20
     </select>
 
     <!-- 产品列表A-Z排序 -->

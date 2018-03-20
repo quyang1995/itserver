@@ -577,8 +577,6 @@ public class APIProgramBpmController extends BaseController {
 			nodesMap.put("programStatus",paramsMap.get("programStatus"));
 			List<Object> str = new ArrayList<Object>();
 			str.add(paramsMap.get("programStatus"));
-//			str.add(ProgramStatusNewEnum.YQSX.getCode());
-//			str.add(ProgramStatusNewEnum.XQBG.getCode());
 			nodesMap.put("programStatusList",str);
 			List<ProgramApprovalSnapshot>  shotList= this.getProgramService().lookNodes(nodesMap);
 			resultMap.put("list",shotList);
@@ -888,13 +886,13 @@ public class APIProgramBpmController extends BaseController {
 			List<Map<String,Object>> changeTopFive = getProgramService().changeTopFive(productList,paramsMap);
 			dataMap.put("changeTopFive",changeTopFive);
 			//本年度费用使用情况
-			Object yearObj = paramsMap.get("year");
-			if (yearObj==null) {
-				yearObj = DateUtil.date2String(new Date(),"yyyy");
-			}
-			String year = yearObj.toString();
-			List<Map<String,Object>> yearCost = getProgramService().yearCost(year);
-			dataMap.put("yearCost",yearCost);
+//			Object yearObj = paramsMap.get("year");
+//			if (yearObj==null) {
+//				yearObj = DateUtil.date2String(new Date(),"yyyy");
+//			}
+//			String year = yearObj.toString();
+//			List<Map<String,Object>> yearCost = getProgramService().yearCost(year);
+//			dataMap.put("yearCost",yearCost);
 
 			resultMap.put("data",dataMap);
 		} catch ( Exception e) {
@@ -905,7 +903,7 @@ public class APIProgramBpmController extends BaseController {
 	}
 
 	/**
-	 * 移动首页
+	 * 本年度费用使用情况
 	 * @param request
 	 * @return
 	 */

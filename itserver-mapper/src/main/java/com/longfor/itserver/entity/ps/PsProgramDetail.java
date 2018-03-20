@@ -26,6 +26,12 @@ public class PsProgramDetail extends Program implements Serializable {
     private Integer changeApprovalStatus;
 
     @Transient
+    private String warning;
+
+    @Transient
+    private String warningRemark;
+
+    @Transient
     private List<Product> productList;
 
     @Transient
@@ -176,5 +182,21 @@ public class PsProgramDetail extends Program implements Serializable {
 
     public void setBusinessList(List<ProgramEmployee> businessList) {
         this.businessList = businessList;
+    }
+
+    public String getWarning() {
+        return warning;
+    }
+
+    public void setWarning(String warning) {
+        this.warning = warning;
+    }
+
+    public String getWarningRemark() {
+        return warningRemark;
+    }
+
+    public void setWarningRemark(String warningRemark) {
+        this.warningRemark = warningRemark;
     }
 }
