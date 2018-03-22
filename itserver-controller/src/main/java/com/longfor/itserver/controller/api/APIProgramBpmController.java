@@ -885,14 +885,6 @@ public class APIProgramBpmController extends BaseController {
 			//需求变更--近三个月变更次数TOP5
 			List<Map<String,Object>> changeTopFive = getProgramService().changeTopFive(productList,paramsMap);
 			dataMap.put("changeTopFive",changeTopFive);
-			//本年度费用使用情况
-//			Object yearObj = paramsMap.get("year");
-//			if (yearObj==null) {
-//				yearObj = DateUtil.date2String(new Date(),"yyyy");
-//			}
-//			String year = yearObj.toString();
-//			List<Map<String,Object>> yearCost = getProgramService().yearCost(year);
-//			dataMap.put("yearCost",yearCost);
 
 			resultMap.put("data",dataMap);
 		} catch ( Exception e) {

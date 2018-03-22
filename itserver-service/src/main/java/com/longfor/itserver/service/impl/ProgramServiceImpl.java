@@ -686,7 +686,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                 || !Objects.equals(oldProgram.getDescp(), newProgram.getDescp())){
             StringBuilder sb = new StringBuilder();
             sb.append(newProgram.getModifiedName())
-                    .append(" 修改了项目基础信息");
+                    .append(" 修改了项目基本信息");
             textList.add(sb.toString());
         }
 
@@ -708,9 +708,6 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
     @Override
     public List<Program> productIdAllList(Map parsmsMap) {
-//        Long productId = Long.valueOf((String) parsmsMap.get("productId"));
-//        Program program = new Program();
-//        program.setProductId(productId);
         List<Program> programList =	programMapper.getListByMap(parsmsMap);
         Product product = productMapper.selectByPrimaryKey(Long.valueOf((String) parsmsMap.get("productId")));
         if(null != product) {
@@ -1068,7 +1065,18 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                 LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
                 throw new RuntimeException("激活流程失败");
             }
-
+            //日志记录审批记录
+            String text = paramsMap.get("modifiedName") + "提交了"+ ProgramStatusNewEnum.YQSX.getText();
+            ProgramEmployeeChangeLog employeeChangeLog = new ProgramEmployeeChangeLog();
+            employeeChangeLog.setProgramId(program.getId());
+            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+            employeeChangeLog.setActionChangeInfo(text);
+            employeeChangeLog.setModifiedAccountId(program.getModifiedAccountId());
+            employeeChangeLog.setModifiedName(program.getModifiedName());
+            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+            employeeChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+            employeeChangeLog.setAccountType(0);
+            programEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException("发生异常");
@@ -1194,6 +1202,18 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                     throw new RuntimeException("激活流程失败");
                 }
             }
+            //日志记录审批记录
+            String text = paramsMap.get("modifiedName") + "提交了"+ ProgramStatusNewEnum.XQBG.getText();
+            ProgramEmployeeChangeLog employeeChangeLog = new ProgramEmployeeChangeLog();
+            employeeChangeLog.setProgramId(program.getId());
+            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+            employeeChangeLog.setActionChangeInfo(text);
+            employeeChangeLog.setModifiedAccountId(program.getModifiedAccountId());
+            employeeChangeLog.setModifiedName(program.getModifiedName());
+            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+            employeeChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+            employeeChangeLog.setAccountType(0);
+            programEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException("发生异常");
@@ -1250,7 +1270,18 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                 LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
                 throw new RuntimeException("激活流程失败");
             }
-
+            //日志记录审批记录
+            String text = paramsMap.get("modifiedName") +ProgramStatusNewEnum.ZZ.getText()+ "了项目。";
+            ProgramEmployeeChangeLog employeeChangeLog = new ProgramEmployeeChangeLog();
+            employeeChangeLog.setProgramId(program.getId());
+            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+            employeeChangeLog.setActionChangeInfo(text);
+            employeeChangeLog.setModifiedAccountId(program.getModifiedAccountId());
+            employeeChangeLog.setModifiedName(program.getModifiedName());
+            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+            employeeChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+            employeeChangeLog.setAccountType(0);
+            programEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException("发生异常");
@@ -1513,6 +1544,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         try{
             Date now = new Date();
             ApplyCreateResultVo applyCreateResultVo = new ApplyCreateResultVo();
+            String textAction = "";
             if(programStatus==ProgramStatusNewEnum.LX.getCode()) {
                 //立项创建流程
                 paramsMap.put("workflowInstanceTitle",program.getName()+ProgramStatusNewEnum.LX.getText());
@@ -1521,6 +1553,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                     LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
                     throw new RuntimeException("创建流程失败");
                 }
+                textAction = ProgramStatusNewEnum.LX.getText();
             }
             if(programStatus==ProgramStatusNewEnum.DPS.getCode()) {
                 //Demo评审创建流程
@@ -1530,6 +1563,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                     LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
                     throw new RuntimeException("创建流程失败");
                 }
+                textAction = ProgramStatusNewEnum.DPS.getText();
             }
             if(programStatus==ProgramStatusNewEnum.CPPS.getCode()) {
                 //产品评审创建流程
@@ -1539,6 +1573,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                     LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
                     throw new RuntimeException("创建流程失败");
                 }
+                textAction = ProgramStatusNewEnum.CPPS.getText();
             }
 
             if(programStatus==ProgramStatusNewEnum.KFPS.getCode()) {
@@ -1549,6 +1584,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                     LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
                     throw new RuntimeException("创建流程失败");
                 }
+                textAction = ProgramStatusNewEnum.KFPS.getText();
             }
 
             if(programStatus==ProgramStatusNewEnum.CSPS.getCode()) {
@@ -1559,6 +1595,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                     LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
                     throw new RuntimeException("创建流程失败");
                 }
+                textAction = ProgramStatusNewEnum.CSPS.getText();
             }
             if(programStatus==ProgramStatusNewEnum.SXPS.getCode()) {
                 //提交上线计划创建流程
@@ -1568,6 +1605,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                     LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
                     throw new RuntimeException("创建流程失败");
                 }
+                textAction = ProgramStatusNewEnum.SXPS.getText();
             }
 
             if(programStatus==ProgramStatusNewEnum.HDFB.getCode()) {
@@ -1578,6 +1616,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                     LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
                     throw new RuntimeException("创建流程失败");
                 }
+                textAction = ProgramStatusNewEnum.HDFB.getText();
             }
 
             if(programStatus==ProgramStatusNewEnum.QMTG.getCode()) {
@@ -1588,6 +1627,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                     LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
                     throw new RuntimeException("创建流程失败");
                 }
+                textAction = ProgramStatusNewEnum.QMTG.getText();
             }
 
             if(programStatus==ProgramStatusNewEnum.XMFP.getCode()) {
@@ -1598,6 +1638,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                     LOG.error("创建流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
                     throw new RuntimeException("创建流程失败");
                 }
+                textAction = ProgramStatusNewEnum.XMFP.getText();
             }
 
 
@@ -1616,7 +1657,6 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             String bidOverallCost = paramsMap.get("bidOverallCost");
             String bidDevWorkload = paramsMap.get("bidDevWorkload");
             String bidOversingleCost = paramsMap.get("bidOversingleCost");
-            String productReviewDate = paramsMap.get("productReviewDate");
             String researchDate = paramsMap.get("researchDate");
             String testDate = paramsMap.get("testDate");
             String onlineDate = paramsMap.get("onlineDate");
@@ -1694,7 +1734,18 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                 LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
                 throw new RuntimeException("激活流程失败");
             }
-
+            //日志记录审批记录
+            String text = paramsMap.get("modifiedName") + "提交了"+ textAction;
+            ProgramEmployeeChangeLog employeeChangeLog = new ProgramEmployeeChangeLog();
+            employeeChangeLog.setProgramId(program.getId());
+            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+            employeeChangeLog.setActionChangeInfo(text);
+            employeeChangeLog.setModifiedAccountId(program.getModifiedAccountId());
+            employeeChangeLog.setModifiedName(program.getModifiedName());
+            employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
+            employeeChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
+            employeeChangeLog.setAccountType(0);
+            programEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException("发生异常");
@@ -2175,13 +2226,13 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     public void programTask() throws Exception{
         List<APIProgramTask> apiProgramTaskList = this.getProgramTask();
         for(int i = 0; i < apiProgramTaskList.size(); i++){
-//            if(!apiProgramTaskList.get(i).getProgramId().equals("303")){
+//            if(!apiProgramTaskList.get(i).getProgramId().toString().equals("300")){
 //                continue;
 //            }
             APIProgramTask apiProgramTask = apiProgramTaskList.get(i);
             Map paramMap = longforServiceImpl.param();
             Props props = JoddHelper.getInstance().getJoddProps();
-            String openUrl = props.getValue("openUrl.programListPath")+apiProgramTask.getProgramId()+"&isweb=true";
+            String openUrl = props.getValue("openUrl.programListPath")+apiProgramTask.getProgramId();
             paramMap.put("ruser",apiProgramTask.getAccountId());
             JSONObject paramMapCont = (JSONObject) paramMap.get("content");
             paramMapCont.put("topTitle",apiProgramTask.getTitle());
@@ -2242,17 +2293,17 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                 this.getTaskList(apiProgramTasks,program,program.getGrayReleaseDate());
             }
             //提示全面推广
-            if (program.getProgramStatus()==ProgramStatusNewEnum.HDFB.getCode()
-                    && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                    && program.getAllExtensionDate()!=null){
-                this.getTaskList(apiProgramTasks,program,program.getAllExtensionDate());
-            }
+//            if (program.getProgramStatus()==ProgramStatusNewEnum.HDFB.getCode()
+//                    && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+//                    && program.getAllExtensionDate()!=null){
+//                this.getTaskList(apiProgramTasks,program,program.getAllExtensionDate());
+//            }
             //提示项目复盘
-            if (program.getProgramStatus()==ProgramStatusNewEnum.QMTG.getCode()
-                    && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                    && program.getReplayDate()!=null ){
-                this.getTaskList(apiProgramTasks,program,program.getReplayDate());
-            }
+//            if (program.getProgramStatus()==ProgramStatusNewEnum.QMTG.getCode()
+//                    && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+//                    && program.getReplayDate()!=null ){
+//                this.getTaskList(apiProgramTasks,program,program.getReplayDate());
+//            }
         }
         return apiProgramTasks;
     }
@@ -2385,7 +2436,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             text = "【"+program.getName()+"】于今日到达"+noteName+"节点，请及时完成"+noteAction;
         }
         if(differentDays<0){
-            text = "【"+program.getName()+"】已在"+noteName+"节点超时"+Math.abs(differentDays)+"天，请及时完成";
+            text = "【"+program.getName()+"】已在"+noteName+"节点逾期"+Math.abs(differentDays)+"天，请尽快到IT+PC端完成";
         }
         return text;
     }

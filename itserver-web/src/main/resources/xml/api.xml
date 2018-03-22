@@ -207,6 +207,9 @@
             <property name="labelName" type="string" required="false" />
             <property name="windowsUrl" type="string" required="false" />
             <property name="macUrl" type="string" required="false" />
+            <property name="iosVersion" type="string" required="false" />
+            <property name="androidVersion" type="string" required="false" />
+            <property name="versionModifiedTime" type="string" required="false" />
         </request>
     </item>
     <!--

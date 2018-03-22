@@ -15,7 +15,7 @@ public interface IProductService extends IAdminService<Product> {
     List<PsProductCount> searchLikeList(Map map);
     Map<String, Object> addProduct(Map map);
     List<Product> searchIdList(String likeProduct);
-    boolean updateProduct(Map map);
+    boolean updateProduct(Map map) throws Exception;
     /**
      * 产品列表A-Z排序
      * @return

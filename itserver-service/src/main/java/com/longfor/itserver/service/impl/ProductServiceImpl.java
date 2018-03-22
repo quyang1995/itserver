@@ -8,6 +8,7 @@ import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.enums.ProductStatusEnum;
 import com.longfor.itserver.common.enums.PublicTypeEnum;
 import com.longfor.itserver.common.util.CommonUtils;
+import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.common.util.StringUtil;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.ProductEmployee;
@@ -197,7 +198,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 
 	@Transactional
 	@Override
-	public boolean updateProduct(Map map) {
+	public boolean updateProduct(Map map) throws Exception{
 		JSONObject jsonObject = (JSONObject) JSONObject.toJSON(map);
 		Integer accountType = AccountUitl.getAccountType(map);
 		Product newProduct = JSONObject.toJavaObject(jsonObject, Product.class);
@@ -223,6 +224,12 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		oldProduct.setLabelName(jsonObject.getString("labelName"));
 		oldProduct.setWindowsUrl(jsonObject.getString("windowsUrl"));
 		oldProduct.setMacUrl(jsonObject.getString("macUrl"));
+		oldProduct.setIosVersion(jsonObject.getString("iosVersion"));
+		oldProduct.setAndroidVersion(jsonObject.getString("androidVersion"));
+		if(StringUtils.isNotBlank(jsonObject.getString("versionModifiedTime"))){
+			oldProduct.setVersionModifiedTime(DateUtil.string2Date(jsonObject.getString("versionModifiedTime"),DateUtil.PATTERN_DATE));
+		}
+
 		/* 接口人相关信息 */
 		getAccountInfo(0, oldProduct, null);
 		/* 关联项目 */

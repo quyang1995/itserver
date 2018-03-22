@@ -146,6 +146,40 @@ public class Product implements Serializable {
     @Column(name = "mac_url")
     private String macUrl;
 
+    @Column(name = "ios_version")
+    private String iosVersion;
+
+    @Column(name = "android_version")
+    private String androidVersion;
+
+    @Column(name = "version_modified_time")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    private Date versionModifiedTime;
+
+    public String getIosVersion() {
+        return iosVersion;
+    }
+
+    public void setIosVersion(String iosVersion) {
+        this.iosVersion = iosVersion;
+    }
+
+    public String getAndroidVersion() {
+        return androidVersion;
+    }
+
+    public void setAndroidVersion(String androidVersion) {
+        this.androidVersion = androidVersion;
+    }
+
+    public Date getVersionModifiedTime() {
+        return versionModifiedTime;
+    }
+
+    public void setVersionModifiedTime(Date versionModifiedTime) {
+        this.versionModifiedTime = versionModifiedTime;
+    }
+
     public String getContactAccountId1() {
         return contactAccountId1;
     }

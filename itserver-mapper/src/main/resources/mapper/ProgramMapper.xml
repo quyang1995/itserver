@@ -95,15 +95,7 @@
 
     <!-- 项目列表 -->
     <select id="programList" parameterType="map" resultMap="ProgramDetailResultMap">
-        SELECT DISTINCT
-        p.id, p.product_id, p.product_name, p.product_code, p.name, p.descp,p.architecture_date,p.overall_cost,
-        p.dev_workload,p.analyzing_conditions,
-        p.like_product, p.like_program, p.type, p.program_status, p.modified_account_id, p.modified_name,
-        p.create_time, p.modified_time,p.approval_status,p.commit_date,p.demo_approval_date,p.bidding_date,p.winning_bid_date,
-        p.prod_approval_date,p.dev_approval_date,p.test_approval_date,p.online_plan_date,p.gray_release_date,p.replay_date,
-        p.all_extension_date,p.actual_commit_date,p.actual_demo_approval_date,p.actual_bidding_date,p.actual_winning_bid_date,
-        p.actual_prod_approval_date,p.actual_dev_approval_date,p.actual_test_approval_date,p.actual_online_plan_date,
-        p.actual_gray_release_date,p.actual_all_extension_date,p.actual_replay_date,
+        SELECT DISTINCT p.*,
         (SELECT warning from program_warning where program_id=p.id and program_status=p.program_status ORDER BY create_time desc LIMIT 0,1) as warning ,
         (SELECT remark from program_warning where program_id=p.id and program_status=p.program_status ORDER BY create_time desc LIMIT 0,1) as warningRemark
         FROM program p JOIN program_employee pe ON p.id = pe.program_id
