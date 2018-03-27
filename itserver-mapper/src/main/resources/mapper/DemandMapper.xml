@@ -86,7 +86,7 @@
         </if>
         ORDER BY create_time DESC
     </select>-->
-    <select id="searchList" resultMap="BaseResultMap">
+    <select id="searchList" resultMap="DemandDetailResultMap">
         SELECT
         <include refid="Base_Column_List"></include>
         FROM demand

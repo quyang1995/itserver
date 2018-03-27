@@ -60,6 +60,7 @@ public class APIProgramController extends BaseController {
 //		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
 		paramsMap.put("isAdmin", "1");
 		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
+//		elExample.getExample().setOrderByClause("convert(substr(name,1,1) using 'GBK') desc");
 		String programStatus = paramsMap.get("programStatus").toString();
 		if(StringUtils.isNotBlank(programStatus) && !"0".equals(programStatus)){
 			String [] programStatusList = programStatus.split(",");
@@ -73,6 +74,51 @@ public class APIProgramController extends BaseController {
 		resultMap.put(APIHelper.PAGE_NUM, elExample.getPageNum());
 		resultMap.put(APIHelper.PAGE_SIZE, elExample.getPageSize());
 		resultMap.put(APIHelper.TOTAL, new PageInfo(programList).getTotal());
+		return resultMap;
+	}
+
+	/**
+	 * 项目列表
+	 *
+	 * @author lovex
+	 * @create 2017/8/5 下午2:25
+	 *
+	 * @version v1.0
+	 */
+	@RequestMapping(value = "/list1", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public Map programList1(HttpServletRequest request, HttpServletResponse response){
+		/* 参数 */
+		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		/* 返回报文 */
+		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try{
+			/* 生成查询用Example */
+			ELExample elExample = new ELExample(request, Program.class);
+			paramsMap.put("isAdmin", "1");
+			PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
+			String iSortCol = paramsMap.get("iSortCol").toString();
+			String sSortDir = paramsMap.get("sSortDir").toString();
+			if("name".equals(iSortCol) || "productName".equals(iSortCol) || "personLiable".equals(iSortCol)){
+				elExample.getExample().setOrderByClause("convert(substr("+iSortCol+",1,1) using 'GBK') "+sSortDir);
+			} else {
+				elExample.getExample().setOrderByClause(iSortCol+" "+sSortDir);
+			}
+			CommonUtils.buildPageParams(paramsMap);
+			String programStatus = paramsMap.get("programStatus").toString();
+			if(StringUtils.isNotBlank(programStatus) && !"0".equals(programStatus)){
+				String [] programStatusList = programStatus.split(",");
+				paramsMap.put("programStatusList",programStatusList);
+			}
+			List<PsProgramDetail> programList = this.getProgramService().programList1(paramsMap);
+			resultMap.put("list", programList);
+			resultMap.put(APIHelper.PAGE_NUM, elExample.getPageNum());
+			resultMap.put(APIHelper.PAGE_SIZE, elExample.getPageSize());
+			resultMap.put(APIHelper.TOTAL, new PageInfo(programList).getTotal());
+		}catch (Exception e){
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
 		return resultMap;
 	}
 
@@ -149,7 +195,8 @@ public class APIProgramController extends BaseController {
 			long id = Long.parseLong(paramsMap.get("id").toString());
 			Object accountId = paramsMap.get("accountId");
 
-			PsProgramDetail program = (PsProgramDetail) this.getProgramService().getProgramId(id);
+//			PsProgramDetail program = (PsProgramDetail) this.getProgramService().getProgramId(id);
+			PsProgramDetail program = (PsProgramDetail) this.getProgramService().getProgram(id);
 			if(program.getLikeProduct() != null && !"".equals(program.getLikeProduct())){
 				String likeProduct = program.getLikeProduct().substring(1, program.getLikeProduct().length());
 				// 关联产品
@@ -525,6 +572,21 @@ public class APIProgramController extends BaseController {
 	public void bugTask() throws Exception{
 		try{
 			this.getProgramService().programTask();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 为了项目列表按照预警天数排序，为了项目列表按照预警天数排序，为了项目列表按照预警天数排序
+	 * @throws Exception
+	 */
+//	@Scheduled(cron = "0 23 16 ? * *")
+	//每天凌晨1点执行一次
+	@Scheduled(cron = "0 0 1 ? * *")
+	public void warningDaysTask() throws Exception{
+		try{
+			this.getProgramService().warningDays();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

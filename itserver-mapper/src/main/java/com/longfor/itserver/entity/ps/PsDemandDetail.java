@@ -1,10 +1,7 @@
 package com.longfor.itserver.entity.ps;
 
 
-import com.longfor.itserver.entity.Demand;
-import com.longfor.itserver.entity.DemandFile;
-import com.longfor.itserver.entity.Product;
-import com.longfor.itserver.entity.Program;
+import com.longfor.itserver.entity.*;
 
 import javax.persistence.Transient;
 import java.io.Serializable;
@@ -23,11 +20,22 @@ public class PsDemandDetail extends Demand implements Serializable {
     private List<Product> productList;
     @Transient
     private List<Program> programList;
+    //归属产品/项目 名称
     @Transient
     private String relationName;
     @Transient
     private List<DemandFile> demandFileList;
+    //归属产品/项目 产品经理
+    @Transient
+    private List<ProgramEmployee> productManagerList;
 
+    public List<ProgramEmployee> getProductManagerList() {
+        return productManagerList;
+    }
+
+    public void setProductManagerList(List<ProgramEmployee> productManagerList) {
+        this.productManagerList = productManagerList;
+    }
 
     public List<Product> getProductList() {
         return productList;

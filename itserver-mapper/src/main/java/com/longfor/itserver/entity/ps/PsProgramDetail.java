@@ -32,6 +32,12 @@ public class PsProgramDetail extends Program implements Serializable {
     private String warningRemark;
 
     @Transient
+    private String currNodeDate;
+
+    @Transient
+    private String personLiable;
+
+    @Transient
     private List<Product> productList;
 
     @Transient
@@ -198,5 +204,21 @@ public class PsProgramDetail extends Program implements Serializable {
 
     public void setWarningRemark(String warningRemark) {
         this.warningRemark = warningRemark;
+    }
+
+    public String getCurrNodeDate() {
+        return currNodeDate;
+    }
+
+    public void setCurrNodeDate(String currNodeDate) {
+        this.currNodeDate = currNodeDate;
+    }
+
+    public String getPersonLiable() {
+        return personLiable;
+    }
+
+    public void setPersonLiable(String personLiable) {
+        this.personLiable = personLiable;
     }
 }

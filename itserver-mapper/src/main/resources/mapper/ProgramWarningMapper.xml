@@ -35,4 +35,20 @@
     ORDER BY create_time DESC
   </select>
 
+  <select id="getOneByWhere" parameterType="map" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    from program_warning
+    <where>
+      <if test="programId != null and programId != ''">
+        program_id = #{programId}
+      </if>
+      <if test="programStatus != null and programStatus != ''">
+        and program_status = #{programStatus}
+      </if>
+    </where>
+    ORDER BY warning DESC
+    LIMIT 0,1
+  </select>
+
 </mapper>

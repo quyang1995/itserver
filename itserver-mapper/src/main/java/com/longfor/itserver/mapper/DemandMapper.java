@@ -1,6 +1,7 @@
 package com.longfor.itserver.mapper;
 
 import com.longfor.itserver.entity.Demand;
+import com.longfor.itserver.entity.ps.PsDemandDetail;
 import com.longfor.itserver.entity.ps.PsDemandTimeTask;
 import com.longfor.itserver.entity.ps.PsIndex;
 import com.longfor.itserver.mapper.base.BeeMapper;
@@ -15,7 +16,7 @@ import java.util.Map;
  */
 public interface DemandMapper extends BeeMapper<Demand> {
 
-	List<Demand> searchList(Map<String, Object> paramsMap);
+	List<PsDemandDetail> searchList(Map<String, Object> paramsMap);
 	boolean addDemand(Map map);
 
 	Demand getDemandById(long id);

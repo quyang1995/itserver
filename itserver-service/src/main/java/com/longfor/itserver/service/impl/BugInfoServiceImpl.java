@@ -14,16 +14,11 @@ import com.longfor.itserver.common.helper.JoddHelper;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.common.util.StringUtil;
-import com.longfor.itserver.entity.BugChangeLog;
-import com.longfor.itserver.entity.BugFile;
-import com.longfor.itserver.entity.BugInfo;
-import com.longfor.itserver.entity.FeedBack;
+import com.longfor.itserver.entity.*;
+import com.longfor.itserver.entity.ps.PsBugInfoDetail;
 import com.longfor.itserver.entity.ps.PsBugTimeTask;
 import com.longfor.itserver.esi.impl.LongforServiceImpl;
-import com.longfor.itserver.mapper.BugChangeLogMapper;
-import com.longfor.itserver.mapper.BugFileMapper;
-import com.longfor.itserver.mapper.BugInfoMapper;
-import com.longfor.itserver.mapper.FeedBackMapper;
+import com.longfor.itserver.mapper.*;
 import com.longfor.itserver.service.IBugInfoService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import com.longfor.itserver.service.util.AccountUitl;
@@ -58,6 +53,12 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
     private FeedBackMapper feedBackMapper;
     @Autowired
     private LongforServiceImpl longforServiceImpl;
+    @Autowired
+    private ProductMapper productMapper;
+    @Autowired
+    private ProgramMapper programMapper;
+    @Autowired
+    private ProgramEmployeeServiceImpl programEmployeeServiceImpl;
 
     /**
      * bug列表
@@ -66,9 +67,31 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
      * @return
      */
     @Override
-    public List<BugInfo> bugList(Map map) {
-        List<BugInfo> bugList = bugInfoMapper.bugList(map);
+    public List<PsBugInfoDetail> bugList(Map map) {
+        List<PsBugInfoDetail> bugList = bugInfoMapper.bugList(map);
+        for (PsBugInfoDetail bug:bugList) {
+            this.setBugInfo(bug);
+        }
         return bugList;
+    }
+
+    private void setBugInfo(PsBugInfoDetail bug){
+        //归属产品/项目 名称
+        String relationName = "";
+        if (bug.getRelationType().equals(1)) {
+            Product prod = productMapper.selectByPrimaryKey(bug.getRelationId());
+            relationName = prod.getName();
+        } else if (bug.getRelationType().equals(2)) {
+            Program prom = programMapper.selectByPrimaryKey(bug.getRelationId());
+            relationName = prom.getName();
+        }
+        bug.setRelationName(relationName);
+		/* 责任人 */
+        Map map = new HashMap();
+        map.put("programId", bug.getRelationId());
+        map.put("employeeType", AvaStatusEnum.LIABLEAVA.getCode());
+        List<ProgramEmployee> personLiableList = programEmployeeServiceImpl.selectTypeList(map);
+        bug.setProductManagerList(personLiableList);
     }
 
     /**
@@ -82,7 +105,6 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         BugInfo bugInfo = bugInfoMapper.getBugId(id);
         return bugInfo;
     }
-
 
     /**
      * 新增BUG

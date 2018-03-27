@@ -1,9 +1,6 @@
 package com.longfor.itserver.entity.ps;
 
-import com.longfor.itserver.entity.BugFile;
-import com.longfor.itserver.entity.BugInfo;
-import com.longfor.itserver.entity.Product;
-import com.longfor.itserver.entity.Program;
+import com.longfor.itserver.entity.*;
 
 import javax.persistence.Transient;
 import java.io.Serializable;
@@ -26,6 +23,17 @@ public class PsBugInfoDetail extends BugInfo implements Serializable {
     private String relationName;
     @Transient
     private List<BugFile> bugFileList;
+    //归属产品/项目 产品经理
+    @Transient
+    private List<ProgramEmployee> productManagerList;
+
+    public List<ProgramEmployee> getProductManagerList() {
+        return productManagerList;
+    }
+
+    public void setProductManagerList(List<ProgramEmployee> productManagerList) {
+        this.productManagerList = productManagerList;
+    }
 
     public List<Product> getProductList() {
         return productList;

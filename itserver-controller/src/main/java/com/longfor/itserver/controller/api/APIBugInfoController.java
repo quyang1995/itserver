@@ -64,7 +64,7 @@ public class APIBugInfoController extends BaseController {
 		String accountId = String.valueOf(paramsMap.get("accountId"));
 		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
 		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
-		List<BugInfo> bugList = this.getBugInfoService().bugList(paramsMap);
+		List<PsBugInfoDetail> bugList = this.getBugInfoService().bugList(paramsMap);
 		
 
 		/* 返回报文 */
@@ -94,7 +94,7 @@ public class APIBugInfoController extends BaseController {
 		/* 查询数据 and admin权限判断 */
 		String accountId = String.valueOf(paramsMap.get("accountId"));
 		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
-		List<BugInfo> bugList = this.getBugInfoService().bugList(paramsMap);
+		List<PsBugInfoDetail> bugList = this.getBugInfoService().bugList(paramsMap);
 
 
 		/* 返回报文 */

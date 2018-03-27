@@ -250,6 +250,30 @@
             <property name="label" type="string" required="false" />
         </request>
     </item>
+    <!--
+        URL:
+        /api/program/list1
+
+        说明:获取项目列表信息
+
+    -->
+    <item id="api_program_list1" description="获取项目列表信息">
+        <request>
+            <property ref="pageNum"/>
+            <property ref="pageSize"/>
+            <property name="accountId" type="string" required="true" maxLength="30"/>
+            <property name="programStatus" type="string" required="true" />
+            <property name="approvalStatus" type="int" required="true" area="0,100,110,120,130,140"/>
+            <property name="analyzingConditions" type="int" required="false" area="-1,1,2,3,4,5,6,7"/>
+            <property name="isPart" type="int" required="true" area="0,1"/>
+            <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
+            <property name="productId" type="int" required="false" />
+            <property name="isMove" type="int" required="false" />
+            <property name="label" type="string" required="false" />
+            <property name="iSortCol" type="string" required="true" />
+            <property name="sSortDir" type="string" required="true" />
+        </request>
+    </item>
 
     <!--
         URL:
@@ -1928,6 +1952,36 @@
             <property name="remark" type="String" required="true"/>
             <property name="createAccountId" type="String" required="true"/>
             <property name="createName" type="String" required="true"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
+        /api/warning/get
+
+        说明:通过id获取预警信息
+
+    -->
+    <item id="api_warning_get" description="通过id获取预警信息">
+        <request>
+            <property name="id" type="String" required="true"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
+        /api/warning/update
+
+        说明:修改预警信息
+
+    -->
+    <item id="api_warning_update" description="修改预警信息">
+        <request>
+            <property name="id" type="String" required="true"/>
+            <property name="warning" type="String" required="true"/>
+            <property name="remark" type="String" required="true"/>
+            <property name="modifiedAccountId" type="String" required="true"/>
+            <property name="modifiedName" type="String" required="true"/>
         </request>
     </item>
 </api>

@@ -8,6 +8,7 @@ import com.github.pagehelper.PageInfo;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.itserver.common.constant.ConfigConsts;
+import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.enums.DemandLevelEnum;
 import com.longfor.itserver.common.enums.DemandStatusEnum;
@@ -17,13 +18,11 @@ import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.entity.*;
 import com.longfor.itserver.entity.ps.PsBugTimeTask;
+import com.longfor.itserver.entity.ps.PsDemandDetail;
 import com.longfor.itserver.entity.ps.PsDemandTimeTask;
 import com.longfor.itserver.entity.ps.PsIndex;
 import com.longfor.itserver.esi.impl.LongforServiceImpl;
-import com.longfor.itserver.mapper.DemandChangeLogMapper;
-import com.longfor.itserver.mapper.DemandFileMapper;
-import com.longfor.itserver.mapper.DemandMapper;
-import com.longfor.itserver.mapper.FeedBackMapper;
+import com.longfor.itserver.mapper.*;
 import com.longfor.itserver.service.IDemandService;
 import com.longfor.itserver.service.base.AdminBaseService;
 
@@ -59,6 +58,12 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 	private FeedBackMapper feedBackMapper;
 	@Autowired
 	private LongforServiceImpl longforServiceImpl;
+	@Autowired
+	private ProductMapper productMapper;
+	@Autowired
+	private ProgramMapper programMapper;
+	@Autowired
+	private ProgramEmployeeServiceImpl  programEmployeeServiceImpl;
 
 	/**
 	 * 	新增需求信息
@@ -255,7 +260,10 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		String accountId = String.valueOf(paramsMap.get("accountId"));
 		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
 		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
-		List<Demand> demands = demandMapper.searchList(paramsMap);
+		List<PsDemandDetail> demands = demandMapper.searchList(paramsMap);
+		for (PsDemandDetail demand:demands) {
+			this.setDemandInfo(demand);
+		}
 		/* 返回数据 */
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		resultMap.put("demandList", demands);
@@ -272,12 +280,34 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		/* 查询数据 and admin权限判断 */
 		String accountId = String.valueOf(paramsMap.get("accountId"));
 		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
-		List<Demand> demands = demandMapper.searchList(paramsMap);
+		List<PsDemandDetail> demands = demandMapper.searchList(paramsMap);
+		for (PsDemandDetail demand:demands) {
+			this.setDemandInfo(demand);
+		}
 		/* 返回数据 */
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		resultMap.put("demandList", demands);
 		resultMap.put(APIHelper.TOTAL, new PageInfo(demands).getTotal());
 		return resultMap;
+	}
+
+	private void setDemandInfo(PsDemandDetail demand){
+		//归属产品/项目 名称
+		String relationName = "";
+		if (demand.getRelationType().equals(1)) {
+			Product prod = productMapper.selectByPrimaryKey(demand.getRelationId());
+			relationName = prod.getName();
+		} else if (demand.getRelationType().equals(2)) {
+			Program prom = programMapper.selectByPrimaryKey(demand.getRelationId());
+			relationName = prom.getName();
+		}
+		demand.setRelationName(relationName);
+		/* 责任人 */
+		Map map = new HashMap();
+		map.put("programId", demand.getRelationId());
+		map.put("employeeType", AvaStatusEnum.LIABLEAVA.getCode());
+		List<ProgramEmployee> personLiableList = programEmployeeServiceImpl.selectTypeList(map);
+		demand.setProductManagerList(personLiableList);
 	}
 
 	@Override

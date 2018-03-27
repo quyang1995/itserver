@@ -15,11 +15,15 @@ public interface ProgramMapper extends BeeMapper<Program> {
 
     List<PsProgramDetail> programList(Map map);
 
+    List<PsProgramDetail> programList1(Map map);
+
     List<Program>  programLimitList(Map map);
 
     List<Program> inProgramId(String likeProgram);
 
     Program getProgramId(long id);
+
+    Program getProgram(Map map);
 
     List<Program> productIdList(Map map);
 
@@ -50,5 +54,7 @@ public interface ProgramMapper extends BeeMapper<Program> {
      * @return
      */
     List<Map<String,Object>> exportProgramList(Map<String,Object> map);
+
+    Integer updateWarningDays();
 
 }

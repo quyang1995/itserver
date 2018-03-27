@@ -13,6 +13,8 @@ public interface IProgramService extends IAdminService<Program> {
 
     List<PsProgramDetail>  programList(Map map);
 
+    List<PsProgramDetail>  programList1(Map map);
+
     List<Program>  programLimitList(Map map);
 
     boolean addProgram(Map map) throws Exception;
@@ -20,6 +22,8 @@ public interface IProgramService extends IAdminService<Program> {
     List<Program> inProgramId(String likeProgram);
 
     Program getProgramId(long id);
+
+    Program getProgram(long id);
     
     boolean updateProgram(Map map);
 
@@ -81,4 +85,6 @@ public interface IProgramService extends IAdminService<Program> {
     List<Map<String,Object>> exportProgramList(Map<String,Object> map);
 
     void programTask() throws Exception;
+
+    void warningDays() throws Exception;
 }

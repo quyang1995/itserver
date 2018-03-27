@@ -56,6 +56,7 @@
         <result column="actual_gray_release_date" jdbcType="TIMESTAMP" property="actualGrayReleaseDate"/>
         <result column="actual_all_extension_date" jdbcType="TIMESTAMP" property="actualAllExtensionDate"/>
         <result column="actual_replay_date" jdbcType="TIMESTAMP" property="actualReplayDate"/>
+        <result column="warning_days" jdbcType="INTEGER" property="warningDays"/>
     </resultMap>
 
     <resultMap id="ProgramResultMap" type="com.longfor.itserver.entity.ps.PsProgram">
@@ -69,6 +70,8 @@
                type="com.longfor.itserver.entity.ps.PsProgramDetail">
         <result column="warning" property="warning" jdbcType="VARCHAR"/>
         <result column="warningRemark" property="warningRemark" jdbcType="VARCHAR"/>
+        <result column="currNodeDate" property="currNodeDate" jdbcType="VARCHAR"/>
+        <result column="personLiable" property="personLiable" jdbcType="VARCHAR"/>
     </resultMap>
 
     <resultMap id="ApiBaseResultMap" type="com.longfor.itserver.entity.ps.PsAPIProgram">
@@ -90,7 +93,7 @@
         ,bid_overall_cost,approval_status,bid_oversingle_cost,new_code,replay_date,all_extension_date
         ,actual_commit_date,actual_demo_approval_date,actual_bidding_date,actual_winning_bid_date,actual_prod_approval_date
         ,actual_dev_approval_date,actual_test_approval_date,actual_online_plan_date,actual_gray_release_date
-        ,actual_all_extension_date,actual_replay_date
+        ,actual_all_extension_date,actual_replay_date,warning_days
     </sql>
 
     <!-- 项目列表 -->
@@ -137,16 +140,124 @@
             concat(concat('%',#{searchText}),'%'))
         </if>
         <if test='analyzingConditions != "" and analyzingConditions != null  and analyzingConditions != -1'>
-            and p.analyzing_conditions = #{analyzingConditions}
+            and (p.analyzing_conditions = #{analyzingConditions}
+              or pt.analyzing_conditions LIKE concat(concat('%',#{analyzingConditions}),'%'))
         </if>
         <if test='label != "" and label != null  and label != ",-1,"'>
             and pt.label like concat(concat('%',#{label}),'%')
         </if>
         ORDER BY p.create_time DESC
+        <!--ORDER BY if(isnull(p.waring_days),1,0),p.waring_days-->
+</select>
+
+    <!-- 项目列表 -->
+    <select id="programList1" parameterType="map" resultMap="ProgramDetailResultMap">
+        SELECT
+        p.id id,
+        p.`name` name,
+        p.product_name productName,
+        p.type type,
+        p.warning_days warningDays,
+        p.program_status programStatus,
+        CASE
+        WHEN p.program_status = '100' THEN  ''
+        WHEN p.program_status = '110' THEN  substring(p.commit_date,1,10)
+        WHEN p.program_status = '120' THEN  substring(p.demo_approval_date,1,10)
+        WHEN p.program_status = '130' THEN  substring(p.bidding_date,1,10)
+        WHEN p.program_status = '140' THEN  substring(p.winning_bid_date,1,10)
+        WHEN p.program_status = '150' THEN  substring(p.prod_approval_date,1,10)
+        WHEN p.program_status = '160' THEN  substring(p.dev_approval_date,1,10)
+        WHEN p.program_status = '170' THEN  substring(p.test_approval_date,1,10)
+        WHEN p.program_status = '180' THEN  substring(p.online_plan_date,1,10)
+        WHEN p.program_status = '190' THEN  substring(p.gray_release_date,1,10)
+        WHEN p.program_status = '193' THEN  substring(p.all_extension_date,1,10)
+        WHEN p.program_status = '195' THEN  substring(p.all_extension_date,1,10)
+        WHEN p.program_status = '900' THEN  ''
+        WHEN p.program_status = '999' THEN  ''
+        ELSE '其他' END currNodeDate,
+        substring(p.gray_release_date,1,10) grayReleaseDate,
+        p.approval_status approvalStatus,
+        GROUP_CONCAT(e.employee_name) as personLiable
+        from program p
+        LEFT JOIN program_employee e ON p.id = e.program_id
+        LEFT JOIN product d ON p.product_id = d.id
+        WHERE e.employee_type = 1
+        <if test=" isMove != null and isMove != '' and isMove == 1">
+            and p.program_status != 100
+        </if>
+        <if test="isAdmin == 0">
+            <if test='isPart == 0'>
+                and (e.account_id = #{accountId, jdbcType=VARCHAR} OR p.type = 1)
+            </if>
+            <if test='isPart == 1'>
+                and e.account_id = #{accountId, jdbcType=VARCHAR}
+            </if>
+        </if>
+        <if test="isAdmin == 1">
+            <if test='isPart == 1'>
+                and e.account_id = #{accountId, jdbcType=VARCHAR}
+            </if>
+        </if>
+        <if test="programStatusList!=null">
+            and p.program_status in
+            <foreach item="item" index="index" collection="programStatusList" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='approvalStatus != "" and approvalStatus != null  and approvalStatus != 0'>
+            and p.approval_status = #{approvalStatus}
+        </if>
+        <if test='productId != "" and productId != null and productId != -1'>
+            and (p.product_id =#{productId})
+        </if>
+        <if test='searchText != "" and searchText != null'>
+            and (p.name like concat(concat('%',#{searchText}),'%') OR e.employee_name like
+            concat(concat('%',#{searchText}),'%'))
+        </if>
+        <if test='analyzingConditions != "" and analyzingConditions != null  and analyzingConditions != -1'>
+            and (p.analyzing_conditions = #{analyzingConditions}
+            or d.analyzing_conditions LIKE concat(concat('%',#{analyzingConditions}),'%'))
+        </if>
+        <if test='label != "" and label != null  and label != ",-1,"'>
+            and d.label like concat(concat('%',#{label}),'%')
+        </if>
+        GROUP BY p.id
+        <if test=" iSortCol != null and iSortCol != '' and iSortCol=='name'">
+            ORDER BY convert(substr(p.`name` ,1,1) using 'GBK')
+        </if>
+        <if test=" iSortCol != null and iSortCol != '' and iSortCol=='productName' ">
+            ORDER BY convert(substr(productName,1,1) using 'GBK')
+        </if>
+        <if test=" iSortCol != null and iSortCol != '' and  iSortCol=='personLiable' ">
+            ORDER BY convert(substr(GROUP_CONCAT(e.employee_name),1,1) using 'GBK')
+        </if>
+        <if test=" iSortCol != null and iSortCol != '' and iSortCol=='type'">
+            ORDER BY if(isnull(p.type),1,0),p.type
+        </if>
+        <if test=" iSortCol != null and iSortCol != '' and iSortCol=='programStatus'">
+            ORDER BY if(isnull(programStatus),1,0),programStatus
+        </if>
+        <if test=" iSortCol != null and iSortCol != '' and iSortCol=='currNodeDate'">
+            ORDER BY if(isnull(currNodeDate),1,0),currNodeDate
+        </if>
+        <if test=" iSortCol != null and iSortCol != '' and iSortCol=='grayReleaseDate'">
+            ORDER BY if(isnull(grayReleaseDate),1,0),grayReleaseDate
+        </if>
+        <if test=" iSortCol != null and iSortCol != '' and iSortCol=='warningDays'">
+            ORDER BY if(isnull(warningDays),1,0),warningDays
+        </if>
+        <if test=" iSortCol != null and iSortCol != '' and iSortCol=='approvalStatus'">
+            ORDER BY if(isnull(approvalStatus),1,0),approvalStatus
+        </if>
+        <if test=" sSortDir != null and sSortDir != '' and sSortDir == 'asc'">
+            asc
+        </if>
+        <if test=" sSortDir != null and sSortDir != '' and sSortDir == 'desc'">
+            desc
+        </if>
     </select>
 
-
-    <!-- 通过产品ID查询项目列表 -->
+<!-- 通过产品ID查询项目列表 -->
     <select id="productIdList" parameterType="map" resultMap="ApiBaseResultMap">
         SELECT DISTINCT p.id,p.`name`,
         (select IFNULL(sum(CASE WHEN d.relation_id =p.id THEN 1 ELSE 0 END),0) from demand d where d.relation_type=2 and
@@ -228,28 +339,41 @@
         WHERE p.id = #{id}
     </select>
 
+    <!-- 通过ID状态查询项目 -->
+    <select id="getProgram" parameterType="map" resultMap="ProgramDetailResultMap">
+        SELECT p.*,
+        (SELECT pw.warning from program_warning pw
+                where pw.program_id=p.id ORDER BY pw.warning desc LIMIT 0,1) as warning ,
+        (SELECT pw.remark from program_warning pw
+                where pw.program_id=p.id ORDER BY pw.warning desc LIMIT 0,1) as warningRemark
+        FROM program p
+        WHERE p.id = #{id}
+    </select>
+
     <!-- 获取最新的newCode -->
     <select id="getNewCode" resultType="String">
         SELECT  new_code FROM program ORDER BY create_time DESC LIMIT 0,1
     </select>
 
     <select id="getCountByProductId" parameterType="map" resultType="int">
-        SELECT COUNT(0) FROM program
+        SELECT COUNT(0) FROM program p
+        LEFT JOIN product pt on pt.id=p.product_id
         <where>
             <if test="productIdList!=null">
-                product_id in
+                p.product_id in
                 <foreach item="item" index="index" collection="productIdList" open="(" separator="," close=")">
                     #{item}
                 </foreach>
             </if>
             <if test=" type != null and type == 1 ">
-              and date_format(create_time,'%Y-%m')=date_format(now(),'%Y-%m')
+              and date_format(p.create_time,'%Y-%m')=date_format(now(),'%Y-%m')
             </if>
             <if test=" type != null and  type == 2 ">
-                and program_status != 100 and program_status != 900 and program_status != 999
+                and p.program_status != 100 and p.program_status != 900 and p.program_status != 999
             </if>
             <if test=" analyzingConditions != null and  analyzingConditions != '' and analyzingConditions != -1 ">
-                and analyzing_conditions = #{analyzingConditions}
+                and (p.analyzing_conditions = #{analyzingConditions}
+                    or pt.analyzing_conditions LIKE CONCAT('%', #{analyzingConditions, jdbcType=VARCHAR}, '%'))
             </if>
         </where>
     </select>
@@ -311,7 +435,7 @@
     </select>
 
     <select id="yearCost" resultType="map">
-        select pc.type,pc.descr,pc.total,a.overAllCost from  program_count pc LEFT JOIN (
+        select pc.type,pc.descr,pc.total,a.overAllCost,pc.payment,pc.sign from  program_count pc LEFT JOIN (
         select
         analyzing_conditions as analyzingConditions,sum(overall_cost) as overAllCost
         from program where
@@ -437,5 +561,9 @@
                 </if>
             </if>
             GROUP BY p.id
+    </select>
+
+    <select id="updateWarningDays" resultType="Integer">
+            UPDATE program set warning_days=NULL
     </select>
 </mapper>

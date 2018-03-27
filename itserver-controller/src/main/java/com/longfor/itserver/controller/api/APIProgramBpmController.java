@@ -922,7 +922,7 @@ public class APIProgramBpmController extends BaseController {
 	}
 
 	/**
-	 * 异常项目
+	 * 异常项目（包括延期和终止的项目）
 	 * @param request
 	 * @return
 	 */

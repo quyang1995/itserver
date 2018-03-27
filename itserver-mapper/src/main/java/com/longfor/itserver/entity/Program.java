@@ -225,11 +225,44 @@ public class Program implements Serializable {
     @JsonSerialize(using = CustomDateSerializer.class)
     private Date actualReplayDate;
 
+    @Column(name = "warning_days")
+    private Integer warningDays;
+
     /**
      * 是否关注，0：未关注，1：已关注
      */
     @Transient
     private int isFollow;
+
+    @Transient
+    private String label;
+
+    @Transient
+    private String labelName;
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getLabelName() {
+        return labelName;
+    }
+
+    public void setLabelName(String labelName) {
+        this.labelName = labelName;
+    }
+
+    public Integer getWarningDays() {
+        return warningDays;
+    }
+
+    public void setWarningDays(Integer warningDays) {
+        this.warningDays = warningDays;
+    }
 
     public Date getReplayDate() {
         return replayDate;
