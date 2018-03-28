@@ -84,7 +84,20 @@ public interface IProgramService extends IAdminService<Program> {
      */
     List<Map<String,Object>> exportProgramList(Map<String,Object> map);
 
+    /**
+     * 定时任务 发送龙信小秘书提示流程节点信息
+     * @throws Exception
+     */
     void programTask() throws Exception;
 
-    void warningDays() throws Exception;
+    /**
+     * D定时批量修改 预警天数
+     * @throws Exception
+     */
+    void warningDaysTask() throws Exception;
+    /**
+     * 单个修改项目信息时 修改 预警天数(与定时批量修改时公用)
+     * @throws Exception
+     */
+    void warningTask(Program program);
 }

@@ -405,7 +405,7 @@ public class APIProgramController extends BaseController {
 	public Map programUpdate(HttpServletResponse response, HttpServletRequest request){
 		try{
 			Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-		/* 责任人 */
+			/* 责任人 */
 			Map map = new HashMap();
 			map.put("programId", paramsMap.get("id"));
 			boolean isAllow = false;
@@ -586,7 +586,7 @@ public class APIProgramController extends BaseController {
 	@Scheduled(cron = "0 0 1 ? * *")
 	public void warningDaysTask() throws Exception{
 		try{
-			this.getProgramService().warningDays();
+			this.getProgramService().warningDaysTask();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
