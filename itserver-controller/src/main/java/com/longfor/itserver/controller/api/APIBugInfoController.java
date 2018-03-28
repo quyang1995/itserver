@@ -18,6 +18,7 @@ import com.longfor.itserver.entity.ps.PsBugInfoDetail;
 import com.longfor.itserver.entity.ps.PsBugTimeTask;
 import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.helper.APIHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
@@ -64,6 +65,11 @@ public class APIBugInfoController extends BaseController {
 		String accountId = String.valueOf(paramsMap.get("accountId"));
 		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
 		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
+		String status = paramsMap.get("status").toString();
+		if(StringUtils.isNotBlank(status) && !"-1".equals(status)){
+			String [] programStatusList = status.split(",");
+			paramsMap.put("statusList",programStatusList);
+		}
 		List<PsBugInfoDetail> bugList = this.getBugInfoService().bugList(paramsMap);
 		
 
@@ -94,6 +100,11 @@ public class APIBugInfoController extends BaseController {
 		/* 查询数据 and admin权限判断 */
 		String accountId = String.valueOf(paramsMap.get("accountId"));
 		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
+		String status = paramsMap.get("status").toString();
+		if(StringUtils.isNotBlank(status) && !"-1".equals(status)){
+			String [] programStatusList = status.split(",");
+			paramsMap.put("statusList",programStatusList);
+		}
 		List<PsBugInfoDetail> bugList = this.getBugInfoService().bugList(paramsMap);
 
 

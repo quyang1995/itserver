@@ -581,7 +581,7 @@ public class APIProgramController extends BaseController {
 	 * 为了项目列表按照预警天数排序，为了项目列表按照预警天数排序，为了项目列表按照预警天数排序
 	 * @throws Exception
 	 */
-//	@Scheduled(cron = "0 23 16 ? * *")
+//	@Scheduled(cron = "0 28 11 ? * *")
 	//每天凌晨1点执行一次
 	@Scheduled(cron = "0 0 1 ? * *")
 	public void warningDaysTask() throws Exception{

@@ -260,6 +260,11 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		String accountId = String.valueOf(paramsMap.get("accountId"));
 		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
 		PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
+		String status = paramsMap.get("status").toString();
+		if(StringUtils.isNotBlank(status) && !"-1".equals(status)){
+			String [] programStatusList = status.split(",");
+			paramsMap.put("statusList",programStatusList);
+		}
 		List<PsDemandDetail> demands = demandMapper.searchList(paramsMap);
 		for (PsDemandDetail demand:demands) {
 			this.setDemandInfo(demand);
@@ -280,6 +285,11 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		/* 查询数据 and admin权限判断 */
 		String accountId = String.valueOf(paramsMap.get("accountId"));
 		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
+		String status = paramsMap.get("status").toString();
+		if(StringUtils.isNotBlank(status) && !"-1".equals(status)){
+			String [] programStatusList = status.split(",");
+			paramsMap.put("statusList",programStatusList);
+		}
 		List<PsDemandDetail> demands = demandMapper.searchList(paramsMap);
 		for (PsDemandDetail demand:demands) {
 			this.setDemandInfo(demand);

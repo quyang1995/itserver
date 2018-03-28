@@ -91,8 +91,14 @@
         <include refid="Base_Column_List"></include>
         FROM demand
         WHERE 1=1
-        <if test='status != "" and status != null and status !=-1'>
-            and status = #{status}
+        <!--<if test='status != "" and status != null and status !=-1'>-->
+            <!--and status = #{status}-->
+        <!--</if>-->
+        <if test="statusList!=null">
+            and status in
+            <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+                #{item}
+            </foreach>
         </if>
         <if test='channel != "" and channel != null and channel !=-1'>
             and channel = #{channel}

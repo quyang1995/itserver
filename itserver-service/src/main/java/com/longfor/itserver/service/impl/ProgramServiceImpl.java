@@ -2562,56 +2562,47 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 //        }
         //立项
         if (program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()
-                && program.getApprovalStatus()==0
-                && program.getCommitDate()!=null){
+                && program.getApprovalStatus()==0){
             this.updateWarningDays(program,program.getCommitDate());
         }
         //Demo评审
         if (program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
-                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                && program.getDemoApprovalDate()!=null ){
+                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()){
             this.updateWarningDays(program,program.getDemoApprovalDate());
         }
         //产品评审
         if (program.getProgramStatus()==ProgramStatusNewEnum.DPS.getCode()
-                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                && program.getProdApprovalDate()!=null ){
+                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()){
             this.updateWarningDays(program,program.getProdApprovalDate());
         }
         //提示开发评审
         if (program.getProgramStatus()==ProgramStatusNewEnum.CPPS.getCode()
-                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                && program.getDevApprovalDate()!=null ){
+                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()){
             this.updateWarningDays(program,program.getDevApprovalDate());
         }
         //测试评审
         if (program.getProgramStatus()==ProgramStatusNewEnum.KFPS.getCode()
-                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                && program.getTestApprovalDate()!=null){
+                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()){
             this.updateWarningDays(program,program.getTestApprovalDate());
         }
         //上线计划
         if (program.getProgramStatus()==ProgramStatusNewEnum.CSPS.getCode()
-                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                && program.getOnlinePlanDate()!=null ){
+                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()){
             this.updateWarningDays(program,program.getOnlinePlanDate());
         }
         //灰度发布
         if (program.getProgramStatus()==ProgramStatusNewEnum.SXPS.getCode()
-                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                && program.getGrayReleaseDate()!=null ){
+                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()){
             this.updateWarningDays(program,program.getGrayReleaseDate());
         }
         //全面推广
         if (program.getProgramStatus()==ProgramStatusNewEnum.HDFB.getCode()
-                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                && program.getAllExtensionDate()!=null){
+                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()){
             this.updateWarningDays(program,program.getAllExtensionDate());
         }
         //项目复盘
         if (program.getProgramStatus()==ProgramStatusNewEnum.QMTG.getCode()
-                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
-                && program.getReplayDate()!=null ){
+                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()){
             this.updateWarningDays(program,program.getReplayDate());
         }
     }
@@ -2668,7 +2659,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             //预警值：0=绿色正常，1=黄色中风险-存在潜在问题，进度可控，2=红色高风险-可能导致延期，进度不可控
             //0=绿色正常
             if (programWarning.getWarning()==0){
-                differentDays = DateUtil.differentDays(now,planDate);
+                if(planDate != null){
+                    differentDays = DateUtil.differentDays(now,planDate);
+                }
             }
             //黄色中风险的按照黄色的预警显示，预期时间给0天，以便排序
             if (programWarning.getWarning()==1){
@@ -2680,12 +2673,16 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             }
         } else {
             //无手动预警的数据，按照正常的显示日期差
-            differentDays = DateUtil.differentDays(now,planDate);
+            if(planDate != null){
+                differentDays = DateUtil.differentDays(now,planDate);
+            }
         }
-        Program newProgram = new Program();
-        newProgram.setId(program.getId());
-        newProgram.setWarningDays(differentDays);
-        programMapper.updateByPrimaryKeySelective(newProgram);
+        if(differentDays != null){
+            Program newProgram = new Program();
+            newProgram.setId(program.getId());
+            newProgram.setWarningDays(differentDays);
+            programMapper.updateByPrimaryKeySelective(newProgram);
+        }
     }
 
 }
