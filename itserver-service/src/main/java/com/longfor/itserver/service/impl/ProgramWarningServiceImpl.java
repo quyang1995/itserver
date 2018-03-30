@@ -7,6 +7,7 @@ import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ProgramWarning;
 import com.longfor.itserver.mapper.ProgramMapper;
 import com.longfor.itserver.mapper.ProgramWarningMapper;
+import com.longfor.itserver.service.IProgramService;
 import com.longfor.itserver.service.IProgramWarningService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import com.longfor.itserver.service.util.AccountUitl;
@@ -26,6 +27,8 @@ public class ProgramWarningServiceImpl extends AdminBaseService<ProgramWarning> 
     private ProgramWarningMapper programWarningMapper;
     @Autowired
     private ProgramMapper programMapper;
+    @Autowired
+    private IProgramService programService;
     @Override
     public List<ProgramWarning> getListByWhere(Map<String,Object> map) {
         return programWarningMapper.getListByWhere(map);
@@ -77,6 +80,8 @@ public class ProgramWarningServiceImpl extends AdminBaseService<ProgramWarning> 
         }
         programWarning.setCreateTime(new Date());
         programWarningMapper.insert(programWarning);
+        //实时更新预警日期
+        programService.warningTask(program);
         return programWarning;
     }
 

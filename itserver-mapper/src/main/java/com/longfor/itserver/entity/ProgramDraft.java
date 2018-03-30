@@ -1,28 +1,20 @@
 package com.longfor.itserver.entity;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import net.mayee.commons.CustomDateSerializer;
-import net.mayee.commons.CustomFullDateSerializer;
-
-import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
+import javax.persistence.*;
 
-@Table(name = "program_approval_snapshot")
-public class ProgramApprovalSnapshot implements Serializable {
-    private static final long serialVersionUID = -6776870685616143799L;
-
+@Table(name = "program_draft")
+public class ProgramDraft {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
-     * 项目ID
+     * 操作类型：100=添加项目，110=立项，120=Demo评审，130=招投标申请，140=中标申请，150=产品评审，160=开发评审，170=测试评审，180=上线计划，190=灰度发布，193=全面推广，195=项目复盘，200=延期上线，210=需求变更，900=完成，999=终止
      */
-    @Column(name = "program_id")
-    private Long programId;
+    @Column(name = "operation_type")
+    private Integer operationType;
 
     /**
      * 归属产品
@@ -36,39 +28,21 @@ public class ProgramApprovalSnapshot implements Serializable {
     @Column(name = "product_name")
     private String productName;
 
+    /**
+     * 归属产品code
+     */
     @Column(name = "product_code")
     private String productCode;
 
+    /**
+     * 项目名称
+     */
     private String name;
 
     /**
      * 项目描述
      */
     private String descp;
-
-    @Column(name = "commit_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
-    private Date commitDate;
-
-    @Column(name = "start_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
-    private Date startDate;
-
-    @Column(name = "gray_release_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
-    private Date grayReleaseDate;
-
-    @Column(name = "release_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
-    private Date releaseDate;
-
-    @Column(name = "ued_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
-    private Date uedDate;
-
-    @Column(name = "architecture_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
-    private Date architectureDate;
 
     /**
      * 关联产品id字符串，e.g. 1,2,3,...
@@ -82,8 +56,14 @@ public class ProgramApprovalSnapshot implements Serializable {
     @Column(name = "like_program")
     private String likeProgram;
 
+    /**
+     * 公开类型：0=私有，1=公开
+     */
     private Integer type;
 
+    /**
+     * 项目状态：100=未立项，110=立项，120=Demo评审，130=招投标申请，140=中标申请，150=产品评审，160=开发评审，170=测试评审，180=上线计划，190=灰度发布，193=全面推广，195=项目复盘，200=延期上线，210=需求变更，900=完成，999=终止
+     */
     @Column(name = "program_status")
     private Integer programStatus;
 
@@ -100,11 +80,9 @@ public class ProgramApprovalSnapshot implements Serializable {
     private String modifiedName;
 
     @Column(name = "create_time")
-    @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date createTime;
 
     @Column(name = "modified_time")
-    @JsonSerialize(using = CustomDateSerializer.class)
     private Date modifiedTime;
 
     /**
@@ -114,53 +92,58 @@ public class ProgramApprovalSnapshot implements Serializable {
     private Integer accountType;
 
     /**
+     * 立项日期
+     */
+    @Column(name = "commit_date")
+    private Date commitDate;
+
+    /**
      * Demo评审日期
      */
     @Column(name = "demo_approval_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
     private Date demoApprovalDate;
 
     /**
      * 招标日期
      */
     @Column(name = "bidding_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
     private Date biddingDate;
 
     /**
      * 中标日期
      */
     @Column(name = "winning_bid_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
     private Date winningBidDate;
 
     /**
      * 产品评审日期
      */
     @Column(name = "prod_approval_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
     private Date prodApprovalDate;
 
     /**
      * 开发评审日期
      */
     @Column(name = "dev_approval_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
     private Date devApprovalDate;
 
     /**
      * 测试评审日期
      */
     @Column(name = "test_approval_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
     private Date testApprovalDate;
 
     /**
      * 上线计划日期
      */
     @Column(name = "online_plan_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
     private Date onlinePlanDate;
+
+    /**
+     * 灰度发布日期
+     */
+    @Column(name = "gray_release_date")
+    private Date grayReleaseDate;
 
     /**
      * 研发方式：1=招投标，2=自研
@@ -172,7 +155,7 @@ public class ProgramApprovalSnapshot implements Serializable {
      * 判断条件：1=地产，2=商业，3=数据，4=冠寓，5=养老，6=产城，7=基础中心
      */
     @Column(name = "analyzing_conditions")
-    private String analyzingConditions;
+    private Integer analyzingConditions;
 
     /**
      * 研发工作量预估
@@ -186,9 +169,6 @@ public class ProgramApprovalSnapshot implements Serializable {
     @Column(name = "overall_cost")
     private BigDecimal overallCost;
 
-    @Column(name = "bid_oversingle_cost")
-    private BigDecimal bidOversingleCost;
-
     /**
      * 研发工作量
      */
@@ -196,38 +176,10 @@ public class ProgramApprovalSnapshot implements Serializable {
     private Integer bidDevWorkload;
 
     /**
-     * 整体费用
-     */
-    @Column(name = "bid_overall_cost")
-    private BigDecimal bidOverallCost;
-
-    /**
      * 审批状态：100=审核中，110=审核通过，120=审核驳回，130=变更审核中，140=变更审核驳回
      */
     @Column(name = "approval_status")
     private Integer approvalStatus;
-
-    @Column(name = "bpm_code")
-    private String bpmCode;
-
-    @Column(name = "suggestion")
-    private String suggestion;
-
-    @Column(name = "apply_account")
-    private String applyAccount;
-
-    /**
-     * 延期原因，1：需求变更，2：其他原因（不涉及费用）
-     */
-    @Column(name = "cause_delay")
-    private String causeDelay;
-
-    /**
-     * 跟琼朔相关的项目，手动添加琼朔,
-     * 1:需要琼朔审批2:不需要琼朔审批
-     */
-    @Column(name = "report_poor")
-    private String reportPoor;
 
     /**
      * 自动生成项目code（规则：IT_XM000001，顺序递增）
@@ -235,206 +187,79 @@ public class ProgramApprovalSnapshot implements Serializable {
     @Column(name = "new_code")
     private String newCode;
 
+    /**
+     * 项目复盘时间
+     */
     @Column(name = "replay_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
     private Date replayDate;
 
-    @Column(name = "all_extension_date")
-    @JsonSerialize(using = CustomDateSerializer.class)
-    private Date allExtensionDate;
-
-    @Column(name = "commit_descp")
-    private String commitDescp;
-
-    @Transient
-    private List<ProgramFile> fileList;
     /**
-     * 人员：项目经理
+     * 全面推广时间
      */
-    @Transient
-    private List<ProgramEmployee> empList;
-    /* 责任人 */
-    @Transient
-    private List<ProgramEmployee> personLiableList;
-    /* 项目经理 */
-    @Transient
-    private List<ProgramEmployee> programManagerList;
-    /* 产品经理 */
-    @Transient
-    private List<ProgramEmployee> productManagerList;
-    /* 开发人员 */
-    @Transient
-    private List<ProgramEmployee> developerList;
-    /* UED人员 */
-    @Transient
-    private List<ProgramEmployee> uedList;
-    /* 测试人员 */
-    @Transient
-    private List<ProgramEmployee> testingList;
-    /* 运维人员 */
-    @Transient
-    private List<ProgramEmployee> operationList;
-    /* 运营人员 */
-    @Transient
-    private List<ProgramEmployee> operateList;
-    /* 业务人员 */
-    @Transient
-    private List<ProgramEmployee> businessList;
-
-    public Date getReplayDate() {
-        return replayDate;
-    }
-
-    public void setReplayDate(Date replayDate) {
-        this.replayDate = replayDate;
-    }
-
-    public Date getAllExtensionDate() {
-        return allExtensionDate;
-    }
-
-    public void setAllExtensionDate(Date allExtensionDate) {
-        this.allExtensionDate = allExtensionDate;
-    }
-
-    public String getNewCode() {
-        return newCode;
-    }
-
-    public void setNewCode(String newCode) {
-        this.newCode = newCode;
-    }
-
-    public void setPersonLiableList(List<ProgramEmployee> personLiableList) {
-        this.personLiableList = personLiableList;
-    }
-
-    public void setProgramManagerList(List<ProgramEmployee> programManagerList) {
-        this.programManagerList = programManagerList;
-    }
-
-    public void setProductManagerList(List<ProgramEmployee> productManagerList) {
-        this.productManagerList = productManagerList;
-    }
-
-    public void setDeveloperList(List<ProgramEmployee> developerList) {
-        this.developerList = developerList;
-    }
-
-    public void setUedList(List<ProgramEmployee> uedList) {
-        this.uedList = uedList;
-    }
-
-    public void setTestingList(List<ProgramEmployee> testingList) {
-        this.testingList = testingList;
-    }
-
-    public void setOperationList(List<ProgramEmployee> operationList) {
-        this.operationList = operationList;
-    }
-
-    public void setOperateList(List<ProgramEmployee> operateList) {
-        this.operateList = operateList;
-    }
-
-    public void setBusinessList(List<ProgramEmployee> businessList) {
-        this.businessList = businessList;
-    }
-
-    public List<ProgramEmployee> getPersonLiableList() {
-        return personLiableList;
-    }
-
-    public List<ProgramEmployee> getProgramManagerList() {
-        return programManagerList;
-    }
-
-    public List<ProgramEmployee> getProductManagerList() {
-        return productManagerList;
-    }
-
-    public List<ProgramEmployee> getDeveloperList() {
-        return developerList;
-    }
-
-    public List<ProgramEmployee> getUedList() {
-        return uedList;
-    }
-
-    public List<ProgramEmployee> getTestingList() {
-        return testingList;
-    }
-
-    public List<ProgramEmployee> getOperationList() {
-        return operationList;
-    }
-
-    public List<ProgramEmployee> getOperateList() {
-        return operateList;
-    }
-
-    public List<ProgramEmployee> getBusinessList() {
-        return businessList;
-    }
-
-    public void setReportPoor(String reportPoor) {
-        this.reportPoor = reportPoor;
-    }
-
-    public String getReportPoor() {
-        return reportPoor;
-    }
-
-    public String getApplyAccount() {
-        return applyAccount;
-    }
-
-    public void setApplyAccount(String applyAccount) {
-        this.applyAccount = applyAccount;
-    }
-
-    public String getSuggestion() {
-        return suggestion;
-    }
-
-    public void setSuggestion(String suggestion) {
-        this.suggestion = suggestion;
-    }
-
-    public List<ProgramEmployee> getEmpList() {
-        return empList;
-    }
-
-    public void setEmpList(List<ProgramEmployee> empList) {
-        this.empList = empList;
-    }
-
-    public List<ProgramFile> getFileList() {
-        return fileList;
-    }
-
-    public void setFileList(List<ProgramFile> fileList) {
-        this.fileList = fileList;
-    }
+    @Column(name = "all_extension_date")
+    private Date allExtensionDate;
 
     /**
      * 内容摘要
      */
+    @Column(name = "remark")
     private String remark;
 
-    public Long getProgramId() {
-        return programId;
+    /**
+     * 立项描述
+     */
+    @Column(name = "commit_descp")
+    private String commitDescp;
+
+    @Column(name = "business_center_list")
+    private String businessCenterList;
+
+    @Column(name = "business_center_list_name")
+    private String businessCenterListName;
+
+    @Column(name = "business_functions_list")
+    private String businessFunctionsList;
+
+    @Column(name = "business_functions_list_name")
+    private String businessFunctionsListName;
+
+    @Column(name = "business_president_list")
+    private String businessPresidentList;
+
+    @Column(name = "business_president_list_name")
+    private String businessPresidentListName;
+
+    @Column(name = "t_approval")
+    private String tApproval;
+
+    @Column(name = "report_poor")
+    private String reportPoor;
+
+    public String getRemark() {
+        return remark;
     }
 
-    public void setProgramId(Long programId) {
-        this.programId = programId;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     /**
-     * 审核意见
+     * 获取立项描述
+     *
+     * @return commitDescp - 立项描述
      */
-    @Column(name = "approval_view")
-    private String approvalView;
+    public String getCommitDescp() {
+        return commitDescp;
+    }
+
+    /**
+     * 设置立项描述
+     *
+     * @param commitDescp 立项描述
+     */
+    public void setCommitDescp(String commitDescp) {
+        this.commitDescp = commitDescp == null ? null : commitDescp.trim();
+    }
 
     /**
      * @return id
@@ -448,6 +273,24 @@ public class ProgramApprovalSnapshot implements Serializable {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+
+    /**
+     * 获取操作类型：100=添加项目，110=立项，120=Demo评审，130=招投标申请，140=中标申请，150=产品评审，160=开发评审，170=测试评审，180=上线计划，190=灰度发布，193=全面推广，195=项目复盘，200=延期上线，210=需求变更，900=完成，999=终止
+     *
+     * @return operation_type - 操作类型：100=添加项目，110=立项，120=Demo评审，130=招投标申请，140=中标申请，150=产品评审，160=开发评审，170=测试评审，180=上线计划，190=灰度发布，193=全面推广，195=项目复盘，200=延期上线，210=需求变更，900=完成，999=终止
+     */
+    public Integer getOperationType() {
+        return operationType;
+    }
+
+    /**
+     * 设置操作类型：100=添加项目，110=立项，120=Demo评审，130=招投标申请，140=中标申请，150=产品评审，160=开发评审，170=测试评审，180=上线计划，190=灰度发布，193=全面推广，195=项目复盘，200=延期上线，210=需求变更，900=完成，999=终止
+     *
+     * @param operationType 操作类型：100=添加项目，110=立项，120=Demo评审，130=招投标申请，140=中标申请，150=产品评审，160=开发评审，170=测试评审，180=上线计划，190=灰度发布，193=全面推广，195=项目复盘，200=延期上线，210=需求变更，900=完成，999=终止
+     */
+    public void setOperationType(Integer operationType) {
+        this.operationType = operationType;
     }
 
     /**
@@ -487,28 +330,36 @@ public class ProgramApprovalSnapshot implements Serializable {
     }
 
     /**
-     * @return product_code
+     * 获取归属产品code
+     *
+     * @return product_code - 归属产品code
      */
     public String getProductCode() {
         return productCode;
     }
 
     /**
-     * @param productCode
+     * 设置归属产品code
+     *
+     * @param productCode 归属产品code
      */
     public void setProductCode(String productCode) {
         this.productCode = productCode == null ? null : productCode.trim();
     }
 
     /**
-     * @return name
+     * 获取项目名称
+     *
+     * @return name - 项目名称
      */
     public String getName() {
         return name;
     }
 
     /**
-     * @param name
+     * 设置项目名称
+     *
+     * @param name 项目名称
      */
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
@@ -530,90 +381,6 @@ public class ProgramApprovalSnapshot implements Serializable {
      */
     public void setDescp(String descp) {
         this.descp = descp == null ? null : descp.trim();
-    }
-
-    /**
-     * @return commit_date
-     */
-    public Date getCommitDate() {
-        return commitDate;
-    }
-
-    /**
-     * @param commitDate
-     */
-    public void setCommitDate(Date commitDate) {
-        this.commitDate = commitDate;
-    }
-
-    /**
-     * @return start_date
-     */
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    /**
-     * @param startDate
-     */
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    /**
-     * @return gray_release_date
-     */
-    public Date getGrayReleaseDate() {
-        return grayReleaseDate;
-    }
-
-    /**
-     * @param grayReleaseDate
-     */
-    public void setGrayReleaseDate(Date grayReleaseDate) {
-        this.grayReleaseDate = grayReleaseDate;
-    }
-
-    /**
-     * @return release_date
-     */
-    public Date getReleaseDate() {
-        return releaseDate;
-    }
-
-    /**
-     * @param releaseDate
-     */
-    public void setReleaseDate(Date releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
-    /**
-     * @return ued_date
-     */
-    public Date getUedDate() {
-        return uedDate;
-    }
-
-    /**
-     * @param uedDate
-     */
-    public void setUedDate(Date uedDate) {
-        this.uedDate = uedDate;
-    }
-
-    /**
-     * @return architecture_date
-     */
-    public Date getArchitectureDate() {
-        return architectureDate;
-    }
-
-    /**
-     * @param architectureDate
-     */
-    public void setArchitectureDate(Date architectureDate) {
-        this.architectureDate = architectureDate;
     }
 
     /**
@@ -653,28 +420,36 @@ public class ProgramApprovalSnapshot implements Serializable {
     }
 
     /**
-     * @return type
+     * 获取公开类型：0=私有，1=公开
+     *
+     * @return type - 公开类型：0=私有，1=公开
      */
     public Integer getType() {
         return type;
     }
 
     /**
-     * @param type
+     * 设置公开类型：0=私有，1=公开
+     *
+     * @param type 公开类型：0=私有，1=公开
      */
     public void setType(Integer type) {
         this.type = type;
     }
 
     /**
-     * @return program_status
+     * 获取项目状态：100=未立项，110=立项，120=Demo评审，130=招投标申请，140=中标申请，150=产品评审，160=开发评审，170=测试评审，180=上线计划，190=灰度发布，193=全面推广，195=项目复盘，200=延期上线，210=需求变更，900=完成，999=终止
+     *
+     * @return program_status - 项目状态：100=未立项，110=立项，120=Demo评审，130=招投标申请，140=中标申请，150=产品评审，160=开发评审，170=测试评审，180=上线计划，190=灰度发布，193=全面推广，195=项目复盘，200=延期上线，210=需求变更，900=完成，999=终止
      */
     public Integer getProgramStatus() {
         return programStatus;
     }
 
     /**
-     * @param programStatus
+     * 设置项目状态：100=未立项，110=立项，120=Demo评审，130=招投标申请，140=中标申请，150=产品评审，160=开发评审，170=测试评审，180=上线计划，190=灰度发布，193=全面推广，195=项目复盘，200=延期上线，210=需求变更，900=完成，999=终止
+     *
+     * @param programStatus 项目状态：100=未立项，110=立项，120=Demo评审，130=招投标申请，140=中标申请，150=产品评审，160=开发评审，170=测试评审，180=上线计划，190=灰度发布，193=全面推广，195=项目复盘，200=延期上线，210=需求变更，900=完成，999=终止
      */
     public void setProgramStatus(Integer programStatus) {
         this.programStatus = programStatus;
@@ -760,6 +535,24 @@ public class ProgramApprovalSnapshot implements Serializable {
      */
     public void setAccountType(Integer accountType) {
         this.accountType = accountType;
+    }
+
+    /**
+     * 获取立项日期
+     *
+     * @return commit_date - 立项日期
+     */
+    public Date getCommitDate() {
+        return commitDate;
+    }
+
+    /**
+     * 设置立项日期
+     *
+     * @param commitDate 立项日期
+     */
+    public void setCommitDate(Date commitDate) {
+        this.commitDate = commitDate;
     }
 
     /**
@@ -889,6 +682,24 @@ public class ProgramApprovalSnapshot implements Serializable {
     }
 
     /**
+     * 获取灰度发布日期
+     *
+     * @return gray_release_date - 灰度发布日期
+     */
+    public Date getGrayReleaseDate() {
+        return grayReleaseDate;
+    }
+
+    /**
+     * 设置灰度发布日期
+     *
+     * @param grayReleaseDate 灰度发布日期
+     */
+    public void setGrayReleaseDate(Date grayReleaseDate) {
+        this.grayReleaseDate = grayReleaseDate;
+    }
+
+    /**
      * 获取研发方式：1=招投标，2=自研
      *
      * @return dev_type - 研发方式：1=招投标，2=自研
@@ -911,7 +722,7 @@ public class ProgramApprovalSnapshot implements Serializable {
      *
      * @return analyzing_conditions - 判断条件：1=地产，2=商业，3=数据，4=冠寓，5=养老，6=产城，7=基础中心
      */
-    public String getAnalyzingConditions() {
+    public Integer getAnalyzingConditions() {
         return analyzingConditions;
     }
 
@@ -920,7 +731,7 @@ public class ProgramApprovalSnapshot implements Serializable {
      *
      * @param analyzingConditions 判断条件：1=地产，2=商业，3=数据，4=冠寓，5=养老，6=产城，7=基础中心
      */
-    public void setAnalyzingConditions(String analyzingConditions) {
+    public void setAnalyzingConditions(Integer analyzingConditions) {
         this.analyzingConditions = analyzingConditions;
     }
 
@@ -960,14 +771,6 @@ public class ProgramApprovalSnapshot implements Serializable {
         this.overallCost = overallCost;
     }
 
-    public BigDecimal getBidOversingleCost() {
-        return bidOversingleCost;
-    }
-
-    public void setBidOversingleCost(BigDecimal bidOversingleCost) {
-        this.bidOversingleCost = bidOversingleCost;
-    }
-
     /**
      * 获取研发工作量
      *
@@ -984,24 +787,6 @@ public class ProgramApprovalSnapshot implements Serializable {
      */
     public void setBidDevWorkload(Integer bidDevWorkload) {
         this.bidDevWorkload = bidDevWorkload;
-    }
-
-    /**
-     * 获取整体费用
-     *
-     * @return bid_overall_cost - 整体费用
-     */
-    public BigDecimal getBidOverallCost() {
-        return bidOverallCost;
-    }
-
-    /**
-     * 设置整体费用
-     *
-     * @param bidOverallCost 整体费用
-     */
-    public void setBidOverallCost(BigDecimal bidOverallCost) {
-        this.bidOverallCost = bidOverallCost;
     }
 
     /**
@@ -1023,68 +808,120 @@ public class ProgramApprovalSnapshot implements Serializable {
     }
 
     /**
-     * @return bpm_code
-     */
-    public String getBpmCode() {
-        return bpmCode;
-    }
-
-    /**
-     * @param bpmCode
-     */
-    public void setBpmCode(String bpmCode) {
-        this.bpmCode = bpmCode == null ? null : bpmCode.trim();
-    }
-
-    /**
-     * 获取内容摘要
+     * 获取自动生成项目code（规则：IT_XM000001，顺序递增）
      *
-     * @return remark - 内容摘要
+     * @return new_code - 自动生成项目code（规则：IT_XM000001，顺序递增）
      */
-    public String getRemark() {
-        return remark;
+    public String getNewCode() {
+        return newCode;
     }
 
     /**
-     * 设置内容摘要
+     * 设置自动生成项目code（规则：IT_XM000001，顺序递增）
      *
-     * @param remark 内容摘要
+     * @param newCode 自动生成项目code（规则：IT_XM000001，顺序递增）
      */
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
+    public void setNewCode(String newCode) {
+        this.newCode = newCode == null ? null : newCode.trim();
     }
 
     /**
-     * 获取审核意见
+     * 获取项目复盘时间
      *
-     * @return approval_view - 审核意见
+     * @return replay_date - 项目复盘时间
      */
-    public String getApprovalView() {
-        return approvalView;
+    public Date getReplayDate() {
+        return replayDate;
     }
 
     /**
-     * 设置审核意见
+     * 设置项目复盘时间
      *
-     * @param approvalView 审核意见
+     * @param replayDate 项目复盘时间
      */
-    public void setApprovalView(String approvalView) {
-        this.approvalView = approvalView == null ? null : approvalView.trim();
+    public void setReplayDate(Date replayDate) {
+        this.replayDate = replayDate;
     }
 
-    public String getCauseDelay() {
-        return causeDelay;
+    /**
+     * 获取全面推广时间
+     *
+     * @return all_extension_date - 全面推广时间
+     */
+    public Date getAllExtensionDate() {
+        return allExtensionDate;
     }
 
-    public void setCauseDelay(String causeDelay) {
-        this.causeDelay = causeDelay;
+    /**
+     * 设置全面推广时间
+     *
+     * @param allExtensionDate 全面推广时间
+     */
+    public void setAllExtensionDate(Date allExtensionDate) {
+        this.allExtensionDate = allExtensionDate;
     }
 
-    public String getCommitDescp() {
-        return commitDescp;
+    public String getBusinessCenterList() {
+        return businessCenterList;
     }
 
-    public void setCommitDescp(String commitDescp) {
-        this.commitDescp = commitDescp;
+    public void setBusinessCenterList(String businessCenterList) {
+        this.businessCenterList = businessCenterList;
+    }
+
+    public String getBusinessCenterListName() {
+        return businessCenterListName;
+    }
+
+    public void setBusinessCenterListName(String businessCenterListName) {
+        this.businessCenterListName = businessCenterListName;
+    }
+
+    public String getBusinessFunctionsList() {
+        return businessFunctionsList;
+    }
+
+    public void setBusinessFunctionsList(String businessFunctionsList) {
+        this.businessFunctionsList = businessFunctionsList;
+    }
+
+    public String getBusinessFunctionsListName() {
+        return businessFunctionsListName;
+    }
+
+    public void setBusinessFunctionsListName(String businessFunctionsListName) {
+        this.businessFunctionsListName = businessFunctionsListName;
+    }
+
+    public String getBusinessPresidentList() {
+        return businessPresidentList;
+    }
+
+    public void setBusinessPresidentList(String businessPresidentList) {
+        this.businessPresidentList = businessPresidentList;
+    }
+
+    public String getBusinessPresidentListName() {
+        return businessPresidentListName;
+    }
+
+    public void setBusinessPresidentListName(String businessPresidentListName) {
+        this.businessPresidentListName = businessPresidentListName;
+    }
+
+    public String gettApproval() {
+        return tApproval;
+    }
+
+    public void settApproval(String tApproval) {
+        this.tApproval = tApproval;
+    }
+
+    public String getReportPoor() {
+        return reportPoor;
+    }
+
+    public void setReportPoor(String reportPoor) {
+        this.reportPoor = reportPoor;
     }
 }

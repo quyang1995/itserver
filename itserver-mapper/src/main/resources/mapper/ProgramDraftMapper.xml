@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.longfor.itserver.mapper.ProgramDraftMapper" >
+  <resultMap id="BaseResultMap" type="com.longfor.itserver.entity.ProgramDraft" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="operation_type" property="operationType" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="BIGINT" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="product_code" property="productCode" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="descp" property="descp" jdbcType="VARCHAR" />
+    <result column="like_product" property="likeProduct" jdbcType="VARCHAR" />
+    <result column="like_program" property="likeProgram" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="program_status" property="programStatus" jdbcType="INTEGER" />
+    <result column="modified_account_id" property="modifiedAccountId" jdbcType="VARCHAR" />
+    <result column="modified_name" property="modifiedName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+    <result column="account_type" property="accountType" jdbcType="INTEGER" />
+    <result column="commit_date" property="commitDate" jdbcType="TIMESTAMP" />
+    <result column="demo_approval_date" property="demoApprovalDate" jdbcType="TIMESTAMP" />
+    <result column="bidding_date" property="biddingDate" jdbcType="TIMESTAMP" />
+    <result column="winning_bid_date" property="winningBidDate" jdbcType="TIMESTAMP" />
+    <result column="prod_approval_date" property="prodApprovalDate" jdbcType="TIMESTAMP" />
+    <result column="dev_approval_date" property="devApprovalDate" jdbcType="TIMESTAMP" />
+    <result column="test_approval_date" property="testApprovalDate" jdbcType="TIMESTAMP" />
+    <result column="online_plan_date" property="onlinePlanDate" jdbcType="TIMESTAMP" />
+    <result column="gray_release_date" property="grayReleaseDate" jdbcType="TIMESTAMP" />
+    <result column="dev_type" property="devType" jdbcType="INTEGER" />
+    <result column="analyzing_conditions" property="analyzingConditions" jdbcType="INTEGER" />
+    <result column="dev_workload" property="devWorkload" jdbcType="INTEGER" />
+    <result column="overall_cost" property="overallCost" jdbcType="DECIMAL" />
+    <result column="bid_dev_workload" property="bidDevWorkload" jdbcType="INTEGER" />
+    <result column="approval_status" property="approvalStatus" jdbcType="INTEGER" />
+    <result column="new_code" property="newCode" jdbcType="VARCHAR" />
+    <result column="replay_date" property="replayDate" jdbcType="TIMESTAMP" />
+    <result column="all_extension_date" property="allExtensionDate" jdbcType="TIMESTAMP" />
+    <result column="commit_descp" jdbcType="VARCHAR" property="commitDescp"/>
+    <result column="remark" jdbcType="VARCHAR" property="remark"/>
+
+    <result column="business_center_list" jdbcType="VARCHAR" property="businessCenterList"/>
+    <result column="business_center_list_name" jdbcType="VARCHAR" property="businessCenterListName"/>
+    <result column="business_functions_list" jdbcType="VARCHAR" property="businessFunctionsList"/>
+    <result column="business_functions_list_name" jdbcType="VARCHAR" property="businessFunctionsListName"/>
+    <result column="business_president_list" jdbcType="VARCHAR" property="businessPresidentList"/>
+    <result column="business_president_list_name" jdbcType="VARCHAR" property="businessPresidentListName"/>
+    <result column="t_approval" jdbcType="VARCHAR" property="tApproval"/>
+    <result column="report_poor" jdbcType="VARCHAR" property="reportPoor"/>
+  </resultMap>
+
+  <resultMap id="PsProgramDraftDetail" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsProgramDraftDetail" >
+
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, operation_type, product_id, product_name, product_code, name, descp, like_product, 
+    like_program, type, program_status, modified_account_id, modified_name, create_time, 
+    modified_time, account_type, commit_date, demo_approval_date, bidding_date, winning_bid_date, 
+    prod_approval_date, dev_approval_date, test_approval_date, online_plan_date, gray_release_date, 
+    dev_type, analyzing_conditions, dev_workload, overall_cost, bid_dev_workload, approval_status, 
+    new_code, replay_date, all_extension_date, commit_descp,remark,business_center_list,business_center_list_name,
+    business_functions_list,business_functions_list_name,business_president_list,business_president_list_name,
+    t_approval,report_poor
+  </sql>
+
+  <select id="getProgramDraftDetail" parameterType="map" resultMap="PsProgramDraftDetail" >
+      SELECT
+      <include refid="Base_Column_List"/>
+      FROM program_draft
+      <where>
+        <if test="operationType != null and operationType != ''">
+          operation_type = #{operationType}
+        </if>
+        <if test="modifiedAccountId != null and modifiedAccountId != ''">
+          AND  modified_account_id = #{modifiedAccountId}
+        </if>
+      </where>
+      ORDER BY create_time DESC LIMIT 0,1
+  </select>
+
+</mapper>

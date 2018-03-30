@@ -229,6 +229,12 @@ public class Program implements Serializable {
     private Integer warningDays;
 
     /**
+     * 立项描述
+     */
+    @Column(name = "commit_descp")
+    private String commitDescp;
+
+    /**
      * 是否关注，0：未关注，1：已关注
      */
     @Transient
@@ -239,6 +245,14 @@ public class Program implements Serializable {
 
     @Transient
     private String labelName;
+
+    public String getCommitDescp() {
+        return commitDescp;
+    }
+
+    public void setCommitDescp(String commitDescp) {
+        this.commitDescp = commitDescp;
+    }
 
     public String getLabel() {
         return label;

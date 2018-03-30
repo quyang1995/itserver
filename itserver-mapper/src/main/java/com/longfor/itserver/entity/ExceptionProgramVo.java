@@ -15,6 +15,8 @@ public class ExceptionProgramVo implements Serializable {
     private String programStatus;
     @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date createTime;
+    private String warningDays;
+    private String warning;
 
     private List<ProgramEmployee> productManagerList;
 
@@ -64,5 +66,21 @@ public class ExceptionProgramVo implements Serializable {
 
     public void setProductManagerList(List<ProgramEmployee> productManagerList) {
         this.productManagerList = productManagerList;
+    }
+
+    public String getWarningDays() {
+        return warningDays;
+    }
+
+    public void setWarningDays(String warningDays) {
+        this.warningDays = warningDays;
+    }
+
+    public String getWarning() {
+        return warning;
+    }
+
+    public void setWarning(String warning) {
+        this.warning = warning;
     }
 }

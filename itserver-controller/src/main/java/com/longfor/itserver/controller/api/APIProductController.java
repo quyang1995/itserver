@@ -256,24 +256,31 @@ public class APIProductController extends BaseController {
     @ResponseBody
     public Map updateProduct(HttpServletRequest request, HttpServletResponse response) {
         try{
-/* 获得已经验证过的参数map*/
+            /* 获得已经验证过的参数map*/
             Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
             String id = paramsMap.get("id");
-        /*责任人*/
-            boolean isAllow = false;
-            List<ProductEmployee> personLiableList = this.getProductEmployeeService()
-                    .searchTypeList(new Long(id), AvaStatusEnum.LIABLEAVA.getCode(), null);
-            if (!"".equals(paramsMap.get("modifiedAccountId"))) {
-                for (ProductEmployee productEmployee : personLiableList) {
-                    if (productEmployee.getAccountId().equals(paramsMap.get("modifiedAccountId"))) {
-                        isAllow = true;
-                        break;
-                    }
-                }
-            } else {
-                return CommonUtils.getResultMapByBizEnum(BizEnum.E9993, "modifiedAccountId");
-            }
 
+            /*责任人*/
+            boolean isAllow = false;
+            String accountId = paramsMap.get("modifiedAccountId").toString();
+            String isAdmin = DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0";
+            //判断管理员角色，若为管理员，可以直接查看 0=非管理员，1=管理员
+            if ("1".equals(isAdmin)) {
+                isAllow = true;
+            } else {
+                List<ProductEmployee> personLiableList = this.getProductEmployeeService()
+                        .searchTypeList(new Long(id), AvaStatusEnum.LIABLEAVA.getCode(), null);
+                if (!"".equals(accountId)) {
+                    for (ProductEmployee productEmployee : personLiableList) {
+                        if (productEmployee.getAccountId().equals(paramsMap.get("modifiedAccountId"))) {
+                            isAllow = true;
+                            break;
+                        }
+                    }
+                } else {
+                    return CommonUtils.getResultMapByBizEnum(BizEnum.E9993, "modifiedAccountId");
+                }
+            }
             Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS_U);
             if (isAllow) {
             /*更新操作*/

@@ -564,7 +564,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         selectOneProgram.setProductName(product.getName());
         selectOneProgram.setProductCode(product.getCode());
         selectOneProgram.setDescp(program.getDescp());
-        selectOneProgram.setLikeProduct(program.getLikeProduct());
+        selectOneProgram.setCommitDescp(program.getCommitDescp());
         selectOneProgram.setLikeProgram(program.getLikeProgram());
         selectOneProgram.setType(program.getType());
         selectOneProgram.setAccountType(accountType);
@@ -1767,6 +1767,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             String type = paramsMap.get("type");
             String replayDate = paramsMap.get("replayDate");
             String allExtensionDate = paramsMap.get("allExtensionDate");
+            String commitDescp = paramsMap.get("commitDescp");
 
             //基本信息实时修改
             if(StringUtils.isNotBlank(devType))program.setDevType(Integer.parseInt(devType));//研发方式
@@ -1777,6 +1778,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             if(StringUtils.isNotBlank(bidDevWorkload))program.setBidDevWorkload(Integer.parseInt(bidDevWorkload));//人天（框架合同填写）
             if(StringUtils.isNotBlank(bidOversingleCost))program.setBidOversingleCost(new BigDecimal(bidOversingleCost));//人天单价（框架合同填写）
             if(StringUtils.isNotBlank(likeProduct))program.setLikeProduct(likeProduct);
+            if(StringUtils.isNotBlank(commitDescp))program.setCommitDescp(commitDescp);//立项说明
             if(StringUtils.isNotBlank(type))program.setType(Integer.parseInt(type));
             if(StringUtils.isNotBlank(productId)){
                 Product product = productMapper.selectByPrimaryKey(Long.valueOf(productId));
@@ -2284,6 +2286,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             }
             resultMap.put("devWorkload",model.getDevWorkload());//评估人天
             resultMap.put("overallCost",model.getOverallCost());//总预算
+            resultMap.put("warningDays",model.getWarningDays());//预警天数
             mapList.add(resultMap);
         }
         //列表
@@ -2547,122 +2550,36 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
     @Override
     public void warningDaysTask() throws Exception{
-        programMapper.updateWarningDays();//修改相差天数值
+        programMapper.updateWarningDays(null);//修改相差天数值为null
         List<Program> programList = programMapper.selectAll();
         for(Program program:programList){
             this.warningTask(program);
         }
     }
 
-    @Override
-    public void warningTask(Program program){
-//        if(program.getProgramStatus()==ProgramStatusNewEnum.ZZ.getCode() ||
-//                program.getProgramStatus()==ProgramStatusNewEnum.WC.getCode() ){
-//
-//        }
-        //立项
-        if (program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()
-                && program.getApprovalStatus()==0){
-            this.updateWarningDays(program,program.getCommitDate());
-        }
-        //Demo评审
-        if (program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
-                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()){
-            this.updateWarningDays(program,program.getDemoApprovalDate());
-        }
-        //产品评审
-        if (program.getProgramStatus()==ProgramStatusNewEnum.DPS.getCode()
-                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()){
-            this.updateWarningDays(program,program.getProdApprovalDate());
-        }
-        //提示开发评审
-        if (program.getProgramStatus()==ProgramStatusNewEnum.CPPS.getCode()
-                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()){
-            this.updateWarningDays(program,program.getDevApprovalDate());
-        }
-        //测试评审
-        if (program.getProgramStatus()==ProgramStatusNewEnum.KFPS.getCode()
-                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()){
-            this.updateWarningDays(program,program.getTestApprovalDate());
-        }
-        //上线计划
-        if (program.getProgramStatus()==ProgramStatusNewEnum.CSPS.getCode()
-                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()){
-            this.updateWarningDays(program,program.getOnlinePlanDate());
-        }
-        //灰度发布
-        if (program.getProgramStatus()==ProgramStatusNewEnum.SXPS.getCode()
-                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()){
-            this.updateWarningDays(program,program.getGrayReleaseDate());
-        }
-        //全面推广
-        if (program.getProgramStatus()==ProgramStatusNewEnum.HDFB.getCode()
-                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()){
-            this.updateWarningDays(program,program.getAllExtensionDate());
-        }
-        //项目复盘
-        if (program.getProgramStatus()==ProgramStatusNewEnum.QMTG.getCode()
-                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()){
-            this.updateWarningDays(program,program.getReplayDate());
-        }
-    }
-
     /**
-     *  differentDays>3天的，按照绿色的正常显示，
-     *  0<=differentDays<=3天的，按照黄色的显示，
+     *  differentDays>=3天的，按照绿色的正常显示，
+     *  0<=differentDays<3天的，按照黄色的显示，
      *  differentDays<0天的，按照红色的显示，
+     *  预警值：0=关闭手动，1=黄色中风险-存在潜在问题，进度可控，2=红色高风险-可能导致延期，进度不可控
      * @param program
-     * @param planDate
      */
-    private void updateWarningDays(Program program,Date planDate){
+    @Override
+    public int warningTask(Program program){
+        if(program.getProgramStatus()==ProgramStatusNewEnum.WC.getCode()
+                || program.getProgramStatus()==ProgramStatusNewEnum.ZZ.getCode()) {
+            return 0;
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",program.getId());
+        programMapper.updateWarningDays(map);//修改相差天数值为null
+        map.remove("id");
         Integer differentDays = null;
         Date now = new Date();
         //首先查找是否有手动预警的数据，手动预警的优先级最高
-        Map<String,Object> map = new HashMap<>();
         map.put("programId", program.getId());
-//        if(program.getApprovalStatus()== ProgramApprovalStatusEnum.SHTG.getCode()){
-//            if(program.getProgramStatus() == ProgramStatusNewEnum.WLX.getCode()){
-//                map.put("programStatus", ProgramStatusNewEnum.LX.getCode());
-//            }
-//            if(program.getProgramStatus() == ProgramStatusNewEnum.LX.getCode()){
-//                map.put("programStatus", ProgramStatusNewEnum.DPS.getCode());
-//            }
-//            if(program.getProgramStatus() == ProgramStatusNewEnum.DPS.getCode()){
-//                map.put("programStatus", ProgramStatusNewEnum.CPPS.getCode());
-//            }
-//            if(program.getProgramStatus() == ProgramStatusNewEnum.CPPS.getCode()){
-//                map.put("programStatus", ProgramStatusNewEnum.KFPS.getCode());
-//            }
-//            if(program.getProgramStatus() == ProgramStatusNewEnum.KFPS.getCode()){
-//                map.put("programStatus", ProgramStatusNewEnum.CSPS.getCode());
-//            }
-//            if(program.getProgramStatus() == ProgramStatusNewEnum.CSPS.getCode()){
-//                map.put("programStatus", ProgramStatusNewEnum.SXPS.getCode());
-//            }
-//            if(program.getProgramStatus() == ProgramStatusNewEnum.SXPS.getCode()){
-//                map.put("programStatus", ProgramStatusNewEnum.HDFB.getCode());
-//            }
-//            if(program.getProgramStatus() == ProgramStatusNewEnum.HDFB.getCode()){
-//                map.put("programStatus", ProgramStatusNewEnum.QMTG.getCode());
-//            }
-//            if(program.getProgramStatus() == ProgramStatusNewEnum.QMTG.getCode()){
-//                map.put("programStatus", ProgramStatusNewEnum.XMFP.getCode());
-//            }
-//            if(program.getProgramStatus() == ProgramStatusNewEnum.XMFP.getCode()){
-//                map.put("programStatus", ProgramStatusNewEnum.WC.getCode());
-//            }
-//        } else {
-//            map.put("programStatus", program.getProgramStatus());
-//        }
         ProgramWarning programWarning = programWarningService.getOneByWhere(map);
-        if (programWarning != null){
-            //预警值：0=绿色正常，1=黄色中风险-存在潜在问题，进度可控，2=红色高风险-可能导致延期，进度不可控
-            //0=绿色正常
-            if (programWarning.getWarning()==0){
-                if(planDate != null){
-                    differentDays = DateUtil.differentDays(now,planDate);
-                }
-            }
+        if (programWarning != null && (programWarning.getWarning()==1 || programWarning.getWarning()==2)){
             //黄色中风险的按照黄色的预警显示，预期时间给0天，以便排序
             if (programWarning.getWarning()==1){
                 differentDays = 0;
@@ -2673,6 +2590,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             }
         } else {
             //无手动预警的数据，按照正常的显示日期差
+            Date planDate = this.getPlanDate(program);
             if(planDate != null){
                 differentDays = DateUtil.differentDays(now,planDate);
             }
@@ -2683,6 +2601,72 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             newProgram.setWarningDays(differentDays);
             programMapper.updateByPrimaryKeySelective(newProgram);
         }
+        return 0;
+    }
+
+    private Date getPlanDate(Program program){
+        Date planDate = null;
+        if (program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()
+                && program.getApprovalStatus()==0){
+            planDate = program.getCommitDate();
+        }
+        if (program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()){
+            if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                planDate = program.getDemoApprovalDate();
+            } else {
+                planDate = program.getCommitDate();
+            }
+        }
+        if (program.getProgramStatus()==ProgramStatusNewEnum.DPS.getCode()){
+            if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                planDate = program.getProdApprovalDate();
+            } else {
+                planDate = program.getDemoApprovalDate();
+            }
+        }
+        if (program.getProgramStatus()==ProgramStatusNewEnum.CPPS.getCode()){
+            if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                planDate = program.getDevApprovalDate();
+            } else {
+                planDate = program.getProdApprovalDate();
+            }
+        }
+        if (program.getProgramStatus()==ProgramStatusNewEnum.KFPS.getCode()){
+            if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                planDate = program.getTestApprovalDate();
+            } else {
+                planDate = program.getDevApprovalDate();
+            }
+        }
+        if (program.getProgramStatus()==ProgramStatusNewEnum.CSPS.getCode()){
+            if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                planDate = program.getOnlinePlanDate();
+            } else {
+                planDate = program.getTestApprovalDate();
+            }
+        }
+        if (program.getProgramStatus()==ProgramStatusNewEnum.SXPS.getCode()){
+            if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                planDate = program.getGrayReleaseDate();
+            } else {
+                planDate = program.getOnlinePlanDate();
+            }
+        }
+        if (program.getProgramStatus()==ProgramStatusNewEnum.HDFB.getCode()){
+            if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                planDate = program.getAllExtensionDate();
+            } else {
+                planDate = program.getGrayReleaseDate();
+            }
+        }
+        if (program.getProgramStatus()==ProgramStatusNewEnum.QMTG.getCode()){
+            if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                planDate = program.getReplayDate();
+            } else {
+                planDate = program.getAllExtensionDate();
+            }
+        }
+        return planDate;
     }
 
 }

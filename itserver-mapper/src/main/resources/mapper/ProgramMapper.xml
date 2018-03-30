@@ -57,6 +57,7 @@
         <result column="actual_all_extension_date" jdbcType="TIMESTAMP" property="actualAllExtensionDate"/>
         <result column="actual_replay_date" jdbcType="TIMESTAMP" property="actualReplayDate"/>
         <result column="warning_days" jdbcType="INTEGER" property="warningDays"/>
+        <result column="commit_descp" jdbcType="VARCHAR" property="commitDescp"/>
     </resultMap>
 
     <resultMap id="ProgramResultMap" type="com.longfor.itserver.entity.ps.PsProgram">
@@ -93,7 +94,7 @@
         ,bid_overall_cost,approval_status,bid_oversingle_cost,new_code,replay_date,all_extension_date
         ,actual_commit_date,actual_demo_approval_date,actual_bidding_date,actual_winning_bid_date,actual_prod_approval_date
         ,actual_dev_approval_date,actual_test_approval_date,actual_online_plan_date,actual_gray_release_date
-        ,actual_all_extension_date,actual_replay_date,warning_days
+        ,actual_all_extension_date,actual_replay_date,warning_days,commit_descp
     </sql>
 
     <!-- 项目列表 -->
@@ -160,7 +161,7 @@
         p.warning_days warningDays,
         p.program_status programStatus,
         CASE
-        WHEN p.program_status = '100' THEN  ''
+        WHEN p.program_status = '100' THEN  substring(p.commit_date,1,10)
         WHEN p.program_status = '110' THEN  substring(p.commit_date,1,10)
         WHEN p.program_status = '120' THEN  substring(p.demo_approval_date,1,10)
         WHEN p.program_status = '130' THEN  substring(p.bidding_date,1,10)
@@ -177,7 +178,8 @@
         ELSE '其他' END currNodeDate,
         substring(p.gray_release_date,1,10) grayReleaseDate,
         p.approval_status approvalStatus,
-        GROUP_CONCAT(e.employee_name) as personLiable
+        GROUP_CONCAT(e.employee_name) as personLiable,
+        (SELECT pw.warning from program_warning pw where pw.program_id=p.id ORDER BY pw.warning desc LIMIT 0,1) as warning
         from program p
         LEFT JOIN program_employee e ON p.id = e.program_id
         LEFT JOIN product d ON p.product_id = d.id
@@ -248,6 +250,9 @@
         </if>
         <if test=" iSortCol != null and iSortCol != '' and iSortCol=='approvalStatus'">
             ORDER BY if(isnull(approvalStatus),1,0),approvalStatus
+        </if>
+        <if test=" iSortCol != null and iSortCol != '' and iSortCol=='createTime'">
+            ORDER BY p.create_time
         </if>
         <if test=" sSortDir != null and sSortDir != '' and sSortDir == 'asc'">
             asc
@@ -563,7 +568,12 @@
             GROUP BY p.id
     </select>
 
-    <select id="updateWarningDays" resultType="Integer">
+    <select id="updateWarningDays" resultType="Integer" parameterType="map">
             UPDATE program set warning_days=NULL
+            <where>
+                <if test=" id != null and  id != '' ">
+                      id = #{id}
+                </if>
+            </where>
     </select>
 </mapper>

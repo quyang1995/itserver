@@ -99,5 +99,5 @@ public interface IProgramService extends IAdminService<Program> {
      * 单个修改项目信息时 修改 预警天数(与定时批量修改时公用)
      * @throws Exception
      */
-    void warningTask(Program program);
+    int warningTask(Program program);
 }

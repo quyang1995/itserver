@@ -55,6 +55,6 @@ public interface ProgramMapper extends BeeMapper<Program> {
      */
     List<Map<String,Object>> exportProgramList(Map<String,Object> map);
 
-    Integer updateWarningDays();
+    Integer updateWarningDays(Map<String,Object> map);
 
 }

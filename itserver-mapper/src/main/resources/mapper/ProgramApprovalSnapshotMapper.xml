@@ -52,6 +52,7 @@
     <result column="new_code" property="newCode" jdbcType="VARCHAR" />
     <result column="replay_date" jdbcType="TIMESTAMP" property="replayDate"/>
     <result column="all_extension_date" jdbcType="TIMESTAMP" property="allExtensionDate"/>
+    <result column="commit_descp" jdbcType="VARCHAR" property="commitDescp"/>
   </resultMap>
 
   <resultMap id="ExceptionProgramVoMap" type="com.longfor.itserver.entity.ExceptionProgramVo" >
@@ -63,6 +64,8 @@
     <result column="product_id" property="productId" jdbcType="VARCHAR" />
     <result column="program_status" property="programStatus" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="warning_days" property="warningDays" jdbcType="VARCHAR" />
+    <result column="warning" property="warning" jdbcType="VARCHAR" />
   </resultMap>
 
   <sql id="Base_Column_List" >
@@ -76,7 +79,7 @@
     dev_approval_date, test_approval_date, online_plan_date, dev_type, analyzing_conditions, 
     dev_workload, overall_cost, bid_dev_workload, bid_overall_cost, approval_status, 
     bpm_code, remark, approval_view, bid_oversingle_cost, suggestion, apply_account, cause_delay
-    , new_code, report_poor, replay_date, all_extension_date
+    , new_code, report_poor, replay_date, all_extension_date, commit_descp
   </sql>
 
   <select id="getListByProgramIdAndStatus" resultMap="BaseResultMap">
@@ -146,19 +149,23 @@
 
   <select id="getExceptionProgram" parameterType="map" resultMap="ExceptionProgramVoMap">
     select * from (
-      SELECT program_id,name,product_id,program_status,create_time from program_approval_snapshot
+      SELECT pas.program_id,pas.name,pas.product_id,p.program_status,pas.create_time,p.warning_days,
+    (SELECT pw.warning from program_warning pw where pw.program_id=pas.program_id ORDER BY warning desc LIMIT 0,1) warning
+        from program_approval_snapshot pas
+      LEFT JOIN program p on pas.program_id=p.id
       where
-        program_status in ('999','200') and approval_status = 110
+        pas.program_status in ('999','200') and pas.approval_status = 110
         <if test="programIdList != null">
-          and product_id in
+          and pas.product_id in
           <foreach item="item" index="index" collection="programIdList" open="(" separator="," close=")">
             #{item}
           </foreach>
         </if>
         <if test=" analyzingConditions != null and  analyzingConditions != '' and  analyzingConditions != -1">
-          and analyzing_conditions = #{analyzingConditions}
+          and pas.analyzing_conditions = #{analyzingConditions}
         </if>
-      order by create_time DESC
+      or p.warning_days <![CDATA[<]]> 0
+      order by pas.create_time DESC
     ) a
     GROUP BY a.program_id
     order by a.create_time DESC
@@ -167,20 +174,23 @@
 
   <select id="getExceptionProgramTotal" parameterType="map" resultType="int">
     select COUNT(program_id) from (
-      SELECT program_id,name,product_id,program_status,create_time from program_approval_snapshot
+      SELECT pas.program_id,pas.name,pas.product_id,p.program_status,pas.create_time
+      from program_approval_snapshot pas
+      LEFT JOIN program p on pas.program_id=p.id
       where
-      program_status in ('999','200') and approval_status = 110
+      pas.program_status in ('999','200') and pas.approval_status = 110
       <if test="programIdList != null">
-        and product_id in
+        and pas.product_id in
         <foreach item="item" index="index" collection="programIdList" open="(" separator="," close=")">
           #{item}
         </foreach>
       </if>
       <if test=" analyzingConditions != null and  analyzingConditions != '' and  analyzingConditions != -1">
-        and analyzing_conditions = #{analyzingConditions}
+        and pas.analyzing_conditions = #{analyzingConditions}
       </if>
-      GROUP BY program_id
-      order by create_time DESC
+      or p.warning_days <![CDATA[<]]> 0
+      GROUP BY pas.program_id
+      order by pas.create_time DESC
     ) a
   </select>
 

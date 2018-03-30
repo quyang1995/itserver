@@ -306,10 +306,14 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		String relationName = "";
 		if (demand.getRelationType().equals(1)) {
 			Product prod = productMapper.selectByPrimaryKey(demand.getRelationId());
-			relationName = prod.getName();
+			if(prod!=null){
+				relationName = prod.getName();
+			}
 		} else if (demand.getRelationType().equals(2)) {
 			Program prom = programMapper.selectByPrimaryKey(demand.getRelationId());
-			relationName = prom.getName();
+			if(prom!=null){
+				relationName = prom.getName();
+			}
 		}
 		demand.setRelationName(relationName);
 		/* 责任人 */

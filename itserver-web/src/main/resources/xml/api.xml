@@ -500,7 +500,8 @@
             <property ref="pageNum"/>
             <property ref="pageSize"/>
             <property name="accountId" type="string" required="true" maxLength="30"/>
-            <property name="status" type="int" required="true" area="-1,0,1,2,3,4"/>
+            <!--<property name="status" type="int" required="true" area="-1,0,1,2,3,4"/>-->
+            <property name="status" type="string" required="true" />
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
             <property name="channel" type="int" required="false" area="-1,0,1,2,3,4" />
             <property name="productId" type="int" required="false" />
@@ -519,7 +520,8 @@
     <item id="api_bug_export" description="导出BUG列表信息">
         <request>
             <property name="accountId" type="string" required="true" maxLength="30"/>
-            <property name="status" type="int" required="true" area="-1,0,1,2,3,4"/>
+            <!--<property name="status" type="int" required="true" area="-1,0,1,2,3,4"/>-->
+            <property name="status" type="string" required="true" />
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
             <property name="productId" type="int" required="false" />
             <property name="programId" type="int" required="false" />
@@ -661,7 +663,8 @@
             <property ref="pageNum"/>
             <property ref="pageSize"/>
             <property name="accountId" type="string" required="true" maxLength="30"/>
-            <property name="status" type="int" required="true" area="-1,0,1,2,3,4"/>
+            <!--<property name="status" type="int" required="true" area="-1,0,1,2,3,4"/>-->
+            <property name="status" type="string" required="true"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
             <property name="channel" type="int" required="false" area="-1,0,1,2,3" />
             <property name="productId" type="int" required="false" />
@@ -680,7 +683,8 @@
     <item id="api_demand_export" description="导出需求列表信息">
         <request>
             <property name="accountId" type="string" required="true" maxLength="30"/>
-            <property name="status" type="int" required="true" area="-1,0,1,2,3,4"/>
+            <!--<property name="status" type="int" required="true" area="-1,0,1,2,3,4"/>-->
+            <property name="status" type="string" required="true"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
             <property name="productId" type="int" required="false" />
             <property name="programId" type="int" required="false" />
@@ -1136,6 +1140,7 @@
         <request>
             <property name="programId" type="string" required="true"/>
             <property name="remark" type="string" required="true"/>
+            <property name="commitDescp" type="string" required="false"/>
             <property name="fileList" type="string" required="true"/>
             <property name="devType" type="int" required="true"/>
             <property name="analyzingConditions" type="int" required="true"/>
@@ -1173,7 +1178,7 @@
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
             <property name="tApproval" type="int" required="true"/>
-            <property name="reportPoor" type="int" required="false"/>
+            <property name="reportPoor" type="int" required="false" description="跟琼朔相关的项目，手动添加琼朔。1:需要琼朔审批2:不需要琼朔审批"/>
         </request>
     </item>
 
@@ -1259,7 +1264,7 @@
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
-            <property name="reportPoor" type="int" required="false"/>
+            <property name="reportPoor" type="int" required="false" description="跟琼朔相关的项目，手动添加琼朔。1:需要琼朔审批2:不需要琼朔审批"/>
         </request>
     </item>
 
@@ -1277,7 +1282,7 @@
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
-            <property name="reportPoor" type="int" required="false"/>
+            <property name="reportPoor" type="int" required="false" description="跟琼朔相关的项目，手动添加琼朔。1:需要琼朔审批2:不需要琼朔审批"/>
         </request>
     </item>
 
@@ -1299,7 +1304,7 @@
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
             <property name="tApproval" type="int" required="false"/>
-            <property name="reportPoor" type="int" required="false"/>
+            <property name="reportPoor" type="int" required="false" description="跟琼朔相关的项目，手动添加琼朔。1:需要琼朔审批2:不需要琼朔审批"/>
         </request>
     </item>
 
@@ -1329,7 +1334,7 @@
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
-            <property name="reportPoor" type="int" required="false"/>
+            <property name="reportPoor" type="int" required="false" description="跟琼朔相关的项目，手动添加琼朔。1:需要琼朔审批2:不需要琼朔审批"/>
         </request>
     </item>
 
@@ -1352,7 +1357,7 @@
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
-            <property name="reportPoor" type="int" required="false"/>
+            <property name="reportPoor" type="int" required="false" description="跟琼朔相关的项目，手动添加琼朔。1:需要琼朔审批2:不需要琼朔审批"/>
         </request>
     </item>
 
@@ -1374,7 +1379,7 @@
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
-            <property name="reportPoor" type="int" required="false"/>
+            <property name="reportPoor" type="int" required="false" description="跟琼朔相关的项目，手动添加琼朔。1:需要琼朔审批2:不需要琼朔审批"/>
         </request>
     </item>
 
@@ -1400,7 +1405,7 @@
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
             <property name="tApproval" type="int" required="false"/>
-            <property name="reportPoor" type="int" required="false"/>
+            <property name="reportPoor" type="int" required="false" description="跟琼朔相关的项目，手动添加琼朔。1:需要琼朔审批2:不需要琼朔审批"/>
         </request>
     </item>
 
@@ -1423,7 +1428,7 @@
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
-            <property name="reportPoor" type="int" required="false"/>
+            <property name="reportPoor" type="int" required="false" description="跟琼朔相关的项目，手动添加琼朔。1:需要琼朔审批2:不需要琼朔审批"/>
         </request>
     </item>
 
@@ -1446,7 +1451,7 @@
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
-            <property name="reportPoor" type="int" required="false"/>
+            <property name="reportPoor" type="int" required="false" description="跟琼朔相关的项目，手动添加琼朔。1:需要琼朔审批2:不需要琼朔审批"/>
         </request>
     </item>
 
@@ -1464,7 +1469,7 @@
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
-            <property name="reportPoor" type="int" required="false"/>
+            <property name="reportPoor" type="int" required="false" description="跟琼朔相关的项目，手动添加琼朔。1:需要琼朔审批2:不需要琼朔审批"/>
         </request>
     </item>
 
@@ -1500,7 +1505,7 @@
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
             <property name="tApproval" type="int" required="true"/>
-            <property name="reportPoor" type="int" required="false"/>
+            <property name="reportPoor" type="int" required="false" description="跟琼朔相关的项目，手动添加琼朔。1:需要琼朔审批2:不需要琼朔审批"/>
         </request>
     </item>
 
@@ -1536,7 +1541,7 @@
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
             <property name="tApproval" type="int" required="true"/>
-            <property name="reportPoor" type="int" required="false"/>
+            <property name="reportPoor" type="int" required="false" description="跟琼朔相关的项目，手动添加琼朔。1:需要琼朔审批2:不需要琼朔审批"/>
         </request>
     </item>
 
@@ -1560,7 +1565,7 @@
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
             <property name="tApproval" type="int" required="true"/>
-            <property name="reportPoor" type="int" required="false"/>
+            <property name="reportPoor" type="int" required="false" description="跟琼朔相关的项目，手动添加琼朔。1:需要琼朔审批2:不需要琼朔审批"/>
         </request>
     </item>
 
@@ -1982,6 +1987,135 @@
             <property name="remark" type="String" required="true"/>
             <property name="modifiedAccountId" type="String" required="true"/>
             <property name="modifiedName" type="String" required="true"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
+        /api/programDraft/add
+
+        说明:新增项目基本信息（草稿）
+
+    -->
+    <item id="api_programDraft_add" description="新增项目基本信息（草稿）">
+        <request>
+            <!--<property name="operationType" type="string" required="false" maxLength="3000"/>-->
+            <property name="productId" type="int" required="true"/>
+            <property name="name" type="string" required="true" maxLength="100"/>
+            <property name="descp" type="string" required="false" maxLength="3000"/>
+            <property name="likeProduct" type="string" required="false" maxLength="20"/>
+            <property name="likeProgram" type="string" required="false" maxLength="20"/>
+            <property name="type" type="int" required="true" area="0,1"/>
+            <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
+            <property name="modifiedName" type="string" required="true" maxLength="50"/>
+            <property name="personLiableList" type="string" required="true"/>
+            <property name="programManagerList" type="string" required="false"/>
+            <property name="productManagerList" type="string" required="false"/>
+            <property name="developerList" type="string" required="false"/>
+            <property name="uedList" type="string" required="false"/>
+            <property name="testingList" type="string" required="false"/>
+            <property name="businessList" type="string" required="false"/>
+            <property name="operationList" type="string" required="false"/>
+            <property name="operateList" type="string" required="false"/>
+            <property name="accountType" type="string" required="false" />
+
+            <property name="commitDate" type="string" required="false" description="立项时间"/>
+            <property name="demoApprovalDate" type="string" required="false" description="Demo评审时间"/>
+            <property name="biddingDate" type="string" required="false" description="招投标时间"/>
+            <property name="winningBidDate" type="string" required="false" description="中标时间"/>
+            <property name="prodApprovalDate" type="string" required="false" description="产品评审时间"/>
+            <property name="devApprovalDate" type="string" required="false" description="开发评审时间"/>
+            <property name="testApprovalDate" type="string" required="false" description="测试评审时间"/>
+            <property name="onlinePlanDate" type="string" required="false" description="上线计划时间"/>
+            <property name="grayReleaseDate" type="string" required="false" description="灰度发布时间"/>
+            <property name="replayDate" type="string" required="false" description="项目复盘时间"/>
+            <property name="allExtensionDate" type="string" required="false" description="全面推广时间"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
+        /api/programDraft/delete
+
+        说明:删除基本信息（草稿）
+
+    -->
+    <item id="api_programDraft_delete" description="删除（草稿）">
+        <request>
+            <property name="id" type="string" required="true"/>
+        </request>
+    </item>
+    <!--
+        URL:
+        /api/programDraft/get
+
+        说明:获取基本信息（草稿）
+
+    -->
+    <item id="api_programDraft_get" description="获取基本信息（草稿）">
+        <request>
+            <property name="operationType" type="string" required="true"/>
+            <property name="modifiedAccountId" type="string" required="true"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
+        /api/programDraft/applyNode
+        说明:审批（草稿）
+    -->
+    <item id="api_programDraft_applyNode" description="审批（草稿）">
+        <request>
+            <property name="operationType" type="string" required="true" description="操作类型"/>
+            <property name="modifiedAccountId" type="string" required="true" description="操作人员id"/>
+            <property name="modifiedName" type="string" required="true" description="操作人员name"/>
+            <!--项目基本信息-->
+            <property name="programId" type="string" required="true" description="项目id"/>
+            <property name="remark" type="string" required="false" description="内容摘要"/>
+            <property name="descp" type="string" required="false" description="项目描述"/>
+            <property name="commitDescp" type="string" required="false" description="立项说明"/>
+            <property name="fileList" type="string" required="false" description="文件"/>
+            <property name="devType" type="int" required="false" description="研发方式：1=招投标，2=自研"/>
+            <property name="analyzingConditions" type="int" required="false" description=" 判断条件：1=地产，2=商业，3=数据，4=冠寓，5=养老，6=产城，7=基础中心"/>
+            <property name="devWorkload" type="int" required="false" description="研发工作量预估"/>
+            <property name="overallCost" type="String" required="false" description="整体费用预估"/>
+            <property name="bidDevWorkload" type="String" required="false" description="研发工作量"/>
+            <property name="productId" type="string" required="false" description="归属产品"/>
+            <property name="productName" type="string" required="false" description="归属产品名称"/>
+            <property name="likeProduct" type="string" required="false" description="关联产品id字符串，e.g. 1,2,3,..."/>
+            <property name="type" type="string" required="false" description="公开性"/>
+            <property name="accountType" type="int" required="false" description="账户类型：0或者null或者空位内部账号，1-供方账号"/>
+            <!--项目计划时间-->
+            <property name="commitDate" type="string" required="false" description="立项日期（计划）"/>
+            <property name="demoApprovalDate" type="string" required="false" description="Demo评审日期（计划）"/>
+            <property name="biddingDate" type="string" required="false" description="招标日期（计划）"/>
+            <property name="winningBidDate" type="string" required="false" description="中标日期（计划）"/>
+            <property name="prodApprovalDate" type="string" required="false" description="产品评审日期（计划"/>
+            <property name="devApprovalDate" type="string" required="false" description="开发评审日期（计划）"/>
+            <property name="testApprovalDate" type="string" required="false" description="测试评审日期（计划）"/>
+            <property name="onlinePlanDate" type="string" required="false" description="上线计划日期（计划）"/>
+            <property name="grayReleaseDate" type="string" required="false" description="灰度发布日期（计划）"/>
+            <property name="allExtensionDate" type="string" required="false" description="全面推广时间（计划）"/>
+            <property name="replayDate" type="string" required="false" description="项目复盘（计划）"/>
+            <!--项目相关人员-->
+            <property name="personLiableList" type="string" required="false" description="责任人"/>
+            <property name="programManagerList" type="string" required="false" description="项目经理"/>
+            <property name="productManagerList" type="string" required="false" description="产品经理"/>
+            <property name="developerList" type="string" required="false" description="开发人员"/>
+            <property name="uedList" type="string" required="false" description="UED人员"/>
+            <property name="testingList" type="string" required="false" description="测试人员"/>
+            <property name="businessList" type="string" required="false" description="业务人员"/>
+            <property name="operationList" type="string" required="false" description="运维人员"/>
+            <property name="operateList" type="string" required="false" description="运营人员"/>
+            <!--审批人员-->
+            <property name="businessCenterList" type="string" required="false" description="业务中心负责人"/>
+            <property name="businessFunctionsList" type="string" required="false" description="业务职能人"/>
+            <property name="businessPresidentList" type="string" required="false" description="业务副总裁"/>
+            <property name="businessCenterListName" type="string" required="false" description="业务中心负责人Name"/>
+            <property name="businessFunctionsListName" type="string" required="false" description="业务职能人Name"/>
+            <property name="businessPresidentListName" type="string" required="false" description="业务副总裁Name"/>
+            <property name="tApproval" type="int" required="false" description="1-李，2-傅"/>
+            <property name="reportPoor" type="int" required="false" description="跟琼朔相关的项目，手动添加琼朔。1:需要琼朔审批2:不需要琼朔审批"/>
         </request>
     </item>
 </api>

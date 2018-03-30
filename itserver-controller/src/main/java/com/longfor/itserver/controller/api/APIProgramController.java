@@ -405,22 +405,31 @@ public class APIProgramController extends BaseController {
 	public Map programUpdate(HttpServletResponse response, HttpServletRequest request){
 		try{
 			Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-			/* 责任人 */
-			Map map = new HashMap();
-			map.put("programId", paramsMap.get("id"));
+
 			boolean isAllow = false;
-			map.put("employeeType", AvaStatusEnum.LIABLEAVA.getCode());
-			List<ProgramEmployee> personLiableList = this.getProgramEmployeeService().selectTypeList(map);
-			if(!"".equals(paramsMap.get("modifiedAccountId"))){
-				for(ProgramEmployee programEmployee : personLiableList){
-					if(programEmployee.getAccountId().equals(paramsMap.get("modifiedAccountId"))){
-						isAllow = true;
-						break;
+			String accountId = paramsMap.get("modifiedAccountId").toString();
+			String isAdmin = DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0";
+			//判断管理员角色，若为管理员，可以直接查看 0=非管理员，1=管理员
+			if ("1".equals(isAdmin)) {
+				isAllow = true;
+			} else {
+				/* 责任人 */
+				Map map = new HashMap();
+				map.put("programId", paramsMap.get("id"));
+				map.put("employeeType", AvaStatusEnum.LIABLEAVA.getCode());
+				List<ProgramEmployee> personLiableList = this.getProgramEmployeeService().selectTypeList(map);
+				if(!"".equals(accountId)){
+					for(ProgramEmployee programEmployee : personLiableList){
+						if(programEmployee.getAccountId().equals(paramsMap.get("modifiedAccountId"))){
+							isAllow = true;
+							break;
+						}
 					}
+				}else {
+					return CommonUtils.getResultMapByBizEnum(BizEnum.E9993,"modifiedAccountId");
 				}
-			}else {
-				return CommonUtils.getResultMapByBizEnum(BizEnum.E9993,"modifiedAccountId");
 			}
+
 			if(isAllow){
             /*更新操作*/
 				this.getProgramService().updateProgram(paramsMap);
@@ -581,7 +590,7 @@ public class APIProgramController extends BaseController {
 	 * 为了项目列表按照预警天数排序，为了项目列表按照预警天数排序，为了项目列表按照预警天数排序
 	 * @throws Exception
 	 */
-//	@Scheduled(cron = "0 28 11 ? * *")
+//	@Scheduled(cron = "0 6 19 ? * *")
 	//每天凌晨1点执行一次
 	@Scheduled(cron = "0 0 1 ? * *")
 	public void warningDaysTask() throws Exception{

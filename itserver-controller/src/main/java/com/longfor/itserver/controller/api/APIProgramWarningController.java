@@ -5,6 +5,7 @@ import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.controller.base.BaseController;
+import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ProgramWarning;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -100,6 +101,10 @@ public class APIProgramWarningController extends BaseController {
 			JSONObject json = (JSONObject) JSONObject.toJSON(paramsMap);
 			ProgramWarning programWarning = JSONObject.toJavaObject(json, ProgramWarning.class);
 			this.getProgramWarningService().updateByIdSelective(programWarning);
+			programWarning = this.getProgramWarningService().selectById(programWarning.getId());
+			//实时更新预警日期
+			Program program = this.getProgramService().selectById(programWarning.getProgramId());
+			this.getProgramService().warningTask(program);
 			resultMap.put("data",programWarning);
 		} catch (Exception e) {
 			e.printStackTrace();

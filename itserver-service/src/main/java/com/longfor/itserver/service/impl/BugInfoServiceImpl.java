@@ -80,10 +80,14 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         String relationName = "";
         if (bug.getRelationType().equals(1)) {
             Product prod = productMapper.selectByPrimaryKey(bug.getRelationId());
-            relationName = prod.getName();
+            if(prod!=null){
+                relationName = prod.getName();
+            }
         } else if (bug.getRelationType().equals(2)) {
             Program prom = programMapper.selectByPrimaryKey(bug.getRelationId());
-            relationName = prom.getName();
+            if(prom!=null){
+                relationName = prom.getName();
+            }
         }
         bug.setRelationName(relationName);
 		/* 责任人 */
