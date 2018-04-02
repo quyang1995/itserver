@@ -2056,6 +2056,7 @@
         <request>
             <property name="operationType" type="string" required="true"/>
             <property name="modifiedAccountId" type="string" required="true"/>
+            <property name="programId" type="string" required="false"/>
         </request>
     </item>
 

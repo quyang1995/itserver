@@ -63,6 +63,7 @@
     <result column="name" property="programName" jdbcType="VARCHAR" />
     <result column="product_id" property="productId" jdbcType="VARCHAR" />
     <result column="program_status" property="programStatus" jdbcType="VARCHAR" />
+    <result column="approval_status" property="approvalStatus" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="warning_days" property="warningDays" jdbcType="VARCHAR" />
     <result column="warning" property="warning" jdbcType="VARCHAR" />
@@ -149,7 +150,29 @@
 
   <select id="getExceptionProgram" parameterType="map" resultMap="ExceptionProgramVoMap">
     select * from (
-      SELECT pas.program_id,pas.name,pas.product_id,p.program_status,pas.create_time,p.warning_days,
+      SELECT pas.program_id,pas.name,pas.product_id,p.approval_status,
+      CASE
+      WHEN pas.program_status = '200' THEN  pas.program_status
+      WHEN pas.program_status = '999' THEN  pas.program_status
+      ELSE p.program_status END program_status,
+      CASE
+      WHEN pas.program_status = '200' THEN  pas.create_time
+      WHEN pas.program_status = '999' THEN  pas.create_time
+      WHEN p.program_status = '100' THEN  p.commit_date
+      WHEN p.program_status = '110' THEN  p.commit_date
+      WHEN p.program_status = '120' THEN  p.demo_approval_date
+      WHEN p.program_status = '130' THEN  p.bidding_date
+      WHEN p.program_status = '140' THEN  p.winning_bid_date
+      WHEN p.program_status = '150' THEN  p.prod_approval_date
+      WHEN p.program_status = '160' THEN  p.dev_approval_date
+      WHEN p.program_status = '170' THEN  p.test_approval_date
+      WHEN p.program_status = '180' THEN  p.online_plan_date
+      WHEN p.program_status = '190' THEN  p.gray_release_date
+      WHEN p.program_status = '193' THEN  p.all_extension_date
+      WHEN p.program_status = '195' THEN  p.replay_date
+      WHEN p.program_status = '900' THEN  pas.create_time
+      ELSE pas.create_time END create_time,
+      p.warning_days,
     (SELECT pw.warning from program_warning pw where pw.program_id=pas.program_id ORDER BY warning desc LIMIT 0,1) warning
         from program_approval_snapshot pas
       LEFT JOIN program p on pas.program_id=p.id

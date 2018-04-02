@@ -78,6 +78,9 @@
         <if test="operationType != null and operationType != ''">
           operation_type = #{operationType}
         </if>
+        <if test="programId != null and programId != ''">
+          AND program_id = #{programId}
+        </if>
         <if test="modifiedAccountId != null and modifiedAccountId != ''">
           AND  modified_account_id = #{modifiedAccountId}
         </if>

@@ -13,6 +13,7 @@ public class ExceptionProgramVo implements Serializable {
     private String programName;
     private String productId;
     private String programStatus;
+    private String approvalStatus;
     @JsonSerialize(using = CustomFullDateSerializer.class)
     private Date createTime;
     private String warningDays;
@@ -82,5 +83,13 @@ public class ExceptionProgramVo implements Serializable {
 
     public void setWarning(String warning) {
         this.warning = warning;
+    }
+
+    public String getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    public void setApprovalStatus(String approvalStatus) {
+        this.approvalStatus = approvalStatus;
     }
 }

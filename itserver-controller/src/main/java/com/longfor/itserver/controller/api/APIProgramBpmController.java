@@ -46,7 +46,7 @@ public class APIProgramBpmController extends BaseController {
 	 */
 	@RequestMapping(value = "/apply", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map programList(HttpServletRequest request) throws IOException {
+	public Map programList(HttpServletRequest request){
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -84,7 +84,7 @@ public class APIProgramBpmController extends BaseController {
 	 */
 	@RequestMapping(value = "/approvalPass", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map approvalPass(HttpServletRequest request) throws IOException {
+	public Map approvalPass(HttpServletRequest request){
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);

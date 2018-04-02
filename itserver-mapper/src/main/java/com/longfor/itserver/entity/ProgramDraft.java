@@ -1,5 +1,8 @@
 package com.longfor.itserver.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import net.mayee.commons.CustomDateSerializer;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
@@ -15,6 +18,12 @@ public class ProgramDraft {
      */
     @Column(name = "operation_type")
     private Integer operationType;
+
+    /**
+     * 项目id
+     */
+    @Column(name = "program_id")
+    private Long programId;
 
     /**
      * 归属产品
@@ -80,9 +89,11 @@ public class ProgramDraft {
     private String modifiedName;
 
     @Column(name = "create_time")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date createTime;
 
     @Column(name = "modified_time")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date modifiedTime;
 
     /**
@@ -95,54 +106,63 @@ public class ProgramDraft {
      * 立项日期
      */
     @Column(name = "commit_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date commitDate;
 
     /**
      * Demo评审日期
      */
     @Column(name = "demo_approval_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date demoApprovalDate;
 
     /**
      * 招标日期
      */
     @Column(name = "bidding_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date biddingDate;
 
     /**
      * 中标日期
      */
     @Column(name = "winning_bid_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date winningBidDate;
 
     /**
      * 产品评审日期
      */
     @Column(name = "prod_approval_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date prodApprovalDate;
 
     /**
      * 开发评审日期
      */
     @Column(name = "dev_approval_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date devApprovalDate;
 
     /**
      * 测试评审日期
      */
     @Column(name = "test_approval_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date testApprovalDate;
 
     /**
      * 上线计划日期
      */
     @Column(name = "online_plan_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date onlinePlanDate;
 
     /**
      * 灰度发布日期
      */
     @Column(name = "gray_release_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date grayReleaseDate;
 
     /**
@@ -191,12 +211,14 @@ public class ProgramDraft {
      * 项目复盘时间
      */
     @Column(name = "replay_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date replayDate;
 
     /**
      * 全面推广时间
      */
     @Column(name = "all_extension_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date allExtensionDate;
 
     /**
@@ -923,5 +945,13 @@ public class ProgramDraft {
 
     public void setReportPoor(String reportPoor) {
         this.reportPoor = reportPoor;
+    }
+
+    public Long getProgramId() {
+        return programId;
+    }
+
+    public void setProgramId(Long programId) {
+        this.programId = programId;
     }
 }

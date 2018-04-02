@@ -42,11 +42,9 @@ public class ProgramDraftServiceImpl extends AdminBaseService<ProgramDraft> impl
     @Override
     @Transactional
     public boolean addProgramDraft(Map map) throws Exception{
-        //删除新数据
-        ProgramDraft oldProgramDraft = new ProgramDraft();
-        oldProgramDraft.setModifiedAccountId(map.get("modifiedAccountId").toString());
-        oldProgramDraft.setOperationType(100);
-        programDraftMapper.delete(oldProgramDraft);
+        //删除旧数据
+        map.put("operationType",100);
+        this.deleteDraft(map);
         //插入新数据
         JSONObject json = (JSONObject) JSONObject.toJSON(map);
         Integer accountType = AccountUitl.getAccountType(map);
@@ -205,11 +203,8 @@ public class ProgramDraftServiceImpl extends AdminBaseService<ProgramDraft> impl
     @Override
     @Transactional
     public boolean applyNode(Map map) throws Exception{
-        //删除新数据
-        ProgramDraft oldProgramDraft = new ProgramDraft();
-        oldProgramDraft.setModifiedAccountId(map.get("modifiedAccountId").toString());
-        oldProgramDraft.setOperationType(Integer.valueOf(map.get("operationType").toString()));
-        programDraftMapper.delete(oldProgramDraft);
+        //删除旧数据
+        this.deleteDraft(map);
         //插入新数据
         JSONObject json = (JSONObject) JSONObject.toJSON(map);
         Integer accountType = AccountUitl.getAccountType(map);
@@ -296,6 +291,28 @@ public class ProgramDraftServiceImpl extends AdminBaseService<ProgramDraft> impl
             List<ProgramEmployeeDraft> operateList = programEmployeeDraftService.selectTypeList(map);
             model.setOperateList(operateList);
         }
+    }
+
+    /**
+     * 根据操作类型跟人员删除草稿
+     * @param map
+     */
+    private void deleteDraft (Map map){
+        ProgramDraft oldProgramDraft = new ProgramDraft();
+        oldProgramDraft.setModifiedAccountId(map.get("modifiedAccountId").toString());
+        oldProgramDraft.setOperationType(Integer.valueOf(map.get("operationType").toString()));
+        if(map.get("programId")!=null){
+            oldProgramDraft.setProgramId(Long.valueOf(map.get("programId").toString()));
+        }
+        List<ProgramDraft>  list = programDraftMapper.select(oldProgramDraft);
+        //先删除人员，后删除草稿
+        for (ProgramDraft draft:list) {
+            ProgramEmployeeDraft empty = new ProgramEmployeeDraft();
+            empty.setProgramId(draft.getId());
+            programEmployeeDraftMapper.delete(empty);
+
+        }
+        programDraftMapper.delete(oldProgramDraft);
     }
 
 }

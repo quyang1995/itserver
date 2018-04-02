@@ -1850,8 +1850,6 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             employeeChangeLog.setModifiedTime(TimeUtils.getTodayByDateTime());
             employeeChangeLog.setAccountType(0);
             programEmployeeChangeLogMapper.insertUseGeneratedKeys(employeeChangeLog);
-            //实时修改预警天数
-            this.warningTask(program);
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException("发生异常");
@@ -2567,7 +2565,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     @Override
     public int warningTask(Program program){
         if(program.getProgramStatus()==ProgramStatusNewEnum.WC.getCode()
-                || program.getProgramStatus()==ProgramStatusNewEnum.ZZ.getCode()) {
+                || program.getProgramStatus()==ProgramStatusNewEnum.ZZ.getCode()
+                || program.getId()==null) {
             return 0;
         }
         Map<String,Object> map = new HashMap<>();
