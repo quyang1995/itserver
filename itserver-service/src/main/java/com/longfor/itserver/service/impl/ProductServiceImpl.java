@@ -50,6 +50,23 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		return list;
 	}
 
+	@Override
+	public List<Map> exportList(Map map) {
+		List<Map> list= productMapper.exportList(map);
+//		for (Map obj:list){
+//			Object analyzingConditions=obj.get("analyzingConditions");
+//			String anaName = "";
+//			if(analyzingConditions!=null){
+//				anaName = obj.get("analyzingConditions").toString().replace("1","地产系统相关")
+//						.replace("2","商业系统相关").replace("3","数据系统相关")
+//						.replace("4","冠寓系统相关").replace("5","养老系统相关")
+//						.replace("6","产城系统相关").replace("7","基础中心系统相关");
+//			}
+//			obj.put("anaName",anaName);
+//		}
+		return list;
+	}
+
 	/**
 	 * 产品责任人
 	 * @param list

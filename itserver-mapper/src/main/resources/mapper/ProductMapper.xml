@@ -116,6 +116,62 @@
         ORDER BY ta.create_time DESC
     </select>
 
+    <select id="exportList" parameterType="map" resultType="map">
+        SELECT
+        ta.id,
+        ta.`name`,
+        ta.CODE code,
+        CASE
+        WHEN ta.type = 0 THEN  '私有'
+        WHEN ta.type = 1 THEN  '公开'
+        ELSE '' END type,
+        CASE
+        WHEN ta.`status` = 0 THEN  '已下线'
+        WHEN ta.`status` = 1 THEN  '已上线'
+        WHEN ta.`status` = 2 THEN  '待上线'
+        ELSE '' END status,
+        ta.analyzing_conditions analyzingConditions,
+        REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(analyzing_conditions,'1','地产系统相关'),'2','商业系统相关'),'3','数据系统相关'),'4','冠寓系统相关'),'5','养老系统相关'),'6','产城系统相关'),'7','基础中心系统相关') anaName,
+        GROUP_CONCAT(tb.employee_name) employeeName,
+        substring(ta.create_time,1,10) createTime
+        FROM
+        product ta
+        LEFT JOIN product_employee tb ON ta.id = tb.product_id and tb.employee_type = 1
+        WHERE 1=1
+        <if test="isAdmin == 1">
+            <if test="mySelf != null and mySelf != '' and mySelf == 1">
+                AND (tb.account_id = #{accountId}
+                OR ta.contact_account_id = #{accountId})
+            </if>
+        </if>
+        <if test="isAdmin == 0">
+            <if test="mySelf != null and mySelf != '' and mySelf == 0">
+                AND (tb.account_id = #{accountId}
+                OR ta.contact_account_id = #{accountId}
+                OR ta.type=1)
+            </if>
+            <if test="mySelf != null and mySelf != '' and mySelf == 1">
+                AND (tb.account_id = #{accountId}
+                OR ta.contact_account_id = #{accountId})
+            </if>
+        </if>
+        <if test="status != null and status != '' and status != -1 ">
+            AND ta.status= #{status}
+        </if>
+        <if test="label != null and label != '' and label != ',-1,' ">
+            AND ta.label  LIKE concat('%',#{label},'%')
+        </if>
+        <if test="searchText != null and searchText != ''">
+            AND (tb.employee_name LIKE concat('%',#{searchText},'%') OR ta.name LIKE concat('%',#{searchText},'%') OR
+            ta.contact_employee_name LIKE concat('%',#{searchText},'%') OR ta.label LIKE concat('%',#{searchText},'%'))
+        </if>
+        <if test="analyzingConditions != null and analyzingConditions != '' and analyzingConditions != -1">
+            AND ta.analyzing_conditions LIKE concat('%',#{analyzingConditions},'%')
+        </if>
+        GROUP BY ta.id
+        ORDER BY ta.create_time DESC
+    </select>
+
     <!--获取产品列表带各状态统计-->
     <select id="productCountList" parameterType="map" resultMap="ApiBaseResultMap">
         SELECT DISTINCT ta.id,ta.`name`,ta.analyzing_conditions as analyzingConditions,

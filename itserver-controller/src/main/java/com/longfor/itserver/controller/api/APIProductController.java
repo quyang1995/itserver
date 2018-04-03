@@ -54,24 +54,55 @@ public class APIProductController extends BaseController {
         /* 获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
         Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-
-        /* 获取查询用例 */
-        ELExample elExample = new ELExample(request, Product.class);
-
-        /* 查询数据 and admin权限判断 */
-        String accountId = paramsMap.get("accountId");
-//        paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
-        paramsMap.put("isAdmin", "1");
-        PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
-        List<PsProductCount> products = this.getProductService().searchList(paramsMap);
-
         /*返回数据*/
-        Map<String, Object> map = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-        map.put("productList", products);
-        map.put(APIHelper.PAGE_NUM, elExample.getPageNum());
-        map.put(APIHelper.PAGE_SIZE, elExample.getPageSize());
-        map.put(APIHelper.TOTAL, new PageInfo(products).getTotal());
-        return map;
+        Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        try{
+            LOG.info("------list:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+            /* 获取查询用例 */
+            ELExample elExample = new ELExample(request, Product.class);
+            /* 查询数据 and admin权限判断 */
+            String accountId = paramsMap.get("accountId");
+//        paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
+            paramsMap.put("isAdmin", "1");
+            PageHelper.startPage(elExample.getPageNum(), elExample.getPageSize(), true);
+            List<PsProductCount> products = this.getProductService().searchList(paramsMap);
+            resultMap.put("productList", products);
+            resultMap.put(APIHelper.PAGE_NUM, elExample.getPageNum());
+            resultMap.put(APIHelper.PAGE_SIZE, elExample.getPageSize());
+            resultMap.put(APIHelper.TOTAL, new PageInfo(products).getTotal());
+        }catch (Exception e){
+            e.printStackTrace();
+            resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 产品列表导出
+     *
+     * @param response
+     * @param request
+     * @return Map
+     */
+    @RequestMapping(value = "/exportList", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Map exportList(HttpServletRequest request, HttpServletResponse response) {
+        /* 获得已经验证过的参数map */
+        @SuppressWarnings("unchecked")
+        Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        /*返回数据*/
+        Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        try{
+            LOG.info("------exportList:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+            /* 查询数据 and admin权限判断 */
+            paramsMap.put("isAdmin", "1");
+            List<Map> products = this.getProductService().exportList(paramsMap);
+            resultMap.put("productList", products);
+        }catch (Exception e){
+            e.printStackTrace();
+            resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+        }
+        return resultMap;
     }
 
     /**

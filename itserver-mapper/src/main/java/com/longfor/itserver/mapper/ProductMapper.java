@@ -11,6 +11,14 @@ import java.util.Map;
 
 public interface ProductMapper extends BeeMapper<Product> {
     List<PsProductCount> selectList(Map map);
+
+    /**
+     * d导出项目列表
+     * @param map
+     * @return
+     */
+    List<Map> exportList(Map map);
+
     List<PsProductCount> selectLikeList(Map map);
     List<Product>  selectIdList(String likeProduct);
     /**

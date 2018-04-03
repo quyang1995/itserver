@@ -1,5 +1,6 @@
 package com.longfor.itserver.controller.api;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.longfor.itserver.common.constant.ConfigConsts;
@@ -14,6 +15,8 @@ import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.helper.APIHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +42,7 @@ import java.util.Map;
 @RequestMapping(value = "/api/program")
 @Controller
 public class APIProgramController extends BaseController {
+	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	/**
 	 * 项目列表
@@ -374,8 +378,9 @@ public class APIProgramController extends BaseController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public Map programAdd(HttpServletResponse response, HttpServletRequest request) throws IOException, JSONException {
+		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		try{
-			Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------/add:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			//name唯一检查
 			Program checkProgram = new Program();
 			String programName = paramsMap.get("name").toString();
@@ -403,9 +408,9 @@ public class APIProgramController extends BaseController {
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public Map programUpdate(HttpServletResponse response, HttpServletRequest request){
+		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		try{
-			Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-
+			LOG.info("------/update:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			boolean isAllow = false;
 			String accountId = paramsMap.get("modifiedAccountId").toString();
 			String isAdmin = DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0";
@@ -451,6 +456,7 @@ public class APIProgramController extends BaseController {
 		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
+			LOG.info("------/changeLog/list:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			CommonUtils.buildPageParams(paramsMap);
 			resultMap.put("list",this.getProgramEmployeeChangeLogService().orderLimitList(paramsMap));
 			resultMap.put(APIHelper.PAGE_NUM, paramsMap.get("pageNum"));
@@ -474,8 +480,9 @@ public class APIProgramController extends BaseController {
 	@RequestMapping(value = "/delEmployee", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public Map delEmp(HttpServletRequest request, HttpServletResponse response) {
+		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		try{
-			Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------delEmployee:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			String programId = (String) paramsMap.get("programId");
 			String accountId = (String) paramsMap.get("accountId");
 			String accountType = String.valueOf(AccountUitl.getAccountType(paramsMap));
@@ -501,7 +508,6 @@ public class APIProgramController extends BaseController {
 				employee.setEmployeeType(AvaStatusEnum.MEMBERAVA.getCode());
 				this.getProgramEmployeeService().delEmployee(employee,accountType);
 			}
-
 			return CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -520,9 +526,15 @@ public class APIProgramController extends BaseController {
 	@ResponseBody
 	public Map productIdAllList(HttpServletRequest request,	HttpServletResponse response){
 		Map parsmsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-		List list = this.getProgramService().productIdAllList(parsmsMap);
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-		resultMap.put("list",list);
+		try{
+			LOG.info("------updateStatus:-----------------"+ JSON.toJSONString(parsmsMap)+"-----------------------");
+			List list = this.getProgramService().productIdAllList(parsmsMap);
+			resultMap.put("list",list);
+		}catch (Exception e){
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
 		return resultMap;
 	}
 
@@ -530,8 +542,9 @@ public class APIProgramController extends BaseController {
 	@RequestMapping(value = "/update/status",method = RequestMethod.POST,produces = {"application/json;charset=utf-8"})
 	@ResponseBody
 	public Map updateStatus(HttpServletRequest request,HttpServletResponse response){
+		Map paramsMap= (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		try{
-			Map paramsMap= (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------updateStatus:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			//状态值有效性验证
 			int code = Integer.parseInt((String) paramsMap.get("status"));
 			ProgramStatusEnum programStatusEnum = ProgramStatusEnum.getByCode(code);
@@ -558,6 +571,7 @@ public class APIProgramController extends BaseController {
 		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
+			LOG.info("------exportProgramList:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			String programStatus = paramsMap.get("programStatus").toString();
 			if(StringUtils.isNotBlank(programStatus) && !"0".equals(programStatus)){
 				String [] programStatusList = programStatus.split(",");
@@ -590,9 +604,9 @@ public class APIProgramController extends BaseController {
 	 * 为了项目列表按照预警天数排序，为了项目列表按照预警天数排序，为了项目列表按照预警天数排序
 	 * @throws Exception
 	 */
-	@Scheduled(cron = "0 25 15 ? * *")
+//	@Scheduled(cron = "0 40 14 ? * *")
 	//每天凌晨1点执行一次
-//	@Scheduled(cron = "0 0 1 ? * *")
+	@Scheduled(cron = "0 0 1 ? * *")
 	public void warningDaysTask() throws Exception{
 		try{
 			this.getProgramService().warningDaysTask();

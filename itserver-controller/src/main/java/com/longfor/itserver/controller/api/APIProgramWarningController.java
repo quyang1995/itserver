@@ -1,5 +1,6 @@
 package com.longfor.itserver.controller.api;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
@@ -7,6 +8,8 @@ import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ProgramWarning;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,6 +28,7 @@ import java.util.Map;
 @RequestMapping(value = "/api/warning")
 @Controller
 public class APIProgramWarningController extends BaseController {
+	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	/**
 	 * warning列表
@@ -38,6 +42,7 @@ public class APIProgramWarningController extends BaseController {
 		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
+			LOG.info("------list:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			resultMap.put("list",this.getProgramWarningService().getListByWhere(paramsMap));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -58,6 +63,7 @@ public class APIProgramWarningController extends BaseController {
 		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
+			LOG.info("------add:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			resultMap.put("data",this.getProgramWarningService().addProgramWarning(paramsMap));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -78,6 +84,7 @@ public class APIProgramWarningController extends BaseController {
 		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
+			LOG.info("------get:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			resultMap.put("data",this.getProgramWarningService().selectById(Long.valueOf(paramsMap.get("id").toString())));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -98,6 +105,7 @@ public class APIProgramWarningController extends BaseController {
 		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
+			LOG.info("------update:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			JSONObject json = (JSONObject) JSONObject.toJSON(paramsMap);
 			ProgramWarning programWarning = JSONObject.toJavaObject(json, ProgramWarning.class);
 			this.getProgramWarningService().updateByIdSelective(programWarning);

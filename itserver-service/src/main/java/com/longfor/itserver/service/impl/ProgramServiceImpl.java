@@ -2556,8 +2556,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     }
 
     /**
-     *  differentDays>=3天的，按照绿色的正常显示，
-     *  0<=differentDays<3天的，按照黄色的显示，
+     *  differentDays>=2天的，按照绿色的正常显示，
+     *  0<=differentDays<2天的，按照黄色的显示，
      *  differentDays<0天的，按照红色的显示，
      *  预警值：0=关闭手动，1=黄色中风险-存在潜在问题，进度可控，2=红色高风险-可能导致延期，进度不可控
      * @param program

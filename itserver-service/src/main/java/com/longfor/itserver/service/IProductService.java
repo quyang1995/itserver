@@ -12,6 +12,14 @@ import java.util.Map;
 
 public interface IProductService extends IAdminService<Product> {
     List<PsProductCount> searchList(Map map);
+
+    /**
+     * 导出项目列表
+     * @param map
+     * @return
+     */
+    List<Map> exportList(Map map);
+
     List<PsProductCount> searchLikeList(Map map);
     Map<String, Object> addProduct(Map map);
     List<Product> searchIdList(String likeProduct);
