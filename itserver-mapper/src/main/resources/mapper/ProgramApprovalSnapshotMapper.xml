@@ -150,7 +150,7 @@
 
   <select id="getExceptionProgram" parameterType="map" resultMap="ExceptionProgramVoMap">
     select * from (
-      SELECT pas.program_id,pas.name,pas.product_id,p.approval_status,
+      SELECT p.id program_id,p.name,p.product_id,p.approval_status,
       CASE
       WHEN pas.program_status = '200' THEN  pas.program_status
       WHEN pas.program_status = '999' THEN  pas.program_status
@@ -174,8 +174,8 @@
       ELSE pas.create_time END create_time,
       p.warning_days,
     (SELECT pw.warning from program_warning pw where pw.program_id=pas.program_id ORDER BY warning desc LIMIT 0,1) warning
-        from program_approval_snapshot pas
-      LEFT JOIN program p on pas.program_id=p.id
+        from  program p
+      LEFT JOIN  (SELECT * from program_approval_snapshot GROUP BY program_id ORDER BY create_time desc ) pas on pas.program_id=p.id
       where
         pas.program_status in ('999','200') and pas.approval_status = 110
         <if test="programIdList != null">
@@ -190,16 +190,15 @@
       or p.warning_days <![CDATA[<]]> 0
       order by pas.create_time DESC
     ) a
-    GROUP BY a.program_id
     order by a.create_time DESC
     LIMIT #{startRow},#{endRow}
   </select>
 
   <select id="getExceptionProgramTotal" parameterType="map" resultType="int">
     select COUNT(program_id) from (
-      SELECT pas.program_id,pas.name,pas.product_id,p.program_status,pas.create_time
-      from program_approval_snapshot pas
-      LEFT JOIN program p on pas.program_id=p.id
+      SELECT p.id program_id,pas.name,pas.product_id,p.program_status,pas.create_time
+      from  program p
+      LEFT JOIN  (SELECT * from program_approval_snapshot GROUP BY program_id ORDER BY create_time desc ) pas on pas.program_id=p.id
       where
       pas.program_status in ('999','200') and pas.approval_status = 110
       <if test="programIdList != null">
@@ -212,7 +211,6 @@
         and pas.analyzing_conditions = #{analyzingConditions}
       </if>
       or p.warning_days <![CDATA[<]]> 0
-      GROUP BY pas.program_id
       order by pas.create_time DESC
     ) a
   </select>

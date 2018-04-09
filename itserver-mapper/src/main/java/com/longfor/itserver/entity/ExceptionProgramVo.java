@@ -1,7 +1,7 @@
 package com.longfor.itserver.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import net.mayee.commons.CustomFullDateSerializer;
+import net.mayee.commons.CustomDateSerializer;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,7 +14,7 @@ public class ExceptionProgramVo implements Serializable {
     private String productId;
     private String programStatus;
     private String approvalStatus;
-    @JsonSerialize(using = CustomFullDateSerializer.class)
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date createTime;
     private String warningDays;
     private String warning;

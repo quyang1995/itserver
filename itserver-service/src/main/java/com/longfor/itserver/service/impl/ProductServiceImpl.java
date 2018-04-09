@@ -188,23 +188,23 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 
 	/**
 	 * 根据规则生成新的产品code
-	 * 例：IT_CP000001
+	 * 例：CP000001
 	 * @return
 	 */
 	private String generateProductNewCode(){
 		String newCode = productMapper.getNewCode();
 		if (StringUtils.isBlank(newCode)) {
-			newCode = "IT_CP000001";
+			newCode = "CP000001";
 			return newCode;
 		}
-		Integer newNum = Integer.parseInt(newCode.substring(5,newCode.length()))+1;
+		Integer newNum = Integer.parseInt(newCode.substring(2,newCode.length()))+1;
 		String newNumStr = newNum.toString();
 		Integer j  = newNumStr.length();
 		for(int i = 0; i< 6 - j; i++) {
 			newNumStr = "0" + newNumStr;
 		}
 		StringBuffer sb = new StringBuffer();
-		sb.append("IT_CP" + newNumStr);
+		sb.append("CP" + newNumStr);
 		return sb.toString();
 	}
 

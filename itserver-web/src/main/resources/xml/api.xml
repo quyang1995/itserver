@@ -1166,12 +1166,24 @@
             <property name="analyzingConditions" type="int" required="true"/>
             <property name="devWorkload" type="int" required="true"/>
             <property name="overallCost" type="String" required="true"/>
-            <property name="commitDate" type="string" required="true"/>
-            <property name="demoApprovalDate" type="string" required="false"/>
-            <property name="biddingDate" type="string" required="false"/>
-            <property name="prodApprovalDate" type="string" required="false"/>
-            <property name="winningBidDate" type="string" required="false"/>
-            <property name="grayReleaseDate" type="string" required="true"/>
+            <!--<property name="commitDate" type="string" required="true"/>-->
+            <!--<property name="demoApprovalDate" type="string" required="false"/>-->
+            <!--<property name="biddingDate" type="string" required="false"/>-->
+            <!--<property name="prodApprovalDate" type="string" required="false"/>-->
+            <!--<property name="winningBidDate" type="string" required="false"/>-->
+            <!--<property name="grayReleaseDate" type="string" required="true"/>-->
+
+            <property name="commitDate" type="string" required="true" description="立项日期（计划）"/>
+            <property name="demoApprovalDate" type="string" required="true" description="Demo评审日期（计划）"/>
+            <property name="biddingDate" type="string" required="false" description="招标日期（计划）"/>
+            <property name="winningBidDate" type="string" required="false" description="中标日期（计划）"/>
+            <property name="prodApprovalDate" type="string" required="true" description="产品评审日期（计划"/>
+            <property name="devApprovalDate" type="string" required="true" description="开发评审日期（计划）"/>
+            <property name="testApprovalDate" type="string" required="true" description="测试评审日期（计划）"/>
+            <property name="onlinePlanDate" type="string" required="true" description="上线计划日期（计划）"/>
+            <property name="grayReleaseDate" type="string" required="true" description="灰度发布日期（计划）"/>
+            <property name="allExtensionDate" type="string" required="false" description="全面推广时间（计划）"/>
+            <property name="replayDate" type="string" required="false" description="项目复盘（计划）"/>
 
             <property name="personLiableList" type="string" required="true" description="责任人"/>
             <property name="programManagerList" type="string" required="true" description="项目经理"/>
@@ -1339,10 +1351,10 @@
             <property name="remark" type="string" required="true"/>
             <property name="fileList" type="string" required="true"/>
             <property name="prodApprovalDate" type="string" required="true"/>
-            <property name="researchDate" type="string" required="true"/>
+            <property name="devApprovalDate" type="string" required="true"/>
             <property name="grayReleaseDate" type="string" required="true"/>
-            <property name="testDate" type="string" required="true"/>
-            <property name="onlineDate" type="string" required="true"/>
+            <property name="testApprovalDate" type="string" required="true"/>
+            <property name="onlinePlanDate" type="string" required="true"/>
             <property name="replayDate" type="string" required="false"/>
             <property name="allExtensionDate" type="string" required="false"/>
 
@@ -1502,25 +1514,16 @@
         <request>
             <property name="programId" type="string" required="true"/>
             <property name="remark" type="string" required="true"/>
-            <!--<property name="causeDelay" type="string" required="true"/>-->
             <property name="fileList" type="string" required="false"/>
 
             <property name="grayReleaseDate" type="string" required="true"/>
-            <!--<property name="demandDate" type="string" required="false"/>-->
-            <!--<property name="developmentDate" type="string" required="false"/>-->
-            <!--<property name="testReviewDate" type="string" required="false"/>-->
-            <property name="onlineDate" type="string" required="true"/>
-            <!--<property name="devWorkloadChange" type="string" required="false"/>-->
-            <!--<property name="overallCost" type="string" required="false"/>-->
+            <property name="onlinePlanDate" type="string" required="true"/>
             <property name="replayDate" type="string" required="false"/>
             <property name="allExtensionDate" type="string" required="false"/>
 
             <property name="developerList" type="string" required="true" description="开发人员"/>
             <property name="businessList" type="string" required="true" description="业务中心人员"/>
             <property name="businessCenterList" type="string" required="true" description="业务中心负责人"/>
-            <!--<property name="itCenterLeaderList" type="string" required="true" description="IT中心负责人guid"/>-->
-
-            <!--<property name="counterSigners" type="string" required="true"/>-->
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
             <property name="accountType" type="int" required="true"/>
@@ -1543,10 +1546,10 @@
             <property name="devWorkloadChange" type="string" required="true"/>
             <property name="overallCost" type="string" required="true"/>
             <property name="grayReleaseDate" type="string" required="true"/>
-            <property name="demandDate" type="string" required="true"/>
-            <property name="developmentDate" type="string" required="true"/>
+            <property name="prodApprovalDate" type="string" required="true"/>
+            <property name="devApprovalDate" type="string" required="true"/>
             <property name="testReviewDate" type="string" required="true"/>
-            <property name="onlineDate" type="string" required="true"/>
+            <property name="onlinePlanDate" type="string" required="true"/>
             <property name="replayDate" type="string" required="false"/>
             <property name="allExtensionDate" type="string" required="false"/>
 
@@ -2019,16 +2022,16 @@
     -->
     <item id="api_programDraft_add" description="新增项目基本信息（草稿）">
         <request>
-            <!--<property name="operationType" type="string" required="false" maxLength="3000"/>-->
-            <property name="productId" type="int" required="true"/>
-            <property name="name" type="string" required="true" maxLength="100"/>
+            <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
+            <property name="modifiedName" type="string" required="true" maxLength="50"/>
+
+            <property name="productId" type="int" required="false"/>
+            <property name="name" type="string" required="false" maxLength="100"/>
             <property name="descp" type="string" required="false" maxLength="3000"/>
             <property name="likeProduct" type="string" required="false" maxLength="20"/>
             <property name="likeProgram" type="string" required="false" maxLength="20"/>
-            <property name="type" type="int" required="true" area="0,1"/>
-            <property name="modifiedAccountId" type="string" required="true" maxLength="50"/>
-            <property name="modifiedName" type="string" required="true" maxLength="50"/>
-            <property name="personLiableList" type="string" required="true"/>
+            <property name="type" type="int" required="false" area="0,1"/>
+            <property name="personLiableList" type="string" required="false"/>
             <property name="programManagerList" type="string" required="false"/>
             <property name="productManagerList" type="string" required="false"/>
             <property name="developerList" type="string" required="false"/>

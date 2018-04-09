@@ -158,6 +158,8 @@
         p.`name` name,
         p.product_name productName,
         p.type type,
+        p.dev_workload devWorkload,
+        p.overall_cost overallCost,
         p.warning_days warningDays,
         p.program_status programStatus,
         CASE
@@ -357,7 +359,7 @@
 
     <!-- 获取最新的newCode -->
     <select id="getNewCode" resultType="String">
-        SELECT  new_code FROM program ORDER BY create_time DESC LIMIT 0,1
+        SELECT  new_code FROM program ORDER BY id DESC LIMIT 0,1
     </select>
 
     <select id="getCountByProductId" parameterType="map" resultType="int">

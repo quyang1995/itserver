@@ -1127,10 +1127,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programMapper.updateByPrimaryKey(program);
 
             if(StringUtils.isNotBlank(paramsMap.get("grayReleaseDate")))program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("grayReleaseDate"),DateUtil.PATTERN_DATE));
-            if(StringUtils.isNotBlank(paramsMap.get("demandDate")))program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("demandDate"),DateUtil.PATTERN_DATE));
-            if(StringUtils.isNotBlank(paramsMap.get("developmentDate")))program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("developmentDate"),DateUtil.PATTERN_DATE));
-            if(StringUtils.isNotBlank(paramsMap.get("testReviewDate")))program.setTestApprovalDate(DateUtil.string2Date(paramsMap.get("testReviewDate"),DateUtil.PATTERN_DATE));
-            if(StringUtils.isNotBlank(paramsMap.get("onlineDate")))program.setOnlinePlanDate(DateUtil.string2Date(paramsMap.get("onlineDate"),DateUtil.PATTERN_DATE));
+            if(StringUtils.isNotBlank(paramsMap.get("onlinePlanDate")))program.setOnlinePlanDate(DateUtil.string2Date(paramsMap.get("onlinePlanDate"),DateUtil.PATTERN_DATE));
             if(StringUtils.isNotBlank(paramsMap.get("replayDate")))program.setReplayDate(DateUtil.string2Date(paramsMap.get("replayDate"),DateUtil.PATTERN_DATE));
             if(StringUtils.isNotBlank(paramsMap.get("allExtensionDate")))program.setAllExtensionDate(DateUtil.string2Date(paramsMap.get("allExtensionDate"),DateUtil.PATTERN_DATE));
 
@@ -1234,10 +1231,10 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             program.setDevWorkload(program.getDevWorkload()+Integer.parseInt(paramsMap.get("devWorkloadChange")));
             program.setOverallCost(program.getOverallCost().add(overallCost));
             if(StringUtils.isNoneBlank(paramsMap.get("grayReleaseDate")))program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("grayReleaseDate"),DateUtil.PATTERN_DATE));
-            if(StringUtils.isNoneBlank(paramsMap.get("demandDate")))program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("demandDate"),DateUtil.PATTERN_DATE));
-            if(StringUtils.isNoneBlank(paramsMap.get("developmentDate")))program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("developmentDate"),DateUtil.PATTERN_DATE));
+            if(StringUtils.isNoneBlank(paramsMap.get("prodApprovalDate")))program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("prodApprovalDate"),DateUtil.PATTERN_DATE));
+            if(StringUtils.isNoneBlank(paramsMap.get("devApprovalDate")))program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("devApprovalDate"),DateUtil.PATTERN_DATE));
             if(StringUtils.isNoneBlank(paramsMap.get("testReviewDate")))program.setTestApprovalDate(DateUtil.string2Date(paramsMap.get("testReviewDate"),DateUtil.PATTERN_DATE));
-            if(StringUtils.isNoneBlank(paramsMap.get("onlineDate")))program.setOnlinePlanDate(DateUtil.string2Date(paramsMap.get("onlineDate"),DateUtil.PATTERN_DATE));
+            if(StringUtils.isNoneBlank(paramsMap.get("onlinePlanDate")))program.setOnlinePlanDate(DateUtil.string2Date(paramsMap.get("onlinePlanDate"),DateUtil.PATTERN_DATE));
             if(StringUtils.isNoneBlank(paramsMap.get("replayDate")))program.setReplayDate(DateUtil.string2Date(paramsMap.get("replayDate"),DateUtil.PATTERN_DATE));
             if(StringUtils.isNoneBlank(paramsMap.get("allExtensionDate")))program.setAllExtensionDate(DateUtil.string2Date(paramsMap.get("allExtensionDate"),DateUtil.PATTERN_DATE));
 
@@ -1750,24 +1747,28 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             String analyzingConditions = paramsMap.get("analyzingConditions");
             String devWorkload = paramsMap.get("devWorkload");
             String overallCost = paramsMap.get("overallCost");
-            String commitDate = paramsMap.get("commitDate");
-            String demoApprovalDate = paramsMap.get("demoApprovalDate");
-            String prodApprovalDate = paramsMap.get("prodApprovalDate");
-            String grayReleaseDate = paramsMap.get("grayReleaseDate");
-            String biddingDate = paramsMap.get("biddingDate");
-            String winningBidDate = paramsMap.get("winningBidDate");
             String bidOverallCost = paramsMap.get("bidOverallCost");
             String bidDevWorkload = paramsMap.get("bidDevWorkload");
             String bidOversingleCost = paramsMap.get("bidOversingleCost");
-            String researchDate = paramsMap.get("researchDate");
-            String testDate = paramsMap.get("testDate");
-            String onlineDate = paramsMap.get("onlineDate");
             String productId = paramsMap.get("productId");
             String likeProduct = paramsMap.get("likeProduct");
             String type = paramsMap.get("type");
-            String replayDate = paramsMap.get("replayDate");
-            String allExtensionDate = paramsMap.get("allExtensionDate");
             String commitDescp = paramsMap.get("commitDescp");
+
+            String commitDate = paramsMap.get("commitDate");
+            String demoApprovalDate = paramsMap.get("demoApprovalDate");
+            String biddingDate = paramsMap.get("biddingDate");
+            String winningBidDate = paramsMap.get("winningBidDate");
+            String prodApprovalDate = paramsMap.get("prodApprovalDate");
+            String devApprovalDate = paramsMap.get("devApprovalDate");
+            String testApprovalDate = paramsMap.get("testApprovalDate");
+            String onlinePlanDate = paramsMap.get("onlinePlanDate");
+            String grayReleaseDate = paramsMap.get("grayReleaseDate");
+            String allExtensionDate = paramsMap.get("allExtensionDate");
+            String replayDate = paramsMap.get("replayDate");
+
+//            String testDate = paramsMap.get("testDate");
+//            String onlineDate = paramsMap.get("onlineDate");
 
             //基本信息实时修改
             if(StringUtils.isNotBlank(devType))program.setDevType(Integer.parseInt(devType));//研发方式
@@ -1801,9 +1802,9 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             if(StringUtils.isNotBlank(biddingDate))program.setBiddingDate(DateUtil.string2Date(biddingDate,DateUtil.PATTERN_DATE));//招标时间
             if(StringUtils.isNotBlank(winningBidDate))program.setWinningBidDate(DateUtil.string2Date(winningBidDate,DateUtil.PATTERN_DATE));//中标时间
             if(StringUtils.isNotBlank(prodApprovalDate))program.setProdApprovalDate(DateUtil.string2Date(prodApprovalDate,DateUtil.PATTERN_DATE));//产品评审时间
-            if(StringUtils.isNotBlank(researchDate))program.setDevApprovalDate(DateUtil.string2Date(researchDate,DateUtil.PATTERN_DATE));//研发评审时间
-            if(StringUtils.isNotBlank(testDate))program.setTestApprovalDate(DateUtil.string2Date(testDate,DateUtil.PATTERN_DATE));//测试评审时间
-            if(StringUtils.isNotBlank(onlineDate))program.setOnlinePlanDate(DateUtil.string2Date(onlineDate,DateUtil.PATTERN_DATE));//上线计划时间
+            if(StringUtils.isNotBlank(devApprovalDate))program.setDevApprovalDate(DateUtil.string2Date(devApprovalDate,DateUtil.PATTERN_DATE));//研发评审时间
+            if(StringUtils.isNotBlank(testApprovalDate))program.setTestApprovalDate(DateUtil.string2Date(testApprovalDate,DateUtil.PATTERN_DATE));//测试评审时间
+            if(StringUtils.isNotBlank(onlinePlanDate))program.setOnlinePlanDate(DateUtil.string2Date(onlinePlanDate,DateUtil.PATTERN_DATE));//上线计划时间
             if(StringUtils.isNotBlank(replayDate))program.setReplayDate(DateUtil.string2Date(replayDate,DateUtil.PATTERN_DATE));//项目复盘时间
             if(StringUtils.isNotBlank(allExtensionDate))program.setAllExtensionDate(DateUtil.string2Date(allExtensionDate,DateUtil.PATTERN_DATE));//全面推广时间
 
@@ -2101,23 +2102,23 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
     /**
      * 根据规则生成新的项目code
-     * 例：IT_XM000001
+     * 例：XM000001
      * @return
      */
     private String generateProgramNewCode(){
         String newCode = programMapper.getNewCode();
         if (StringUtils.isBlank(newCode)) {
-            newCode = "IT_XM000001";
+            newCode = "XM000001";
             return newCode;
         }
-        Integer newNum = Integer.parseInt(newCode.substring(5,newCode.length()))+1;
+        Integer newNum = Integer.parseInt(newCode.substring(2,newCode.length()))+1;
         String newNumStr = newNum.toString();
         Integer j  = newNumStr.length();
         for(int i = 0; i< 6 - j; i++) {
             newNumStr = "0" + newNumStr;
         }
         StringBuffer sb = new StringBuffer();
-        sb.append("IT_XM" + newNumStr);
+        sb.append("XM" + newNumStr);
         return sb.toString();
     }
 

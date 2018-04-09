@@ -869,7 +869,7 @@ public class APIProgramBpmController extends BaseController {
 			if (yueList == null || yueList.isEmpty()) {
 				dataMap.put("productYue",0);
 			}
-			dataMap.put("productYue",productList.size());
+			dataMap.put("productYue",yueList.size());
 			//进行中的产品
 			List<Product> productDoing = getProgramService().getListByLikeAnalyzingConditions(paramsMap,2);
 			if (productDoing == null || productDoing.isEmpty()) {

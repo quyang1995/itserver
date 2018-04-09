@@ -5,9 +5,7 @@ import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.controller.base.BaseController;
-import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ps.PsProgramDraftDetail;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -39,13 +37,6 @@ public class APIProgramDraftController extends BaseController {
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		try{
 			LOG.info("------add:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
-			//name唯一检查
-			Program checkProgram = new Program();
-			String programName = paramsMap.get("name").toString();
-			checkProgram.setName(programName);
-			if(StringUtils.isBlank(programName) || this.getProgramService().select(checkProgram).size() > 0){
-				return CommonUtils.getResultMapByBizEnum(BizEnum.E1038, programName);
-			}
 			this.getProgramDraftService().addProgramDraft(paramsMap);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -67,7 +58,7 @@ public class APIProgramDraftController extends BaseController {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		try{
-			LOG.info("------add:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+			LOG.info("------applyNode:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			this.getProgramDraftService().applyNode(paramsMap);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -89,7 +80,7 @@ public class APIProgramDraftController extends BaseController {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		try{
-			LOG.info("------add:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+			LOG.info("------delete:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			this.getProgramDraftService().deleteProgramDraft(paramsMap);
 		}catch (Exception e){
 			e.printStackTrace();

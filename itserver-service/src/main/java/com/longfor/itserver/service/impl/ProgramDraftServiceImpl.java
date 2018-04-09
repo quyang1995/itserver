@@ -50,12 +50,11 @@ public class ProgramDraftServiceImpl extends AdminBaseService<ProgramDraft> impl
         Integer accountType = AccountUitl.getAccountType(map);
         ProgramDraft programDraft = JSONObject.toJavaObject(json, ProgramDraft.class);
         Product product = productMapper.selectByPrimaryKey(programDraft.getProductId());
-        if(product == null){
-            return false;
+        if(product != null){
+            programDraft.setProductName(product.getName());
+            programDraft.setProductCode(product.getCode());
         }
         programDraft.setProgramStatus(ProgramStatusNewEnum.WLX.getCode());
-        programDraft.setProductName(product.getName());
-        programDraft.setProductCode(product.getCode());
         programDraft.setCreateTime(TimeUtils.getTodayByDateTime());
         programDraft.setModifiedTime(TimeUtils.getTodayByDateTime());
         programDraft.setAccountType(accountType);
@@ -210,13 +209,15 @@ public class ProgramDraftServiceImpl extends AdminBaseService<ProgramDraft> impl
         Integer accountType = AccountUitl.getAccountType(map);
         ProgramDraft programDraft = JSONObject.toJavaObject(json, ProgramDraft.class);
         programDraft.setAccountType(accountType);
-        String productId = programDraft.getProductId().toString();
-        if(StringUtils.isNotBlank(productId)){
-            Product product = productMapper.selectByPrimaryKey(Long.valueOf(productId));
-            if (product!=null) {
-                programDraft.setProductId(product.getId());
-                programDraft.setProductName(product.getName());
-                programDraft.setProductCode(product.getCode());
+        if(programDraft.getProductId()!=null){
+            String productId = programDraft.getProductId().toString();
+            if(StringUtils.isNotBlank(productId)){
+                Product product = productMapper.selectByPrimaryKey(Long.valueOf(productId));
+                if (product!=null) {
+                    programDraft.setProductId(product.getId());
+                    programDraft.setProductName(product.getName());
+                    programDraft.setProductCode(product.getCode());
+                }
             }
         }
         programDraftMapper.insert(programDraft);

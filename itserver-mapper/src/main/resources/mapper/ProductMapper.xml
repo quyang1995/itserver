@@ -261,7 +261,7 @@
     </select>
 
     <select id="getNewCode" resultType="String">
-        SELECT  code FROM product ORDER BY create_time DESC LIMIT 0,1
+        SELECT  code FROM product ORDER BY id DESC LIMIT 0,1
     </select>
 
     <select id="getListByLikeAnalyzingConditions" resultMap="BaseResultMap" parameterType="map">
