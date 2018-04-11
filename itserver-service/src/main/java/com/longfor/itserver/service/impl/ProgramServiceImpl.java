@@ -1371,7 +1371,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                 throw new RuntimeException("激活流程失败");
             }
             //日志记录审批记录
-            String text = paramsMap.get("modifiedName") +ProgramStatusNewEnum.ZZ.getText()+ "了项目。";
+            String text = paramsMap.get("modifiedName") +"提交了"+ ProgramStatusNewEnum.ZZ.getText()+ "项目";
             ProgramEmployeeChangeLog employeeChangeLog = new ProgramEmployeeChangeLog();
             employeeChangeLog.setProgramId(program.getId());
             employeeChangeLog.setCreateTime(TimeUtils.getTodayByDateTime());
