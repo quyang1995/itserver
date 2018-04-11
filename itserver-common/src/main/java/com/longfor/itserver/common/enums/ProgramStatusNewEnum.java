@@ -14,7 +14,7 @@ public enum ProgramStatusNewEnum {
     ZTBSQ(130, "招投标申请"),
     ZBSQ(140, "中标申请"),
     CPPS(150, "产品评审"),
-    KFPS(160, "开发评审"),
+    KFPS(160, "技术评审"),
     CSPS(170, "测试评审"),
     SXPS(180, "上线计划"),
     HDFB(190, "灰度发布"),

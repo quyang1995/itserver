@@ -61,10 +61,11 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
-			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
-			if (StringUtils.isNotBlank(repeatFile)){
-				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
-			}
+			//验证文件名字重复
+//			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+//			if (StringUtils.isNotBlank(repeatFile)){
+//				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+//			}
 			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString())==null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
 			}
@@ -142,6 +143,27 @@ public class APIProgramBpmController extends BaseController {
 		return resultMap;
 	}
 
+	/**
+	 * 撤销流程
+	 */
+//	@RequestMapping(value = "/revokeInstance", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+//	@ResponseBody
+//	public Map revokeInstance(HttpServletRequest request) throws IOException {
+//		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+//		try{
+//			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+//			LOG.info("------revokeInstance:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+//
+//			Program program = this.getProgram(paramsMap);
+//			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
+//			getProgramService().revokeInstance(paramsMap,program);
+//		}catch (Exception e){
+//			e.printStackTrace();
+//			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+//		}
+//		return resultMap;
+//	}
+
 	private Program getProgram(Map<String, String> paramsMap){
 		Long programId = Long.parseLong(paramsMap.get("programId"));
 		Program program = getProgramService().getProgramId(programId);
@@ -164,10 +186,11 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
-			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
-			if (StringUtils.isNotBlank(repeatFile)){
-				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
-			}
+			//验证文件名字重复
+//			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+//			if (StringUtils.isNotBlank(repeatFile)){
+//				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+//			}
 			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString())==null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
 			}
@@ -198,10 +221,11 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
-			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
-			if (StringUtils.isNotBlank(repeatFile)){
-				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
-			}
+			//验证文件名字重复
+//			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+//			if (StringUtils.isNotBlank(repeatFile)){
+//				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+//			}
 			getProgramService().submit(paramsMap,program,ProgramStatusNewEnum.ZTBSQ.getCode());
 		}catch (Exception e){
 			e.printStackTrace();
@@ -226,10 +250,11 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
-			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
-			if (StringUtils.isNotBlank(repeatFile)){
-				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
-			}
+			//验证文件名字重复
+//			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+//			if (StringUtils.isNotBlank(repeatFile)){
+//				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+//			}
 			getProgramService().submit(paramsMap,program,ProgramStatusNewEnum.ZBSQ.getCode());
 		}catch (Exception e){
 			e.printStackTrace();
@@ -254,10 +279,11 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
-			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
-			if (StringUtils.isNotBlank(repeatFile)){
-				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
-			}
+			//验证文件名字重复
+//			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+//			if (StringUtils.isNotBlank(repeatFile)){
+//				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+//			}
 			getProgramService().submit(paramsMap,program,ProgramStatusNewEnum.CPPS.getCode());
 		}catch (Exception e){
 			e.printStackTrace();
@@ -282,10 +308,11 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.DEVEAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
-			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
-			if (StringUtils.isNotBlank(repeatFile)){
-				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
-			}
+			//验证文件名字重复
+//			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+//			if (StringUtils.isNotBlank(repeatFile)){
+//				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+//			}
 			if (edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString())==null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1031);
 			}
@@ -313,10 +340,11 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.TESTINGAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
-			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
-			if (StringUtils.isNotBlank(repeatFile)){
-				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
-			}
+			//验证文件名字重复
+//			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+//			if (StringUtils.isNotBlank(repeatFile)){
+//				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+//			}
 			if (edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString())==null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1031);
 			}
@@ -344,10 +372,11 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
-			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
-			if (StringUtils.isNotBlank(repeatFile)){
-				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
-			}
+			//验证文件名字重复
+//			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+//			if (StringUtils.isNotBlank(repeatFile)){
+//				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+//			}
 			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString())==null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
 			}
@@ -378,10 +407,11 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
-			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
-			if (StringUtils.isNotBlank(repeatFile)){
-				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
-			}
+			//验证文件名字重复
+//			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+//			if (StringUtils.isNotBlank(repeatFile)){
+//				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+//			}
 			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString())==null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
 			}
@@ -412,10 +442,11 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
-			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
-			if (StringUtils.isNotBlank(repeatFile)){
-				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
-			}
+			//验证文件名字重复
+//			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+//			if (StringUtils.isNotBlank(repeatFile)){
+//				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+//			}
 			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString())==null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
 			}
@@ -446,10 +477,11 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
-			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
-			if (StringUtils.isNotBlank(repeatFile)){
-				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
-			}
+			//验证文件名字重复
+//			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+//			if (StringUtils.isNotBlank(repeatFile)){
+//				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+//			}
 			getProgramService().submit(paramsMap,program,ProgramStatusNewEnum.XMFP.getCode());
 		}catch (Exception e){
 			e.printStackTrace();
@@ -475,10 +507,11 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
-			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
-			if (StringUtils.isNotBlank(repeatFile)){
-				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
-			}
+			//验证文件名字重复
+//			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+//			if (StringUtils.isNotBlank(repeatFile)){
+//				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+//			}
 			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()) == null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
 			}
@@ -509,10 +542,11 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
-			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
-			if (StringUtils.isNotBlank(repeatFile)){
-				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
-			}
+			//验证文件名字重复
+//			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+//			if (StringUtils.isNotBlank(repeatFile)){
+//				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+//			}
 			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()) == null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
 			}
@@ -543,10 +577,11 @@ public class APIProgramBpmController extends BaseController {
 			if (!checkAuth(paramsMap.get("programId"),paramsMap.get("modifiedAccountId"),AvaStatusEnum.PRODAVA.getCode())) {
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
 			}
-			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
-			if (StringUtils.isNotBlank(repeatFile)){
-				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
-			}
+			//验证文件名字重复
+//			String repeatFile = checkFileName(program.getId().toString(),paramsMap.get("fileList"));
+//			if (StringUtils.isNotBlank(repeatFile)){
+//				return CommonUtils.getResultMapByBizEnum(BizEnum.E1034,repeatFile);
+//			}
 			if (edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()) == null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E1030);
 			}
@@ -987,6 +1022,12 @@ public class APIProgramBpmController extends BaseController {
 		return  resultMap;
 	}
 
+	/**
+	 * w文件名称重复性
+	 * @param programId
+	 * @param fileList
+	 * @return
+	 */
 	private String checkFileName(String programId,String fileList){
 		List<FileVo> fileListVo = JSON.parseArray(fileList, FileVo.class);
 		if (fileListVo == null || fileListVo.isEmpty()) {

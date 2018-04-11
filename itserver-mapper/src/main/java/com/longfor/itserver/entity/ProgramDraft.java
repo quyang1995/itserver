@@ -228,6 +228,18 @@ public class ProgramDraft {
     private String remark;
 
     /**
+     * 会签人oa账号，多个逗号隔开
+     */
+    @Column(name = "counter_signers")
+    private String counterSigners;
+
+    /**
+     * 会签人oa账号名称，多个逗号隔开
+     */
+    @Column(name = "counter_signers_name")
+    private String counterSignersName;
+
+    /**
      * 立项描述
      */
     @Column(name = "commit_descp")
@@ -953,5 +965,21 @@ public class ProgramDraft {
 
     public void setProgramId(Long programId) {
         this.programId = programId;
+    }
+
+    public String getCounterSigners() {
+        return counterSigners;
+    }
+
+    public void setCounterSigners(String counterSigners) {
+        this.counterSigners = counterSigners;
+    }
+
+    public String getCounterSignersName() {
+        return counterSignersName;
+    }
+
+    public void setCounterSignersName(String counterSignersName) {
+        this.counterSignersName = counterSignersName;
     }
 }

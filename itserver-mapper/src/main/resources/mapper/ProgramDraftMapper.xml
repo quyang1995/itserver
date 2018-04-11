@@ -41,6 +41,8 @@
     <result column="all_extension_date" property="allExtensionDate" jdbcType="TIMESTAMP" />
     <result column="commit_descp" jdbcType="VARCHAR" property="commitDescp"/>
     <result column="remark" jdbcType="VARCHAR" property="remark"/>
+    <result column="counter_signers" jdbcType="VARCHAR" property="counterSigners"/>
+    <result column="counter_signers_name" jdbcType="VARCHAR" property="counterSignersName"/>
 
     <result column="business_center_list" jdbcType="VARCHAR" property="businessCenterList"/>
     <result column="business_center_list_name" jdbcType="VARCHAR" property="businessCenterListName"/>
@@ -67,7 +69,7 @@
     dev_type, analyzing_conditions, dev_workload, overall_cost, bid_dev_workload, approval_status, 
     new_code, replay_date, all_extension_date, commit_descp,remark,business_center_list,business_center_list_name,
     business_functions_list,business_functions_list_name,business_president_list,business_president_list_name,
-    t_approval,report_poor
+    t_approval,report_poor,counter_signers,counter_signers_name
   </sql>
 
   <select id="getProgramDraftDetail" parameterType="map" resultMap="PsProgramDraftDetail" >

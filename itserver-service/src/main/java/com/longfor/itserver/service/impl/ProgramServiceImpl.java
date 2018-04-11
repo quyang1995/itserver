@@ -969,7 +969,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     }
 
     /***
-     * 审核驳回
+     * 审核驳回至发起人
      */
     @Override
     @Transactional(value="transactionManager")
@@ -1028,12 +1028,13 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     }
 
     /***
-     * 终止流程
+     * 审批人驳回，且撤销流程
      */
     @Override
     @Transactional(value="transactionManager")
     public void cancelInstance(Map<String, String> paramsMap,Program program) {
         try{
+            //驳回流程至发起人
             ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtil.returnWorkflowToStart(
                     paramsMap.get("modifiedAccountId"),paramsMap.get("workItemId"),paramsMap.get("suggestion"));
             if(pplySubmitResultVo.getIsSuccess().equals("false")){
@@ -1041,7 +1042,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                 throw new RuntimeException("提交流程失败");
             }
 
-            //提交流程
+            //撤销流程
             boolean f = ProgramBpmUtils.cancelInstance(
                     "admin",paramsMap.get("instanceId"),null,"1");
             if(!f){
@@ -1792,7 +1793,11 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             program.setApprovalStatus(approvalStatus);
             program.setProgramStatus(programStatus);
             program.setModifiedTime(now);
-            programMapper.updateByPrimaryKey(program);
+            //立项和产品评审不修改计划时间
+            if(!(programStatus==ProgramStatusNewEnum.LX.getCode()
+                    || programStatus==ProgramStatusNewEnum.CPPS.getCode())) {
+                programMapper.updateByPrimaryKey(program);
+            }
 
             //program表
             //相关日期审核通过之后，修改项目信息
@@ -1808,10 +1813,12 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             if(StringUtils.isNotBlank(replayDate))program.setReplayDate(DateUtil.string2Date(replayDate,DateUtil.PATTERN_DATE));//项目复盘时间
             if(StringUtils.isNotBlank(allExtensionDate))program.setAllExtensionDate(DateUtil.string2Date(allExtensionDate,DateUtil.PATTERN_DATE));//全面推广时间
 
-//            program.setApprovalStatus(approvalStatus);
-//            program.setProgramStatus(programStatus);
-//            program.setModifiedTime(now);
-//            programMapper.updateByPrimaryKey(program);
+            //立项和产品评审修改计划时间
+            if(programStatus==ProgramStatusNewEnum.LX.getCode()
+                    || programStatus==ProgramStatusNewEnum.CPPS.getCode()) {
+                programMapper.updateByPrimaryKey(program);
+            }
+
             if(programStatus==ProgramStatusNewEnum.LX.getCode()) {
                 this.dealProgramEmployee(paramsMap, program);
             }

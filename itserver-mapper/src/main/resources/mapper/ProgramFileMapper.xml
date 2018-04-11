@@ -106,7 +106,8 @@
       pas.modified_Name
     FROM
         program_file pf
-    LEFT JOIN program_approval_snapshot pas ON pas.id = pf.snapshot_id
+    INNER JOIN program_approval_snapshot pas ON pas.id = pf.snapshot_id
+    INNER JOIN program_approval_snapshot pa ON pa.bpm_code=pas.bpm_code and pa.approval_status=110
       <where>
         <if test="programId != null and programId != ''">
           pf.program_id = #{programId}

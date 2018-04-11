@@ -51,4 +51,17 @@
     LIMIT 0,1
   </select>
 
+  <select id="warningSum" parameterType="string" resultType="int">
+    SELECT COUNT(1) from program
+    where warning_days <![CDATA[ < ]]> 3 and
+    id in (SELECT program_id from program_employee where account_id = #{accountId} and employee_type = 1)
+  </select>
+
+  <select id="warningRemarksSum" parameterType="string" resultType="int">
+    SELECT COUNT(1) from program_warning pw
+    INNER JOIN program p ON p.id=pw.program_id and p.program_status not in (999,900)
+    where pw.warning!=0 and
+    pw.program_id in (SELECT program_id from program_employee where account_id = #{accountId} and employee_type = 1)
+  </select>
+
 </mapper>

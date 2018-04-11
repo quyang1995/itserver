@@ -185,7 +185,7 @@
         from program p
         LEFT JOIN program_employee e ON p.id = e.program_id
         LEFT JOIN product d ON p.product_id = d.id
-        WHERE e.employee_type = 1
+        WHERE  e.employee_type = 1
         <if test=" isMove != null and isMove != '' and isMove == 1">
             and p.program_status != 100
         </if>

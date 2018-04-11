@@ -40,6 +40,16 @@ public class ProgramWarningServiceImpl extends AdminBaseService<ProgramWarning> 
     }
 
     @Override
+    public int warningSum(String accountId) {
+        return programWarningMapper.warningSum(accountId);
+    }
+
+    @Override
+    public int warningRemarksSum(String accountId) {
+        return programWarningMapper.warningRemarksSum(accountId);
+    }
+
+    @Override
     public ProgramWarning addProgramWarning(Map<String,Object> map) {
         JSONObject json = (JSONObject) JSONObject.toJSON(map);
         ProgramWarning programWarning = JSONObject.toJavaObject(json, ProgramWarning.class);

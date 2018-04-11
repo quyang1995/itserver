@@ -2140,6 +2140,9 @@
             <property name="businessPresidentListName" type="string" required="false" description="业务副总裁Name"/>
             <property name="tApproval" type="int" required="false" description="1-李，2-傅"/>
             <property name="reportPoor" type="int" required="false" description="跟琼朔相关的项目，手动添加琼朔。1:需要琼朔审批2:不需要琼朔审批"/>
+
+            <property name="counterSigners" type="string" required="false" description="会签人oa账号，多个逗号隔开"/>
+            <property name="counterSignersName" type="string" required="false" description="会签人oa账号名称，多个逗号隔开"/>
         </request>
     </item>
 </api>
