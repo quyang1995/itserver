@@ -180,12 +180,11 @@
         ELSE '其他' END currNodeDate,
         substring(p.gray_release_date,1,10) grayReleaseDate,
         p.approval_status approvalStatus,
-        GROUP_CONCAT(e.employee_name) as personLiable,
         (SELECT pw.warning from program_warning pw where pw.program_id=p.id ORDER BY pw.warning desc LIMIT 0,1) as warning
         from program p
         LEFT JOIN program_employee e ON p.id = e.program_id
         LEFT JOIN product d ON p.product_id = d.id
-        WHERE  e.employee_type = 1
+        WHERE 1 = 1
         <if test=" isMove != null and isMove != '' and isMove == 1">
             and p.program_status != 100
         </if>
@@ -489,11 +488,11 @@
             WHEN p.program_status = '999' THEN  '终止'
             ELSE '其他' END programStatus,
             CASE
-            WHEN p.approval_status = '100' THEN  '审核中'
-            WHEN p.approval_status = '110' THEN  '审核通过'
-            WHEN p.approval_status = '120' THEN  '审核驳回'
-            WHEN p.approval_status = '130' THEN  '变更审核中'
-            WHEN p.approval_status = '140' THEN  '变更审核驳回'
+            WHEN p.approval_status = '100' THEN  '审批中'
+            WHEN p.approval_status = '110' THEN  '审批通过'
+            WHEN p.approval_status = '120' THEN  '审批驳回'
+            WHEN p.approval_status = '130' THEN  '变更审批中'
+            WHEN p.approval_status = '140' THEN  '变更审批驳回'
             ELSE '其他' END approvalStatus,
             CASE
             WHEN p.analyzing_conditions = '1' THEN  '地产'

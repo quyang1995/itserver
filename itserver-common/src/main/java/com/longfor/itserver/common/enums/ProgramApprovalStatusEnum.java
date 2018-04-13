@@ -2,11 +2,11 @@ package com.longfor.itserver.common.enums;
 
 public enum ProgramApprovalStatusEnum {
     /* 状态 */
-    SHZ(100, "审核中"),
-    SHTG(110, "审核通过"),
-    SHBH(120, "审核驳回"),
-    BGSHZ(130, "变更审核中"),
-    BGSHBH(140, "变更审核驳回");
+    SHZ(100, "审批中"),
+    SHTG(110, "审批通过"),
+    SHBH(120, "审批驳回"),
+    BGSHZ(130, "变更审批中"),
+    BGSHBH(140, "变更审批驳回");
 
     /* 枚举码 */
     private int code;

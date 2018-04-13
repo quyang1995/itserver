@@ -133,20 +133,21 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programEmployee.setProgramId(model.getId());
             List<ProgramEmployee> personLiableList = programEmployeeMapper.select(programEmployee);
             model.setPersonLiableList(personLiableList);
+            String sb = new String();
+            Boolean f = true ;
             //当前登录人员为管理员或项目责任人时，就可以看到“评估人天”和“总预算”
             String accountId = map.get("accountId").toString();
             String isAdmin = DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0";
-            if ("0".equals(isAdmin)){
-                Boolean f = true ;
-                for(ProgramEmployee emp:personLiableList){
-                    if(emp.getAccountId().equals(accountId)){
-                        f = false;
-                    }
+            for(ProgramEmployee emp:personLiableList){
+                sb += "," + emp.getEmployeeName() ;
+                if(emp.getAccountId().equals(accountId)){
+                    f = false;
                 }
-                if (f) {
-                    model.setDevWorkload(-1);
-                    model.setOverallCost(new BigDecimal(-1));
-                }
+            }
+            model.setPersonLiable(sb.replaceFirst(",",""));
+            if ("0".equals(isAdmin) && f){
+                model.setDevWorkload(-1);
+                model.setOverallCost(new BigDecimal(-1));
             }
         }
         return programList;
@@ -288,7 +289,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         if(shot.getProgramStatus()==ProgramStatusNewEnum.YQSX.getCode()
                 || shot.getProgramStatus()==ProgramStatusNewEnum.XQBG.getCode()){
             BigDecimal ten = new BigDecimal(100000);
-            if (shot.getOverallCost().compareTo(ten) != -1 || shot.getProgramStatus()==ProgramStatusNewEnum.YQSX.getCode()) {//大于10万,取审批变更数据
+            if (shot.getProgramStatus()==ProgramStatusNewEnum.YQSX.getCode() || shot.getOverallCost().compareTo(ten) != -1) {//大于10万,取审批变更数据
                 //需求变更或延期时，取变更审核中的历史数据
                 pMap.put("approvalStatus", ProgramApprovalStatusEnum.BGSHZ.getCode());
             } else {
@@ -566,6 +567,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         selectOneProgram.setDescp(program.getDescp());
         selectOneProgram.setCommitDescp(program.getCommitDescp());
         selectOneProgram.setLikeProgram(program.getLikeProgram());
+        selectOneProgram.setLikeProduct(program.getLikeProduct());
         selectOneProgram.setType(program.getType());
         selectOneProgram.setAccountType(accountType);
         selectOneProgram.setModifiedTime(TimeUtils.getTodayByDateTime());
@@ -877,12 +879,15 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             int oldProgramStatus = programApprovalSnapshot.getProgramStatus();
             int currProgramStatus = program.getProgramStatus();
             int currApprovalStatus = program.getApprovalStatus();
+            //取项目创建时间
+            Date programCreateDate = program.getCreateTime();
 
             String newCode = programApprovalSnapshot.getNewCode();
             String applyAccount = programApprovalSnapshot.getApplyAccount();
 
             this.copyPropertiesToProgram(program,programApprovalSnapshot);
-
+            //项目创建时间不修改,programCreateDate为数据库项目创建时间
+            program.setCreateTime(programCreateDate);
             //更新项目表
             //延期和需求变更审核通过时，项目状态不变
             if (oldProgramStatus == ProgramStatusNewEnum.XQBG.getCode()
@@ -935,7 +940,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                 program.setActualAllExtensionDate(now);
             }
             //实际项目复盘时间
-            if(program.getProgramStatus()==ProgramStatusNewEnum.XMFP.getCode()){
+            if(program.getProgramStatus()==ProgramStatusNewEnum.XMFP.getCode()
+                    || program.getProgramStatus()==ProgramStatusNewEnum.WC.getCode()){
                 program.setActualReplayDate(now);
             }
             programMapper.updateByPrimaryKey(program);
@@ -1228,13 +1234,20 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                 program.setModifiedName(paramsMap.get("modifiedName"));
                 programMapper.updateByPrimaryKey(program);
             }
-
-            program.setDevWorkload(program.getDevWorkload()+Integer.parseInt(paramsMap.get("devWorkloadChange")));
-            program.setOverallCost(program.getOverallCost().add(overallCost));
+            if (program.getDevWorkload()!=null) {
+                program.setDevWorkload(program.getDevWorkload()+Integer.parseInt(paramsMap.get("devWorkload")));
+            } else {
+                program.setDevWorkload(Integer.parseInt(paramsMap.get("devWorkload")));
+            }
+            if(program.getOverallCost()!=null){
+                program.setOverallCost(program.getOverallCost().add(overallCost));
+            } else {
+                program.setOverallCost(overallCost);
+            }
             if(StringUtils.isNoneBlank(paramsMap.get("grayReleaseDate")))program.setGrayReleaseDate(DateUtil.string2Date(paramsMap.get("grayReleaseDate"),DateUtil.PATTERN_DATE));
             if(StringUtils.isNoneBlank(paramsMap.get("prodApprovalDate")))program.setProdApprovalDate(DateUtil.string2Date(paramsMap.get("prodApprovalDate"),DateUtil.PATTERN_DATE));
             if(StringUtils.isNoneBlank(paramsMap.get("devApprovalDate")))program.setDevApprovalDate(DateUtil.string2Date(paramsMap.get("devApprovalDate"),DateUtil.PATTERN_DATE));
-            if(StringUtils.isNoneBlank(paramsMap.get("testReviewDate")))program.setTestApprovalDate(DateUtil.string2Date(paramsMap.get("testReviewDate"),DateUtil.PATTERN_DATE));
+            if(StringUtils.isNoneBlank(paramsMap.get("testApprovalDate")))program.setTestApprovalDate(DateUtil.string2Date(paramsMap.get("testApprovalDate"),DateUtil.PATTERN_DATE));
             if(StringUtils.isNoneBlank(paramsMap.get("onlinePlanDate")))program.setOnlinePlanDate(DateUtil.string2Date(paramsMap.get("onlinePlanDate"),DateUtil.PATTERN_DATE));
             if(StringUtils.isNoneBlank(paramsMap.get("replayDate")))program.setReplayDate(DateUtil.string2Date(paramsMap.get("replayDate"),DateUtil.PATTERN_DATE));
             if(StringUtils.isNoneBlank(paramsMap.get("allExtensionDate")))program.setAllExtensionDate(DateUtil.string2Date(paramsMap.get("allExtensionDate"),DateUtil.PATTERN_DATE));
@@ -1268,7 +1281,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                 programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
             }
 
-            programApprovalSnapshot.setDevWorkload(Integer.parseInt(paramsMap.get("devWorkloadChange")));
+            programApprovalSnapshot.setDevWorkload(Integer.parseInt(paramsMap.get("devWorkload")));
             programApprovalSnapshot.setOverallCost(overallCost);
             programApprovalSnapshot.setRemark(paramsMap.get("remark"));
             programApprovalSnapshot.setCreateTime(now);
@@ -1779,7 +1792,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             if(StringUtils.isNotBlank(bidOverallCost))program.setBidOverallCost(new BigDecimal(bidOverallCost));//整体费用
             if(StringUtils.isNotBlank(bidDevWorkload))program.setBidDevWorkload(Integer.parseInt(bidDevWorkload));//人天（框架合同填写）
             if(StringUtils.isNotBlank(bidOversingleCost))program.setBidOversingleCost(new BigDecimal(bidOversingleCost));//人天单价（框架合同填写）
-            if(StringUtils.isNotBlank(likeProduct))program.setLikeProduct(likeProduct);
+            if(StringUtils.isNotBlank(likeProduct))program.setLikeProduct(likeProduct);//关联产品id字符串
             if(StringUtils.isNotBlank(commitDescp))program.setCommitDescp(commitDescp);//立项说明
             if(StringUtils.isNotBlank(type))program.setType(Integer.parseInt(type));
             if(StringUtils.isNotBlank(productId)){

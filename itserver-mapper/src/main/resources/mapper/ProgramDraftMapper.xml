@@ -62,7 +62,7 @@
     <!--
       WARNING - @mbggenerated
     -->
-    id, operation_type, product_id, product_name, product_code, name, descp, like_product, 
+    id, operation_type, product_id, product_name, product_code, name, descp, like_product,
     like_program, type, program_status, modified_account_id, modified_name, create_time, 
     modified_time, account_type, commit_date, demo_approval_date, bidding_date, winning_bid_date, 
     prod_approval_date, dev_approval_date, test_approval_date, online_plan_date, gray_release_date, 

@@ -82,10 +82,10 @@ public class APIIndexController extends BaseController {
 			//wSum:项目预警是进度预警和风险备注数总和
 			int wSum = warningSum + warningRemarksSum;
 			//待办
-			MoApproveListVo moApproveListVo = MoApproveUtil.flowapiList("0","0",accountId,null,1,1000);
+			MoApproveListVo moApproveListVo = MoApproveUtil.flowapiList("0","0",accountId,null,1,1);
 			int dealtApprove = moApproveListVo.getTotal();
 			//我发起的
-			MoApproveListVo myApproveListVo = MoApproveUtil.flowapiList("1","0",accountId,null,1,1000);
+			MoApproveListVo myApproveListVo = MoApproveUtil.flowapiList("1","0",accountId,null,1,1);
 			int myLaunchApprove = myApproveListVo.getTotal();
 			//待审批包括待办和我发起的
 			int myApprove = dealtApprove + myLaunchApprove;

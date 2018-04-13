@@ -284,7 +284,7 @@
             <property name="accountId" type="string" required="true" maxLength="30"/>
             <property name="programStatus" type="string" required="true" />
             <property name="approvalStatus" type="int" required="true" area="0,100,110,120,130,140"/>
-            <property name="analyzingConditions" type="int" required="false" area="-1,1,2,3,4,5,6,7"/>
+            <property name="analyzingConditions" type="int" required="false" area="-1,1,2,3,4,5,6,7,8"/>
             <property name="isPart" type="int" required="true" area="0,1"/>
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
             <property name="productId" type="int" required="false" />
@@ -1543,12 +1543,12 @@
             <property name="remark" type="string" required="true"/>
             <property name="fileList" type="string" required="true"/>
 
-            <property name="devWorkloadChange" type="string" required="true"/>
+            <property name="devWorkload" type="string" required="true"/>
             <property name="overallCost" type="string" required="true"/>
             <property name="grayReleaseDate" type="string" required="true"/>
             <property name="prodApprovalDate" type="string" required="true"/>
             <property name="devApprovalDate" type="string" required="true"/>
-            <property name="testReviewDate" type="string" required="true"/>
+            <property name="testApprovalDate" type="string" required="true"/>
             <property name="onlinePlanDate" type="string" required="true"/>
             <property name="replayDate" type="string" required="false"/>
             <property name="allExtensionDate" type="string" required="false"/>
@@ -2090,7 +2090,7 @@
     -->
     <item id="api_programDraft_applyNode" description="审批（草稿）">
         <request>
-            <property name="operationType" type="string" required="true" description="操作类型"/>
+            <property name="operationType" type="int" required="true" description="操作类型"/>
             <property name="modifiedAccountId" type="string" required="true" description="操作人员id"/>
             <property name="modifiedName" type="string" required="true" description="操作人员name"/>
             <!--项目基本信息-->
@@ -2107,7 +2107,7 @@
             <property name="productId" type="string" required="false" description="归属产品"/>
             <property name="productName" type="string" required="false" description="归属产品名称"/>
             <property name="likeProduct" type="string" required="false" description="关联产品id字符串，e.g. 1,2,3,..."/>
-            <property name="type" type="string" required="false" description="公开性"/>
+            <property name="type" type="int" required="false" description="公开性"/>
             <property name="accountType" type="int" required="false" description="账户类型：0或者null或者空位内部账号，1-供方账号"/>
             <!--项目计划时间-->
             <property name="commitDate" type="string" required="false" description="立项日期（计划）"/>

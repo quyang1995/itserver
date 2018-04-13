@@ -11,6 +11,7 @@ import com.longfor.itserver.entity.ps.PsProgramDraftDetail;
 import com.longfor.itserver.mapper.ProductMapper;
 import com.longfor.itserver.mapper.ProgramDraftMapper;
 import com.longfor.itserver.mapper.ProgramEmployeeDraftMapper;
+import com.longfor.itserver.service.IProductService;
 import com.longfor.itserver.service.IProgramDraftService;
 import com.longfor.itserver.service.IProgramEmployeeDraftService;
 import com.longfor.itserver.service.base.AdminBaseService;
@@ -32,6 +33,8 @@ public class ProgramDraftServiceImpl extends AdminBaseService<ProgramDraft> impl
     private ProductMapper productMapper;
     @Autowired
     private ProgramDraftMapper programDraftMapper;
+    @Autowired
+    private IProductService productService;
     @Autowired
     private ADSHelper adsHelper;
     @Autowired
@@ -242,8 +245,17 @@ public class ProgramDraftServiceImpl extends AdminBaseService<ProgramDraft> impl
     @Override
     public PsProgramDraftDetail getProgramDraftDetail(Map map) {
         PsProgramDraftDetail programDraft = programDraftMapper.getProgramDraftDetail(map);
+        //人员信息
         if(programDraft!=null){
             setPsProgramDraftDetailInfo(programDraft);
+            //关联产品
+            if(StringUtils.isNotBlank(programDraft.getLikeProduct())){
+                String likeProduct = programDraft.getLikeProduct().substring(1, programDraft.getLikeProduct().length());
+                if(StringUtils.isNotBlank(likeProduct)) {
+                    List<Product> product = productService.searchIdList(likeProduct);
+                    programDraft.setProductList(product);
+                }
+            }
         }
         return programDraft;
     }
