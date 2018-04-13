@@ -199,9 +199,11 @@
     select COUNT(program_id) from (
       SELECT p.id program_id,pas.name,pas.product_id,p.program_status,pas.create_time
       from  program p
-      LEFT JOIN  (SELECT * from program_approval_snapshot GROUP BY program_id ORDER BY create_time desc ) pas on pas.program_id=p.id
-      where
-      pas.program_status in ('999','200') and pas.approval_status = 110
+    INNER JOIN product pt on pt.id=p.product_id
+    INNER JOIN  (SELECT * from program_approval_snapshot GROUP BY program_id ORDER BY create_time desc ) pas on pas.program_id=p.id
+    where
+    ( p.warning_days <![CDATA[<]]> 0  or
+    (pas.program_status IN ('999', '200') AND pas.approval_status = 110 ))
       <if test="programIdList != null">
         and pas.product_id in
         <foreach item="item" index="index" collection="programIdList" open="(" separator="," close=")">
@@ -209,9 +211,8 @@
         </foreach>
       </if>
       <if test=" analyzingConditions != null and  analyzingConditions != '' and  analyzingConditions != -1">
-        and pas.analyzing_conditions = #{analyzingConditions}
+        and pt.analyzing_conditions LIKE CONCAT('%', #{analyzingConditions, jdbcType=VARCHAR}, '%')
       </if>
-      or p.warning_days <![CDATA[<]]> 0
       order by pas.create_time DESC
     ) a
   </select>
