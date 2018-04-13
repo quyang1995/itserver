@@ -910,6 +910,8 @@ public class APIProgramBpmController extends BaseController {
 			if (productDoing == null || productDoing.isEmpty()) {
 				dataMap.put("productDoing",0);
 			}
+
+			///
 			dataMap.put("productDoing",productDoing.size());
 			//项目总数
 			dataMap.put("programSum",getProgramService().getProgramSum(paramsMap,0));
