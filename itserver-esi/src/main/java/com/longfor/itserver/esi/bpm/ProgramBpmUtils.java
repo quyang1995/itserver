@@ -105,8 +105,8 @@ public class ProgramBpmUtils
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessAccount").split(",");
         String [] developAccountGuid = paramsMap.get("developAccount").split(",");
-        String str = businessAccountGuid[0]+","+developAccountGuid[0]+","+paramsMap.get("isLfq");
-        jsonObject.put("ItemValue", str.split(","));//业务人（业务人员）+项目技术负责人（开发人员第一个）
+        String str = businessAccountGuid[0]+","+developAccountGuid[0]+","+paramsMap.get("isLfq")+","+paramsMap.get("counterSigners");
+        jsonObject.put("ItemValue", str.split(","));//业务人（业务人员）+项目技术负责人（开发人员第一个）+ 会签人
         jsonArray.add(jsonObject);
         //********************添加业务及技术审批**********end********************
 
@@ -193,8 +193,8 @@ public class ProgramBpmUtils
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessAccount").split(",");
         String [] developAccountGuid = paramsMap.get("developAccount").split(",");
-        String str = businessAccountGuid[0]+","+developAccountGuid[0];
-        jsonObject.put("ItemValue", str.split(","));//业务人（业务人员）+项目技术负责人（开发人员第一个）
+        String str = businessAccountGuid[0]+","+developAccountGuid[0]+","+paramsMap.get("counterSigners");
+        jsonObject.put("ItemValue", str.split(","));//业务人（业务人员）+项目技术负责人（开发人员第一个）+会签人
         jsonArray.add(jsonObject);
         //********************添加相关负责人审批**********end********************
 
@@ -278,7 +278,8 @@ public class ProgramBpmUtils
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessAccount").split(",");
-        jsonObject.put("ItemValue", businessAccountGuid[0]);//业务人（业务人员）
+        String stra = businessAccountGuid[0] + "," + paramsMap.get("counterSigners");
+        jsonObject.put("ItemValue", stra.split(","));//业务人（业务人员）+ 会签人
         jsonArray.add(jsonObject);
         //********************添加相关负责人审批**********end********************
 
@@ -342,8 +343,8 @@ public class ProgramBpmUtils
         //********************添加产品经理审批**********begin********************
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
-        String [] productManagerList = paramsMap.get("productManagerList").split(",");
-        String str = productManagerList[0]+","+paramsMap.get("ifZqs")+","+paramsMap.get("isLfq");
+//        String [] productManagerList = paramsMap.get("productManagerList").split(",");
+        String str = paramsMap.get("productManagerList")+","+paramsMap.get("ifZqs")+","+paramsMap.get("isLfq");
         jsonObject.put("ItemValue", str.split(","));//产品经理 + 周琼硕审批guid
         jsonArray.add(jsonObject);
         //********************添加产品经理审批**********end********************
@@ -394,9 +395,9 @@ public class ProgramBpmUtils
         //********************添加x相关负责人审批**********begin********************
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
-        String [] productManagerList = paramsMap.get("productManagerList").split(",");
-        String str = productManagerList[0]+","+ paramsMap.get("ifZqs");
-        jsonObject.put("ItemValue", str.split(","));//产品经理+是否周琼硕审批guid
+//        String [] productManagerList = paramsMap.get("productManagerList").split(",");
+        String str = paramsMap.get("productManagerList")+","+ paramsMap.get("ifZqs")+","+ paramsMap.get("counterSigners");
+        jsonObject.put("ItemValue", str.split(","));//产品经理+是否周琼硕审批guid+会签人
         jsonArray.add(jsonObject);
         //********************添加x相关负责人审批**********end********************
 
@@ -459,8 +460,8 @@ public class ProgramBpmUtils
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessAccount").split(",");
         String [] developAccountGuid = paramsMap.get("developAccount").split(",");
-        String str = businessAccountGuid[0]+","+developAccountGuid[0];
-        jsonObject.put("ItemValue", str.split(","));//业务人（业务人员）+项目技术负责人（开发人员第一个）
+        String str = businessAccountGuid[0]+","+developAccountGuid[0]+","+paramsMap.get("counterSigners");
+        jsonObject.put("ItemValue", str.split(","));//业务人（业务人员）+项目技术负责人（开发人员第一个）+会签人
         jsonArray.add(jsonObject);
         //********************添加相关负责人审批**********end********************
 
@@ -529,8 +530,8 @@ public class ProgramBpmUtils
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessAccount").split(",");
-        String str = businessAccountGuid[0];
-        jsonObject.put("ItemValue", str.split(","));//业务人（业务人员）
+        String str = businessAccountGuid[0]+","+paramsMap.get("counterSigners");
+        jsonObject.put("ItemValue", str.split(","));//业务人（业务人员）+会签人
         jsonArray.add(jsonObject);
         //********************添加相关负责人审批**********end********************
 
@@ -595,7 +596,7 @@ public class ProgramBpmUtils
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessAccount").split(",");
-        String str = businessAccountGuid[0];
+        String str = businessAccountGuid[0]+","+paramsMap.get("counterSigners");
         jsonObject.put("ItemValue", str.split(","));//业务人（业务人员）
         jsonArray.add(jsonObject);
         //********************添加相关负责人审批**********end********************
@@ -657,10 +658,11 @@ public class ProgramBpmUtils
         //********************集团审批**********begin********************
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "Originator");
-        jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));//提交人guid
+        String str = paramsMap.get("modifiedAccountGuid")+","+paramsMap.get("counterSigners");
+        jsonObject.put("ItemValue", str.split(","));//提交人guid+会签人
         jsonArray.add(jsonObject);
 
-        String str = paramsMap.get("ifZqs");
+        str = paramsMap.get("ifZqs");
         if(StringUtils.isNotBlank(str)){
             jsonObject = new JSONObject();
             jsonObject.put("ItemName", "approval300AppendActors");
@@ -710,8 +712,8 @@ public class ProgramBpmUtils
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessList").split(",");
         String [] developAccountGuid = paramsMap.get("developerList").split(",");
-        String str = businessAccountGuid[0]+","+developAccountGuid[0];
-        jsonObject.put("ItemValue", str.split(","));//业务对接人（业务人员）+项目技术负责人（开发人员第一个）
+        String str = businessAccountGuid[0]+","+developAccountGuid[0]+","+paramsMap.get("counterSigners");
+        jsonObject.put("ItemValue", str.split(","));//业务对接人（业务人员）+项目技术负责人（开发人员第一个）+会签人
         jsonArray.add(jsonObject);
         //********************添加业务人员及项目技术负责人**********end********************
 
@@ -777,7 +779,8 @@ public class ProgramBpmUtils
         //********************集团审批**********begin********************
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "Originator");
-        jsonObject.put("ItemValue", paramsMap.get("modifiedAccountGuid"));
+        String stra = paramsMap.get("modifiedAccountGuid");
+        jsonObject.put("ItemValue", stra.split(","));
         jsonArray.add(jsonObject);
         //********************集团审批**********end********************
 
@@ -792,7 +795,7 @@ public class ProgramBpmUtils
         String [] businessAccountGuid = paramsMap.get("businessList").split(",");
         String [] developAccountGuid = paramsMap.get("developerList").split(",");
 //        String str = paramsMap.get("itCenterLeaderList")+","+paramsMap.get("businessCenterList")+ "," + paramsMap.get("businessFunctionsList") +","+ businessAccountGuid[0]+","+ developAccountGuid[0]+","+ paramsMap.get("lorf");
-        String str = paramsMap.get("businessCenterList")+ "," + paramsMap.get("businessFunctionsList") +","+ businessAccountGuid[0]+","+ developAccountGuid[0]+","+ paramsMap.get("lorf");
+        String str = paramsMap.get("businessCenterList")+ "," + paramsMap.get("businessFunctionsList") +","+ businessAccountGuid[0]+","+ developAccountGuid[0]+","+ paramsMap.get("lorf") +","+paramsMap.get("counterSigners");
         if("1".equals(paramsMap.get("reportPoor"))){
             str += "," + paramsMap.get("ifZqs");
         }
@@ -834,8 +837,8 @@ public class ProgramBpmUtils
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessList").split(",");
         String [] developAccountGuid = paramsMap.get("developerList").split(",");
-        String str = businessAccountGuid[0]+","+developAccountGuid[0];
-        jsonObject.put("ItemValue", str.split(","));//业务对接人（业务人员）+项目技术负责人（开发人员第一个）
+        String str = businessAccountGuid[0]+","+developAccountGuid[0]+","+paramsMap.get("counterSigners");
+        jsonObject.put("ItemValue", str.split(","));//业务对接人（业务人员）+项目技术负责人（开发人员第一个）+会签人
         jsonArray.add(jsonObject);
         //********************添加业务人员及项目技术负责人**********end********************
 
@@ -911,8 +914,8 @@ public class ProgramBpmUtils
         jsonObject.put("ItemName", "approval200AppendActors");
         String [] businessAccountGuid = paramsMap.get("businessList").split(",");
         String [] developAccountGuid = paramsMap.get("developerList").split(",");
-        String str = businessAccountGuid[0]+","+developAccountGuid[0];
-        jsonObject.put("ItemValue", str.split(","));//业务对接人（业务人员）+项目技术负责人（开发人员第一个）
+        String str = businessAccountGuid[0]+","+developAccountGuid[0]+","+paramsMap.get("counterSigners");
+        jsonObject.put("ItemValue", str.split(","));//业务对接人（业务人员）+项目技术负责人（开发人员第一个）+会签人
         jsonArray.add(jsonObject);
         //********************添加业务人员及项目技术负责人**********end********************
 

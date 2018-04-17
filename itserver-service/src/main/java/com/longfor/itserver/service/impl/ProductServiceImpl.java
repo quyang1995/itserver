@@ -13,10 +13,12 @@ import com.longfor.itserver.common.util.StringUtil;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.ProductEmployee;
 import com.longfor.itserver.entity.ProductEmployeeChangeLog;
+import com.longfor.itserver.entity.ProductLabel;
 import com.longfor.itserver.entity.ps.PsProductCount;
 import com.longfor.itserver.mapper.ProductEmployeeChangeLogMapper;
 import com.longfor.itserver.mapper.ProductEmployeeMapper;
 import com.longfor.itserver.mapper.ProductMapper;
+import com.longfor.itserver.service.IProductLabelService;
 import com.longfor.itserver.service.IProductService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import com.longfor.itserver.service.util.AccountUitl;
@@ -42,6 +44,8 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 	private ADSHelper adsHelp;
 	@Autowired
 	private ProductEmployeeChangeLogMapper productEmployeeChangeLogMapper;
+	@Autowired
+	private IProductLabelService productLabelService;
 
 	@Override
 	public List<PsProductCount> searchList(Map map) {
@@ -243,8 +247,39 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		oldProduct.setMacUrl(jsonObject.getString("macUrl"));
 		oldProduct.setIosVersion(jsonObject.getString("iosVersion"));
 		oldProduct.setAndroidVersion(jsonObject.getString("androidVersion"));
-		if(StringUtils.isNotBlank(jsonObject.getString("versionModifiedTime"))){
-			oldProduct.setVersionModifiedTime(DateUtil.string2Date(jsonObject.getString("versionModifiedTime"),DateUtil.PATTERN_DATE));
+
+		String iosModifiedTime = jsonObject.getString("iosModifiedTime");
+		String androidModifiedTime = jsonObject.getString("androidModifiedTime");
+		String iosUrlTest = jsonObject.getString("iosUrlTest");
+		String androidUrlTest = jsonObject.getString("androidUrlTest");
+		String iosVersionTest = jsonObject.getString("iosVersionTest");
+		String androidVersionTest = jsonObject.getString("androidVersionTest");
+		String iosModifiedTimeTest = jsonObject.getString("iosModifiedTimeTest");
+		String androidModifiedTimeTest = jsonObject.getString("androidModifiedTimeTest");
+
+		if(StringUtils.isNotBlank(iosModifiedTime)){
+			oldProduct.setIosModifiedTime(DateUtil.string2Date(iosModifiedTime,DateUtil.PATTERN_DATE));
+		}
+		if(StringUtils.isNotBlank(androidModifiedTime)){
+			oldProduct.setAndroidModifiedTime(DateUtil.string2Date(androidModifiedTime,DateUtil.PATTERN_DATE));
+		}
+		if(StringUtils.isNotBlank(iosUrlTest)){
+			oldProduct.setIosUrlTest(iosUrlTest);
+		}
+		if(StringUtils.isNotBlank(androidUrlTest)){
+			oldProduct.setAndroidUrlTest(androidUrlTest);
+		}
+		if(StringUtils.isNotBlank(iosVersionTest)){
+			oldProduct.setIosVersionTest(iosVersionTest);
+		}
+		if(StringUtils.isNotBlank(androidVersionTest)){
+			oldProduct.setAndroidVersionTest(androidVersionTest);
+		}
+		if(StringUtils.isNotBlank(iosModifiedTimeTest)){
+			oldProduct.setIosModifiedTimeTest(DateUtil.string2Date(iosModifiedTimeTest,DateUtil.PATTERN_DATE));
+		}
+		if(StringUtils.isNotBlank(androidModifiedTimeTest)){
+			oldProduct.setAndroidModifiedTimeTest(DateUtil.string2Date(androidModifiedTimeTest,DateUtil.PATTERN_DATE));
 		}
 
 		/* 接口人相关信息 */
@@ -492,6 +527,78 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		List<PsProductCount> list= productMapper.productHui(map);
 		this.getPersonLiableList(list);
 		return list;
+	}
+
+	@Override
+	public Map<String,Object> newProductHui(Map<String,Object> map) {
+		Map<String, Object> resultMap = new HashMap<>();
+		String analyzingConditions = map.get("analyzingConditions").toString();
+		String labels = map.get("labels").toString();
+		String productStatus = map.get("productStatus").toString();
+		//业务线-1：代表全部
+		if("-1".equals(analyzingConditions)){
+			analyzingConditions = "1,2,3,4,5,6,7,8";
+		}
+		//产品线,-1,：代表全部
+		if(",-1,".equals(labels)){
+//			map.remove("labels");
+			List<ProductLabel> productLabelList = productLabelService.select(null);
+			String [] label = new String[productLabelList.size()];
+			for(int i = 0 ; i < productLabelList.size() ; i++) {
+				label[i] = "," + productLabelList.get(i).getId().toString() + ",";
+			}
+			map.put("labels",label);
+		} else {
+			String [] label = labels.substring(1).split(",");
+			for (String str:label){
+				str = "," + str + ",";
+			}
+			map.put("labels",label);
+		}
+		//产品状态参数
+		if("-1".equals(productStatus) ){
+			productStatus = "290,100,110,120,130,140,150,160,170,180,190,193,195";
+		}
+		if(productStatus.indexOf("290")!=-1){
+			//已上线参数
+			map.put("status","1");
+		}
+		String [] strProductStatus = productStatus.split(",");
+		map.put("productStatus",strProductStatus);
+
+		if(analyzingConditions.indexOf("1")!=-1){
+			map.put("analyzingConditions","1");
+			resultMap.put("one",productMapper.newProductHui(map));
+		}
+		if(analyzingConditions.indexOf("2")!=-1){
+			map.put("analyzingConditions","2");
+			resultMap.put("two",productMapper.newProductHui(map));
+		}
+		if(analyzingConditions.indexOf("3")!=-1){
+			map.put("analyzingConditions","3");
+			resultMap.put("three",productMapper.newProductHui(map));
+		}
+		if(analyzingConditions.indexOf("4")!=-1){
+			map.put("analyzingConditions","4");
+			resultMap.put("four",productMapper.newProductHui(map));
+		}
+		if(analyzingConditions.indexOf("5")!=-1){
+			map.put("analyzingConditions","5");
+			resultMap.put("five",productMapper.newProductHui(map));
+		}
+		if(analyzingConditions.indexOf("6")!=-1){
+			map.put("analyzingConditions","6");
+			resultMap.put("six",productMapper.newProductHui(map));
+		}
+		if(analyzingConditions.indexOf("7")!=-1){
+			map.put("analyzingConditions","7");
+			resultMap.put("seven",productMapper.newProductHui(map));
+		}
+		if(analyzingConditions.indexOf("8")!=-1){
+			map.put("analyzingConditions","8");
+			resultMap.put("eight",productMapper.newProductHui(map));
+		}
+		return resultMap;
 	}
 
 	@Override

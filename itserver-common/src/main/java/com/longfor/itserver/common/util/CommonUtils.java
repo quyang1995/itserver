@@ -633,6 +633,10 @@ public class CommonUtils {
             if(pageSize > 50) {
                 paramsMap.put("pageSize", "50");
             }
+            if(pageNum < 1) {
+                pageNum = 1;
+                paramsMap.put("pageNum","1");
+            }
 
             int page_start = (pageNum - 1) * pageSize;
             int page_end = pageSize;

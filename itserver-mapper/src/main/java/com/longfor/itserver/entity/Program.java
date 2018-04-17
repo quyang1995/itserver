@@ -53,6 +53,9 @@ public class Program implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "program_type")
+    private Integer programType;
     /**
      * 账户类型：0或者null或者空位内部账号，1-供方账号
      */
@@ -852,5 +855,13 @@ public class Program implements Serializable {
 
     public void setActualReplayDate(Date actualReplayDate) {
         this.actualReplayDate = actualReplayDate;
+    }
+
+    public Integer getProgramType() {
+        return programType;
+    }
+
+    public void setProgramType(Integer programType) {
+        this.programType = programType;
     }
 }

@@ -465,6 +465,29 @@ public class APIProductController extends BaseController {
     }
 
     /**
+     * 产品汇列表(新)
+     *
+     * @param response
+     * @param request
+     * @return Map
+     */
+    @RequestMapping(value = "/newProductHui", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Map newProductHui(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        try{
+            /* 获得已经验证过的参数map */
+            @SuppressWarnings("unchecked")
+            Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+            resultMap.put("data", this.getProductService().newProductHui(paramsMap));
+        }catch (Exception e){
+            e.printStackTrace();
+            resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+        }
+        return resultMap;
+    }
+
+    /**
      * 产品标签类型列表
      *
      * @param response

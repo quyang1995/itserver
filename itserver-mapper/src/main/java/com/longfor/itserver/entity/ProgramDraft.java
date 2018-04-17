@@ -14,6 +14,13 @@ public class ProgramDraft {
     private Long id;
 
     /**
+     * 1=软件开发实施项目,2=运维服务、咨询采购项目,3=软件许可、硬件采购项目,4=基础设施项目
+     */
+    @Column(name = "program_type")
+    private Integer programType;
+
+
+    /**
      * 操作类型：100=添加项目，110=立项，120=Demo评审，130=招投标申请，140=中标申请，150=产品评审，160=开发评审，170=测试评审，180=上线计划，190=灰度发布，193=全面推广，195=项目复盘，200=延期上线，210=需求变更，900=完成，999=终止
      */
     @Column(name = "operation_type")
@@ -981,5 +988,13 @@ public class ProgramDraft {
 
     public void setCounterSignersName(String counterSignersName) {
         this.counterSignersName = counterSignersName;
+    }
+
+    public Integer getProgramType() {
+        return programType;
+    }
+
+    public void setProgramType(Integer programType) {
+        this.programType = programType;
     }
 }

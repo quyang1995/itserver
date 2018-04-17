@@ -44,6 +44,13 @@ public interface IProductService extends IAdminService<Product> {
      * @return
      */
     List<PsProductCount> productHui(Map<String,Object> map);
+
+    /**
+     * 产品汇列表（新）
+     * @param map
+     * @return
+     */
+    Map<String,Object> newProductHui(Map<String,Object> paramsMap);
     /**
      * 产品汇数量
      * @param map

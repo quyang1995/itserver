@@ -560,6 +560,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         if (null == selectOneProgram) {
             return false;
         }
+        selectOneProgram.setProgramType(program.getProgramType());
         selectOneProgram.setName(program.getName());
         selectOneProgram.setProductId(product.getId());
         selectOneProgram.setProductName(product.getName());
@@ -966,6 +967,22 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                 programApprovalSnapshot.setProgramStatus(ProgramStatusNewEnum.XMFP.getCode());
                 programApprovalSnapshotMapper.insert(programApprovalSnapshot);
             }
+            //项目类型如果是运维服务、咨询采购项目，项目立项完成之后直接，项目状态直接变为完成,并且添加快照记录
+            //项目类型如果是软件许可、硬件采购项目，项目灰度完成之后直接，项目状态直接变为完成,并且添加快照记录
+            if(program.getProgramType()==ProgramTypeEnum.YWFW.getCode()
+                    && program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
+                    && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+                    ||
+                    program.getProgramType()==ProgramTypeEnum.RJXK.getCode()
+                    && program.getProgramStatus()==ProgramStatusNewEnum.HDFB.getCode()
+                    && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()){
+                program.setProgramStatus(ProgramStatusNewEnum.WC.getCode());
+                programMapper.updateByPrimaryKeySelective(program);
+                ProgramApprovalSnapshot wcSnapshot = new ProgramApprovalSnapshot();
+                this.copyProperties(wcSnapshot,program);
+                wcSnapshot.setId(null);
+                programApprovalSnapshotMapper.insert(wcSnapshot);
+            }
             //实时修改预警天数
             this.warningTask(program);
         }catch (Exception e){
@@ -1114,6 +1131,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             paramsMap.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
             paramsMap.put("businessList",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList")));//业务人员转成GUID
             paramsMap.put("developerList",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList")));//开发人员转成GUID
+            paramsMap.put("counterSigners",paramsMap.get("counterSigners"));//会签人
             if("1".equals(paramsMap.get("reportPoor"))){
                 paramsMap.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
             }
@@ -1201,6 +1219,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             paramsMap.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
             paramsMap.put("businessList",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList")));//业务人员转成GUID
             paramsMap.put("developerList",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList")));//开发人员转成GUID
+            paramsMap.put("counterSigners",paramsMap.get("counterSigners"));//会签人
             if("1".equals(paramsMap.get("reportPoor"))){
                 paramsMap.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
             }
@@ -1348,6 +1367,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             if("1".equals(paramsMap.get("reportPoor"))){
                 paramsMap.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
             }
+            paramsMap.put("counterSigners",paramsMap.get("counterSigners"));//开发人员转成GUID
             paramsMap.put("workflowInstanceTitle",program.getName()+ProgramStatusNewEnum.ZZ.getText());//流程名称
             //创建流程
             ApplyCreateResultVo applyCreateResultVo = ProgramBpmUtils.submitFinishProgram(paramsMap);
@@ -1461,7 +1481,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         if("1".equals(paramsMap.get("reportPoor"))){
             map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
         }
-//        map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
+        map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
         map.put("cOrZ",paramsMap.get("tApproval"));//string 1-李，2-傅   IT部门副总经理
         map.put("businessPresidentList",paramsMap.get("businessPresidentList"));//业务副总裁
         if(paramsMap.get("productId")!=null){
@@ -1493,6 +1513,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
         map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
 //        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
+        map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
         map.put("businessCenterList",paramsMap.get("businessCenterList"));//业务中心负责人
         map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
         if("1".equals(paramsMap.get("reportPoor"))){
@@ -1514,6 +1535,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
 //        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
         map.put("businessCenterList",paramsMap.get("businessCenterList"));//业务中心负责人
+        map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
         map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
         if("1".equals(paramsMap.get("reportPoor"))){
             map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
@@ -1568,6 +1590,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         if("1".equals(paramsMap.get("reportPoor"))){
             map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
         }
+        map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
         return map;
     }
 
@@ -1591,6 +1614,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         }
         map.put("cOrZ",paramsMap.get("tApproval"));//string 1-李，2-傅   IT部门副总经理
         map.put("businessPresidentList",paramsMap.get("businessPresidentList"));//业务副总裁
+        map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
         return map;
     }
 
@@ -1611,6 +1635,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         if("1".equals(paramsMap.get("reportPoor"))){
             map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
         }
+        map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
         return map;
     }
 
@@ -1631,6 +1656,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         if("1".equals(paramsMap.get("reportPoor"))){
             map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
         }
+        map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
         return map;
     }
 
@@ -1648,6 +1674,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         if("1".equals(paramsMap.get("reportPoor"))){
             map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
         }
+        map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
         return map;
     }
 
@@ -2585,14 +2612,15 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
      */
     @Override
     public int warningTask(Program program){
+        Map<String,Object> map = new HashMap<>();
+        if(program.getId()==null){
+            map.put("id",program.getId());
+            programMapper.updateWarningDays(map);//修改相差天数值为null
+        }
         if(program.getProgramStatus()==ProgramStatusNewEnum.WC.getCode()
-                || program.getProgramStatus()==ProgramStatusNewEnum.ZZ.getCode()
-                || program.getId()==null) {
+                || program.getProgramStatus()==ProgramStatusNewEnum.ZZ.getCode()) {
             return 0;
         }
-        Map<String,Object> map = new HashMap<>();
-        map.put("id",program.getId());
-        programMapper.updateWarningDays(map);//修改相差天数值为null
         map.remove("id");
         Integer differentDays = null;
         Date now = new Date();
@@ -2626,64 +2654,119 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
     private Date getPlanDate(Program program){
         Date planDate = null;
-        if (program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()
-                && program.getApprovalStatus()==0){
-            planDate = program.getCommitDate();
-        }
-        if (program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()){
-            if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
-                planDate = program.getDemoApprovalDate();
-            } else {
+        //根据不同的项目类型查找对应下个节点
+        //1:项目类型为：软件开发实施项目时，按照九步法
+        if(program.getProgramType()==ProgramTypeEnum.RJKF.getCode()){
+            if (program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()
+                    && program.getApprovalStatus()==0){
                 planDate = program.getCommitDate();
             }
-        }
-        if (program.getProgramStatus()==ProgramStatusNewEnum.DPS.getCode()){
-            if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
-                planDate = program.getProdApprovalDate();
-            } else {
-                planDate = program.getDemoApprovalDate();
+            if (program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()){
+                if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                    planDate = program.getDemoApprovalDate();
+                } else {
+                    planDate = program.getCommitDate();
+                }
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.DPS.getCode()){
+                if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                    planDate = program.getProdApprovalDate();
+                } else {
+                    planDate = program.getDemoApprovalDate();
+                }
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.CPPS.getCode()){
+                if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                    planDate = program.getDevApprovalDate();
+                } else {
+                    planDate = program.getProdApprovalDate();
+                }
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.KFPS.getCode()){
+                if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                    planDate = program.getTestApprovalDate();
+                } else {
+                    planDate = program.getDevApprovalDate();
+                }
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.CSPS.getCode()){
+                if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                    planDate = program.getOnlinePlanDate();
+                } else {
+                    planDate = program.getTestApprovalDate();
+                }
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.SXPS.getCode()){
+                if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                    planDate = program.getGrayReleaseDate();
+                } else {
+                    planDate = program.getOnlinePlanDate();
+                }
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.HDFB.getCode()){
+                if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                    planDate = program.getAllExtensionDate();
+                } else {
+                    planDate = program.getGrayReleaseDate();
+                }
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.QMTG.getCode()){
+                if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                    planDate = program.getReplayDate();
+                } else {
+                    planDate = program.getAllExtensionDate();
+                }
             }
         }
-        if (program.getProgramStatus()==ProgramStatusNewEnum.CPPS.getCode()){
-            if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
-                planDate = program.getDevApprovalDate();
-            } else {
-                planDate = program.getProdApprovalDate();
+        //2:项目类型为：运维服务、咨询采购项目时，直接结束，不做操作
+
+        //3:项目类型为：软件许可、硬件采购项目，
+        if(program.getProgramType()==ProgramTypeEnum.RJXK.getCode()){
+            if (program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()
+                    && program.getApprovalStatus()==0){
+                planDate = program.getCommitDate();
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()){
+                if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                    planDate = program.getGrayReleaseDate();
+                } else {
+                    planDate = program.getCommitDate();
+                }
             }
         }
-        if (program.getProgramStatus()==ProgramStatusNewEnum.KFPS.getCode()){
-            if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
-                planDate = program.getTestApprovalDate();
-            } else {
-                planDate = program.getDevApprovalDate();
+        //4:项目类型为：基础设施项目，
+        if(program.getProgramType()==ProgramTypeEnum.JCSS.getCode()){
+            if (program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()
+                    && program.getApprovalStatus()==0){
+                planDate = program.getCommitDate();
             }
-        }
-        if (program.getProgramStatus()==ProgramStatusNewEnum.CSPS.getCode()){
-            if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
-                planDate = program.getOnlinePlanDate();
-            } else {
-                planDate = program.getTestApprovalDate();
+            if (program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()){
+                if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                    planDate = program.getDevApprovalDate();
+                } else {
+                    planDate = program.getCommitDate();
+                }
             }
-        }
-        if (program.getProgramStatus()==ProgramStatusNewEnum.SXPS.getCode()){
-            if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
-                planDate = program.getGrayReleaseDate();
-            } else {
-                planDate = program.getOnlinePlanDate();
+            if (program.getProgramStatus()==ProgramStatusNewEnum.KFPS.getCode()){
+                if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                    planDate = program.getGrayReleaseDate();
+                } else {
+                    planDate = program.getDevApprovalDate();
+                }
             }
-        }
-        if (program.getProgramStatus()==ProgramStatusNewEnum.HDFB.getCode()){
-            if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
-                planDate = program.getAllExtensionDate();
-            } else {
-                planDate = program.getGrayReleaseDate();
+            if (program.getProgramStatus()==ProgramStatusNewEnum.HDFB.getCode()){
+                if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                    planDate = program.getAllExtensionDate();
+                } else {
+                    planDate = program.getGrayReleaseDate();
+                }
             }
-        }
-        if (program.getProgramStatus()==ProgramStatusNewEnum.QMTG.getCode()){
-            if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
-                planDate = program.getReplayDate();
-            } else {
-                planDate = program.getAllExtensionDate();
+            if (program.getProgramStatus()==ProgramStatusNewEnum.QMTG.getCode()){
+                if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()) {
+                    planDate = program.getReplayDate();
+                } else {
+                    planDate = program.getAllExtensionDate();
+                }
             }
         }
         return planDate;

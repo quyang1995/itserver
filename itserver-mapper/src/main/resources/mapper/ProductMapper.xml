@@ -38,7 +38,14 @@
         <result column="mac_url" property="macUrl" jdbcType="VARCHAR"/>
         <result column="ios_version" property="iosVersion" jdbcType="VARCHAR"/>
         <result column="android_version" property="androidVersion" jdbcType="VARCHAR"/>
-        <result column="version_modified_time" property="versionModifiedTime" jdbcType="TIMESTAMP"/>
+        <result column="ios_modified_time" property="iosModifiedTime" jdbcType="TIMESTAMP"/>
+        <result column="android_modified_time" property="androidModifiedTime" jdbcType="TIMESTAMP"/>
+        <result column="ios_url_test" property="iosUrlTest" jdbcType="VARCHAR"/>
+        <result column="android_url_test" property="androidUrlTest" jdbcType="VARCHAR"/>
+        <result column="ios_version_test" property="iosVersionTest" jdbcType="VARCHAR"/>
+        <result column="android_version_test" property="androidVersionTest" jdbcType="VARCHAR"/>
+        <result column="ios_modified_time_test" property="iosModifiedTimeTest" jdbcType="TIMESTAMP"/>
+        <result column="android_modified_time_test" property="androidModifiedTimeTest" jdbcType="TIMESTAMP"/>
     </resultMap>
 
 
@@ -75,7 +82,8 @@
         contact_full_dept_path, like_program, type, status, modified_account_id, modified_name,
         create_time, modified_time, new_code, analyzing_conditions,contact_account_id1,contact_employee_code1,
         contact_employee_name1,contact_full_dept_path1,logo,is_top,label,pc_url,h5_url,ios_url,android_url,
-        label_name,windows_url,mac_url,ios_version,android_version,version_modified_time
+        label_name,windows_url,mac_url,ios_version,android_version,ios_modified_time,android_modified_time,
+        ios_url_test,android_url_test,ios_version_test,android_version_test,ios_modified_time_test,android_modified_time_test
     </sql>
     <select id="selectList" parameterType="map" resultMap="CountBaseResultMap">
         SELECT DISTINCT ta.*,
@@ -404,6 +412,56 @@
             where 1=1 and `status`!=0
             <include refid="productHui_Where"/>
         </if>
+    </select>
+
+    <select id="newProductHui" resultMap="CountBaseResultMap" parameterType="map">
+        select * from (
+        SELECT p.*,
+        CASE
+        WHEN pro.program_status = '100' THEN  '100'
+        WHEN pro.program_status = '110' THEN  '110'
+        WHEN pro.program_status = '120' THEN  '120'
+        WHEN pro.program_status = '130' THEN  '130'
+        WHEN pro.program_status = '140' THEN  '140'
+        WHEN pro.program_status = '150' THEN  '150'
+        WHEN pro.program_status = '160' THEN  '160'
+        WHEN pro.program_status = '170' THEN  '170'
+        WHEN pro.program_status = '180' THEN  '180'
+        WHEN pro.program_status = '190' THEN  '190'
+        WHEN pro.program_status = '193' THEN  '193'
+        WHEN pro.program_status = '195' THEN  '195'
+        WHEN pro.program_status = '900' THEN  '900'
+        WHEN pro.program_status = '999' THEN  '999'
+        ELSE '100' END as programStatus
+        FROM product p
+        LEFT JOIN (SELECT id,product_id,program_status from program GROUP BY product_id) pro on pro.product_id=p.id
+        ) a
+        <where>
+            <if test=" analyzingConditions != null and analyzingConditions != '' and analyzingConditions != -1">
+                a.analyzing_conditions like concat('%',#{analyzingConditions},'%')
+            </if>
+            <if test=" searchText != null and searchText != '' ">
+                and (a.name like concat('%',#{searchText},'%')  or a.label_name like concat('%',#{searchText},'%'))
+            </if>
+            <if test=" labels != null ">
+                AND
+                <foreach item="item" index="index" collection="labels" open="(" separator="or" close=")">
+                    a.label like concat('%',#{item},'%')
+                </foreach>
+            </if>
+            <if test=" productStatus != null ">
+                AND (
+                <foreach item="item" index="index" collection="productStatus" open="(" separator="or" close=")">
+                    a.programStatus = #{item}
+                </foreach>
+                <if test=" status != null and status != '' ">
+                    or (a.status = #{status} or a.programStatus = 900)
+                </if>
+                )
+            </if>
+
+        </where>
+        ORDER BY a.is_top desc,field(a.`status`,1,2,0),a.programStatus desc,a.create_time desc;
     </select>
 
     <select id="getCountByLabelId" resultType="int" >

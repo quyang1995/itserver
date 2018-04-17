@@ -6,6 +6,7 @@
       WARNING - @mbggenerated
     -->
     <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="program_type" property="programType" jdbcType="INTEGER" />
     <result column="operation_type" property="operationType" jdbcType="INTEGER" />
     <result column="product_id" property="productId" jdbcType="BIGINT" />
     <result column="product_name" property="productName" jdbcType="VARCHAR" />
@@ -62,7 +63,7 @@
     <!--
       WARNING - @mbggenerated
     -->
-    id, operation_type, product_id, product_name, product_code, name, descp, like_product,
+    id, program_type, operation_type, product_id, product_name, product_code, name, descp, like_product,
     like_program, type, program_status, modified_account_id, modified_name, create_time, 
     modified_time, account_type, commit_date, demo_approval_date, bidding_date, winning_bid_date, 
     prod_approval_date, dev_approval_date, test_approval_date, online_plan_date, gray_release_date, 

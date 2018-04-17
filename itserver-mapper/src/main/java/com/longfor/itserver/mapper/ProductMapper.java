@@ -33,8 +33,20 @@ public interface ProductMapper extends BeeMapper<Product> {
 
     List<Product> getListByLikeAnalyzingConditions(Map map);
 
+    /**
+     * 产品汇
+     * @param map
+     * @return
+     */
     List<PsProductCount> productHui(Map<String,Object> map);
     int productHuiNum(Map map);
+
+    /**
+     * 产品汇（新）
+     * @param map
+     * @return
+     */
+    List<PsProductCount> newProductHui(Map<String,Object> map);
 
     /**
      * 查询产品标签使用次数

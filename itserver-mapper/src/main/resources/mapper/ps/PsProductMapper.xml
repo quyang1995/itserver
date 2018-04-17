@@ -38,7 +38,14 @@
     <result column="mac_url" property="macUrl" jdbcType="VARCHAR"/>
     <result column="ios_version" property="iosVersion" jdbcType="VARCHAR"/>
     <result column="android_version" property="androidVersion" jdbcType="VARCHAR"/>
-    <result column="version_modified_time" property="versionModifiedTime" jdbcType="TIMESTAMP"/>
+    <result column="ios_modified_time" property="iosModifiedTime" jdbcType="TIMESTAMP"/>
+    <result column="android_modified_time" property="androidModifiedTime" jdbcType="TIMESTAMP"/>
+    <result column="ios_url_test" property="iosUrlTest" jdbcType="VARCHAR"/>
+    <result column="android_url_test" property="androidUrlTest" jdbcType="VARCHAR"/>
+    <result column="ios_version_test" property="iosVersionTest" jdbcType="VARCHAR"/>
+    <result column="android_version_test" property="androidVersionTest" jdbcType="VARCHAR"/>
+    <result column="ios_modified_time_test" property="iosModifiedTimeTest" jdbcType="TIMESTAMP"/>
+    <result column="android_modified_time_test" property="androidModifiedTimeTest" jdbcType="TIMESTAMP"/>
   </resultMap>
   <resultMap id="ApiBaseResultMap" extends="BaseResultMap" type="com.longfor.itserver.entity.ps.PsProductAll">
   </resultMap>
@@ -50,7 +57,8 @@
     contact_full_dept_path, like_program, type, status, modified_account_id, modified_name,
     create_time, modified_time, analyzing_conditions, contact_account_id1, contact_employee_code1,
     contact_employee_name1, contact_full_dept_path1, logo,is_top,label, pc_url, h5_url, ios_url, android_url,
-    label_name, windows_url, mac_url,ios_version,android_version,version_modified_time
+    label_name, windows_url, mac_url,ios_version,android_version,ios_modified_time,android_modified_time,
+    ios_url_test,android_url_test,ios_version_test,android_version_test,ios_modified_time_test,android_modified_time_test
   </sql>
 
   <select id="selectLikeList" resultMap="ApiBaseResultMap">

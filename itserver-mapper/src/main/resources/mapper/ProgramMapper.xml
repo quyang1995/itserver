@@ -6,6 +6,7 @@
           WARNING - @mbggenerated
         -->
         <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="program_type" jdbcType="INTEGER" property="programType"/>
         <result column="product_id" jdbcType="BIGINT" property="productId"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="product_code" jdbcType="VARCHAR" property="productCode" />
@@ -87,7 +88,7 @@
         <!--
           WARNING - @mbggenerated
         -->
-        id, product_id, product_name, product_code, name, descp, commit_date, start_date, gray_release_date, release_date,
+        id,program_type, product_id, product_name, product_code, name, descp, commit_date, start_date, gray_release_date, release_date,
         ued_date, architecture_date, like_product, like_program, type, program_status, modified_account_id, modified_name,
         create_time, modified_time,demo_approval_date,bidding_date,winning_bid_date,prod_approval_date,dev_approval_date
         ,test_approval_date,online_plan_date,dev_type,analyzing_conditions,dev_workload,overall_cost,bid_dev_workload
@@ -519,29 +520,6 @@
             DATE_FORMAT(p.actual_gray_release_date,'%Y-%m-%d') actualGrayReleaseDate,
             DATE_FORMAT(p.actual_all_extension_date,'%Y-%m-%d') actualAllExtensionDate,
             DATE_FORMAT(p.actual_replay_date,'%Y-%m-%d') actualReplayDate
-        /**
-            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=110 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d')  actualCommitDate
-            ,
-            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=120 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualDemoApprovalDate
-            ,
-            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=130 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualBiddingDate
-            ,
-            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=140 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualWinningBidDate
-            ,
-            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=150 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualProdApprovalDate
-            ,
-            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=160 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualDevApprovalDate
-            ,
-            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=170 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualTestApprovalDate
-            ,
-            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=180 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualOnlinePlanDate
-            ,
-            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=190 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualGrayReleaseDate
-            ,
-            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=193 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualReplayDate
-            ,
-            DATE_FORMAT((SELECT pas.create_time from program_approval_snapshot pas where pas.program_id=p.id and pas.approval_status=110 and pas.program_status=195 ORDER BY create_time DESC LIMIT 0,1),'%Y-%m-%d') actualAllExtensionDate
-            **/
             from program p
             LEFT JOIN program_employee e ON p.id = e.program_id
             LEFT JOIN product pd on pd.id=p.product_id
@@ -555,6 +533,12 @@
             <!--<if test=" programStatus != null and  programStatus != '' and  programStatus != '0'">-->
                 <!--AND p.program_status = #{programStatus}-->
             <!--</if>-->
+            <if test='approvalStatus != "" and approvalStatus != null  and approvalStatus != 0'>
+                and p.approval_status = #{approvalStatus}
+            </if>
+            <if test='productId != "" and productId != null and productId != -1'>
+                and p.product_id =#{productId}
+            </if>
             <if test=" analyzingConditions != null and  analyzingConditions != '' and  analyzingConditions != -1">
                 AND p.analyzing_conditions  LIKE CONCAT('%', #{analyzingConditions, jdbcType=VARCHAR}, '%')
             </if>

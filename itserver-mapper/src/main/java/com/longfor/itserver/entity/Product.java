@@ -152,9 +152,33 @@ public class Product implements Serializable {
     @Column(name = "android_version")
     private String androidVersion;
 
-    @Column(name = "version_modified_time")
+    @Column(name = "ios_modified_time")
     @JsonSerialize(using = CustomDateSerializer.class)
-    private Date versionModifiedTime;
+    private Date iosModifiedTime;
+
+    @Column(name = "android_modified_time")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    private Date androidModifiedTime;
+
+    @Column(name = "ios_url_test")
+    private String iosUrlTest;
+
+    @Column(name = "android_url_test")
+    private String androidUrlTest;
+
+    @Column(name = "ios_version_test")
+    private String iosVersionTest;
+
+    @Column(name = "android_version_test")
+    private String androidVersionTest;
+
+    @Column(name = "ios_modified_time_test")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    private Date iosModifiedTimeTest;
+
+    @Column(name = "android_modified_time_test")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    private Date androidModifiedTimeTest;
 
     public String getIosVersion() {
         return iosVersion;
@@ -170,14 +194,6 @@ public class Product implements Serializable {
 
     public void setAndroidVersion(String androidVersion) {
         this.androidVersion = androidVersion;
-    }
-
-    public Date getVersionModifiedTime() {
-        return versionModifiedTime;
-    }
-
-    public void setVersionModifiedTime(Date versionModifiedTime) {
-        this.versionModifiedTime = versionModifiedTime;
     }
 
     public String getContactAccountId1() {
@@ -560,5 +576,69 @@ public class Product implements Serializable {
      */
     public void setModifiedTime(Date modifiedTime) {
         this.modifiedTime = modifiedTime;
+    }
+
+    public Date getIosModifiedTime() {
+        return iosModifiedTime;
+    }
+
+    public void setIosModifiedTime(Date iosModifiedTime) {
+        this.iosModifiedTime = iosModifiedTime;
+    }
+
+    public Date getAndroidModifiedTime() {
+        return androidModifiedTime;
+    }
+
+    public void setAndroidModifiedTime(Date androidModifiedTime) {
+        this.androidModifiedTime = androidModifiedTime;
+    }
+
+    public String getIosUrlTest() {
+        return iosUrlTest;
+    }
+
+    public void setIosUrlTest(String iosUrlTest) {
+        this.iosUrlTest = iosUrlTest;
+    }
+
+    public String getAndroidUrlTest() {
+        return androidUrlTest;
+    }
+
+    public void setAndroidUrlTest(String androidUrlTest) {
+        this.androidUrlTest = androidUrlTest;
+    }
+
+    public String getIosVersionTest() {
+        return iosVersionTest;
+    }
+
+    public void setIosVersionTest(String iosVersionTest) {
+        this.iosVersionTest = iosVersionTest;
+    }
+
+    public String getAndroidVersionTest() {
+        return androidVersionTest;
+    }
+
+    public void setAndroidVersionTest(String androidVersionTest) {
+        this.androidVersionTest = androidVersionTest;
+    }
+
+    public Date getIosModifiedTimeTest() {
+        return iosModifiedTimeTest;
+    }
+
+    public void setIosModifiedTimeTest(Date iosModifiedTimeTest) {
+        this.iosModifiedTimeTest = iosModifiedTimeTest;
+    }
+
+    public Date getAndroidModifiedTimeTest() {
+        return androidModifiedTimeTest;
+    }
+
+    public void setAndroidModifiedTimeTest(Date androidModifiedTimeTest) {
+        this.androidModifiedTimeTest = androidModifiedTimeTest;
     }
 }
