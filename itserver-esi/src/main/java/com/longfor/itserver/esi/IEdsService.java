@@ -10,4 +10,6 @@ package com.longfor.itserver.esi;
 public interface IEdsService {
 
     String getEmpGuidByPfAcc(String oaStr);
+
+    String getEmpGuidByPfAcc_s(String oaStr);
 }

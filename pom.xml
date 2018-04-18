@@ -33,7 +33,8 @@
         <mybatis-ehcache.version>1.0.3</mybatis-ehcache.version>
         <persistence-api.version>1.0</persistence-api.version>
 
-        <eds-helper.version>1.5.13-SNAPSHOT</eds-helper.version>
+        <!--<eds-helper.version>1.5.13-SNAPSHOT</eds-helper.version>-->
+        <eds-helper.version>1.6.7-SNAPSHOT</eds-helper.version>
         <ads-helper.version>1.0.7-SNAPSHOT</ads-helper.version>
 
         <judi-encrypt.version>1.12</judi-encrypt.version>
