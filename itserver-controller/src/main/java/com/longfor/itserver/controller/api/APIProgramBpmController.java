@@ -819,7 +819,7 @@ public class APIProgramBpmController extends BaseController {
 										paramsMap.get("approveStatus"),
 										paramsMap.get("oaAccount"),
 										paramsMap.get("searchType"),
-										Integer.parseInt(paramsMap.get("page")),
+										Integer.parseInt(paramsMap.get("page"))-1,
 										Integer.parseInt(paramsMap.get("pageSize")));
 
 			if(null==moApproveListVo)return CommonUtils.getResultMapByBizEnum(BizEnum.E1303);
