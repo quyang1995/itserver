@@ -47,7 +47,7 @@ public interface IProductService extends IAdminService<Product> {
 
     /**
      * 产品汇列表（新）
-     * @param map
+     * @param paramsMap
      * @return
      */
     Map<String,Object> newProductHui(Map<String,Object> paramsMap);

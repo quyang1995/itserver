@@ -2403,6 +2403,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                     program.getProgramStatus()==ProgramStatusNewEnum.WC.getCode() ){
                 continue;
             }
+            this.promptNoteInfo(program,apiProgramTasks);
+        }
+        return apiProgramTasks;
+    }
+
+    private void promptNoteInfo(Program program,List<APIProgramTask> apiProgramTasks){
+        //项目类型为：软件开发实施项目时
+        if(program.getProgramType()==ProgramTypeEnum.RJKF.getCode()){
             //提示立项
             if (program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()
                     && program.getApprovalStatus()==0
@@ -2421,7 +2429,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                     && program.getProdApprovalDate()!=null ){
                 this.getTaskList(apiProgramTasks,program,program.getProdApprovalDate());
             }
-            //提示开发评审
+            //提示技术评审
             if (program.getProgramStatus()==ProgramStatusNewEnum.CPPS.getCode()
                     && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
                     && program.getDevApprovalDate()!=null ){
@@ -2458,7 +2466,53 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 //                this.getTaskList(apiProgramTasks,program,program.getReplayDate());
 //            }
         }
-        return apiProgramTasks;
+        //项目类型为：运维服务、咨询采购项目时
+        if(program.getProgramType()==ProgramTypeEnum.YWFW.getCode()){
+            //提示立项
+            if (program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()
+                    && program.getApprovalStatus()==0
+                    && program.getCommitDate()!=null){
+                this.getTaskList(apiProgramTasks,program,program.getCommitDate());
+            }
+            //立项审核通过之后，项目完成
+        }
+        //项目类型为：软件许可、硬件采购项目时
+        if(program.getProgramType()==ProgramTypeEnum.RJXK.getCode()){
+            //提示立项
+            if (program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()
+                    && program.getApprovalStatus()==0
+                    && program.getCommitDate()!=null){
+                this.getTaskList(apiProgramTasks,program,program.getCommitDate());
+            }
+            //提示灰度发布
+            if (program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
+                    && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+                    && program.getGrayReleaseDate()!=null){
+                this.getTaskList(apiProgramTasks,program,program.getGrayReleaseDate());
+            }
+            //灰度发布完成之后，项目完成
+        }
+        //项目类型为：基础设施项目时
+        if(program.getProgramType()==ProgramTypeEnum.JCSS.getCode()){
+            //提示立项
+            if (program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()
+                    && program.getApprovalStatus()==0
+                    && program.getCommitDate()!=null){
+                this.getTaskList(apiProgramTasks,program,program.getCommitDate());
+            }
+            //提示技术评审
+            if (program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
+                    && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+                    && program.getDevApprovalDate()!=null ){
+                this.getTaskList(apiProgramTasks,program,program.getDevApprovalDate());
+            }
+            //提示灰度发布
+            if (program.getProgramStatus()==ProgramStatusNewEnum.KFPS.getCode()
+                    && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHTG.getCode()
+                    && program.getGrayReleaseDate()!=null){
+                this.getTaskList(apiProgramTasks,program,program.getGrayReleaseDate());
+            }
+        }
     }
 
     private void getTaskList(List<APIProgramTask> apiProgramTasks,Program program,Date planDate){
