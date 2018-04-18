@@ -286,6 +286,7 @@ public class APIProgramController extends BaseController {
 			resultMap.put("data", program);
 		} catch (Exception e){
 			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
 		}
 		return resultMap;
 	}
@@ -312,6 +313,7 @@ public class APIProgramController extends BaseController {
 			resultMap.put("data", grayLevelList);
 		} catch (Exception e){
 			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
 		}
 		return resultMap;
 	}
@@ -450,6 +452,24 @@ public class APIProgramController extends BaseController {
 		}
 	}
 
+	/**
+	 * 删除项目：未立项项目允许删除项目
+	 */
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public Map approvalRebut(HttpServletRequest request) {
+		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		try{
+			LOG.info("------delete:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+			this.getProgramService().deleteProgram(paramsMap);
+		}catch (Exception e){
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return resultMap;
+	}
+
 	@RequestMapping(value = "/changeLog/list" ,method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public Map changeLogList(HttpServletResponse response,HttpServletRequest request){
@@ -528,7 +548,7 @@ public class APIProgramController extends BaseController {
 		Map parsmsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
-			LOG.info("------updateStatus:-----------------"+ JSON.toJSONString(parsmsMap)+"-----------------------");
+			LOG.info("------productIdAllList:-----------------"+ JSON.toJSONString(parsmsMap)+"-----------------------");
 			List list = this.getProgramService().productIdAllList(parsmsMap);
 			resultMap.put("list",list);
 		}catch (Exception e){
@@ -544,7 +564,7 @@ public class APIProgramController extends BaseController {
 	public Map updateStatus(HttpServletRequest request,HttpServletResponse response){
 		Map paramsMap= (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		try{
-			LOG.info("------updateStatus:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+			LOG.info("------/update/status:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			//状态值有效性验证
 			int code = Integer.parseInt((String) paramsMap.get("status"));
 			ProgramStatusEnum programStatusEnum = ProgramStatusEnum.getByCode(code);

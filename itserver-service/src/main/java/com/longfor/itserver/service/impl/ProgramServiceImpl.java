@@ -401,6 +401,20 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         return true;
     }
 
+    @Override
+    @Transactional
+    public Integer deleteProgram(Map map){
+        Long programId = Long.parseLong(map.get("programId").toString());
+        Program program = programMapper.selectByPrimaryKey(programId);
+        if(program.getProgramStatus()!=ProgramStatusNewEnum.WLX.getCode()){
+            return 1;
+        }
+        //删除项目表数据
+        programMapper.deleteByPrimaryKey(programId);
+
+        return 0;
+    }
+
     public boolean getAccountLongfor(Program program, String str, String id) {
         String[] strArr = str.split(",");
         for (int i = 0; i < strArr.length; i++) {

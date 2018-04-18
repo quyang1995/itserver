@@ -327,7 +327,6 @@ public class APIProductController extends BaseController {
         }
     }
 
-
     @RequestMapping(value = "/changeLog/list", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
     public Map changeLogList(HttpServletRequest request, HttpServletResponse response) {

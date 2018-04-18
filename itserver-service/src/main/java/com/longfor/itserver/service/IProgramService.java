@@ -19,6 +19,12 @@ public interface IProgramService extends IAdminService<Program> {
 
     boolean addProgram(Map map) throws Exception;
 
+    /**
+     * 删除项目：未立项项目允许删除项目
+     * @param map
+     */
+    Integer deleteProgram(Map map);
+
     List<Program> inProgramId(String likeProgram);
 
     Program getProgramId(long id);
@@ -79,6 +85,11 @@ public interface IProgramService extends IAdminService<Program> {
 
     List<Map<String,Object>> changeTopFive(List<Product> productList,Map<String, Object> paramsMap);
 
+    /**
+     * 年度预算
+     * @param year
+     * @return
+     */
     List<Map<String,Object>> yearCost(String year);
 
     List<ProgramFile> getFileListByWhere(Map<String,Object> map);

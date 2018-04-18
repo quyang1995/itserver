@@ -568,35 +568,51 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 
 		if(analyzingConditions.indexOf("1")!=-1){
 			map.put("analyzingConditions","1");
-			resultMap.put("one",productMapper.newProductHui(map));
+			List<PsProductCount> list = productMapper.newProductHui(map);
+			this.getPersonLiableList(list);
+			resultMap.put("one",list);
 		}
 		if(analyzingConditions.indexOf("2")!=-1){
 			map.put("analyzingConditions","2");
-			resultMap.put("two",productMapper.newProductHui(map));
+			List<PsProductCount> list = productMapper.newProductHui(map);
+			this.getPersonLiableList(list);
+			resultMap.put("two",list);
 		}
 		if(analyzingConditions.indexOf("3")!=-1){
 			map.put("analyzingConditions","3");
-			resultMap.put("three",productMapper.newProductHui(map));
+			List<PsProductCount> list = productMapper.newProductHui(map);
+			this.getPersonLiableList(list);
+			resultMap.put("three",list);
 		}
 		if(analyzingConditions.indexOf("4")!=-1){
 			map.put("analyzingConditions","4");
-			resultMap.put("four",productMapper.newProductHui(map));
+			List<PsProductCount> list = productMapper.newProductHui(map);
+			this.getPersonLiableList(list);
+			resultMap.put("four",list);
 		}
 		if(analyzingConditions.indexOf("5")!=-1){
 			map.put("analyzingConditions","5");
-			resultMap.put("five",productMapper.newProductHui(map));
+			List<PsProductCount> list = productMapper.newProductHui(map);
+			this.getPersonLiableList(list);
+			resultMap.put("five",list);
 		}
 		if(analyzingConditions.indexOf("6")!=-1){
 			map.put("analyzingConditions","6");
-			resultMap.put("six",productMapper.newProductHui(map));
+			List<PsProductCount> list = productMapper.newProductHui(map);
+			this.getPersonLiableList(list);
+			resultMap.put("six",list);
 		}
 		if(analyzingConditions.indexOf("7")!=-1){
 			map.put("analyzingConditions","7");
-			resultMap.put("seven",productMapper.newProductHui(map));
+			List<PsProductCount> list = productMapper.newProductHui(map);
+			this.getPersonLiableList(list);
+			resultMap.put("seven",list);
 		}
 		if(analyzingConditions.indexOf("8")!=-1){
 			map.put("analyzingConditions","8");
-			resultMap.put("eight",productMapper.newProductHui(map));
+			List<PsProductCount> list = productMapper.newProductHui(map);
+			this.getPersonLiableList(list);
+			resultMap.put("eight",list);
 		}
 		return resultMap;
 	}
