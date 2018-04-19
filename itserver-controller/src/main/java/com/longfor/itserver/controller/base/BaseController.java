@@ -2,8 +2,10 @@ package com.longfor.itserver.controller.base;
 
 
 import com.longfor.ads.helper.ADSHelper;
+import com.longfor.eds.helper.EDSHelper;
 import com.longfor.itserver.common.helper.JoddHelper;
 import com.longfor.itserver.esi.IAdsService;
+import com.longfor.itserver.esi.IEdsService;
 import com.longfor.itserver.service.*;
 import com.longfor.itserver.service.ps.IPsProductService;
 import net.mayee.redis.RedisCache;
@@ -76,6 +78,8 @@ public class BaseController {
     @Autowired
     private ADSHelper adsHelper;
     @Autowired
+    private EDSHelper edsHelper;
+    @Autowired
     private IProductLabelService productLabelService;
     @Autowired
     private IProductLabelTypeService productLabelTypeService;
@@ -106,6 +110,10 @@ public class BaseController {
 
     public IAdsService getAdsService() {
         return adsService;
+    }
+
+    public EDSHelper getEdsHelper() {
+        return edsHelper;
     }
 
     public IFeedBackService getFeedBackService() {

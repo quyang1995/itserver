@@ -3,6 +3,7 @@ package com.longfor.itserver.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
+import com.longfor.eds.helper.EDSHelper;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.enums.ProductStatusEnum;
@@ -42,6 +43,8 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 	private ProductEmployeeMapper productEmployeeMapper;
 	@Autowired
 	private ADSHelper adsHelp;
+	@Autowired
+	private EDSHelper edsHelper;
 	@Autowired
 	private ProductEmployeeChangeLogMapper productEmployeeChangeLogMapper;
 	@Autowired
@@ -353,7 +356,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		if (num == 0) {
 			//功能建议反馈接口人
 			AccountLongfor accountInfo =
-					AccountUitl.getAccountByAccountTypes(product.getContactAccountId(),adsHelp);
+					AccountUitl.getAccountByAccountTypes(product.getContactAccountId(),adsHelp,edsHelper);
 			if (accountInfo != null) {
 				product.setContactEmployeeCode(StringUtil.getLongValue(accountInfo.getPsEmployeeCode()));
 				product.setContactEmployeeName(accountInfo.getName());
@@ -361,7 +364,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 			}
 			//功能异常反馈接口人
 			AccountLongfor accountInfo1 =
-					AccountUitl.getAccountByAccountTypes(product.getContactAccountId1(),adsHelp);
+					AccountUitl.getAccountByAccountTypes(product.getContactAccountId1(),adsHelp,edsHelper);
 			if (accountInfo1 != null) {
 				product.setContactEmployeeCode1(StringUtil.getLongValue(accountInfo1.getPsEmployeeCode()));
 				product.setContactEmployeeName1(accountInfo1.getName());
@@ -374,7 +377,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 					for (int i = 1; i < split.length; i++) {
 						String loginName = split[i];
 						AccountLongfor accountInfo =
-								AccountUitl.getAccountByAccountTypes(loginName,adsHelp);
+								AccountUitl.getAccountByAccountTypes(loginName,adsHelp,edsHelper);
 						if (accountInfo != null) {
 							ProductEmployee productEmployee = new ProductEmployee();
 							productEmployee.setProductId(product.getId());

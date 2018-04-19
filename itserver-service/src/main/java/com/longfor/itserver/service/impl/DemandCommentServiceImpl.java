@@ -4,6 +4,7 @@ package com.longfor.itserver.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
+import com.longfor.eds.helper.EDSHelper;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.helper.JoddHelper;
@@ -42,6 +43,8 @@ public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> im
     @Autowired
     private ADSHelper adsHelper;
     @Autowired
+    private EDSHelper edsHelper;
+    @Autowired
     private DemandMapper demandMapper;
     @Autowired
     private LongforServiceImpl longforServiceImpl;
@@ -54,7 +57,7 @@ public class DemandCommentServiceImpl extends AdminBaseService<DemandComment> im
         Integer accountType = AccountUitl.getAccountType(paramsMap);
         //回复人验证
         AccountLongfor accountLongfor =
-                AccountUitl.getAccountByAccountType(accountType,demandComment.getAccountId(),adsHelper);
+                AccountUitl.getAccountByAccountType(accountType,demandComment.getAccountId(),adsHelper,edsHelper);
         if(accountLongfor == null) {
             return CommonUtils.getResultMapByBizEnum(BizEnum.E1017,"该回复人");
         }
