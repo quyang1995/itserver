@@ -4,7 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.entity.BuddyAccount;
 import com.longfor.ads.helper.ADSHelper;
+import com.longfor.eds.entity.PsEmployeeWy;
+import com.longfor.eds.helper.EDSHelper;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.web.util.WebUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
@@ -21,9 +25,26 @@ public class AccountUitl {
      * @return
      */
     public static AccountLongfor getAccountByAccountType(Integer accountType, String loginName, ADSHelper adsHelper){
+        EDSHelper edsHelper = new EDSHelper();
         AccountLongfor accountLongfor = new AccountLongfor();
         if(accountType==0){
             accountLongfor = adsHelper.getAccountLongforByLoginName(loginName);
+            if(accountLongfor == null){
+                //查询地产人员为null时 查询物业人员
+                PsEmployeeWy psEmployeeWy = edsHelper.getWyEmployeeByLoginName(loginName);
+                if(psEmployeeWy == null){
+                    return null;
+                }else{
+                    accountLongfor = new AccountLongfor();
+                    accountLongfor.setId(psEmployeeWy.getId());
+                    accountLongfor.setUcAccountId(psEmployeeWy.getGuid());
+                    accountLongfor.setLoginName(psEmployeeWy.getHpsOaAcc());
+                    accountLongfor.setName(psEmployeeWy.getName1());
+                    accountLongfor.setPsEmployeeCode(psEmployeeWy.getEmplid());
+                    accountLongfor.setPsDeptId(new Long(psEmployeeWy.getDeptid()));
+                    accountLongfor.setPsDeptFullName(psEmployeeWy.getDeptDescr());
+                }
+            }
             return accountLongfor;
         }
         if(accountType==1){
@@ -42,8 +63,21 @@ public class AccountUitl {
      * @return
      */
     public static AccountLongfor getAccountByAccountTypes( String loginName, ADSHelper adsHelper){
+        EDSHelper edsHelper = new EDSHelper();
         AccountLongfor accountLongfor = adsHelper.getAccountLongforByLoginName(loginName);
         if(accountLongfor!=null){
+            return accountLongfor;
+        }
+        PsEmployeeWy psEmployeeWy = edsHelper.getWyEmployeeByLoginName(loginName);
+        if(psEmployeeWy!=null){
+            accountLongfor = new AccountLongfor();
+            accountLongfor.setId(psEmployeeWy.getId());
+            accountLongfor.setUcAccountId(psEmployeeWy.getGuid());
+            accountLongfor.setLoginName(psEmployeeWy.getHpsOaAcc());
+            accountLongfor.setName(psEmployeeWy.getName1());
+            accountLongfor.setPsEmployeeCode(psEmployeeWy.getEmplid());
+            accountLongfor.setPsDeptId(new Long(psEmployeeWy.getDeptid()));
+            accountLongfor.setPsDeptFullName(psEmployeeWy.getDeptDescr());
             return accountLongfor;
         }
         BuddyAccount buddyAccount = adsHelper.getByLoginNameBuddyAccount(loginName);
