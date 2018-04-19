@@ -25,6 +25,7 @@ public class AccountUitl {
      * @return
      */
     public static AccountLongfor getAccountByAccountType(Integer accountType, String loginName, ADSHelper adsHelper, EDSHelper edsHelper){
+        if(loginName == null || "".equals(loginName))return null;
         AccountLongfor accountLongfor = new AccountLongfor();
         if(accountType==0){
             accountLongfor = adsHelper.getAccountLongforByLoginName(loginName);
@@ -62,6 +63,7 @@ public class AccountUitl {
      * @return
      */
     public static AccountLongfor getAccountByAccountTypes( String loginName, ADSHelper adsHelper, EDSHelper edsHelper){
+        if(loginName == null || "".equals(loginName))return null;
         AccountLongfor accountLongfor = adsHelper.getAccountLongforByLoginName(loginName);
         if(accountLongfor!=null){
             return accountLongfor;
