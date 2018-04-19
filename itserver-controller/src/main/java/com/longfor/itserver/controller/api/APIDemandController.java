@@ -225,7 +225,7 @@ public class APIDemandController extends BaseController {
         try{
             Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
             //人员信息有效性验证
-            AccountLongfor accountLongfor = AccountUitl.getAccountByAccountTypes((String) paramsMap.get("callonAccountId"),getAdsHelper());
+            AccountLongfor accountLongfor = AccountUitl.getAccountByAccountTypes((String) paramsMap.get("callonAccountId"),getAdsHelper(),getEdsHelper());
             if(accountLongfor == null){
                 return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
             }

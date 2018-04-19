@@ -3,6 +3,7 @@ package com.longfor.itserver.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
+import com.longfor.eds.helper.EDSHelper;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.ProgramStatusNewEnum;
 import com.longfor.itserver.common.util.StringUtil;
@@ -37,6 +38,8 @@ public class ProgramDraftServiceImpl extends AdminBaseService<ProgramDraft> impl
     private IProductService productService;
     @Autowired
     private ADSHelper adsHelper;
+    @Autowired
+    private EDSHelper edsHelper;
     @Autowired
     private ProgramEmployeeDraftMapper programEmployeeDraftMapper;
     @Autowired
@@ -150,7 +153,7 @@ public class ProgramDraftServiceImpl extends AdminBaseService<ProgramDraft> impl
         for (int i = 0; i < strArr.length; i++) {
             String loginName = strArr[i].toString();
             AccountLongfor accountLongfor =
-                    AccountUitl.getAccountByAccountTypes(loginName,adsHelper);
+                    AccountUitl.getAccountByAccountTypes(loginName,adsHelper,edsHelper);
             if (accountLongfor != null) {
                 ProgramEmployeeDraft pe = new ProgramEmployeeDraft();
                 pe.setProgramId(programDraft.getId());

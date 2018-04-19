@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
+import com.longfor.eds.helper.EDSHelper;
 import com.longfor.itserver.common.enums.*;
 import com.longfor.itserver.common.helper.DataPermissionHelper;
 import com.longfor.itserver.common.helper.JoddHelper;
@@ -68,6 +69,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
     @Autowired
     private ADSHelper adsHelper;
+    @Autowired
+    private EDSHelper edsHelper;
 
     @Autowired
     private IEdsService edsService;
@@ -406,7 +409,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         for (int i = 0; i < strArr.length; i++) {
             String loginName = strArr[i].toString();
             AccountLongfor accountLongfor =
-                    AccountUitl.getAccountByAccountTypes(loginName,adsHelper);
+                    AccountUitl.getAccountByAccountTypes(loginName,adsHelper,edsHelper);
             if (accountLongfor != null) {
                 ProgramEmployee pe = new ProgramEmployee();
                 pe.setProgramId(program.getId());

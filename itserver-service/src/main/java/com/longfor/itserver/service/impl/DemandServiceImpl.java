@@ -7,6 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
+import com.longfor.eds.helper.EDSHelper;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
@@ -51,6 +52,8 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 	@Autowired
 	private ADSHelper adsHelper;
 	@Autowired
+	private EDSHelper edsHelper;
+	@Autowired
 	private DemandChangeLogMapper demandChangeLogMapper;
 	@Autowired
 	private DemandFileMapper demandFileMapper;
@@ -80,7 +83,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		Integer accountType = AccountUitl.getAccountType(map);
 		//获取发起人信息
 		AccountLongfor draftedAccountLongfor =
-				AccountUitl.getAccountByAccountType(accountType,demand.getModifiedAccountId(),adsHelper);
+				AccountUitl.getAccountByAccountType(accountType,demand.getModifiedAccountId(),adsHelper,edsHelper);
 		if(draftedAccountLongfor!=null){
 			demand.setDraftedAccountId(demand.getModifiedAccountId());
 			if(StringUtils.isNotBlank(draftedAccountLongfor.getPsEmployeeCode())){
@@ -91,7 +94,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		}
 		//获取指派人信息
 		AccountLongfor callonAccountLongfor =
-				AccountUitl.getAccountByAccountTypes(demand.getCallonAccountId(),adsHelper);
+				AccountUitl.getAccountByAccountTypes(demand.getCallonAccountId(),adsHelper,edsHelper);
 		if (callonAccountLongfor!=null){
 			demand.setCallonEmployeeName(callonAccountLongfor.getName());
 			if(StringUtils.isNotBlank(callonAccountLongfor.getPsEmployeeCode())){
@@ -172,7 +175,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		Integer accountType = AccountUitl.getAccountType(map);
 		//获取指派人信息
 		AccountLongfor callonAccountLongfor =
-				AccountUitl.getAccountByAccountTypes(demand.getCallonAccountId(),adsHelper);
+				AccountUitl.getAccountByAccountTypes(demand.getCallonAccountId(),adsHelper,edsHelper);
 		if (callonAccountLongfor != null) {
 			if(StringUtils.isNotBlank(callonAccountLongfor.getPsEmployeeCode())){
 				demand.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
@@ -184,7 +187,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 
 		//获取最后修改人
 		AccountLongfor draftedAccountLongfor =
-				AccountUitl.getAccountByAccountType(accountType,demand.getModifiedAccountId(),adsHelper);
+				AccountUitl.getAccountByAccountType(accountType,demand.getModifiedAccountId(),adsHelper,edsHelper);
 		if (draftedAccountLongfor != null) {
 			demand.setModifiedAccountId(demand.getModifiedAccountId());
 			demand.setModifiedName(draftedAccountLongfor.getName());
@@ -541,7 +544,7 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		Demand oldDemand = demandMapper.selectByPrimaryKey(demandId);
 		Demand newDemand = new Demand();
 		AccountLongfor accountLongfor =
-				AccountUitl.getAccountByAccountTypes(callonAccountId,adsHelper);
+				AccountUitl.getAccountByAccountTypes(callonAccountId,adsHelper,edsHelper);
 		if(accountLongfor==null){
 			return false;
 		}

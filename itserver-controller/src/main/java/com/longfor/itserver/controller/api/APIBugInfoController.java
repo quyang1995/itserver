@@ -271,7 +271,7 @@ public class APIBugInfoController extends BaseController {
 			Map<String, String> paramsMap = (Map<String, String>)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 			//人员信息有效性验证
 			AccountLongfor accountLongfor =
-					AccountUitl.getAccountByAccountTypes(paramsMap.get("callonAccountId"),getAdsHelper());
+					AccountUitl.getAccountByAccountTypes(paramsMap.get("callonAccountId"),getAdsHelper(),getEdsHelper());
 			if(accountLongfor == null){
 				return CommonUtils.getResultMapByBizEnum(BizEnum.E9994);
 			}

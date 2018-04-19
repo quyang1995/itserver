@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
+import com.longfor.eds.helper.EDSHelper;
 import com.longfor.itserver.common.enums.*;
 import com.longfor.itserver.common.helper.JoddHelper;
 import com.longfor.itserver.common.util.CommonUtils;
@@ -47,6 +48,9 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
     private ADSHelper adsHelper;
 
     @Autowired
+    private EDSHelper edsHelper;
+
+    @Autowired
     private BugChangeLogMapper bugChangeLogMapper;
 
     @Autowired
@@ -87,7 +91,7 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
             //通过账户ID查询账户基本信息
             //获取发起人信息
             accountLongfor =
-                    AccountUitl.getAccountByAccountType(accountType,feedBack.getModifiedAccountId(),adsHelper);
+                    AccountUitl.getAccountByAccountType(accountType,feedBack.getModifiedAccountId(),adsHelper,edsHelper);
 //            accountLongfor = adsHelper.getAccountLongforByLoginName(feedBack.getModifiedAccountId());
             if (accountLongfor == null) {//账户不存在
                 return CommonUtils.getResultMapByBizEnum(BizEnum.E1001);

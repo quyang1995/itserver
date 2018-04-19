@@ -24,8 +24,7 @@ public class AccountUitl {
      * @param adsHelper
      * @return
      */
-    public static AccountLongfor getAccountByAccountType(Integer accountType, String loginName, ADSHelper adsHelper){
-        EDSHelper edsHelper = new EDSHelper();
+    public static AccountLongfor getAccountByAccountType(Integer accountType, String loginName, ADSHelper adsHelper, EDSHelper edsHelper){
         AccountLongfor accountLongfor = new AccountLongfor();
         if(accountType==0){
             accountLongfor = adsHelper.getAccountLongforByLoginName(loginName);
@@ -62,8 +61,7 @@ public class AccountUitl {
      * @param adsHelper
      * @return
      */
-    public static AccountLongfor getAccountByAccountTypes( String loginName, ADSHelper adsHelper){
-        EDSHelper edsHelper = new EDSHelper();
+    public static AccountLongfor getAccountByAccountTypes( String loginName, ADSHelper adsHelper, EDSHelper edsHelper){
         AccountLongfor accountLongfor = adsHelper.getAccountLongforByLoginName(loginName);
         if(accountLongfor!=null){
             return accountLongfor;

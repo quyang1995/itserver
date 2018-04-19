@@ -8,6 +8,7 @@ import com.github.pagehelper.PageInfo;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.entity.BuddyAccount;
 import com.longfor.ads.helper.ADSHelper;
+import com.longfor.eds.helper.EDSHelper;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.*;
 import com.longfor.itserver.common.helper.JoddHelper;
@@ -45,6 +46,8 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
     private BugInfoMapper bugInfoMapper;
     @Autowired
     private ADSHelper adsHelper;
+    @Autowired
+    private EDSHelper edsHelper;
     @Autowired
     private BugChangeLogMapper bugChangeLogMapper;
     @Autowired
@@ -126,7 +129,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
 
         //获取发起人信息
         AccountLongfor draftedAccountLongfor =
-                AccountUitl.getAccountByAccountType(accountType,bugInfo.getModifiedAccountId(),adsHelper);
+                AccountUitl.getAccountByAccountType(accountType,bugInfo.getModifiedAccountId(),adsHelper,edsHelper);
         if (draftedAccountLongfor != null) {
             bugInfo.setDraftedAccountId(bugInfo.getModifiedAccountId());
             if(StringUtils.isNotBlank(draftedAccountLongfor.getPsEmployeeCode())){
@@ -137,7 +140,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         }
         //获取指派人信息
         AccountLongfor callonAccountLongfor =
-                AccountUitl.getAccountByAccountTypes(bugInfo.getCallonAccountId(),adsHelper);
+                AccountUitl.getAccountByAccountTypes(bugInfo.getCallonAccountId(),adsHelper,edsHelper);
         if (callonAccountLongfor != null) {
             if(StringUtils.isNotBlank(callonAccountLongfor.getPsEmployeeCode())){
                 bugInfo.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
@@ -214,7 +217,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         Integer accountType = AccountUitl.getAccountType(map);
         //获取指派人信息
         AccountLongfor callonAccountLongfor =
-                AccountUitl.getAccountByAccountTypes(bugInfo.getCallonAccountId(),adsHelper);
+                AccountUitl.getAccountByAccountTypes(bugInfo.getCallonAccountId(),adsHelper,edsHelper);
         if (callonAccountLongfor != null) {
             if(StringUtils.isNotBlank(callonAccountLongfor.getPsEmployeeCode())){
                 bugInfo.setCallonEmployeeCode(Long.parseLong(callonAccountLongfor.getPsEmployeeCode()));
@@ -226,7 +229,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
 
         //获取最后修改人
         AccountLongfor draftedAccountLongfor =
-                AccountUitl.getAccountByAccountType(accountType,bugInfo.getModifiedAccountId(),adsHelper);
+                AccountUitl.getAccountByAccountType(accountType,bugInfo.getModifiedAccountId(),adsHelper,edsHelper);
         if (draftedAccountLongfor != null) {
             bugInfo.setModifiedAccountId(bugInfo.getModifiedAccountId());
             bugInfo.setModifiedName(draftedAccountLongfor.getName());
@@ -501,7 +504,7 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         //指派人更改后对象 用于更新
 //        BugInfo newBug = bugInfoMapper.selectByPrimaryKey(bugId);
         BugInfo newBug = new BugInfo();
-        AccountLongfor accountLongfor = AccountUitl.getAccountByAccountTypes(callonAccountId,adsHelper);
+        AccountLongfor accountLongfor = AccountUitl.getAccountByAccountTypes(callonAccountId,adsHelper,edsHelper);
         newBug.setCallonAccountId(callonAccountId);
         newBug.setCallonEmployeeCode(StringUtil.getLongValue(accountLongfor.getPsEmployeeCode()));
         newBug.setCallonEmployeeName(accountLongfor.getName());
