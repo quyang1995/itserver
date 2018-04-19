@@ -440,6 +440,11 @@
             <if test=" analyzingConditions != null and analyzingConditions != '' and analyzingConditions != -1">
                 a.analyzing_conditions like concat('%',#{analyzingConditions},'%')
             </if>
+            <if test=" analyzingConditionsList != null ">
+                <foreach item="item" index="index" collection="analyzingConditionsList" open="(" separator="or" close=")">
+                    a.analyzing_conditions like concat('%',#{item},'%')
+                </foreach>
+            </if>
             <if test=" searchText != null and searchText != '' ">
                 and (a.name like concat('%',#{searchText},'%')  or a.label_name like concat('%',#{searchText},'%'))
             </if>

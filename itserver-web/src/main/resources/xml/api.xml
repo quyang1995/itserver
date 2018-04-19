@@ -1825,6 +1825,7 @@
     <item id="api_product_newProductHui" description="产品汇列表(新)">
         <request>
             <property name="accountId" type="string" required="true"/>
+            <property name="requestType" type="string" required="true" area="0,1"/>
             <property name="analyzingConditions" type="string" required="true" description="-1代表全部"/>
             <property name="labels" type="string" required="true" description="产品线,-1,：代表全部"/>
             <property name="productStatus" type="string" required="true" description="产品状态-1：代表全部"/>
