@@ -1142,12 +1142,12 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             //延期原因，1：需求变更，2：其他原因,需走审批
 //            String causeDelay = paramsMap.get("causeDelay");
             //人员转换
-            paramsMap.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
-            paramsMap.put("businessList",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList")));//业务人员转成GUID
-            paramsMap.put("developerList",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList")));//开发人员转成GUID
+            paramsMap.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc_s(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+            paramsMap.put("businessList",edsService.getEmpGuidByPfAcc_s(paramsMap.get("businessList")));//业务人员转成GUID
+            paramsMap.put("developerList",edsService.getEmpGuidByPfAcc_s(paramsMap.get("developerList")));//开发人员转成GUID
             paramsMap.put("counterSigners",paramsMap.get("counterSigners"));//会签人
             if("1".equals(paramsMap.get("reportPoor"))){
-                paramsMap.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+                paramsMap.put("ifZqs",edsService.getEmpGuidByPfAcc_s("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
             }
             paramsMap.put("workflowInstanceTitle",program.getName()+ProgramStatusNewEnum.YQSX.getText());//流程名称
             //创建流程
@@ -1230,17 +1230,17 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             BigDecimal  overallCost = new BigDecimal(paramsMap.get("overallCost"));
             BigDecimal ten = new BigDecimal(100000);
             //人员转换
-            paramsMap.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
-            paramsMap.put("businessList",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList")));//业务人员转成GUID
-            paramsMap.put("developerList",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList")));//开发人员转成GUID
+            paramsMap.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc_s(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+            paramsMap.put("businessList",edsService.getEmpGuidByPfAcc_s(paramsMap.get("businessList")));//业务人员转成GUID
+            paramsMap.put("developerList",edsService.getEmpGuidByPfAcc_s(paramsMap.get("developerList")));//开发人员转成GUID
             paramsMap.put("counterSigners",paramsMap.get("counterSigners"));//会签人
             if("1".equals(paramsMap.get("reportPoor"))){
-                paramsMap.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+                paramsMap.put("ifZqs",edsService.getEmpGuidByPfAcc_s("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
             }
             if("1".equals(paramsMap.get("tApproval"))){
-                paramsMap.put("lorf",edsService.getEmpGuidByPfAcc("lichuan"));//lorf:李川    string 1-李，2-傅
+                paramsMap.put("lorf",edsService.getEmpGuidByPfAcc_s("lichuan"));//lorf:李川    string 1-李，2-傅
             }else if("2".equals(paramsMap.get("tApproval"))){
-                paramsMap.put("lorf",edsService.getEmpGuidByPfAcc("fuzhihua"));//lorf:傅志华    string 1-李，2-傅
+                paramsMap.put("lorf",edsService.getEmpGuidByPfAcc_s("fuzhihua"));//lorf:傅志华    string 1-李，2-傅
             }
             paramsMap.put("workflowInstanceTitle",program.getName()+ProgramStatusNewEnum.XQBG.getText());//流程名称
             ApplyCreateResultVo applyCreateResultVo = new ApplyCreateResultVo();
@@ -1375,11 +1375,11 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         try{
             Date now = new Date();
 
-            paramsMap.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
-            paramsMap.put("businessList",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList")));//业务人员转成GUID
-            paramsMap.put("developerList",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList")));//开发人员转成GUID
+            paramsMap.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc_s(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+            paramsMap.put("businessList",edsService.getEmpGuidByPfAcc_s(paramsMap.get("businessList")));//业务人员转成GUID
+            paramsMap.put("developerList",edsService.getEmpGuidByPfAcc_s(paramsMap.get("developerList")));//开发人员转成GUID
             if("1".equals(paramsMap.get("reportPoor"))){
-                paramsMap.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+                paramsMap.put("ifZqs",edsService.getEmpGuidByPfAcc_s("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
             }
             paramsMap.put("counterSigners",paramsMap.get("counterSigners"));//开发人员转成GUID
             paramsMap.put("workflowInstanceTitle",program.getName()+ProgramStatusNewEnum.ZZ.getText());//流程名称
@@ -1486,14 +1486,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         Map map = new HashMap();
         map.put("workflowInstanceTitle",paramsMap.get("workflowInstanceTitle"));//l流程名称
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
-        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
-        map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
+        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc_s(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+        map.put("businessAccount",edsService.getEmpGuidByPfAcc_s(paramsMap.get("businessList").toString()));//业务人guid
         map.put("businessFunctionsList",paramsMap.get("businessFunctionsList"));//业务职能人guid
 //        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
         map.put("businessCenterList",paramsMap.get("businessCenterList"));//业务中心负责人
-        map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
+        map.put("developAccount",edsService.getEmpGuidByPfAcc_s(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
         if("1".equals(paramsMap.get("reportPoor"))){
-            map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+            map.put("ifZqs",edsService.getEmpGuidByPfAcc_s("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
         }
         map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
         map.put("cOrZ",paramsMap.get("tApproval"));//string 1-李，2-傅   IT部门副总经理
@@ -1524,14 +1524,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         Map map = new HashMap();
         map.put("workflowInstanceTitle",paramsMap.get("workflowInstanceTitle"));//l流程名称
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
-        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
-        map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
+        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc_s(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+        map.put("businessAccount",edsService.getEmpGuidByPfAcc_s(paramsMap.get("businessList").toString()));//业务人guid
 //        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
         map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
         map.put("businessCenterList",paramsMap.get("businessCenterList"));//业务中心负责人
-        map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
+        map.put("developAccount",edsService.getEmpGuidByPfAcc_s(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
         if("1".equals(paramsMap.get("reportPoor"))){
-            map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+            map.put("ifZqs",edsService.getEmpGuidByPfAcc_s("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
         }
         map.put("cOrZ",paramsMap.get("tApproval"));//string 1-李，2-傅   IT部门副总经理
         return map;
@@ -1545,14 +1545,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         Map map = new HashMap();
         map.put("workflowInstanceTitle",paramsMap.get("workflowInstanceTitle"));//l流程名称
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
-        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
-        map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
+        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc_s(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+        map.put("businessAccount",edsService.getEmpGuidByPfAcc_s(paramsMap.get("businessList").toString()));//业务人guid
 //        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
         map.put("businessCenterList",paramsMap.get("businessCenterList"));//业务中心负责人
         map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
-        map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
+        map.put("developAccount",edsService.getEmpGuidByPfAcc_s(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
         if("1".equals(paramsMap.get("reportPoor"))){
-            map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+            map.put("ifZqs",edsService.getEmpGuidByPfAcc_s("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
         }
         return map;
     }
@@ -1566,13 +1566,13 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         Map map = new HashMap();
         map.put("workflowInstanceTitle",paramsMap.get("workflowInstanceTitle"));//l流程名称
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
-        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
-        map.put("productManagerList",edsService.getEmpGuidByPfAcc(paramsMap.get("productManagerList").toString()));//产品经理
-        map.put("testingList",edsService.getEmpGuidByPfAcc(paramsMap.get("testingList").toString()));//项目测试负责人
+        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc_s(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+        map.put("productManagerList",edsService.getEmpGuidByPfAcc_s(paramsMap.get("productManagerList").toString()));//产品经理
+        map.put("testingList",edsService.getEmpGuidByPfAcc_s(paramsMap.get("testingList").toString()));//项目测试负责人
         map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
-        map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
+        map.put("developAccount",edsService.getEmpGuidByPfAcc_s(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
         if("1".equals(paramsMap.get("reportPoor"))){
-            map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+            map.put("ifZqs",edsService.getEmpGuidByPfAcc_s("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
         }
         //地产、冠寓、基础架构、技术管理相关加刘富强会签人，添加节点：立项、开发评审
         if(paramsMap.get("programId")!=null){
@@ -1597,12 +1597,12 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         Map map = new HashMap();
         map.put("workflowInstanceTitle",paramsMap.get("workflowInstanceTitle"));//l流程名称
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
-        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
-        map.put("productManagerList",edsService.getEmpGuidByPfAcc(paramsMap.get("productManagerList").toString()));//产品经理
-        map.put("testingList",edsService.getEmpGuidByPfAcc(paramsMap.get("testingList").toString()));//项目测试负责人
-        map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
+        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc_s(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+        map.put("productManagerList",edsService.getEmpGuidByPfAcc_s(paramsMap.get("productManagerList").toString()));//产品经理
+        map.put("testingList",edsService.getEmpGuidByPfAcc_s(paramsMap.get("testingList").toString()));//项目测试负责人
+        map.put("developAccount",edsService.getEmpGuidByPfAcc_s(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
         if("1".equals(paramsMap.get("reportPoor"))){
-            map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+            map.put("ifZqs",edsService.getEmpGuidByPfAcc_s("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
         }
         map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
         return map;
@@ -1617,14 +1617,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         Map map = new HashMap();
         map.put("workflowInstanceTitle",paramsMap.get("workflowInstanceTitle"));//l流程名称
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
-        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
-        map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
+        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc_s(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+        map.put("businessAccount",edsService.getEmpGuidByPfAcc_s(paramsMap.get("businessList").toString()));//业务人guid
         map.put("businessFunctionsList",paramsMap.get("businessFunctionsList"));//业务职能人guid
 //        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
         map.put("businessCenterList",paramsMap.get("businessCenterList"));//业务中心负责人
-        map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
+        map.put("developAccount",edsService.getEmpGuidByPfAcc_s(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
         if("1".equals(paramsMap.get("reportPoor"))){
-            map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+            map.put("ifZqs",edsService.getEmpGuidByPfAcc_s("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
         }
         map.put("cOrZ",paramsMap.get("tApproval"));//string 1-李，2-傅   IT部门副总经理
         map.put("businessPresidentList",paramsMap.get("businessPresidentList"));//业务副总裁
@@ -1641,13 +1641,13 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         Map map = new HashMap();
         map.put("workflowInstanceTitle",paramsMap.get("workflowInstanceTitle"));//l流程名称
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
-        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
-        map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
+        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc_s(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+        map.put("businessAccount",edsService.getEmpGuidByPfAcc_s(paramsMap.get("businessList").toString()));//业务人guid
 //        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
         map.put("businessCenterList",paramsMap.get("businessCenterList"));//业务中心负责人
-        map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
+        map.put("developAccount",edsService.getEmpGuidByPfAcc_s(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
         if("1".equals(paramsMap.get("reportPoor"))){
-            map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+            map.put("ifZqs",edsService.getEmpGuidByPfAcc_s("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
         }
         map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
         return map;
@@ -1662,13 +1662,13 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         Map map = new HashMap();
         map.put("workflowInstanceTitle",paramsMap.get("workflowInstanceTitle"));//l流程名称
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
-        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
-        map.put("businessAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("businessList").toString()));//业务人guid
+        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc_s(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+        map.put("businessAccount",edsService.getEmpGuidByPfAcc_s(paramsMap.get("businessList").toString()));//业务人guid
 //        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
         map.put("businessCenterList",paramsMap.get("businessCenterList"));//业务中心负责人
-        map.put("developAccount",edsService.getEmpGuidByPfAcc(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
+        map.put("developAccount",edsService.getEmpGuidByPfAcc_s(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid
         if("1".equals(paramsMap.get("reportPoor"))){
-            map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+            map.put("ifZqs",edsService.getEmpGuidByPfAcc_s("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
         }
         map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
         return map;
@@ -1683,10 +1683,10 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         Map map = new HashMap();
         map.put("workflowInstanceTitle",paramsMap.get("workflowInstanceTitle"));//l流程名称
         map.put("modifiedAccountId",paramsMap.get("modifiedAccountId"));//提交人oa账号
-        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc(paramsMap.get("modifiedAccountId").toString()));//提交人guid
+        map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc_s(paramsMap.get("modifiedAccountId").toString()));//提交人guid
 //        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
         if("1".equals(paramsMap.get("reportPoor"))){
-            map.put("ifZqs",edsService.getEmpGuidByPfAcc("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
+            map.put("ifZqs",edsService.getEmpGuidByPfAcc_s("zhouqiongshuo"));//ifZqs:是否周琼硕审批    string 2-否，1-是
         }
         map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
         return map;

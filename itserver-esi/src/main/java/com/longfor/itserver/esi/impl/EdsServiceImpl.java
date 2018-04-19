@@ -30,6 +30,9 @@ public class EdsServiceImpl implements IEdsService {
     private static String token;
     private static final String GET_EMP_GUID_BY_PFACC = "/api/employee/getEmpListByPfAcc";
 
+    private static final String GET_EMP_GUID_BY_LOGINNAME = "/api/employee/getByLoginName";
+    private static final String GET_EMPWY_GUID_BY_LOGINNAME = "/api/employeeWy/getByLoginName";
+
     static {
         Props props = JoddHelper.getInstance().getJoddProps();
         url = props.getValue("eds.url");
@@ -64,6 +67,37 @@ public class EdsServiceImpl implements IEdsService {
         return sb.toString();
     }
 
-
-
+    /**
+     * 根据员工oa账号获取员工guid(包括地产跟物业员工)
+     * 多个员工，以‘，’分割，返回guid也以‘，’分割
+     * @param oaStr
+     * @return
+     */
+    public String getEmpGuidByPfAcc_s(String oaStr){
+        StringBuffer sb = new StringBuffer();
+        try{
+            String [] accountId = oaStr.split(",");
+            for(String e:accountId){
+                JSONObject para = new JSONObject();
+                para.put("loginName",e);
+                JSONObject json = HttpUtil.post(url + GET_EMP_GUID_BY_LOGINNAME,token,para.toString());
+                Map<String,Object> jsonMap = JSON.parseObject(JSON.toJSONString(json.get("employee")),Map.class);
+                if (jsonMap==null){
+                    json = HttpUtil.post(url + GET_EMPWY_GUID_BY_LOGINNAME,token,para.toString());
+                    jsonMap = JSON.parseObject(JSON.toJSONString(json.get("employeeWy")),Map.class);
+                    if (jsonMap!=null){
+                        sb.append(jsonMap.get("guid"));
+                        sb.append(",");
+                    }
+                } else {
+                    sb.append(jsonMap.get("psGuid"));
+                    sb.append(",");
+                }
+            }
+            sb.deleteCharAt(sb.length()-1);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }
 }
