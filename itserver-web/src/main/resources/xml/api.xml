@@ -1213,7 +1213,7 @@
             <property name="replayDate" type="string" required="false" description="项目复盘（计划）"/>
 
             <property name="personLiableList" type="string" required="true" description="责任人"/>
-            <property name="programManagerList" type="string" required="true" description="项目经理"/>
+            <property name="programManagerList" type="string" required="false" description="项目经理"/>
             <property name="productManagerList" type="string" required="true" description="产品经理"/>
             <property name="developerList" type="string" required="true" description="开发人员"/>
             <property name="uedList" type="string" required="true" description="UED人员"/>

@@ -621,6 +621,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		}
 		if("1".equals(requestType)) {
 			map.put("analyzingConditionsList", analyzingConditions.split(","));
+			map.remove("analyzingConditions");
 			List<PsProductCount> list = productMapper.newProductHui(map);
 			this.getPersonLiableList(list);
 			resultMap.put("one", list);
