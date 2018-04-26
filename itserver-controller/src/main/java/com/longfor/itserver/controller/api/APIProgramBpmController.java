@@ -605,7 +605,11 @@ public class APIProgramBpmController extends BaseController {
 		try{
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 			LOG.info("------lookNodes:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
-
+			Program program = this.getProgramService().selectById(new Long(paramsMap.get("id")));
+			if (program==null){
+				resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
+				return resultMap;
+			}
 			Map<String,Object> nodesMap = new HashMap<String,Object>();
 			nodesMap.put("programId",new Long(paramsMap.get("id")));
 			nodesMap.put("programStatus",paramsMap.get("programStatus"));

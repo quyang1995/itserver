@@ -239,6 +239,48 @@
             <property name="androidModifiedTimeTest" type="string" required="false" />
         </request>
     </item>
+
+    <!--
+          URL:
+          /api/product/update/productUrl
+
+          说明:修改产品访问地址，时间
+
+      -->
+    <item id="api_product_update_productUrl" description="修改产品访问地址，时间">
+        <request>
+            <property name="id" type="string" required="true" />
+            <property name="pcUrl" type="string" required="false" />
+            <property name="h5Url" type="string" required="false" />
+            <property name="iosUrl" type="string" required="false" />
+            <property name="androidUrl" type="string" required="false" />
+            <property name="windowsUrl" type="string" required="false" />
+            <property name="macUrl" type="string" required="false" />
+            <property name="iosVersion" type="string" required="false" />
+            <property name="androidVersion" type="string" required="false" />
+            <property name="iosModifiedTime" type="string" required="false" />
+            <property name="androidModifiedTime" type="string" required="false" />
+            <property name="iosUrlTest" type="string" required="false" />
+            <property name="androidUrlTest" type="string" required="false" />
+            <property name="iosVersionTest" type="string" required="false" />
+            <property name="androidVersionTest" type="string" required="false" />
+            <property name="iosModifiedTimeTest" type="string" required="false" />
+            <property name="androidModifiedTimeTest" type="string" required="false" />
+        </request>
+    </item>
+
+    <!--
+              URL:
+              /api/product/delete
+              说明:删除产品：产品下不存在项目的允许删除
+          -->
+    <item id="api_product_delete" description="删除产品：产品下不存在项目的允许删除">
+        <request>
+            <property name="productId" type="string" required="true" />
+            <property name="accountId" type="string" required="true" />
+        </request>
+    </item>
+
     <!--
               URL:
               /api/product/productIsTop
@@ -455,7 +497,7 @@
     <item id="api_program_delete" description="删除项目基本信息">
         <request>
             <property name="programId" type="string" required="true"/>
-            <property name="accountId" type="string" required="false"/>
+            <property name="accountId" type="string" required="true"/>
         </request>
     </item>
     <!--
@@ -568,6 +610,22 @@
         <request>
             <property name="accountId" type="string" required="true" maxLength="30"/>
             <!--<property name="status" type="int" required="true" area="-1,0,1,2,3,4"/>-->
+            <property name="status" type="string" required="true" />
+            <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
+            <property name="productId" type="int" required="false" />
+            <property name="programId" type="int" required="false" />
+            <property name="isPart" type="int" required="false" area="0,1,2"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
+        /api/bug/newExport
+        说明:获取BUG列表信息(新)
+    -->
+    <item id="api_bug_newExport" description="导出BUG列表信息(新)">
+        <request>
+            <property name="accountId" type="string" required="true" maxLength="30"/>
             <property name="status" type="string" required="true" />
             <property name="searchText" type="string" required="false" maxLength="30" description="搜索内容"/>
             <property name="productId" type="int" required="false" />
@@ -1200,15 +1258,15 @@
             <!--<property name="winningBidDate" type="string" required="false"/>-->
             <!--<property name="grayReleaseDate" type="string" required="true"/>-->
 
-            <property name="commitDate" type="string" required="true" description="立项日期（计划）"/>
-            <property name="demoApprovalDate" type="string" required="true" description="Demo评审日期（计划）"/>
+            <property name="commitDate" type="string" required="false" description="立项日期（计划）"/>
+            <property name="demoApprovalDate" type="string" required="false" description="Demo评审日期（计划）"/>
             <property name="biddingDate" type="string" required="false" description="招标日期（计划）"/>
             <property name="winningBidDate" type="string" required="false" description="中标日期（计划）"/>
-            <property name="prodApprovalDate" type="string" required="true" description="产品评审日期（计划"/>
-            <property name="devApprovalDate" type="string" required="true" description="开发评审日期（计划）"/>
-            <property name="testApprovalDate" type="string" required="true" description="测试评审日期（计划）"/>
-            <property name="onlinePlanDate" type="string" required="true" description="上线计划日期（计划）"/>
-            <property name="grayReleaseDate" type="string" required="true" description="灰度发布日期（计划）"/>
+            <property name="prodApprovalDate" type="string" required="false" description="产品评审日期（计划"/>
+            <property name="devApprovalDate" type="string" required="false" description="开发评审日期（计划）"/>
+            <property name="testApprovalDate" type="string" required="false" description="测试评审日期（计划）"/>
+            <property name="onlinePlanDate" type="string" required="false" description="上线计划日期（计划）"/>
+            <property name="grayReleaseDate" type="string" required="false" description="灰度发布日期（计划）"/>
             <property name="allExtensionDate" type="string" required="false" description="全面推广时间（计划）"/>
             <property name="replayDate" type="string" required="false" description="项目复盘（计划）"/>
 
@@ -1546,8 +1604,8 @@
             <property name="remark" type="string" required="true"/>
             <property name="fileList" type="string" required="false"/>
 
-            <property name="grayReleaseDate" type="string" required="true"/>
-            <property name="onlinePlanDate" type="string" required="true"/>
+            <property name="grayReleaseDate" type="string" required="false"/>
+            <property name="onlinePlanDate" type="string" required="false"/>
             <property name="replayDate" type="string" required="false"/>
             <property name="allExtensionDate" type="string" required="false"/>
 

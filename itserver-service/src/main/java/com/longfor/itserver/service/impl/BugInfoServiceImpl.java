@@ -1,15 +1,12 @@
 package com.longfor.itserver.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.longfor.ads.entity.AccountLongfor;
-import com.longfor.ads.entity.BuddyAccount;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.eds.helper.EDSHelper;
-import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.*;
 import com.longfor.itserver.common.helper.JoddHelper;
 import com.longfor.itserver.common.util.CommonUtils;
@@ -81,12 +78,12 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
     private void setBugInfo(PsBugInfoDetail bug){
         //归属产品/项目 名称
         String relationName = "";
-        if (bug.getRelationType().equals(1)) {
+        if (bug.getRelationType().equals(1) && bug.getRelationId()!=null) {
             Product prod = productMapper.selectByPrimaryKey(bug.getRelationId());
             if(prod!=null){
                 relationName = prod.getName();
             }
-        } else if (bug.getRelationType().equals(2)) {
+        } else if (bug.getRelationType().equals(2) && bug.getRelationId()!=null) {
             Program prom = programMapper.selectByPrimaryKey(bug.getRelationId());
             if(prom!=null){
                 relationName = prom.getName();
@@ -94,11 +91,13 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         }
         bug.setRelationName(relationName);
 		/* 责任人 */
-        Map map = new HashMap();
-        map.put("programId", bug.getRelationId());
-        map.put("employeeType", AvaStatusEnum.LIABLEAVA.getCode());
-        List<ProgramEmployee> personLiableList = programEmployeeServiceImpl.selectTypeList(map);
-        bug.setProductManagerList(personLiableList);
+		if(bug.getRelationId()!=null){
+            Map map = new HashMap();
+            map.put("programId", bug.getRelationId());
+            map.put("employeeType", AvaStatusEnum.LIABLEAVA.getCode());
+            List<ProgramEmployee> personLiableList = programEmployeeServiceImpl.selectTypeList(map);
+            bug.setProductManagerList(personLiableList);
+        }
     }
 
     /**

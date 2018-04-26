@@ -437,8 +437,9 @@
         LEFT JOIN (SELECT id,product_id,program_status from program GROUP BY product_id) pro on pro.product_id=p.id
         ) a
         <where>
+            a.`status`!=0
             <if test=" analyzingConditions != null and analyzingConditions != '' and analyzingConditions != -1">
-                a.analyzing_conditions like concat('%',#{analyzingConditions},'%')
+                AND a.analyzing_conditions like concat('%',#{analyzingConditions},'%')
             </if>
             <if test=" analyzingConditionsList != null and analyzingConditionsList != '' ">
                 AND
@@ -461,16 +462,27 @@
                     a.programStatus = #{item}
                 </foreach>
                 <if test=" status != null and status != '' ">
-                    or (a.status = #{status} or a.programStatus = 900)
+                    or a.status = #{status}
                 </if>
                 )
             </if>
-
         </where>
-        ORDER BY a.is_top desc,field(a.`status`,1,2,0),a.programStatus desc,a.create_time desc;
+        ORDER BY a.is_top desc,field(a.`status`,1,2,0),a.programStatus desc,a.create_time desc
     </select>
 
     <select id="getCountByLabelId" resultType="int" >
         select COUNT(1) from product WHERE label LIKE  concat('%',#{label},'%')
     </select>
+
+    <update id="updateProductUrl" parameterType="com.longfor.itserver.entity.Product">
+        update product set
+        pc_url = #{pcUrl},h5_url = #{h5Url},ios_url = #{iosUrl},android_url = #{androidUrl},
+        windows_url = #{windowsUrl},mac_url = #{macUrl},ios_version = #{iosVersion},
+        android_version = #{androidVersion},ios_modified_time = #{iosModifiedTime},
+        android_modified_time = #{androidModifiedTime},ios_url_test = #{iosUrlTest},
+        android_url_test = #{androidUrlTest},ios_version_test = #{iosVersionTest},
+        android_version_test = #{androidVersionTest},ios_modified_time_test = #{iosModifiedTimeTest},
+        android_modified_time_test = #{androidModifiedTimeTest}
+        where id = #{id}
+    </update>
 </mapper>

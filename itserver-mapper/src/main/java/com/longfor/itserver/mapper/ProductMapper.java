@@ -54,4 +54,11 @@ public interface ProductMapper extends BeeMapper<Product> {
      * @return
      */
     int getCountByLabelId(@Param(value = "label")String label);
+
+    /**
+     * 修改产品访问地址，时间
+     * @param product
+     * @return
+     */
+    Integer updateProductUrl(Product product);
 }

@@ -35,7 +35,6 @@ import net.mayee.commons.TimeUtils;
 import net.mayee.commons.helper.APIHelper;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -409,12 +408,34 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     public Integer deleteProgram(Map map){
         Long programId = Long.parseLong(map.get("programId").toString());
         Program program = programMapper.selectByPrimaryKey(programId);
-        if(program.getProgramStatus()!=ProgramStatusNewEnum.WLX.getCode()){
+        if(program==null){
             return 1;
+        }
+        if(program.getProgramStatus()!=ProgramStatusNewEnum.WLX.getCode()){
+            return 2;
         }
         //删除项目表数据
         programMapper.deleteByPrimaryKey(programId);
-
+        //删除项目快照表数据
+        ProgramApprovalSnapshot pas = new ProgramApprovalSnapshot();
+        pas.setProgramId(programId);
+        programApprovalSnapshotMapper.delete(pas);
+        //删除项目相关人员数据
+        ProgramEmployee employee = new ProgramEmployee();
+        employee.setProgramId(programId);
+        programEmployeeMapper.delete(employee);
+        //删除项目日志表数据
+        ProgramEmployeeChangeLog employeeChangeLog = new ProgramEmployeeChangeLog();
+        employeeChangeLog.setProgramId(programId);
+        programEmployeeChangeLogMapper.delete(employeeChangeLog);
+        //若有预警，删除预警信息
+        ProgramWarning programWarning = new ProgramWarning();
+        programWarning.setProgramId(programId);
+        programWarningService.delete(programWarning);
+        //若有关注信息，删除关注信息
+        ProgramFollow programFollow = new ProgramFollow();
+        programFollow.setProgramId(programId);
+        programFollowMapper.delete(programFollow);
         return 0;
     }
 
@@ -505,6 +526,10 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                 program.setProductName(product.getName());
                 program.setLabel(product.getLabel());
                 program.setLabelName(product.getLabelName());
+                /**
+                 * 项目所属产品业务线
+                 */
+                program.setProductAnalyzingConditions(product.getAnalyzingConditions());
             }
         }
 //        Program program = programMapper.selectByPrimaryKey(id);
@@ -998,6 +1023,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                 ProgramApprovalSnapshot wcSnapshot = new ProgramApprovalSnapshot();
                 this.copyProperties(wcSnapshot,program);
                 wcSnapshot.setId(null);
+                wcSnapshot.setCreateTime(new Date());
                 programApprovalSnapshotMapper.insert(wcSnapshot);
             }
             //实时修改预警天数
@@ -2396,7 +2422,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     public void programTask() throws Exception{
         List<APIProgramTask> apiProgramTaskList = this.getProgramTask();
         for(int i = 0; i < apiProgramTaskList.size(); i++){
-//            if(!apiProgramTaskList.get(i).getProgramId().toString().equals("300")){
+//            if(!apiProgramTaskList.get(i).getProgramId().toString().equals("506")){
 //                continue;
 //            }
             APIProgramTask apiProgramTask = apiProgramTaskList.get(i);
@@ -2589,15 +2615,29 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         List<ProgramEmployee> taskEmployee = new ArrayList<ProgramEmployee>();
         Map map = new HashMap();
         map.put("programId",program.getId());
-        /*产品评审通过，提示开发人员*/
-        if (program.getProgramStatus()==ProgramStatusNewEnum.CPPS.getCode()){
+        //项目类型1：软件开发实施项目
+        if(program.getProgramType()==ProgramTypeEnum.RJKF.getCode()){
+            /*产品评审通过，提示技术人员*/
+            if (program.getProgramStatus()==ProgramStatusNewEnum.CPPS.getCode()){
             /* 开发人员 */
-            map.put("employeeTypeId", new Long(AvaStatusEnum.DEVEAVA.getCode()));
-        }
-        /*开发评审通过，提示测试人员*/
-        if (program.getProgramStatus()==ProgramStatusNewEnum.KFPS.getCode()){
+                map.put("employeeTypeId", new Long(AvaStatusEnum.DEVEAVA.getCode()));
+            }
+            /*开发评审通过，提示测试人员*/
+            if (program.getProgramStatus()==ProgramStatusNewEnum.KFPS.getCode()){
             /* 测试人员 */
-            map.put("employeeTypeId", new Long(AvaStatusEnum.TESTINGAVA.getCode()));
+                map.put("employeeTypeId", new Long(AvaStatusEnum.TESTINGAVA.getCode()));
+            }
+        }
+        //项目类型2：运维服务、咨询采购项目，没有开发和测试节点，不通知开发和技术人员
+        //项目类型3：软件许可、硬件采购项目，没有开发和测试节点，不通知开发和技术人员
+
+        //项目类型4：基础设施项目
+        if(program.getProgramType()==ProgramTypeEnum.JCSS.getCode()){
+            /*立项通过，提示技术人员*/
+            if (program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()){
+            /* 开发人员 */
+                map.put("employeeTypeId", new Long(AvaStatusEnum.DEVEAVA.getCode()));
+            }
         }
         taskEmployee.addAll(programEmployeeService.selectPersonList(map));
         return taskEmployee;
@@ -2611,42 +2651,87 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         String text = "";
         String noteName = "";
         String noteAction = "";
-        if (program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()){
-            noteName = ProgramStatusNewEnum.LX.getText();
-            noteAction = ProgramStatusNewEnum.LX.getText();
+        //1:软件开发实施项目
+        if(program.getProgramType()==ProgramTypeEnum.RJKF.getCode()){
+            if (program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()){
+                noteName = ProgramStatusNewEnum.LX.getText();
+                noteAction = ProgramStatusNewEnum.LX.getText();
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()){
+                noteName = ProgramStatusNewEnum.DPS.getText();
+                noteAction = ProgramStatusNewEnum.DPS.getText();
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.DPS.getCode()){
+                noteName = ProgramStatusNewEnum.CPPS.getText();
+                noteAction = ProgramStatusNewEnum.CPPS.getText();
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.CPPS.getCode()){
+                noteName = ProgramStatusNewEnum.KFPS.getText();
+                noteAction = ProgramStatusNewEnum.KFPS.getText();
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.KFPS.getCode()){
+                noteName = ProgramStatusNewEnum.CSPS.getText();
+                noteAction = ProgramStatusNewEnum.CSPS.getText();
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.CSPS.getCode()){
+                noteName = ProgramStatusNewEnum.SXPS.getText();
+                noteAction = ProgramStatusNewEnum.SXPS.getText();
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.SXPS.getCode()){
+                noteName = ProgramStatusNewEnum.HDFB.getText();
+                noteAction = ProgramStatusNewEnum.HDFB.getText();
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.HDFB.getCode()){
+                noteName = ProgramStatusNewEnum.QMTG.getText();
+                noteAction = ProgramStatusNewEnum.QMTG.getText();
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.QMTG.getCode()){
+                noteName = ProgramStatusNewEnum.XMFP.getText();
+                noteAction = ProgramStatusNewEnum.XMFP.getText();
+            }
         }
-        if (program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()){
-            noteName = ProgramStatusNewEnum.DPS.getText();
-            noteAction = ProgramStatusNewEnum.DPS.getText();
+        //2:运维服务、咨询采购项目
+        if(program.getProgramType()==ProgramTypeEnum.YWFW.getCode()){
+            if (program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()){
+                noteName = ProgramStatusNewEnum.LX.getText();
+                noteAction = ProgramStatusNewEnum.LX.getText();
+            }
         }
-        if (program.getProgramStatus()==ProgramStatusNewEnum.DPS.getCode()){
-            noteName = ProgramStatusNewEnum.CPPS.getText();
-            noteAction = ProgramStatusNewEnum.CPPS.getText();
+        //3:软件许可、硬件采购项目
+        if(program.getProgramType()==ProgramTypeEnum.RJXK.getCode()){
+            if (program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()){
+                noteName = ProgramStatusNewEnum.LX.getText();
+                noteAction = ProgramStatusNewEnum.LX.getText();
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()){
+                noteName = ProgramStatusNewEnum.HDFB.getText();
+                noteAction = ProgramStatusNewEnum.HDFB.getText();
+            }
         }
-        if (program.getProgramStatus()==ProgramStatusNewEnum.CPPS.getCode()){
-            noteName = ProgramStatusNewEnum.KFPS.getText();
-            noteAction = ProgramStatusNewEnum.KFPS.getText();
+        //4:基础设施项目
+        if(program.getProgramType()==ProgramTypeEnum.JCSS.getCode()){
+            if (program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()){
+                noteName = ProgramStatusNewEnum.LX.getText();
+                noteAction = ProgramStatusNewEnum.LX.getText();
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()){
+                noteName = ProgramStatusNewEnum.KFPS.getText();
+                noteAction = ProgramStatusNewEnum.KFPS.getText();
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.KFPS.getCode()){
+                noteName = ProgramStatusNewEnum.HDFB.getText();
+                noteAction = ProgramStatusNewEnum.HDFB.getText();
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.HDFB.getCode()){
+                noteName = ProgramStatusNewEnum.QMTG.getText();
+                noteAction = ProgramStatusNewEnum.QMTG.getText();
+            }
+            if (program.getProgramStatus()==ProgramStatusNewEnum.QMTG.getCode()){
+                noteName = ProgramStatusNewEnum.XMFP.getText();
+                noteAction = ProgramStatusNewEnum.XMFP.getText();
+            }
         }
-        if (program.getProgramStatus()==ProgramStatusNewEnum.KFPS.getCode()){
-            noteName = ProgramStatusNewEnum.CSPS.getText();
-            noteAction = ProgramStatusNewEnum.CSPS.getText();
-        }
-        if (program.getProgramStatus()==ProgramStatusNewEnum.CSPS.getCode()){
-            noteName = ProgramStatusNewEnum.SXPS.getText();
-            noteAction = ProgramStatusNewEnum.SXPS.getText();
-        }
-        if (program.getProgramStatus()==ProgramStatusNewEnum.SXPS.getCode()){
-            noteName = ProgramStatusNewEnum.HDFB.getText();
-            noteAction = ProgramStatusNewEnum.HDFB.getText();
-        }
-        if (program.getProgramStatus()==ProgramStatusNewEnum.HDFB.getCode()){
-            noteName = ProgramStatusNewEnum.QMTG.getText();
-            noteAction = ProgramStatusNewEnum.QMTG.getText();
-        }
-        if (program.getProgramStatus()==ProgramStatusNewEnum.QMTG.getCode()){
-            noteName = ProgramStatusNewEnum.XMFP.getText();
-            noteAction = ProgramStatusNewEnum.XMFP.getText();
-        }
+
         //管理层蒋正浩、左恩泽、李骏岩、傅志华,提示信息
         if (role == 0) {
             text = "【"+program.getName()+"】已逾期，请及时关注。";
@@ -2684,7 +2769,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     @Override
     public int warningTask(Program program){
         Map<String,Object> map = new HashMap<>();
-        if(program.getId()==null){
+        if(program.getId()!=null){
             map.put("id",program.getId());
             programMapper.updateWarningDays(map);//修改相差天数值为null
         }
@@ -2790,7 +2875,12 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             }
         }
         //2:项目类型为：运维服务、咨询采购项目时，直接结束，不做操作
-
+        if(program.getProgramType()==ProgramTypeEnum.YWFW.getCode()) {
+            if (program.getProgramStatus() == ProgramStatusNewEnum.WLX.getCode()
+                    && program.getApprovalStatus() == 0) {
+                planDate = program.getCommitDate();
+            }
+        }
         //3:项目类型为：软件许可、硬件采购项目，
         if(program.getProgramType()==ProgramTypeEnum.RJXK.getCode()){
             if (program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()

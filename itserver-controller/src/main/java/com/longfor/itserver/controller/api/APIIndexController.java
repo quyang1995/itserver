@@ -1,24 +1,13 @@
 package com.longfor.itserver.controller.api;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.longfor.itserver.common.constant.ConfigConsts;
-import com.longfor.itserver.common.enums.AvaStatusEnum;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.helper.DataPermissionHelper;
 import com.longfor.itserver.common.util.CommonUtils;
-import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.common.vo.MoApprove.MoApproveListVo;
 import com.longfor.itserver.controller.base.BaseController;
-import com.longfor.itserver.entity.Product;
-import com.longfor.itserver.entity.Program;
-import com.longfor.itserver.entity.ProgramEmployee;
 import com.longfor.itserver.entity.ps.PsIndex;
-import com.longfor.itserver.entity.ps.PsProgramDetail;
 import com.longfor.itserver.esi.MoApproveUtil;
-import com.longfor.itserver.service.impl.ProgramWarningServiceImpl;
-import net.mayee.commons.helper.APIHelper;
-import org.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

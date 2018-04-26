@@ -25,6 +25,12 @@ public class ProgramApprovalSnapshot implements Serializable {
     private Long programId;
 
     /**
+     * 项目类型
+     */
+    @Column(name = "program_type")
+    private Integer programType;
+
+    /**
      * 归属产品
      */
     @Column(name = "product_id")
@@ -1086,5 +1092,13 @@ public class ProgramApprovalSnapshot implements Serializable {
 
     public void setCommitDescp(String commitDescp) {
         this.commitDescp = commitDescp;
+    }
+
+    public Integer getProgramType() {
+        return programType;
+    }
+
+    public void setProgramType(Integer programType) {
+        this.programType = programType;
     }
 }

@@ -15,7 +15,6 @@ import com.longfor.itserver.entity.BugInfo;
 import com.longfor.itserver.entity.Product;
 import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ps.PsBugInfoDetail;
-import com.longfor.itserver.entity.ps.PsBugTimeTask;
 import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.helper.APIHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -112,6 +111,37 @@ public class APIBugInfoController extends BaseController {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		resultMap.put("list", bugList);
 		resultMap.put(APIHelper.TOTAL, new PageInfo(bugList).getTotal());
+		return resultMap;
+	}
+
+	/**
+	 * 导出BUG列表(新)
+	 *
+	 */
+	@RequestMapping(value = "/newExport", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public Map bugNewExportList(HttpServletRequest request, HttpServletResponse response){
+		/* 获得已经验证过的参数map */
+		@SuppressWarnings("unchecked")
+		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		/* 返回报文 */
+		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try {
+			/* 查询数据 and admin权限判断 */
+			String accountId = String.valueOf(paramsMap.get("accountId"));
+			paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
+			String status = paramsMap.get("status").toString();
+			if(StringUtils.isNotBlank(status) && !"-1".equals(status)){
+				String [] programStatusList = status.split(",");
+				paramsMap.put("statusList",programStatusList);
+			}
+			List<PsBugInfoDetail> bugList = this.getBugInfoService().bugList(paramsMap);
+			resultMap.put("list", bugList);
+			resultMap.put(APIHelper.TOTAL, new PageInfo(bugList).getTotal());
+		} catch ( Exception e) {
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
 		return resultMap;
 	}
 

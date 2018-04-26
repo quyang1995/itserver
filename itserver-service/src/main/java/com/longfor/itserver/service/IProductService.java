@@ -2,7 +2,6 @@ package com.longfor.itserver.service;
 
 
 import com.longfor.itserver.entity.Product;
-import com.longfor.itserver.entity.ps.PsProduct;
 import com.longfor.itserver.entity.ps.PsProductCount;
 import com.longfor.itserver.service.base.IAdminService;
 import org.apache.ibatis.annotations.Param;
@@ -24,6 +23,13 @@ public interface IProductService extends IAdminService<Product> {
     Map<String, Object> addProduct(Map map);
     List<Product> searchIdList(String likeProduct);
     boolean updateProduct(Map map) throws Exception;
+
+    /**
+     * 修改产品访问地址，时间
+     * @param map
+     * @return
+     */
+    void updateProductUrl(Map map);
     /**
      * 产品列表A-Z排序
      * @return
@@ -63,4 +69,10 @@ public interface IProductService extends IAdminService<Product> {
      * @return
      */
     int getCountByLabelId(@Param(value = "label")String label);
+
+    /**
+     * 删除产品：产品下不存在项目的允许删除
+     * @param map
+     */
+    Integer deleteProduct(Map map);
 }

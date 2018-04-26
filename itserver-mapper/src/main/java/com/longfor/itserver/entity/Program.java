@@ -34,6 +34,9 @@ public class Program implements Serializable {
     private Date onlinePlanDate;
     @Column(name = "dev_type")
     private Integer devType;
+    /**
+     * 预算业务线
+     */
     @Column(name = "analyzing_conditions")
     private String analyzingConditions;
     @Column(name = "dev_workload")
@@ -248,6 +251,20 @@ public class Program implements Serializable {
 
     @Transient
     private String labelName;
+
+    /**
+     * 项目所属产品业务线
+     */
+    @Transient
+    private String productAnalyzingConditions;
+
+    public String getProductAnalyzingConditions() {
+        return productAnalyzingConditions;
+    }
+
+    public void setProductAnalyzingConditions(String productAnalyzingConditions) {
+        this.productAnalyzingConditions = productAnalyzingConditions;
+    }
 
     public String getCommitDescp() {
         return commitDescp;

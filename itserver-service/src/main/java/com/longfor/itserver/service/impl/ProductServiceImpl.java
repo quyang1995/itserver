@@ -11,16 +11,14 @@ import com.longfor.itserver.common.enums.PublicTypeEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.common.util.StringUtil;
-import com.longfor.itserver.entity.Product;
-import com.longfor.itserver.entity.ProductEmployee;
-import com.longfor.itserver.entity.ProductEmployeeChangeLog;
-import com.longfor.itserver.entity.ProductLabel;
+import com.longfor.itserver.entity.*;
 import com.longfor.itserver.entity.ps.PsProductCount;
 import com.longfor.itserver.mapper.ProductEmployeeChangeLogMapper;
 import com.longfor.itserver.mapper.ProductEmployeeMapper;
 import com.longfor.itserver.mapper.ProductMapper;
 import com.longfor.itserver.service.IProductLabelService;
 import com.longfor.itserver.service.IProductService;
+import com.longfor.itserver.service.IProgramService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.TimeUtils;
@@ -49,6 +47,8 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 	private ProductEmployeeChangeLogMapper productEmployeeChangeLogMapper;
 	@Autowired
 	private IProductLabelService productLabelService;
+	@Autowired
+	private IProgramService programService;
 
 	@Override
 	public List<PsProductCount> searchList(Map map) {
@@ -148,7 +148,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		product.setAccountType(accountType);
 		product.setNewCode(code);
 		product.setCode(code);
-        product.setIsTop("0");
+		product.setIsTop("0");
 		product.setAnalyzingConditions(jsonObject.getString("analyzingConditions"));
 		int insert = productMapper.insert(product);
 		/* 产品责任人 */
@@ -331,6 +331,14 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		}
 
 		return true;
+	}
+
+	@Transactional
+	@Override
+	public void updateProductUrl(Map map) {
+		JSONObject jsonObject = (JSONObject) JSONObject.toJSON(map);
+		Product product = JSONObject.toJavaObject(jsonObject, Product.class);
+		productMapper.updateProductUrl(product);
 	}
 	/**
 	 * 删除操作
@@ -554,14 +562,20 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 			map.put("labels",label);
 		} else {
 			String [] label = labels.substring(1).split(",");
-			for (String str:label){
-				str = "," + str + ",";
+			String [] labelDeal = new String [label.length];
+			for(int i=0;i<label.length;i++){
+				labelDeal[i] = "," + label[i] + ",";
 			}
-			map.put("labels",label);
+			map.put("labels",labelDeal);
 		}
 		//产品状态参数
 		if("-1".equals(productStatus) ){
-			productStatus = "290,100,110,120,130,140,150,160,170,180,190,193,195";
+			if("0".equals(requestType)){
+				productStatus = "290,100,110,120,130,140,150,160,170,180,190,193,195";
+			}
+			if("1".equals(requestType)){
+				productStatus = "290,100,110,120,130,140,150,160,170,180,190,193,195,999";
+			}
 		}
 		if(productStatus.indexOf("290")!=-1){
 			//已上线参数
@@ -637,5 +651,29 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 	@Override
 	public int getCountByLabelId(String label) {
 		return productMapper.getCountByLabelId(label);
+	}
+	@Override
+	public Integer deleteProduct(Map map) {
+		Long productId = Long.parseLong(map.get("productId").toString());
+		Product product = productMapper.selectByPrimaryKey(productId);
+		if(product==null){
+			return 1;
+		}
+		Program program = new Program();
+		program.setProductId(productId);
+		if(programService.selectCount(program)!=0){
+			return 2;
+		}
+		//删除产品信息
+		productMapper.deleteByPrimaryKey(productId);
+		//删除产品人员信息
+		ProductEmployee productEmployee = new ProductEmployee();
+		productEmployee.setProductId(productId);
+		productEmployeeMapper.delete(productEmployee);
+		//删除产品人员日志信息
+		ProductEmployeeChangeLog productEmployeeChangeLog = new ProductEmployeeChangeLog();
+		productEmployeeChangeLog.setProductId(productId);
+		productEmployeeChangeLogMapper.delete(productEmployeeChangeLog);
+		return 0;
 	}
 }

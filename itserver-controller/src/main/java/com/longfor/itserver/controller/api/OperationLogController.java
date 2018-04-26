@@ -1,6 +1,5 @@
 package com.longfor.itserver.controller.api;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
@@ -9,7 +8,6 @@ import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.common.vo.BuddyAccount;
 import com.longfor.itserver.common.vo.OperationLogVo;
 import com.longfor.itserver.controller.base.BaseController;
-import com.longfor.itserver.entity.ProductEmployeeChangeLog;
 import com.longfor.itserver.esi.impl.AdsServiceImpl;
 import net.mayee.commons.helper.APIHelper;
 import org.apache.commons.beanutils.BeanUtils;

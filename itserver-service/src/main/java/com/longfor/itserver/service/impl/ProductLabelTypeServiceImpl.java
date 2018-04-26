@@ -5,7 +5,6 @@ import com.longfor.itserver.entity.ProductLabel;
 import com.longfor.itserver.entity.ProductLabelType;
 import com.longfor.itserver.mapper.ProductLabelMapper;
 import com.longfor.itserver.mapper.ProductLabelTypeMapper;
-import com.longfor.itserver.service.IProductLabelService;
 import com.longfor.itserver.service.IProductLabelTypeService;
 import com.longfor.itserver.service.base.AdminBaseService;
 import org.springframework.beans.factory.annotation.Autowired;

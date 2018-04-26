@@ -4,7 +4,6 @@ package com.longfor.itserver.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
-import com.longfor.itserver.entity.DemandChangeLog;
 import com.longfor.itserver.entity.ProductEmployeeChangeLog;
 import com.longfor.itserver.mapper.ProductEmployeeChangeLogMapper;
 import com.longfor.itserver.service.IProductEmployeeChangeLogService;

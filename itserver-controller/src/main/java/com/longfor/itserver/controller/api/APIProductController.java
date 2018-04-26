@@ -327,6 +327,27 @@ public class APIProductController extends BaseController {
         }
     }
 
+    /**
+     * 修改产品访问地址，时间
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/update/productUrl", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Map updateProductUrl(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        try{
+            LOG.info("------/update/productUrl:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+            this.getProductService().updateProductUrl(paramsMap);
+        }catch (Exception e){
+            e.printStackTrace();
+            resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+        }
+        return resultMap;
+    }
+
     @RequestMapping(value = "/changeLog/list", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
     public Map changeLogList(HttpServletRequest request, HttpServletResponse response) {
@@ -408,6 +429,35 @@ public class APIProductController extends BaseController {
             e.printStackTrace();
             return CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
         }
+    }
+    /**
+     * 删除产品：产品下不存在项目的允许删除
+     */
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+    @ResponseBody
+    public Map approvalRebut(HttpServletRequest request) {
+        Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        try{
+            LOG.info("------delete:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+            String accountId = paramsMap.get("accountId").toString();
+            String isAdmin = DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0";
+            if("1".equals(isAdmin)){
+                Integer i = this.getProductService().deleteProduct(paramsMap);
+                if(i==1){
+                    resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1401);
+                }
+                if(i==2){
+                    resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1042);
+                }
+            } else {
+                resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+        }
+        return resultMap;
     }
 
     /**

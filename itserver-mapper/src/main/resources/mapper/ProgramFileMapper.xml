@@ -77,13 +77,14 @@
 
   <select id="getFileListByMapTotal" resultType="Integer">
     SELECT COUNT(0) FROM program_file pf
-    LEFT JOIN program_approval_snapshot pas ON pas.id = pf.snapshot_id
+    INNER JOIN program_approval_snapshot pas ON pas.id = pf.snapshot_id
+    INNER JOIN program_approval_snapshot pa ON pa.bpm_code=pas.bpm_code and pa.approval_status=110
     <where>
       <if test="programId != null and programId != ''">
         pf.program_id = #{programId}
       </if>
       <if test="programName != null and programName != ''">
-        and pas.pas.name = #{programName}
+        and pas.name = #{programName}
       </if>
       <if test="type != null and type != ''">
         and pf.type = #{type}
@@ -113,7 +114,7 @@
           pf.program_id = #{programId}
         </if>
         <if test="programName != null and programName != ''">
-          and pas.pas.name = #{programName}
+          and pas.name = #{programName}
         </if>
         <if test="type != null and type != ''">
           and pf.type = #{type}

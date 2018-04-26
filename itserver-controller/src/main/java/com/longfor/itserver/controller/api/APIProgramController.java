@@ -462,7 +462,19 @@ public class APIProgramController extends BaseController {
 		Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		try{
 			LOG.info("------delete:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
-			this.getProgramService().deleteProgram(paramsMap);
+			String accountId = paramsMap.get("accountId").toString();
+			String isAdmin = DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0";
+			if("1".equals(isAdmin)){
+				Integer i = this.getProgramService().deleteProgram(paramsMap);
+				if(i==1){
+					resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
+				}
+				if(i==2){
+					resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1041);
+				}
+			} else {
+				resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+			}
 		}catch (Exception e){
 			e.printStackTrace();
 			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
@@ -521,7 +533,7 @@ public class APIProgramController extends BaseController {
 					//删除当前用户
 					this.getProgramEmployeeService().delEmployee(employee,accountType);
 				} else {
-					return CommonUtils.getResultMapByBizEnum(BizEnum.E1027, " 唯一责任人");
+					return CommonUtils.getResultMapByBizEnum(BizEnum.E1027, " 唯一项目经理");
 				}
 			} else {
 				//删除成员

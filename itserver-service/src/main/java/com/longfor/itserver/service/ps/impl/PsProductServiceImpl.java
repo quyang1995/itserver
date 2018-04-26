@@ -8,9 +8,6 @@ import com.longfor.itserver.service.ps.IPsProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author wax
  *         Created on 2017/8/3 下午7:15
