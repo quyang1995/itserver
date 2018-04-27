@@ -3,8 +3,8 @@ package com.longfor.itserver.common.enums;
 public enum ProgramTypeEnum {
 
     /* 状态 */
-    RJKF(1, "软件开发实施项目", "label label-sm label-danger"),
-    YWFW(2, "运维服务、咨询采购项目", "label label-sm label-info"),
+    RJKF(1, "一般定制开发或实施软件项目", "label label-sm label-danger"),
+    YWFW(2, "运维服务、咨询服务采购项目", "label label-sm label-info"),
     RJXK(3, "软件许可、硬件采购项目", "label label-sm label-success"),
     JCSS(4, "基础设施项目", "label label-sm label-success");
 
