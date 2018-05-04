@@ -23,4 +23,11 @@ public interface BugInfoMapper extends BeeMapper<BugInfo> {
 
     List<PsBugTimeTask> bugTask();
 
+    /**
+     * 导出BUG列表(新)
+     * @param map
+     * @return
+     */
+    List<Map<String,Object>> newExport(Map map);
+
 }

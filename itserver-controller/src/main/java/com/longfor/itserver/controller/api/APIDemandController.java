@@ -1,5 +1,6 @@
 package com.longfor.itserver.controller.api;
 
+import com.alibaba.fastjson.JSON;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
@@ -14,6 +15,8 @@ import com.longfor.itserver.entity.Program;
 import com.longfor.itserver.entity.ps.PsDemandDetail;
 import com.longfor.itserver.service.util.AccountUitl;
 import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +39,9 @@ import java.util.Map;
 @RequestMapping(value="/api/demand")
 @Controller
 public class APIDemandController extends BaseController {
+
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+
     /**
      * 需求系列
      *
@@ -74,6 +80,29 @@ public class APIDemandController extends BaseController {
         /*查询数据*/
         Map<String, Object> map= this.getDemandService().getExcelDemandList(paramsMap);
         return map;
+    }
+
+    /**
+     * 导出需求列表（新）
+     *
+     * @param response
+     * @param request
+     * @return map
+     */
+    @RequestMapping(value = "/newExport", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Map newExport(HttpServletRequest request, HttpServletResponse response){
+        Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        try{
+            Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+            LOG.info("------newExport:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+            /*查询数据*/
+            resultMap.put("data",this.getDemandService().newExport(paramsMap));
+        }catch (Exception e){
+            e.printStackTrace();
+            resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+        }
+        return resultMap;
     }
 
     /**

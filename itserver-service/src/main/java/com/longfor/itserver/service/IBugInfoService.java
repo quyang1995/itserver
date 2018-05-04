@@ -37,4 +37,18 @@ public interface IBugInfoService extends IAdminService<BugInfo> {
      * @return
      */
     List<PsBugTimeTask> bugTask();
+
+    /**
+     * 导出BUG列表(新)
+     * @param map
+     * @return
+     */
+    List<Map<String,Object>> newExport(Map map);
+
+    /**
+     * 删除项目或产品相关bug，relationType=1：产品，relationType=2：项目
+     * @param id
+     * @param relationType
+     */
+    void deleteBugInfo(Long id,Integer relationType);
 }

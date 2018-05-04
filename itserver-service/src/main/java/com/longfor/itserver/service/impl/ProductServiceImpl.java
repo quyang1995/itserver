@@ -16,9 +16,7 @@ import com.longfor.itserver.entity.ps.PsProductCount;
 import com.longfor.itserver.mapper.ProductEmployeeChangeLogMapper;
 import com.longfor.itserver.mapper.ProductEmployeeMapper;
 import com.longfor.itserver.mapper.ProductMapper;
-import com.longfor.itserver.service.IProductLabelService;
-import com.longfor.itserver.service.IProductService;
-import com.longfor.itserver.service.IProgramService;
+import com.longfor.itserver.service.*;
 import com.longfor.itserver.service.base.AdminBaseService;
 import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.TimeUtils;
@@ -49,6 +47,12 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 	private IProductLabelService productLabelService;
 	@Autowired
 	private IProgramService programService;
+	@Autowired
+	private IBugInfoService bugInfoService;
+	@Autowired
+	private IDemandService demandService;
+	@Autowired
+	private IFeedBackService feedBackService;
 
 	@Override
 	public List<PsProductCount> searchList(Map map) {
@@ -674,6 +678,12 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		ProductEmployeeChangeLog productEmployeeChangeLog = new ProductEmployeeChangeLog();
 		productEmployeeChangeLog.setProductId(productId);
 		productEmployeeChangeLogMapper.delete(productEmployeeChangeLog);
+		//删除产品相关bug
+		bugInfoService.deleteBugInfo(productId,1);
+		//删除产品相关demand
+		demandService.deleteDemand(productId,1);
+		//删除产品反馈信息
+		feedBackService.deleteFeedBack(productId);
 		return 0;
 	}
 }

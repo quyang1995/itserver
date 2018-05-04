@@ -25,9 +25,7 @@ import com.longfor.itserver.esi.bpm.ProgramBpmUtil;
 import com.longfor.itserver.esi.bpm.ProgramBpmUtils;
 import com.longfor.itserver.esi.impl.LongforServiceImpl;
 import com.longfor.itserver.mapper.*;
-import com.longfor.itserver.service.IProgramEmployeeService;
-import com.longfor.itserver.service.IProgramService;
-import com.longfor.itserver.service.IProgramWarningService;
+import com.longfor.itserver.service.*;
 import com.longfor.itserver.service.base.AdminBaseService;
 import com.longfor.itserver.service.util.AccountUitl;
 import jodd.props.Props;
@@ -86,6 +84,12 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 
     @Autowired
     private LongforServiceImpl longforServiceImpl;
+
+    @Autowired
+    private IBugInfoService bugInfoService;
+
+    @Autowired
+    private IDemandService demandService;
 
 
     @Override
@@ -411,32 +415,40 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         if(program==null){
             return 1;
         }
-        if(program.getProgramStatus()!=ProgramStatusNewEnum.WLX.getCode()){
+        //项目未立项或者立项审核驳回的可以删除
+        if(program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()
+                || (program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
+                        && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHBH.getCode())){
+            //删除项目表数据
+            programMapper.deleteByPrimaryKey(programId);
+            //删除项目快照表数据
+            ProgramApprovalSnapshot pas = new ProgramApprovalSnapshot();
+            pas.setProgramId(programId);
+            programApprovalSnapshotMapper.delete(pas);
+            //删除项目相关人员数据
+            ProgramEmployee employee = new ProgramEmployee();
+            employee.setProgramId(programId);
+            programEmployeeMapper.delete(employee);
+            //删除项目日志表数据
+            ProgramEmployeeChangeLog employeeChangeLog = new ProgramEmployeeChangeLog();
+            employeeChangeLog.setProgramId(programId);
+            programEmployeeChangeLogMapper.delete(employeeChangeLog);
+            //若有预警，删除预警信息
+            ProgramWarning programWarning = new ProgramWarning();
+            programWarning.setProgramId(programId);
+            programWarningService.delete(programWarning);
+            //若有关注信息，删除关注信息
+            ProgramFollow programFollow = new ProgramFollow();
+            programFollow.setProgramId(programId);
+            programFollowMapper.delete(programFollow);
+            //删除项目相关bug
+            bugInfoService.deleteBugInfo(programId,2);
+            //删除项目相关demand
+            demandService.deleteDemand(programId,2);
+            return 0;
+        } else {
             return 2;
         }
-        //删除项目表数据
-        programMapper.deleteByPrimaryKey(programId);
-        //删除项目快照表数据
-        ProgramApprovalSnapshot pas = new ProgramApprovalSnapshot();
-        pas.setProgramId(programId);
-        programApprovalSnapshotMapper.delete(pas);
-        //删除项目相关人员数据
-        ProgramEmployee employee = new ProgramEmployee();
-        employee.setProgramId(programId);
-        programEmployeeMapper.delete(employee);
-        //删除项目日志表数据
-        ProgramEmployeeChangeLog employeeChangeLog = new ProgramEmployeeChangeLog();
-        employeeChangeLog.setProgramId(programId);
-        programEmployeeChangeLogMapper.delete(employeeChangeLog);
-        //若有预警，删除预警信息
-        ProgramWarning programWarning = new ProgramWarning();
-        programWarning.setProgramId(programId);
-        programWarningService.delete(programWarning);
-        //若有关注信息，删除关注信息
-        ProgramFollow programFollow = new ProgramFollow();
-        programFollow.setProgramId(programId);
-        programFollowMapper.delete(programFollow);
-        return 0;
     }
 
     public boolean getAccountLongfor(Program program, String str, String id) {
@@ -1002,13 +1014,19 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programApprovalSnapshot.setModifiedTime(now);
             programApprovalSnapshot.setSuggestion(paramsMap.get("suggestion"));
             programApprovalSnapshot.setReportPoor(paramsMap.get("reportPoor"));
-            programApprovalSnapshotMapper.insert(programApprovalSnapshot);
-            //如果是项目复盘的话，数据库里添加一条项目复盘审核通过的信息
+            Integer shotProgramStatus = programApprovalSnapshot.getProgramStatus();
+            //如果是项目复盘的话，先在数据库里添加一条项目复盘审核通过的信息
             if(oldProgramStatus==ProgramStatusNewEnum.XMFP.getCode()){
                 programApprovalSnapshot.setId(null);
                 programApprovalSnapshot.setProgramStatus(ProgramStatusNewEnum.XMFP.getCode());
                 programApprovalSnapshotMapper.insert(programApprovalSnapshot);
             }
+            programApprovalSnapshot.setProgramStatus(shotProgramStatus);
+            if(programApprovalSnapshot!=null){
+                programApprovalSnapshot.setId(null);
+            }
+            programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
             //项目类型如果是运维服务、咨询采购项目，项目立项完成之后直接，项目状态直接变为完成,并且添加快照记录
             //项目类型如果是软件许可、硬件采购项目，项目灰度完成之后直接，项目状态直接变为完成,并且添加快照记录
             if(program.getProgramType()==ProgramTypeEnum.YWFW.getCode()

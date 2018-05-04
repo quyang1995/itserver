@@ -362,4 +362,19 @@ public class FeedBackServiceImpl extends AdminBaseService<FeedBack> implements I
         return map;
     }
 
+    @Override
+    public void deleteFeedBack(Long productId) {
+        FeedBack feedBack = new FeedBack();
+        feedBack.setProductId(productId);
+        List<FeedBack> feedBackList = feedBackMapper.select(feedBack);
+        for (FeedBack f:feedBackList) {
+            //删除反馈文件
+            FeedBackFile feedBackFile = new FeedBackFile();
+            feedBackFile.setFeedBackId(f.getId());
+            feedBackFileMapper.delete(feedBackFile);
+        }
+        //删除反馈
+        feedBackMapper.delete(feedBack);
+    }
+
 }

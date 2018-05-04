@@ -254,4 +254,132 @@
         WHERE `status` in(2,3) and sysdate() >= date_sub(hope_date,interval -1 day)
         GROUP BY callon_account_id
     </select>
+
+    <select id="newExport" resultType="map">
+        SELECT
+        d.id id,
+        d.`name` `name`,
+        d.descp descp,
+        CASE
+        WHEN d.`level` = '0' THEN  '底'
+        WHEN d.`level` = '1' THEN  '中'
+        WHEN d.`level` = '2' THEN  '高'
+        WHEN d.`level` = '3' THEN  '紧急'
+        ELSE '' END level,
+        d.drafted_account_id draftedAccountId,
+        d.drafted_employee_name draftedEmployeeName,
+        d.callon_account_id callonAccountId,
+        d.callon_employee_name callonEmployeeName,
+        CASE
+        WHEN d.`status` = '0' THEN  '已取消'
+        WHEN d.`status` = '1' THEN  '已关闭'
+        WHEN d.`status` = '2' THEN  '待处理'
+        WHEN d.`status` = '3' THEN  '处理中'
+        WHEN d.`status` = '4' THEN  '已完成'
+        ELSE '' END status,
+        substring(d.create_time,1,10) createTime,
+        (SELECT GROUP_CONCAT(employee_name) from
+        (SELECT de.*,pe.employee_name FROM demand de LEFT JOIN product_employee pe ON
+        de.relation_id = pe.product_id and de.relation_type='1' and pe.employee_type='1')
+        as prod_emp where d.id=id GROUP BY id) productManager,
+        p.`name` productName,
+        (SELECT GROUP_CONCAT(employee_name) from
+        (SELECT de.*,pe.employee_name FROM demand de LEFT JOIN program_employee pe ON
+        de.relation_id = pe.program_id and de.relation_type='2' and pe.employee_type='1')
+        as prog_emp where d.id=id GROUP BY id) programManager,
+        m.`name` programName,
+        (SELECT GROUP_CONCAT(content) from
+        (SELECT de.*,CONCAT(dc.create_time,' ',dc.employee_name,':',dc.content) 'content' FROM demand de
+        LEFT JOIN demand_comment dc ON
+        de.id = dc.demand_id)
+        as dem_com where d.id=id GROUP BY id) comment
+        from demand d
+        LEFT JOIN product p ON d.relation_id = p.id and d.relation_type='1'
+        LEFT JOIN program m on d.relation_id = m.id and d.relation_type='2'
+        WHERE 1=1
+        <if test="statusList!=null">
+            and d.status in
+            <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='channel != "" and channel != null and channel !=-1'>
+            and d.channel = #{channel}
+        </if>
+        <if test='isPart == 1'>
+            and d.callon_account_id = #{accountId, jdbcType=VARCHAR}
+        </if>
+        <if test='isPart == 2'>
+            and d.drafted_account_id = #{accountId, jdbcType=VARCHAR}
+        </if>
+        <!--非管理员账户执行 选择了产品-->
+        <if test="isAdmin == 0">
+            <if test='productId !="" and productId != null and productId != -1 and (programId == 0 or programId == -1) '>
+                and
+                <if test='programId == -1'>
+                    (
+                </if>
+                (d.relation_type = 1 AND d.relation_id IN
+                (
+                SELECT ta.id FROM product ta LEFT JOIN product_employee tb ON ta.id = tb.product_id
+                WHERE (tb.account_id = #{accountId, jdbcType=VARCHAR} OR ta.contact_account_id = #{accountId, jdbcType=VARCHAR} OR ta.type=1)
+                AND product_id = #{productId}
+                ))
+                <if test='programId == -1'>
+                    OR (
+                    d.relation_type = 2 AND d.relation_id IN (
+                    SELECT DISTINCT p.id FROM program p JOIN program_employee pe ON p.id = pe.program_id WHERE (pe.account_id = #{accountId, jdbcType=VARCHAR} OR p.type = 1)
+                    AND product_id = #{productId}
+                    )
+                    ))
+                </if>
+            </if>
+            <if test='productId !="" and productId != null and productId != -1 and programId !=0 and programId != null and programId != -1'>
+                and  d.relation_type = 2 AND d.relation_id IN (
+                SELECT DISTINCT p.id FROM program p JOIN program_employee pe ON p.id = pe.program_id WHERE (pe.account_id = #{accountId, jdbcType=VARCHAR} OR p.type = 1)
+                AND product_id = #{productId} AND relation_id = #{programId}
+                )
+            </if>
+            <if test='productId == -1 and isPart == 0'>
+                and ((
+                d.relation_type = 1 AND d.relation_id IN
+                (
+                SELECT ta.id FROM product ta LEFT JOIN product_employee tb ON ta.id = tb.product_id
+                WHERE (tb.account_id = #{accountId, jdbcType=VARCHAR} OR ta.contact_account_id =
+                #{accountId, jdbcType=VARCHAR} OR ta.type=1)
+                )
+                )
+                OR (
+                d.relation_type = 2 AND d.relation_id IN (
+                SELECT DISTINCT p.id FROM program p JOIN program_employee pe ON p.id = pe.program_id WHERE (pe.account_id =
+                #{accountId, jdbcType=VARCHAR} OR p.type = 1)
+                ))
+                OR d.callon_account_id = #{accountId, jdbcType=VARCHAR} OR d.drafted_account_id = #{accountId, jdbcType=VARCHAR}
+                )
+            </if>
+        </if>
+        <!--管理员账户执行-->
+        <if test="isAdmin == 1">
+            <if test='productId !="" and productId != null and productId != -1 and (programId == 0 or programId == -1)'>
+                and
+                <if test='programId == -1'>
+                    (
+                </if>
+                (d.relation_type = 1 AND d.relation_id = #{productId})
+                <if test="programId == -1">
+                    OR (
+                    d.relation_type = 2 AND d.relation_id IN  ( SELECT id FROM program WHERE product_id = #{productId})
+                    ))
+                </if>
+            </if>
+            <if test='programId != 0 and programId != null and programId != -1'>
+                AND  d.relation_type = 2 AND d.relation_id = #{programId}
+            </if>
+        </if>
+        <if test='searchText != "" and searchText != null'>
+            and (d.name like concat(concat('%',#{searchText}),'%') OR d.callon_employee_name like
+            concat(concat('%',#{searchText}),'%'))
+        </if>
+        ORDER BY field(d.status,2,3,4,1,0),d.modified_time DESC
+    </select>
 </mapper>

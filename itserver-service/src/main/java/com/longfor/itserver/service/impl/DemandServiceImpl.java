@@ -64,6 +64,8 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 	private ProgramMapper programMapper;
 	@Autowired
 	private ProgramEmployeeServiceImpl  programEmployeeServiceImpl;
+	@Autowired
+	private DemandCommentMapper demandCommentMapper;
 
 	/**
 	 * 	新增需求信息
@@ -299,6 +301,19 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		resultMap.put("demandList", demands);
 		resultMap.put(APIHelper.TOTAL, new PageInfo(demands).getTotal());
 		return resultMap;
+	}
+
+	@Override
+	public List<Map<String,Object>> newExport(Map<String, Object> paramsMap) {
+		/* 查询数据 and admin权限判断 */
+		String accountId = String.valueOf(paramsMap.get("accountId"));
+		paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
+		String status = paramsMap.get("status").toString();
+		if(StringUtils.isNotBlank(status) && !"-1".equals(status)){
+			String [] programStatusList = status.split(",");
+			paramsMap.put("statusList",programStatusList);
+		}
+		return demandMapper.newExport(paramsMap);
 	}
 
 	private void setDemandInfo(PsDemandDetail demand){
@@ -631,5 +646,31 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 			}
 		}
 		return demandList;
+	}
+
+	@Override
+	public void deleteDemand(Long id,Integer relationType) {
+		Demand demand = new Demand();
+		demand.setRelationId(id);
+		demand.setRelationType(relationType);
+		List<Demand> demandList = demandMapper.select(demand);
+		for (Demand d:demandList) {
+			if(d.getId()!=null){
+				//删除文件相关
+				DemandFile demandFile = new DemandFile();
+				demandFile.setDemandId(d.getId());
+				demandFileMapper.delete(demandFile);
+				//删除日志相关
+				DemandChangeLog demandChangeLog = new DemandChangeLog();
+				demandChangeLog.setDemandId(d.getId());
+				demandChangeLogMapper.delete(demandChangeLog);
+				//删除评论相关
+				DemandComment demandComment = new DemandComment();
+				demandComment.setDemandId(d.getId());
+				demandCommentMapper.delete(demandComment);
+			}
+		}
+		//删除demand
+		demandMapper.delete(demand);
 	}
 }

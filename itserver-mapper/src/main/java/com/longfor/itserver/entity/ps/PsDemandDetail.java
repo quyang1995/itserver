@@ -29,6 +29,21 @@ public class PsDemandDetail extends Demand implements Serializable {
     @Transient
     private List<ProgramEmployee> productManagerList;
 
+    @Transient
+    private String productManager;
+
+    @Transient
+    private String productName;
+
+    @Transient
+    private String programManager;
+
+    @Transient
+    private String programName;
+
+    @Transient
+    private String comment;
+
     public List<ProgramEmployee> getProductManagerList() {
         return productManagerList;
     }
@@ -67,5 +82,45 @@ public class PsDemandDetail extends Demand implements Serializable {
 
     public void setDemandFileList(List<DemandFile> demandFileList) {
         this.demandFileList = demandFileList;
+    }
+
+    public String getProductManager() {
+        return productManager;
+    }
+
+    public void setProductManager(String productManager) {
+        this.productManager = productManager;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getProgramManager() {
+        return programManager;
+    }
+
+    public void setProgramManager(String programManager) {
+        this.programManager = programManager;
+    }
+
+    public String getProgramName() {
+        return programName;
+    }
+
+    public void setProgramName(String programName) {
+        this.programName = programName;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

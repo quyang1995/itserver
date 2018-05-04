@@ -59,6 +59,8 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
     private ProgramMapper programMapper;
     @Autowired
     private ProgramEmployeeServiceImpl programEmployeeServiceImpl;
+    @Autowired
+    private BugCommentMapper bugCommentMapper;
 
     /**
      * bug列表
@@ -73,6 +75,18 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
             this.setBugInfo(bug);
         }
         return bugList;
+    }
+
+    /**
+     * 导出BUG列表(新)
+     *
+     * @param map
+     * @return
+     */
+    @Override
+    public List<Map<String,Object>> newExport(Map map) {
+
+        return bugInfoMapper.newExport(map);
     }
 
     private void setBugInfo(PsBugInfoDetail bug){
@@ -582,6 +596,37 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
             }
         }
         return bugList;
+    }
+
+    /**
+     * 删除项目或产品相关bug，relationType=1：产品，relationType=2：项目
+     * @param id
+     * @param relationType
+     */
+    @Override
+    public void deleteBugInfo(Long id,Integer relationType) {
+        BugInfo bugInfo = new BugInfo();
+        bugInfo.setRelationId(id);
+        bugInfo.setRelationType(relationType);
+        List<BugInfo> bugInfoList = bugInfoMapper.select(bugInfo);
+        for (BugInfo bug:bugInfoList) {
+            if(bug.getId()!=null){
+                //删除bug相关文件
+                BugFile bugFile = new BugFile();
+                bugFile.setBugId(bug.getId());
+                bugFileMapper.delete(bugFile);
+                //删除bug相关日志
+                BugChangeLog bugChangeLog = new BugChangeLog();
+                bugChangeLog.setBugId(bug.getId());
+                bugChangeLogMapper.delete(bugChangeLog);
+                //删除bug相关评论
+                BugComment bugComment = new BugComment();
+                bugComment.setBugId(bug.getId());
+                bugCommentMapper.delete(bugComment);
+            }
+        }
+        //删除bug
+        bugInfoMapper.delete(bugInfo);
     }
 
 }

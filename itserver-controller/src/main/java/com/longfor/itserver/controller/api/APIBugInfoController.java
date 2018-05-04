@@ -1,5 +1,6 @@
 package com.longfor.itserver.controller.api;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.longfor.ads.entity.AccountLongfor;
@@ -19,6 +20,8 @@ import com.longfor.itserver.service.util.AccountUitl;
 import net.mayee.commons.helper.APIHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +45,8 @@ import java.util.Map;
 @RequestMapping(value = "/api/bug")
 @Controller
 public class APIBugInfoController extends BaseController {
+
+	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	/**
 	 * BUG列表
@@ -127,6 +132,7 @@ public class APIBugInfoController extends BaseController {
 		/* 返回报文 */
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try {
+			LOG.info("------newExport:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			/* 查询数据 and admin权限判断 */
 			String accountId = String.valueOf(paramsMap.get("accountId"));
 			paramsMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
@@ -135,9 +141,7 @@ public class APIBugInfoController extends BaseController {
 				String [] programStatusList = status.split(",");
 				paramsMap.put("statusList",programStatusList);
 			}
-			List<PsBugInfoDetail> bugList = this.getBugInfoService().bugList(paramsMap);
-			resultMap.put("list", bugList);
-			resultMap.put(APIHelper.TOTAL, new PageInfo(bugList).getTotal());
+			resultMap.put("list", this.getBugInfoService().newExport(paramsMap));
 		} catch ( Exception e) {
 			e.printStackTrace();
 			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);

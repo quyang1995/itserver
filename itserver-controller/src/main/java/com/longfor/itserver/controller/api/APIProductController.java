@@ -442,16 +442,24 @@ public class APIProductController extends BaseController {
             LOG.info("------delete:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
             String accountId = paramsMap.get("accountId").toString();
             String isAdmin = DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0";
-            if("1".equals(isAdmin)){
-                Integer i = this.getProductService().deleteProduct(paramsMap);
-                if(i==1){
-                    resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1401);
+            //判断管理员角色，0=非管理员，1=管理员，管理员和责任人,可以删除产品
+            if ("0".equals(isAdmin)) {
+                Map<String, Object> accountMap = new HashMap<String, Object>();
+                accountMap.put("employeeType", "1");
+                accountMap.put("accountId", accountId);
+                accountMap.put("productId", paramsMap.get("productId").toString());
+                List<ProductEmployee> accountList = this.getProductEmployeeService().searchTypeListMap(accountMap);
+                if (accountList==null || accountList.isEmpty()){
+                    resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1402,accountList.get(0).getEmployeeName());
+                    return resultMap;
                 }
-                if(i==2){
-                    resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1042);
-                }
-            } else {
-                resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+            }
+            Integer i = this.getProductService().deleteProduct(paramsMap);
+            if(i==1){
+                resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1401);
+            }
+            if(i==2){
+                resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1042);
             }
         }catch (Exception e){
             e.printStackTrace();

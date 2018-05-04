@@ -15,4 +15,10 @@ public interface IFeedBackService extends IAdminService<FeedBack> {
     FeedBack getFeedBackId(long id);
 
     Map countStatus(Map map);
+
+    /**
+     * 删除反馈信息
+     * @param productId
+     */
+    void deleteFeedBack(Long productId);
 }

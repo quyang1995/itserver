@@ -463,17 +463,26 @@ public class APIProgramController extends BaseController {
 		try{
 			LOG.info("------delete:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
 			String accountId = paramsMap.get("accountId").toString();
+			String programId = paramsMap.get("programId").toString();
 			String isAdmin = DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0";
-			if("1".equals(isAdmin)){
-				Integer i = this.getProgramService().deleteProgram(paramsMap);
-				if(i==1){
-					resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
+			//管理员和责任人,可以删除项目
+			if("0".equals(isAdmin)){
+				Map map = new HashMap();
+				map.put("accountId", accountId);
+				map.put("programId", programId);
+				map.put("employeeType", "1");
+				List<ProgramEmployee> accountList = this.getProgramEmployeeService().selectTypeList(map);
+				if (accountList == null || accountList.isEmpty()) {
+					resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1305,accountList.get(0).getEmployeeName());
+					return resultMap;
 				}
-				if(i==2){
-					resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1041);
-				}
-			} else {
-				resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1026);
+			}
+			Integer i = this.getProgramService().deleteProgram(paramsMap);
+			if(i==1){
+				resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
+			}
+			if(i==2){
+				resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E1041);
 			}
 		}catch (Exception e){
 			e.printStackTrace();

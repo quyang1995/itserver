@@ -28,4 +28,11 @@ public interface DemandMapper extends BeeMapper<Demand> {
 	List<Demand> statusList(Map paramsMap);
 
 	List<PsDemandTimeTask> demandTask();
+
+	/**
+	 * 导出list（新）
+	 * @param paramsMap
+	 * @return
+	 */
+	List<Map<String,Object>> newExport(Map<String, Object> paramsMap);
 }

@@ -3,6 +3,7 @@ package com.longfor.itserver.service;
 
 import com.longfor.itserver.common.util.ELExample;
 import com.longfor.itserver.entity.Demand;
+import com.longfor.itserver.entity.ps.PsDemandDetail;
 import com.longfor.itserver.entity.ps.PsDemandTimeTask;
 import com.longfor.itserver.entity.ps.PsIndex;
 import com.longfor.itserver.service.base.IAdminService;
@@ -17,14 +18,21 @@ public interface IDemandService extends IAdminService<Demand> {
 	 * @param paramsMap
 	 * @return
 	 */
-	public Map<String, Object> getPageDemandList(Map<String, Object>paramsMap,ELExample example);
+	 Map<String, Object> getPageDemandList(Map<String, Object>paramsMap,ELExample example);
 
 	/**
 	 * 获取所有list
 	 * @param paramsMap
 	 * @return
 	 */
-	public Map<String, Object> getExcelDemandList(Map<String, Object>paramsMap);
+	 Map<String, Object> getExcelDemandList(Map<String, Object>paramsMap);
+
+	/**
+	 * 导出list（新）
+	 * @param paramsMap
+	 * @return
+	 */
+	List<Map<String,Object>> newExport(Map<String, Object>paramsMap);
 
 	/**
 	 *  新增需求信息
@@ -45,7 +53,7 @@ public interface IDemandService extends IAdminService<Demand> {
 	 * @param
 	 * @return
 	 */
-	public Demand getDemandById(Long id);
+	 Demand getDemandById(Long id);
 
 	List<PsIndex> countPending(String id);
 
@@ -70,4 +78,11 @@ public interface IDemandService extends IAdminService<Demand> {
 	 * @return
 	 */
 	List<PsDemandTimeTask> demandTask();
+
+	/**
+	 * 删除项目或产品相关Demand，relationType=1：产品，relationType=2：项目
+	 * @param id
+	 * @param relationType
+	 */
+	void deleteDemand(Long id,Integer relationType);
 }
