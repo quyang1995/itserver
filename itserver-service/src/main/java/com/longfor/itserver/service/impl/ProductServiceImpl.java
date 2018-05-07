@@ -53,6 +53,8 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 	private IDemandService demandService;
 	@Autowired
 	private IFeedBackService feedBackService;
+	@Autowired
+	private ISearchTextService searchTextService;
 
 	@Override
 	public List<PsProductCount> searchList(Map map) {
@@ -551,6 +553,18 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		String analyzingConditions = map.get("analyzingConditions").toString();
 		String labels = map.get("labels").toString();
 		String productStatus = map.get("productStatus").toString();
+		if(map.get("searchText")!=null){
+			//常用搜索记录
+			String searchText = map.get("searchText").toString();
+			if(StringUtils.isNotBlank(searchText)){
+				SearchText search = new SearchText();
+				search.setType(1);
+				search.setText(searchText);
+				search.setPfAcc(map.get("accountId").toString());
+				search.setCreateTime(new Date());
+				searchTextService.insert(search);
+			}
+		}
 		//业务线-1：代表全部
 		if("-1".equals(analyzingConditions)){
 			analyzingConditions = "1,2,3,4,5,6,7,8";

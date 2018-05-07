@@ -88,6 +88,13 @@ public class BaseController {
     @Autowired
     private IProgramDraftService programDraftService;
 
+    @Autowired
+    private ISearchTextService searchTextService;
+
+    public ISearchTextService getSearchTextService() {
+        return searchTextService;
+    }
+
     public IProgramDraftService getProgramDraftService() {
         return programDraftService;
     }

@@ -94,7 +94,9 @@ public class EdsServiceImpl implements IEdsService {
                     sb.append(",");
                 }
             }
-            sb.deleteCharAt(sb.length()-1);
+            if (sb != null && sb.length()>0) {
+                sb.deleteCharAt(sb.length()-1);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }

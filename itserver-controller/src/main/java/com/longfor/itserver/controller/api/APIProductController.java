@@ -532,11 +532,35 @@ public class APIProductController extends BaseController {
     @ResponseBody
     public Map newProductHui(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        /* 获得已经验证过的参数map */
+        @SuppressWarnings("unchecked")
+        Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         try{
-            /* 获得已经验证过的参数map */
-            @SuppressWarnings("unchecked")
-            Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
             resultMap.put("data", this.getProductService().newProductHui(paramsMap));
+        }catch (Exception e){
+            e.printStackTrace();
+            resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 产品汇列表(常用搜素列表)
+     *
+     * @param response
+     * @param request
+     * @return Map
+     */
+    @RequestMapping(value = "/searchText", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Map searchText(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+        /* 获得已经验证过的参数map */
+        @SuppressWarnings("unchecked")
+        Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+        try{
+            paramsMap.put("type",1);
+            resultMap.put("data", this.getSearchTextService().getSearchText(paramsMap));
         }catch (Exception e){
             e.printStackTrace();
             resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);

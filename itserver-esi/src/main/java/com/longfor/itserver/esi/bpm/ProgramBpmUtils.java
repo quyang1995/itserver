@@ -301,8 +301,8 @@ public class ProgramBpmUtils
         jsonObject = new JSONObject();
         jsonObject.put("ItemName", "approval301AppendActors");
 //        String [] developAccountGuid = paramsMap.get("developAccount").split(",");
-        str = paramsMap.get("developAccount");
-        jsonObject.put("ItemValue", str.split(","));
+        str = paramsMap.get("developAccount")+","+paramsMap.get("testingList");
+        jsonObject.put("ItemValue", str.split(","));//技术人员+测试人员
         jsonArray.add(jsonObject);
         //********************添加技术负责人申**********end********************
 

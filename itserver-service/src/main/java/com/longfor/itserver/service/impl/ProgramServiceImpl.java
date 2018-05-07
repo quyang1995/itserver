@@ -1353,11 +1353,10 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             ProgramApprovalSnapshot programApprovalSnapshot = new ProgramApprovalSnapshot();
             this.copyProperties(programApprovalSnapshot,program);
             programApprovalSnapshot.setProgramStatus(ProgramStatusNewEnum.XQBG.getCode());
+            programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
             if (overallCost.compareTo(ten) != -1) {
-                programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
                 programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.BGSHZ.getCode());
             } else {
-                programApprovalSnapshot.setBpmCode(applyCreateResultVo.getInstanceID());
                 programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
             }
 
@@ -1375,24 +1374,30 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             //附件表
             this.dealFileList(paramsMap.get("fileList"),program.getId(),ProgramStatusNewEnum.XQBG.getCode(),programApprovalSnapshot.getId());
 
-
-            if (overallCost.compareTo(ten) != -1) {
-                //激活流程
-                ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtils.approvePass(
-                        paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID(),null);
-                if(pplySubmitResultVo.getIsSuccess().equals("false")){
-                    LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                    throw new RuntimeException("激活流程失败");
-                }
-            } else {//小于10万走通知
-                //激活流程
-                ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtils.approvePass(
-                        paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID(),null);
-                if(pplySubmitResultVo.getIsSuccess().equals("false")){
-                    LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
-                    throw new RuntimeException("激活流程失败");
-                }
+            //激活流程
+            ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtils.approvePass(
+                    paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID(),null);
+            if(pplySubmitResultVo.getIsSuccess().equals("false")){
+                LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+                throw new RuntimeException("激活流程失败");
             }
+//            if (overallCost.compareTo(ten) != -1) {
+//                //激活流程
+//                ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtils.approvePass(
+//                        paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID(),null);
+//                if(pplySubmitResultVo.getIsSuccess().equals("false")){
+//                    LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+//                    throw new RuntimeException("激活流程失败");
+//                }
+//            } else {//小于10万走通知
+//                //激活流程
+//                ApplySubmitResultVo pplySubmitResultVo = ProgramBpmUtils.approvePass(
+//                        paramsMap.get("modifiedAccountId"),applyCreateResultVo.getWorkItemID(),null);
+//                if(pplySubmitResultVo.getIsSuccess().equals("false")){
+//                    LOG.error("激活流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+//                    throw new RuntimeException("激活流程失败");
+//                }
+//            }
             //日志记录审批记录
             String text = paramsMap.get("modifiedName") + "提交了"+ ProgramStatusNewEnum.XQBG.getText();
             ProgramEmployeeChangeLog employeeChangeLog = new ProgramEmployeeChangeLog();
@@ -1595,6 +1600,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         map.put("modifiedAccountGuid",edsService.getEmpGuidByPfAcc_s(paramsMap.get("modifiedAccountId").toString()));//提交人guid
         map.put("businessAccount",edsService.getEmpGuidByPfAcc_s(paramsMap.get("businessList").toString()));//业务人guid
 //        map.put("itCenterLeaderList",paramsMap.get("itCenterLeaderList"));//IT中心负责人guid
+        map.put("testingList",edsService.getEmpGuidByPfAcc_s(paramsMap.get("testingList").toString()));//项目测试负责人
         map.put("businessCenterList",paramsMap.get("businessCenterList"));//业务中心负责人
         map.put("counterSigners",paramsMap.get("counterSigners"));//会签人  string 逗号分隔
         map.put("developAccount",edsService.getEmpGuidByPfAcc_s(paramsMap.get("developerList").toString()));//项目技术负责人/开发人员guid

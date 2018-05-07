@@ -1465,6 +1465,7 @@
             <!--<property name="itCenterLeaderList" type="string" required="true" description="IT中心负责人"/>-->
             <property name="businessList" type="string" required="true" description="业务中心人员"/>
             <property name="counterSigners" type="string" required="false" description="会签人"/>
+            <property name="testingList" type="string" required="true" description="测试人员"/>
 
             <property name="modifiedAccountId" type="string" required="true"/>
             <property name="modifiedName" type="string" required="true"/>
@@ -1904,6 +1905,17 @@
             <property name="labels" type="string" required="true" description="产品线,-1,：代表全部"/>
             <property name="productStatus" type="string" required="true" description="产品状态-1：代表全部"/>
             <property name="searchText" type="string" required="false"/>
+        </request>
+    </item>
+
+    <!--
+        URL:
+        /api/product/searchText
+        说明:产品汇列表(常用搜素列表)
+    -->
+    <item id="api_product_searchText" description="产品汇列表(常用搜素列表)">
+        <request>
+            <property name="pfAcc" type="string" required="true"/>
         </request>
     </item>
 
