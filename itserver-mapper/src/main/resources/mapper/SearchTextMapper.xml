@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.longfor.itserver.mapper.SearchTextMapper">
+    <resultMap id="BaseResultMap" type="com.longfor.itserver.entity.SearchText">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="text" jdbcType="VARCHAR" property="text"/>
+        <result column="pf_acc" jdbcType="VARCHAR" property="pfAcc"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+
+
+    <sql id="Base_Column_List">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        id, type, text, create_time
+    </sql>
+
+    <select id="getSearchText" parameterType="map" resultMap="BaseResultMap">
+        SELECT * from (
+        SELECT id,text,COUNT(text) num from search_text where pf_acc = #{pfAcc} and type = #{type} GROUP BY text
+        ) a ORDER BY a.num,a.create_time DESC LIMIT 0,4
+    </select>
+</mapper>
