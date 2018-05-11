@@ -177,7 +177,7 @@
     (SELECT pw.warning from program_warning pw where pw.program_id=pas.program_id ORDER BY warning desc LIMIT 0,1) warning
         from  program p
     INNER JOIN product pt on pt.id=p.product_id
-    INNER JOIN  (SELECT * from program_approval_snapshot GROUP BY program_id ORDER BY create_time desc ) pas on pas.program_id=p.id
+    LEFT JOIN  (SELECT * from program_approval_snapshot GROUP BY program_id ORDER BY create_time desc ) pas on pas.program_id=p.id
       where
         ( p.warning_days <![CDATA[<]]> 0  or
         (pas.program_status IN ('999', '200') AND pas.approval_status = 110 ))
