@@ -1,20 +1,19 @@
 package com.longfor.itserver.common.enums;
 
-public enum ProgramApprovalStatusEnum {
-    /* 状态 */
-    SHZ(100, "审批中"),
-    SHTG(110, "审批通过"),
-    SHBH(120, "审批驳回"),
-    BGSHZ(130, "变更审批中"),
-    BGSHBH(140, "变更审批驳回"),
-    SHCX(150, "审批撤销");
+/***
+ * 项目风险等级枚举
+ */
+public enum ProgramWarningEnum {
+    GREEN(0, "已关闭"),
+    YELLOW(1, "中风险"),
+    RED(2, "高风险");
 
     /* 枚举码 */
     private int code;
     /* 枚举描述 */
     private String text;
 
-    ProgramApprovalStatusEnum(int code, String text) {
+    ProgramWarningEnum(int code, String text) {
         this.code = code;
         this.text = text;
     }
@@ -34,8 +33,8 @@ public enum ProgramApprovalStatusEnum {
      * @param code 枚举码
      * @return 枚举
      */
-    public static ProgramApprovalStatusEnum getByCode(int code) {
-        for (ProgramApprovalStatusEnum status : values()) {
+    public static ProgramWarningEnum getByCode(int code) {
+        for (ProgramWarningEnum status : values()) {
             if (status.getCode() == code) {
                 return status;
             }

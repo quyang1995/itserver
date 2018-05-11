@@ -54,6 +54,31 @@ public class ProgramWarning {
     private String createName;
 
     /**
+     * 修改人员id
+     */
+    @Column(name = "modified_account_id")
+    private String modifiedAccountId;
+
+    /**
+     * 修改人员名
+     */
+    @Column(name = "modified_name")
+    private String modifiedName;
+
+    /**
+     * 修改时间
+     */
+    @Column(name = "modified_time")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    private Date modifiedTime;
+
+    /**
+     * 项目名称
+     */
+    @Transient
+    private String programName;
+
+    /**
      * @return id
      */
     public Long getId() {
@@ -191,5 +216,37 @@ public class ProgramWarning {
      */
     public void setCreateName(String createName) {
         this.createName = createName == null ? null : createName.trim();
+    }
+
+    public String getModifiedAccountId() {
+        return modifiedAccountId;
+    }
+
+    public void setModifiedAccountId(String modifiedAccountId) {
+        this.modifiedAccountId = modifiedAccountId;
+    }
+
+    public String getModifiedName() {
+        return modifiedName;
+    }
+
+    public void setModifiedName(String modifiedName) {
+        this.modifiedName = modifiedName;
+    }
+
+    public Date getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(Date modifiedTime) {
+        this.modifiedTime = modifiedTime;
+    }
+
+    public String getProgramName() {
+        return programName;
+    }
+
+    public void setProgramName(String programName) {
+        this.programName = programName;
     }
 }

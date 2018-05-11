@@ -562,4 +562,13 @@
                 </if>
             </where>
     </select>
+
+    <update id="updateActualDate" parameterType="string">
+      UPDATE program SET
+        actual_prod_approval_date=null,actual_dev_approval_date=null,
+        actual_test_approval_date=null,actual_online_plan_date=null,
+        actual_gray_release_date=null,actual_all_extension_date=null,
+        actual_replay_date=null
+      WHERE id=#{id}
+    </update>
 </mapper>

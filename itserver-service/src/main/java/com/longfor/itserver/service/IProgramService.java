@@ -55,7 +55,7 @@ public interface IProgramService extends IAdminService<Program> {
     /**
      * 撤销流程
      */
-//    void revokeInstance(Map<String, String> paramsMap,Program program);
+    void revokeInstance(Map<String, String> paramsMap,Program program);
 
     void delay(Map<String, String> paramsMap,Program program);
 

@@ -127,7 +127,7 @@ public class APIProgramBpmController extends BaseController {
 	 */
 	@RequestMapping(value = "/approvalRebut", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map cancelInstance(HttpServletRequest request) throws IOException {
+	public Map cancelInstance(HttpServletRequest request) {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -146,23 +146,23 @@ public class APIProgramBpmController extends BaseController {
 	/**
 	 * 撤销流程
 	 */
-//	@RequestMapping(value = "/revokeInstance", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
-//	@ResponseBody
-//	public Map revokeInstance(HttpServletRequest request) throws IOException {
-//		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-//		try{
-//			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-//			LOG.info("------revokeInstance:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
-//
-//			Program program = this.getProgram(paramsMap);
-//			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
-//			getProgramService().revokeInstance(paramsMap,program);
-//		}catch (Exception e){
-//			e.printStackTrace();
-//			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
-//		}
-//		return resultMap;
-//	}
+	@RequestMapping(value = "/revokeInstance", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public Map revokeInstance(HttpServletRequest request) throws IOException {
+		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try{
+			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------revokeInstance:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+
+			Program program = this.getProgram(paramsMap);
+			if(null==program)return CommonUtils.getResultMapByBizEnum(BizEnum.E1301);
+			getProgramService().revokeInstance(paramsMap,program);
+		}catch (Exception e){
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return resultMap;
+	}
 
 	private Program getProgram(Map<String, String> paramsMap){
 		Long programId = Long.parseLong(paramsMap.get("programId"));
@@ -175,7 +175,7 @@ public class APIProgramBpmController extends BaseController {
 	 */
 	@RequestMapping(value = "/demoReview", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map demoReview(HttpServletRequest request) throws IOException {
+	public Map demoReview(HttpServletRequest request) {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -210,7 +210,7 @@ public class APIProgramBpmController extends BaseController {
 	 */
 	@RequestMapping(value = "/tenderFile", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map tenderFile(HttpServletRequest request) throws IOException {
+	public Map tenderFile(HttpServletRequest request)  {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -239,7 +239,7 @@ public class APIProgramBpmController extends BaseController {
 	 */
 	@RequestMapping(value = "/bidNotice", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map bidNotice(HttpServletRequest request) throws IOException {
+	public Map bidNotice(HttpServletRequest request) {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -268,7 +268,7 @@ public class APIProgramBpmController extends BaseController {
 	 */
 	@RequestMapping(value = "/productReview", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map productReview(HttpServletRequest request) throws IOException {
+	public Map productReview(HttpServletRequest request) {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -306,7 +306,7 @@ public class APIProgramBpmController extends BaseController {
 	 */
 	@RequestMapping(value = "/development", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map development(HttpServletRequest request) throws IOException {
+	public Map development(HttpServletRequest request) {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -344,7 +344,7 @@ public class APIProgramBpmController extends BaseController {
 	 */
 	@RequestMapping(value = "/deploy", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map deploy(HttpServletRequest request) throws IOException {
+	public Map deploy(HttpServletRequest request) {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -382,7 +382,7 @@ public class APIProgramBpmController extends BaseController {
 	 */
 	@RequestMapping(value = "/planOnline", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map planOnline(HttpServletRequest request) throws IOException {
+	public Map planOnline(HttpServletRequest request)  {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -417,7 +417,7 @@ public class APIProgramBpmController extends BaseController {
 	 */
 	@RequestMapping(value = "/release", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map release(HttpServletRequest request) throws IOException {
+	public Map release(HttpServletRequest request)  {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -487,7 +487,7 @@ public class APIProgramBpmController extends BaseController {
 	 */
 	@RequestMapping(value = "/projectReview", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map projectReview(HttpServletRequest request) throws IOException {
+	public Map projectReview(HttpServletRequest request) {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -517,7 +517,7 @@ public class APIProgramBpmController extends BaseController {
 	 */
 	@RequestMapping(value = "/delay", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map delay(HttpServletRequest request) throws IOException {
+	public Map delay(HttpServletRequest request) {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -552,7 +552,7 @@ public class APIProgramBpmController extends BaseController {
 	 */
 	@RequestMapping(value = "/demandChange", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map demandChange(HttpServletRequest request) throws IOException {
+	public Map demandChange(HttpServletRequest request)  {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -587,7 +587,7 @@ public class APIProgramBpmController extends BaseController {
      */
     @RequestMapping(value = "/stopProgram", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
     @ResponseBody
-    public Map stopProgram(HttpServletRequest request) throws IOException {
+    public Map stopProgram(HttpServletRequest request) {
         Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         try{
             Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -622,7 +622,7 @@ public class APIProgramBpmController extends BaseController {
 	 */
 	@RequestMapping(value = "/lookNodes", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map lookNodes(HttpServletRequest request) throws IOException {
+	public Map lookNodes(HttpServletRequest request) {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -652,7 +652,7 @@ public class APIProgramBpmController extends BaseController {
 	 */
 	@RequestMapping(value = "/getProgramByBpmCode", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map getProgramByBpmCode(HttpServletRequest request) throws IOException {
+	public Map getProgramByBpmCode(HttpServletRequest request) {
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
 			Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);

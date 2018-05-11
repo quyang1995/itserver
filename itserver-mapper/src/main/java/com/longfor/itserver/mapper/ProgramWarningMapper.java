@@ -29,4 +29,18 @@ public interface ProgramWarningMapper extends BeeMapper<ProgramWarning> {
      * @return
      */
     int warningRemarksSum(@Param(value = "accountId") String accountId);
+
+    /**
+     * 风险备注列表
+     * @param map
+     * @return
+     */
+    List<ProgramWarning> warningList (Map<String,Object> map);
+
+    /**
+     * 风险备注列表(数量)
+     * @param map
+     * @return
+     */
+    int warningListTotal (Map<String,Object> map);
 }

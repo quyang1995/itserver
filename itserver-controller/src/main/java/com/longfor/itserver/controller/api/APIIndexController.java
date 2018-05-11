@@ -74,7 +74,10 @@ public class APIIndexController extends BaseController {
 			int dealtApprove = moApproveListVo.getTotal();
 			//我发起的
 			MoApproveListVo myApproveListVo = MoApproveUtil.flowapiList("1","0",accountId,null,0,1);
-			int myLaunchApprove = myApproveListVo.getTotal();
+			int myLaunchApprove = 0;
+			if(myApproveListVo != null){
+				myLaunchApprove = myApproveListVo.getTotal();
+			}
 			//待审批包括待办和我发起的
 			int myApprove = dealtApprove + myLaunchApprove;
 

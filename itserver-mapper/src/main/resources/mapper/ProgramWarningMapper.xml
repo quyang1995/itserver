@@ -13,6 +13,9 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_account_id" property="createAccountId" jdbcType="VARCHAR" />
     <result column="create_name" property="createName" jdbcType="VARCHAR" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+    <result column="modified_account_id" property="modifiedAccountId" jdbcType="VARCHAR" />
+    <result column="modified_name" property="modifiedName" jdbcType="VARCHAR" />
   </resultMap>
 
   <sql id="Base_Column_List" >
@@ -20,7 +23,7 @@
       WARNING - @mbggenerated
     -->
     id, program_id, program_status, warning, remark, create_time, create_account_id, 
-    create_name
+    create_name, modified_time, modified_account_id, modified_name
   </sql>
 
   <select id="getListByWhere" parameterType="map" resultMap="BaseResultMap">
@@ -62,6 +65,49 @@
     INNER JOIN program p ON p.id=pw.program_id and p.program_status not in (999,900)
     where pw.warning!=0 and
     pw.program_id in (SELECT program_id from program_employee where account_id = #{accountId})
+  </select>
+
+  <select id="warningList" parameterType="map" resultMap="BaseResultMap">
+    SELECT pw.*,p.name programName from program_warning pw
+    INNER JOIN program p ON p.id=pw.program_id and p.program_status not in (999,900)
+    <where>
+      <if test=" isMyself == 1 " >
+        pw.program_id in (SELECT program_id from program_employee where account_id = #{accountId})
+      </if>
+      <if test="programId != null and programId != ''">
+        and pw.program_id = #{programId}
+      </if>
+      <if test="searchText != null and searchText != ''">
+        and p.name LIKE CONCAT('%', #{searchText}, '%')
+      </if>
+      <if test="warningList != null">
+        and pw.warning in
+        <foreach item="item" index="index" collection="warningList" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+    </where>
+    ORDER BY pw.create_time desc
+    LIMIT #{startRow},#{endRow}
+  </select>
+
+  <select id="warningListTotal" parameterType="map" resultType="integer">
+    SELECT COUNT(1) from program_warning pw
+    INNER JOIN program p ON p.id=pw.program_id and p.program_status not in (999,900)
+    <where>
+      <if test=" isMyself == 1 " >
+        pw.program_id in (SELECT program_id from program_employee where account_id = #{accountId})
+      </if>
+      <if test="programId != null and programId != ''">
+        and pw.program_id = #{programId}
+      </if>
+      <if test=" warningList != null ">
+        and pw.warning in
+        <foreach item="item" index="index" collection="warningList" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+    </where>
   </select>
 
 </mapper>

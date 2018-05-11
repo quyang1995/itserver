@@ -11,7 +11,20 @@ public interface IProgramWarningService extends IAdminService<ProgramWarning>{
 
     List<ProgramWarning> getListByWhere (Map<String,Object> map);
 
+    /**
+     * 新增项目预警
+     * @param map
+     * @return
+     */
     ProgramWarning addProgramWarning(Map<String,Object> map);
+
+    /**
+     * 修改项目预警
+     * @param map
+     * @return
+     */
+    ProgramWarning updateProgramWarning(Map<String,Object> map);
+
     /**
      * 取当前项目节点的最新的一条手动预警数据
      * @param map
@@ -32,5 +45,19 @@ public interface IProgramWarningService extends IAdminService<ProgramWarning>{
      * @return
      */
     int warningRemarksSum(@Param(value = "accountId") String accountId);
+
+    /**
+     * 风险备注列表
+     * @param map
+     * @return
+     */
+    List<ProgramWarning> warningList (Map<String,Object> map);
+
+    /**
+     * 风险备注列表(数量)
+     * @param map
+     * @return
+     */
+    int warningListTotal (Map<String,Object> map);
 
 }

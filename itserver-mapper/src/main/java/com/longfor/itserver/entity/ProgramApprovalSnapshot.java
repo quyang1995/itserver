@@ -287,160 +287,28 @@ public class ProgramApprovalSnapshot implements Serializable {
     @Transient
     private List<ProgramEmployee> businessList;
 
-    public Date getReplayDate() {
-        return replayDate;
-    }
-
-    public void setReplayDate(Date replayDate) {
-        this.replayDate = replayDate;
-    }
-
-    public Date getAllExtensionDate() {
-        return allExtensionDate;
-    }
-
-    public void setAllExtensionDate(Date allExtensionDate) {
-        this.allExtensionDate = allExtensionDate;
-    }
-
-    public String getNewCode() {
-        return newCode;
-    }
-
-    public void setNewCode(String newCode) {
-        this.newCode = newCode;
-    }
-
-    public void setPersonLiableList(List<ProgramEmployee> personLiableList) {
-        this.personLiableList = personLiableList;
-    }
-
-    public void setProgramManagerList(List<ProgramEmployee> programManagerList) {
-        this.programManagerList = programManagerList;
-    }
-
-    public void setProductManagerList(List<ProgramEmployee> productManagerList) {
-        this.productManagerList = productManagerList;
-    }
-
-    public void setDeveloperList(List<ProgramEmployee> developerList) {
-        this.developerList = developerList;
-    }
-
-    public void setUedList(List<ProgramEmployee> uedList) {
-        this.uedList = uedList;
-    }
-
-    public void setTestingList(List<ProgramEmployee> testingList) {
-        this.testingList = testingList;
-    }
-
-    public void setOperationList(List<ProgramEmployee> operationList) {
-        this.operationList = operationList;
-    }
-
-    public void setOperateList(List<ProgramEmployee> operateList) {
-        this.operateList = operateList;
-    }
-
-    public void setBusinessList(List<ProgramEmployee> businessList) {
-        this.businessList = businessList;
-    }
-
-    public List<ProgramEmployee> getPersonLiableList() {
-        return personLiableList;
-    }
-
-    public List<ProgramEmployee> getProgramManagerList() {
-        return programManagerList;
-    }
-
-    public List<ProgramEmployee> getProductManagerList() {
-        return productManagerList;
-    }
-
-    public List<ProgramEmployee> getDeveloperList() {
-        return developerList;
-    }
-
-    public List<ProgramEmployee> getUedList() {
-        return uedList;
-    }
-
-    public List<ProgramEmployee> getTestingList() {
-        return testingList;
-    }
-
-    public List<ProgramEmployee> getOperationList() {
-        return operationList;
-    }
-
-    public List<ProgramEmployee> getOperateList() {
-        return operateList;
-    }
-
-    public List<ProgramEmployee> getBusinessList() {
-        return businessList;
-    }
-
-    public void setReportPoor(String reportPoor) {
-        this.reportPoor = reportPoor;
-    }
-
-    public String getReportPoor() {
-        return reportPoor;
-    }
-
-    public String getApplyAccount() {
-        return applyAccount;
-    }
-
-    public void setApplyAccount(String applyAccount) {
-        this.applyAccount = applyAccount;
-    }
-
-    public String getSuggestion() {
-        return suggestion;
-    }
-
-    public void setSuggestion(String suggestion) {
-        this.suggestion = suggestion;
-    }
-
-    public List<ProgramEmployee> getEmpList() {
-        return empList;
-    }
-
-    public void setEmpList(List<ProgramEmployee> empList) {
-        this.empList = empList;
-    }
-
-    public List<ProgramFile> getFileList() {
-        return fileList;
-    }
-
-    public void setFileList(List<ProgramFile> fileList) {
-        this.fileList = fileList;
-    }
-
     /**
      * 内容摘要
      */
     private String remark;
-
-    public Long getProgramId() {
-        return programId;
-    }
-
-    public void setProgramId(Long programId) {
-        this.programId = programId;
-    }
 
     /**
      * 审核意见
      */
     @Column(name = "approval_view")
     private String approvalView;
+
+    /**
+     * 当前项目表 的项目状态
+     */
+    @Transient
+    private Integer programProgramStatus;
+
+    /**
+     * 当前项目表 的项目审核状态
+     */
+    @Transient
+    private Integer programApprovalStatus;
 
     /**
      * @return id
@@ -454,6 +322,14 @@ public class ProgramApprovalSnapshot implements Serializable {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getProgramId() {
+        return programId;
+    }
+
+    public void setProgramId(Long programId) {
+        this.programId = programId;
     }
 
     /**
@@ -1100,5 +976,157 @@ public class ProgramApprovalSnapshot implements Serializable {
 
     public void setProgramType(Integer programType) {
         this.programType = programType;
+    }
+
+    public Date getReplayDate() {
+        return replayDate;
+    }
+
+    public void setReplayDate(Date replayDate) {
+        this.replayDate = replayDate;
+    }
+
+    public Date getAllExtensionDate() {
+        return allExtensionDate;
+    }
+
+    public void setAllExtensionDate(Date allExtensionDate) {
+        this.allExtensionDate = allExtensionDate;
+    }
+
+    public String getNewCode() {
+        return newCode;
+    }
+
+    public void setNewCode(String newCode) {
+        this.newCode = newCode;
+    }
+
+    public void setPersonLiableList(List<ProgramEmployee> personLiableList) {
+        this.personLiableList = personLiableList;
+    }
+
+    public void setProgramManagerList(List<ProgramEmployee> programManagerList) {
+        this.programManagerList = programManagerList;
+    }
+
+    public void setProductManagerList(List<ProgramEmployee> productManagerList) {
+        this.productManagerList = productManagerList;
+    }
+
+    public void setDeveloperList(List<ProgramEmployee> developerList) {
+        this.developerList = developerList;
+    }
+
+    public void setUedList(List<ProgramEmployee> uedList) {
+        this.uedList = uedList;
+    }
+
+    public void setTestingList(List<ProgramEmployee> testingList) {
+        this.testingList = testingList;
+    }
+
+    public void setOperationList(List<ProgramEmployee> operationList) {
+        this.operationList = operationList;
+    }
+
+    public void setOperateList(List<ProgramEmployee> operateList) {
+        this.operateList = operateList;
+    }
+
+    public void setBusinessList(List<ProgramEmployee> businessList) {
+        this.businessList = businessList;
+    }
+
+    public List<ProgramEmployee> getPersonLiableList() {
+        return personLiableList;
+    }
+
+    public List<ProgramEmployee> getProgramManagerList() {
+        return programManagerList;
+    }
+
+    public List<ProgramEmployee> getProductManagerList() {
+        return productManagerList;
+    }
+
+    public List<ProgramEmployee> getDeveloperList() {
+        return developerList;
+    }
+
+    public List<ProgramEmployee> getUedList() {
+        return uedList;
+    }
+
+    public List<ProgramEmployee> getTestingList() {
+        return testingList;
+    }
+
+    public List<ProgramEmployee> getOperationList() {
+        return operationList;
+    }
+
+    public List<ProgramEmployee> getOperateList() {
+        return operateList;
+    }
+
+    public List<ProgramEmployee> getBusinessList() {
+        return businessList;
+    }
+
+    public void setReportPoor(String reportPoor) {
+        this.reportPoor = reportPoor;
+    }
+
+    public String getReportPoor() {
+        return reportPoor;
+    }
+
+    public String getApplyAccount() {
+        return applyAccount;
+    }
+
+    public void setApplyAccount(String applyAccount) {
+        this.applyAccount = applyAccount;
+    }
+
+    public String getSuggestion() {
+        return suggestion;
+    }
+
+    public void setSuggestion(String suggestion) {
+        this.suggestion = suggestion;
+    }
+
+    public List<ProgramEmployee> getEmpList() {
+        return empList;
+    }
+
+    public void setEmpList(List<ProgramEmployee> empList) {
+        this.empList = empList;
+    }
+
+    public List<ProgramFile> getFileList() {
+        return fileList;
+    }
+
+    public void setFileList(List<ProgramFile> fileList) {
+        this.fileList = fileList;
+    }
+
+    public Integer getProgramProgramStatus() {
+        return programProgramStatus;
+    }
+
+    public void setProgramProgramStatus(Integer programProgramStatus) {
+        this.programProgramStatus = programProgramStatus;
+    }
+
+    public Integer getProgramApprovalStatus() {
+        return programApprovalStatus;
+    }
+
+    public void setProgramApprovalStatus(Integer programApprovalStatus) {
+        this.programApprovalStatus = programApprovalStatus;
     }
 }

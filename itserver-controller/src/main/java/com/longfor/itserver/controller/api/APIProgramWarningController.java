@@ -1,13 +1,11 @@
 package com.longfor.itserver.controller.api;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.controller.base.BaseController;
-import com.longfor.itserver.entity.Program;
-import com.longfor.itserver.entity.ProgramWarning;
+import net.mayee.commons.helper.APIHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -38,7 +35,7 @@ public class APIProgramWarningController extends BaseController {
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map list(HttpServletRequest request, HttpServletResponse response){
+	public Map list(HttpServletRequest request){
 		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
@@ -59,7 +56,7 @@ public class APIProgramWarningController extends BaseController {
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map add(HttpServletRequest request, HttpServletResponse response){
+	public Map add(HttpServletRequest request){
 		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
@@ -80,7 +77,7 @@ public class APIProgramWarningController extends BaseController {
 	 */
 	@RequestMapping(value = "/get", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map get(HttpServletRequest request, HttpServletResponse response){
+	public Map get(HttpServletRequest request){
 		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
@@ -101,19 +98,12 @@ public class APIProgramWarningController extends BaseController {
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map update(HttpServletRequest request, HttpServletResponse response){
+	public Map update(HttpServletRequest request){
 		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
 			LOG.info("------update:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
-			JSONObject json = (JSONObject) JSONObject.toJSON(paramsMap);
-			ProgramWarning programWarning = JSONObject.toJavaObject(json, ProgramWarning.class);
-			this.getProgramWarningService().updateByIdSelective(programWarning);
-			programWarning = this.getProgramWarningService().selectById(programWarning.getId());
-			//实时更新预警日期
-			Program program = this.getProgramService().selectById(programWarning.getProgramId());
-			this.getProgramService().warningTask(program);
-			resultMap.put("data",programWarning);
+			resultMap.put("data",this.getProgramWarningService().updateProgramWarning(paramsMap));
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
@@ -121,5 +111,27 @@ public class APIProgramWarningController extends BaseController {
 		return resultMap;
 	}
 
+	/**
+	 * warningList列表
+	 *
+	 */
+	@RequestMapping(value = "/warningList", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public Map warningList(HttpServletRequest request){
+		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try{
+			LOG.info("------warningList:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+			CommonUtils.buildPageParams(paramsMap);
+			resultMap.put("data",this.getProgramWarningService().warningList(paramsMap));
+			resultMap.put(APIHelper.PAGE_NUM, paramsMap.get("pageNum"));
+			resultMap.put(APIHelper.PAGE_SIZE, paramsMap.get("pageSize"));
+			resultMap.put(APIHelper.TOTAL, this.getProgramWarningService().warningListTotal(paramsMap));
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return resultMap;
+	}
 
 }

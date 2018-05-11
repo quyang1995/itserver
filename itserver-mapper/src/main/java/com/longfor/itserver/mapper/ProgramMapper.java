@@ -57,4 +57,10 @@ public interface ProgramMapper extends BeeMapper<Program> {
 
     Integer updateWarningDays(Map<String,Object> map);
 
+    /**
+     * 需求变更通过以后，清空产品评审之后的实际时间
+     * @param id
+     */
+    void updateActualDate(@Param(value = "id")Long id);
+
 }

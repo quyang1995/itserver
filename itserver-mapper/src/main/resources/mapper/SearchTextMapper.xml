@@ -23,7 +23,7 @@
 
     <select id="getSearchText" parameterType="map" resultMap="BaseResultMap">
         SELECT * from (
-        SELECT id,text,COUNT(text) num from search_text where pf_acc = #{pfAcc} and type = #{type} GROUP BY text
-        ) a ORDER BY a.num,a.create_time DESC LIMIT 0,4
+        SELECT id,text,create_time,COUNT(text) num from search_text where pf_acc = #{pfAcc} and type = #{type} GROUP BY text
+        ) a ORDER BY a.num DESC,a.create_time DESC LIMIT 0,4
     </select>
 </mapper>

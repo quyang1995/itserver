@@ -182,12 +182,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             if (paramMap.get("programStatus").equals(ProgramStatusNewEnum.CPPS.getCode())) {
                 if (allList.get(i).getApprovalStatus()== ProgramApprovalStatusEnum.SHTG.getCode()
                         || allList.get(i).getApprovalStatus()== ProgramApprovalStatusEnum.SHBH.getCode()
-                        || allList.get(i).getApprovalStatus()== ProgramApprovalStatusEnum.BGSHBH.getCode()) {
+                        || allList.get(i).getApprovalStatus()== ProgramApprovalStatusEnum.BGSHBH.getCode()
+                        || allList.get(i).getApprovalStatus()== ProgramApprovalStatusEnum.SHCX.getCode()) {
                     resultList.add(allList.get(i));
                 }
             } else {
                 if (allList.get(i).getApprovalStatus()== ProgramApprovalStatusEnum.SHTG.getCode()
-                        || allList.get(i).getApprovalStatus()== ProgramApprovalStatusEnum.SHBH.getCode()) {
+                        || allList.get(i).getApprovalStatus()== ProgramApprovalStatusEnum.SHBH.getCode()
+                        || allList.get(i).getApprovalStatus()== ProgramApprovalStatusEnum.SHCX.getCode()) {
                     resultList.add(allList.get(i));
                 }
             }
@@ -290,6 +292,11 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             return null;
         }
         ProgramApprovalSnapshot shot = allList.get(0);
+        Program program = programMapper.selectByPrimaryKey(shot.getProgramId());
+        if(program != null){
+            shot.setProgramProgramStatus(program.getProgramStatus());
+            shot.setProgramApprovalStatus(program.getApprovalStatus());
+        }
         Map pMap = new HashMap();
         pMap.put("bpmCode", shot.getBpmCode());
         if(shot.getProgramStatus()==ProgramStatusNewEnum.YQSX.getCode()
@@ -415,10 +422,12 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         if(program==null){
             return 1;
         }
-        //项目未立项或者立项审核驳回的可以删除
+        //项目未立项或者立项审核驳回或者立项撤销的可以删除
         if(program.getProgramStatus()==ProgramStatusNewEnum.WLX.getCode()
                 || (program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
-                        && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHBH.getCode())){
+                        && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHBH.getCode())
+                ||(program.getProgramStatus()==ProgramStatusNewEnum.LX.getCode()
+                && program.getApprovalStatus()==ProgramApprovalStatusEnum.SHCX.getCode())){
             //删除项目表数据
             programMapper.deleteByPrimaryKey(programId);
             //删除项目快照表数据
@@ -944,9 +953,10 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             //项目创建时间不修改,programCreateDate为数据库项目创建时间
             program.setCreateTime(programCreateDate);
             //更新项目表
-            //延期和需求变更审核通过时，项目状态不变
-            if (oldProgramStatus == ProgramStatusNewEnum.XQBG.getCode()
-                    || oldProgramStatus == ProgramStatusNewEnum.YQSX.getCode()) {
+            //延期审核通过时，项目状态不变
+            //需求变更审核通过时，项目变为demo评审，审核通过
+            //九步法审核通过时，项目审核状态变为审核通过
+            if (oldProgramStatus == ProgramStatusNewEnum.YQSX.getCode()) {
                 program.setApprovalStatus(currApprovalStatus);
             } else {
                 program.setApprovalStatus(ProgramApprovalStatusEnum.SHTG.getCode());
@@ -999,8 +1009,22 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                     || program.getProgramStatus()==ProgramStatusNewEnum.WC.getCode()){
                 program.setActualReplayDate(now);
             }
+            //如果是需求变更大于10万，需要审批时，需求变更通过以后，清空产品评审之后的实际时间
+            //如果是需求变更小于10万，不需要审批，直接在提需求变更时，清空产品评审之后的实际时间
+            if (oldProgramStatus == ProgramStatusNewEnum.XQBG.getCode()) {
+                program.setActualProdApprovalDate(null);
+                program.setActualDevApprovalDate(null);
+                program.setActualTestApprovalDate(null);
+                program.setActualOnlinePlanDate(null);
+                program.setActualGrayReleaseDate(null);
+                program.setActualAllExtensionDate(null);
+                program.setActualReplayDate(null);
+            }
             programMapper.updateByPrimaryKey(program);
-
+            //如果是需求变更，需求变更通过以后，清空产品评审之后的实际时间
+//            if (oldProgramStatus == ProgramStatusNewEnum.XQBG.getCode()) {
+//                programMapper.updateActualDate(program.getId());
+//            }
             //program快照表
             this.copyProperties(programApprovalSnapshot,program);
             if (oldProgramStatus == ProgramStatusNewEnum.XQBG.getCode()
@@ -1103,6 +1127,56 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
             programApprovalSnapshot.setBpmCode(paramsMap.get("instanceId"));
             programApprovalSnapshot.setSuggestion(paramsMap.get("suggestion"));
             programApprovalSnapshot.setReportPoor(paramsMap.get("reportPoor"));
+            programApprovalSnapshotMapper.insert(programApprovalSnapshot);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("发生异常");
+        }
+    }
+
+    /***
+     * 撤销流程
+     * 撤销把项目审核状态改为撤销状态，新增快照表数据，为撤销状态，项目状态和项目表一致
+     */
+    @Override
+    @Transactional(value="transactionManager")
+    public void revokeInstance(Map<String, String> paramsMap,Program program) {
+        try{
+            //撤销流程
+            boolean f = ProgramBpmUtils.cancelInstance(
+                    paramsMap.get("modifiedAccountId"),paramsMap.get("instanceId"),null,"1");
+            if(!f){
+                LOG.error("提交流程失败:"+ JSON.toJSONString(paramsMap)+"-----------------------");
+                throw new RuntimeException("提交流程失败");
+            }
+
+            //获取快照表最新一条数据
+            Map<String,Object> paraMap = new HashMap<>();
+            paraMap.put("bpmCode",paramsMap.get("instanceId"));
+            List<ProgramApprovalSnapshot> tmpList = programApprovalSnapshotMapper.grayLevelList(paraMap);
+            ProgramApprovalSnapshot programApprovalSnapshot = tmpList.get(0);
+            int oldProgramStatus = programApprovalSnapshot.getProgramStatus();
+            Date now = new Date();
+
+            //更新项目表
+            if (oldProgramStatus != ProgramStatusNewEnum.XQBG.getCode()
+                    && oldProgramStatus != ProgramStatusNewEnum.YQSX.getCode()
+                    && oldProgramStatus != ProgramStatusNewEnum.ZZ.getCode()) {
+                program.setApprovalStatus(ProgramApprovalStatusEnum.SHCX.getCode());
+            }
+            program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
+            program.setModifiedName(paramsMap.get("modifiedName"));
+            program.setModifiedTime(now);
+            programMapper.updateByPrimaryKey(program);
+
+            //快照表
+            programApprovalSnapshot.setId(null);
+            programApprovalSnapshot.setApprovalStatus(ProgramApprovalStatusEnum.SHCX.getCode());
+            programApprovalSnapshot.setCreateTime(now);
+            programApprovalSnapshot.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
+            programApprovalSnapshot.setModifiedName(paramsMap.get("modifiedName"));
+            programApprovalSnapshot.setModifiedTime(now);
             programApprovalSnapshotMapper.insert(programApprovalSnapshot);
 
         }catch (Exception e){
@@ -1346,6 +1420,17 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
                 program.setAccountType(Integer.parseInt(paramsMap.get("accountType")));
                 program.setModifiedAccountId(paramsMap.get("modifiedAccountId"));
                 program.setModifiedName(paramsMap.get("modifiedName"));
+
+                //如果是需求变更大于10万，需要审批时，需求变更通过以后，清空产品评审之后的实际时间
+                //如果是需求变更小于10万，不需要审批，直接在提需求变更时，清空产品评审之后的实际时间
+                program.setActualProdApprovalDate(null);
+                program.setActualDevApprovalDate(null);
+                program.setActualTestApprovalDate(null);
+                program.setActualOnlinePlanDate(null);
+                program.setActualGrayReleaseDate(null);
+                program.setActualAllExtensionDate(null);
+                program.setActualReplayDate(null);
+
                 programMapper.updateByPrimaryKey(program);
             }
 
