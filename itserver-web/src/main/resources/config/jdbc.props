@@ -20,6 +20,11 @@ password=hUHwCImQp7slcLtB
 initial.size=10
 max.active=80
 
+jira.driverClass=com.mysql.jdbc.Driver
+jira.url=jdbc:mysql://192.168.96.61:3306/jira?useUnicode=true&characterEncoding=UTF-8
+jira.userName=root
+jira.passWord=123456
+
 
 [jdbc<production>]
 driverClass=com.mysql.jdbc.Driver
@@ -28,3 +33,8 @@ username=itplusprod
 password=11hs47uZQLyTjNZg
 initial.size=10
 max.active=80
+
+jira.driverClass=com.mysql.jdbc.Driver
+jira.url=jdbc:mysql://192.168.96.61:3306/jira?useUnicode=true&characterEncoding=UTF-8
+jira.userName=root
+jira.passWord=123456

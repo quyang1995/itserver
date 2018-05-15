@@ -1,5 +1,6 @@
 package com.longfor.itserver.service.impl;
 
+import com.longfor.itserver.common.enums.AvaStatusTypeEnum;
 import com.longfor.itserver.entity.ProgramEmployee;
 import com.longfor.itserver.entity.ProgramEmployeeChangeLog;
 import com.longfor.itserver.mapper.ProgramEmployeeChangeLogMapper;
@@ -47,6 +48,11 @@ public class ProgramEmployeeServiceImpl extends AdminBaseService<ProgramEmployee
         StringBuilder log = new StringBuilder();
         log.append("[");
         log.append(employeeList.get(0).getEmployeeName());
+        Integer i = 1;
+        if(employeeList.get(0).getEmployeeTypeId()!=null){
+            i = Integer.valueOf(employeeList.get(0).getEmployeeTypeId().toString());
+        }
+        log.append("("+ AvaStatusTypeEnum.getTextByCode(i)+")");
         log.append("] 退出了项目组。");
         changeLog.setModifiedName(employeeList.get(0).getEmployeeName());
         changeLog.setModifiedAccountId(employeeList.get(0).getAccountId());

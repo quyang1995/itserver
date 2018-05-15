@@ -840,14 +840,14 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 //            textList.add(sb.toString());
 //        }
 
-//        if(!Objects.equals(oldProgram.getName(), newProgram.getName())
-//                || !Objects.equals(oldProgram.getLikeProduct(), newProgram.getLikeProduct())
-//                || !Objects.equals(oldProgram.getDescp(), newProgram.getDescp())){
-//            StringBuilder sb = new StringBuilder();
-//            sb.append(newProgram.getModifiedName())
-//                    .append(" 修改了项目基本信息");
-//            textList.add(sb.toString());
-//        }
+        if(!Objects.equals(oldProgram.getName(), newProgram.getName())
+                || !Objects.equals(oldProgram.getLikeProduct(), newProgram.getLikeProduct())
+                || !Objects.equals(oldProgram.getDescp(), newProgram.getDescp())){
+            StringBuilder sb = new StringBuilder();
+            sb.append(newProgram.getModifiedName())
+                    .append(" 修改了项目基本信息");
+            textList.add(sb.toString());
+        }
 
         if (oldProgram != null) {
             if (jsonObject.get("personLiableList") != null || jsonObject.get("productManagerList") != null
