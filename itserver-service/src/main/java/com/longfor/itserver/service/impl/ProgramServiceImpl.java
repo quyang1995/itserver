@@ -393,9 +393,8 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         if (!"".equals(jsonArrOperate)) {
             getAccountLongfor(program, jsonArrOperate, "8");
         }
-
         //先生成变动日志
-        List<String> changeLogTextList = getChangeLogText(null, program);
+        List<String> changeLogTextList = getChangeLogText(null, program, json);
         /*添加日志*/
         for(String text : changeLogTextList){
             ProgramEmployeeChangeLog employeeChangeLog = new ProgramEmployeeChangeLog();
@@ -618,7 +617,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         Product product = productMapper.selectByPrimaryKey(program.getProductId());
         Integer accountType = AccountUitl.getAccountType(map);
         //先生成变动日志
-        List<String> changeLogTextList = getChangeLogText(selectOneProgram, program);
+        List<String> changeLogTextList = getChangeLogText(selectOneProgram, program, json);
 
         if (null == selectOneProgram) {
             return false;
@@ -725,7 +724,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         return true;
     }
 
-    private List<String> getChangeLogText(Program oldProgram, Program newProgram){
+    private List<String> getChangeLogText(Program oldProgram, Program newProgram, JSONObject jsonObject){
         List<String> textList = new ArrayList<>();
 
         if(oldProgram == null && newProgram != null){
@@ -841,17 +840,140 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
 //            textList.add(sb.toString());
 //        }
 
-        if(!Objects.equals(oldProgram.getName(), newProgram.getName())
-                || !Objects.equals(oldProgram.getLikeProduct(), newProgram.getLikeProduct())
-                || !Objects.equals(oldProgram.getDescp(), newProgram.getDescp())){
-            StringBuilder sb = new StringBuilder();
-            sb.append(newProgram.getModifiedName())
-                    .append(" 修改了项目基本信息");
-            textList.add(sb.toString());
-        }
+//        if(!Objects.equals(oldProgram.getName(), newProgram.getName())
+//                || !Objects.equals(oldProgram.getLikeProduct(), newProgram.getLikeProduct())
+//                || !Objects.equals(oldProgram.getDescp(), newProgram.getDescp())){
+//            StringBuilder sb = new StringBuilder();
+//            sb.append(newProgram.getModifiedName())
+//                    .append(" 修改了项目基本信息");
+//            textList.add(sb.toString());
+//        }
 
+        if (oldProgram != null) {
+            if (jsonObject.get("personLiableList") != null || jsonObject.get("productManagerList") != null
+                    || jsonObject.get("developerList") != null || jsonObject.get("uedList") != null
+                    || jsonObject.get("testingList") != null || jsonObject.get("businessList") != null
+                    || jsonObject.get("operationList") != null || jsonObject.get("operateList") != null) {
+                StringBuilder sb = new StringBuilder();
+                Map map = new HashMap();
+                map.put("programId",oldProgram.getId());
+                //项目经理的变更
+                map.put("employeeType",AvaStatusEnum.LIABLEAVA.getCode());
+                List<ProgramEmployee> personLiableList = programEmployeeMapper.selectTypeList(map);
+                this.dealEmpLog(sb, jsonObject.get("personLiableList").toString(), personLiableList, newProgram, AvaStatusTypeEnum.PROGAVA.getCode());
+                //产品经理的变更
+                map.put("employeeType",AvaStatusEnum.MEMBERAVA.getCode());
+                map.put("employeeTypeId",AvaStatusEnum.PRODAVA.getCode());
+                List<ProgramEmployee> productManagerList = programEmployeeMapper.selectTypeList(map);
+                this.dealEmpLog(sb, jsonObject.get("productManagerList").toString(), productManagerList, newProgram, AvaStatusTypeEnum.PRODAVA.getCode());
+                //开发人员的变更
+                map.put("employeeTypeId",AvaStatusEnum.DEVEAVA.getCode());
+                List<ProgramEmployee> developerList = programEmployeeMapper.selectTypeList(map);
+                this.dealEmpLog(sb, jsonObject.get("developerList").toString(), developerList, newProgram, AvaStatusTypeEnum.DEVEAVA.getCode());
+                //ued人员的变更
+                map.put("employeeTypeId",AvaStatusEnum.UEDAVA.getCode());
+                List<ProgramEmployee> uedList = programEmployeeMapper.selectTypeList(map);
+                this.dealEmpLog(sb, jsonObject.get("uedList").toString(), uedList, newProgram, AvaStatusTypeEnum.UEDAVA.getCode());
+                //测试人员的变更
+                map.put("employeeTypeId",AvaStatusEnum.TESTINGAVA.getCode());
+                List<ProgramEmployee> testingList = programEmployeeMapper.selectTypeList(map);
+                this.dealEmpLog(sb, jsonObject.get("testingList").toString(), testingList, newProgram, AvaStatusTypeEnum.TESTINGAVA.getCode());
+                //业务人员的变更
+                map.put("employeeTypeId",AvaStatusEnum.BUSINESSAVA.getCode());
+                List<ProgramEmployee> businessList = programEmployeeMapper.selectTypeList(map);
+                this.dealEmpLog(sb, jsonObject.get("businessList").toString(), businessList, newProgram, AvaStatusTypeEnum.BUSINESSAVA.getCode());
+                //运维人员的变更
+                map.put("employeeTypeId",AvaStatusEnum.OPERATION.getCode());
+                List<ProgramEmployee> operationList = programEmployeeMapper.selectTypeList(map);
+                this.dealEmpLog(sb, jsonObject.get("operationList").toString(), operationList, newProgram, AvaStatusTypeEnum.OPERATION.getCode());
+                //运营人员的变更
+                map.put("employeeTypeId",AvaStatusEnum.OPERATE.getCode());
+                List<ProgramEmployee> operateList = programEmployeeMapper.selectTypeList(map);
+                this.dealEmpLog(sb, jsonObject.get("operateList").toString(), operateList, newProgram, AvaStatusTypeEnum.OPERATE.getCode());
+                if (StringUtils.isNotBlank(sb.toString())) {
+                    textList.add(sb.toString());
+                }
+            }
+        }
         return textList;
     }
+
+    private void dealEmpLog(StringBuilder sb,String str,List<ProgramEmployee> empList,Program newProgram, int type){
+        boolean f = false;
+        if(StringUtils.isBlank(str)) {
+            str = ",";
+        }
+        String[] split = null;
+        if (!",".equals(str)) {
+            split = str.replaceFirst(",","").split(",");
+        }
+        if (split==null && (empList==null || empList.isEmpty())) {
+            f = false;
+        } else if(split==null && empList!=null && !empList.isEmpty()
+                || (split!=null && (empList==null || empList.isEmpty()))) {
+            f = true;
+        } else if(split!=null && empList!=null && !empList.isEmpty() && split.length!=empList.size()) {
+            f = true;
+        } else {
+            for (int i = 0; i < split.length; i++) {
+                boolean k = false;
+                String loginName = split[i];
+                if (StringUtils.isNotBlank(loginName)) {
+                    for (ProgramEmployee e:empList) {
+                        if (loginName.equals(e.getAccountId())) {
+                            k = true;
+                            break;
+                        }
+                    }
+                }
+                if(k){
+                    continue;
+                } else {
+                    f = true;
+                    break;
+                }
+            }
+        }
+        if (f) {
+            String oldEmp = "";
+            String newEmp = "";
+            if (empList != null && !empList.isEmpty()) {
+                for (ProgramEmployee e:empList) {
+                    oldEmp += e.getEmployeeName() + ",";
+                }
+                if (oldEmp != null) {
+                    oldEmp = oldEmp.substring(0,oldEmp.length()-1);
+                }
+            } else {
+                oldEmp = "无";
+            }
+            if (split != null && split.length>0) {
+                for (int i = 0; i < split.length; i++) {
+                    String loginName = split[i];
+                    AccountLongfor accountInfo =
+                            AccountUitl.getAccountByAccountTypes(loginName, adsHelper, edsHelper);
+                    newEmp += accountInfo.getName() + ",";
+                }
+                if (StringUtils.isNotBlank(newEmp)) {
+                    newEmp = newEmp.substring(0,newEmp.length()-1);
+                }
+            }  else {
+                newEmp = "无";
+            }
+
+            if(StringUtils.isNotBlank(sb.toString())){
+                sb.append(",");
+            } else {
+                sb.append(newProgram.getModifiedName());
+            }
+            sb.append(" 将 "+ AvaStatusTypeEnum.getTextByCode(type)+" 从 [")
+                    .append(oldEmp)
+                    .append("] 更新为 [")
+                    .append(newEmp)
+                    .append("]");
+        }
+    }
+
 
     private String statusLog(Program oldProgram,Program newProgram){
         StringBuilder sb = new StringBuilder();

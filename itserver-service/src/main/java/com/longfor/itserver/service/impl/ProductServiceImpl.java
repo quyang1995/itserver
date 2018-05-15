@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.longfor.ads.entity.AccountLongfor;
 import com.longfor.ads.helper.ADSHelper;
 import com.longfor.eds.helper.EDSHelper;
-import com.longfor.itserver.common.enums.AvaStatusEnum;
-import com.longfor.itserver.common.enums.BizEnum;
-import com.longfor.itserver.common.enums.ProductStatusEnum;
-import com.longfor.itserver.common.enums.PublicTypeEnum;
+import com.longfor.itserver.common.enums.*;
 import com.longfor.itserver.common.util.CommonUtils;
 import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.common.util.StringUtil;
@@ -25,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.el.ELContext;
 import java.util.*;
 
 /**
@@ -181,7 +179,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 
 
 		//先生成变动日志
-		List<String> changeLogTextList = getChangeLogText(null, product);
+		List<String> changeLogTextList = getChangeLogText(null, product, jsonObject);
         /*添加日志*/
 		for(String text : changeLogTextList){
 			ProductEmployeeChangeLog employeeChangeLog = new ProductEmployeeChangeLog();
@@ -235,7 +233,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		Product oldProduct = productMapper.selectByPrimaryKey(newProduct.getId());
 
 		//先生成变动日志
-		List<String> changeLogTextList = getChangeLogText(oldProduct, newProduct);
+		List<String> changeLogTextList = getChangeLogText(oldProduct, newProduct, jsonObject);
 
 		oldProduct.setName(jsonObject.getString("name"));
 		oldProduct.setAnalyzingConditions(jsonObject.getString("analyzingConditions"));
@@ -467,7 +465,7 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		return true;
 	}
 
-	private List<String> getChangeLogText(Product oldProduct, Product newProduct){
+	private List<String> getChangeLogText(Product oldProduct, Product newProduct, JSONObject jsonObject){
 		List<String> textList = new ArrayList<>();
 
 		if(oldProduct == null && newProduct != null){
@@ -506,16 +504,151 @@ public class ProductServiceImpl extends AdminBaseService<Product> implements IPr
 		}
 
 		if(!Objects.equals(oldProduct.getName(), newProduct.getName())
-				|| !Objects.equals(oldProduct.getContactAccountId(), newProduct.getContactAccountId())
 				|| !Objects.equals(oldProduct.getLikeProgram(), newProduct.getLikeProgram())
 				|| !Objects.equals(oldProduct.getDescp(), newProduct.getDescp())){
 			StringBuilder sb = new StringBuilder();
 			sb.append(newProduct.getModifiedName())
-					.append(" 修改了产品基础信息");
+					.append(" 修改了产品基本信息");
 			textList.add(sb.toString());
 		}
-
+		if(!Objects.equals(oldProduct.getContactAccountId(), newProduct.getContactAccountId())
+				|| !Objects.equals(oldProduct.getContactAccountId1(), newProduct.getContactAccountId1())){
+			StringBuilder sb = new StringBuilder();
+			if(!Objects.equals(oldProduct.getContactAccountId(), newProduct.getContactAccountId())){
+				if(StringUtils.isNotBlank(sb.toString())){
+					sb.append(",");
+				} else {
+					sb.append(newProduct.getModifiedName());
+				}
+				AccountLongfor accountInfo =
+						AccountUitl.getAccountByAccountTypes(newProduct.getContactAccountId(),adsHelp,edsHelper);
+				sb.append(" 将 功能建议反馈接口人 从 [")
+						.append(oldProduct.getContactEmployeeName())
+						.append("] 更新为 [")
+						.append(accountInfo.getName())
+						.append("]");
+			}
+			if(!Objects.equals(oldProduct.getContactAccountId1(), newProduct.getContactAccountId1())){
+				if(StringUtils.isNotBlank(sb.toString())){
+					sb.append(",");
+				} else {
+					sb.append(newProduct.getModifiedName());
+				}
+				AccountLongfor accountInfo =
+						AccountUitl.getAccountByAccountTypes(newProduct.getContactAccountId1(),adsHelp,edsHelper);
+				sb.append(" 将 功能异常反馈接口人 从 [")
+						.append(oldProduct.getContactEmployeeName1())
+						.append("] 更新为 [")
+						.append(accountInfo.getName())
+						.append("]");
+			}
+			textList.add(sb.toString());
+		}
+		if (oldProduct != null) {
+			if(jsonObject.get("personLiableList")!=null || jsonObject.get("programManagerList")!=null
+					|| jsonObject.get("developerList")!=null || jsonObject.get("uedList")!=null
+					|| jsonObject.get("testingList")!=null || jsonObject.get("businessList")!=null){
+				StringBuilder sb = new StringBuilder();
+				//产品经理的变更
+				List<ProductEmployee> personLiableList = productEmployeeMapper.selectTypeList(oldProduct.getId(),AvaStatusEnum.LIABLEAVA.getCode(),null);
+				this.dealEmpLog(sb, jsonObject.get("personLiableList").toString(), personLiableList, newProduct, AvaStatusTypeEnum.PRODAVA.getCode());
+				//项目经理的变更
+				List<ProductEmployee> programManagerList = productEmployeeMapper.selectTypeList(oldProduct.getId(),AvaStatusEnum.MEMBERAVA.getCode(),new Long(AvaStatusEnum.PROGAVA.getCode()));
+				this.dealEmpLog(sb, jsonObject.get("programManagerList").toString(), programManagerList, newProduct, AvaStatusTypeEnum.PROGAVA.getCode());
+				//开发人员的变更
+				List<ProductEmployee> developerList = productEmployeeMapper.selectTypeList(oldProduct.getId(),AvaStatusEnum.MEMBERAVA.getCode(),new Long(AvaStatusEnum.DEVEAVA.getCode()));
+				this.dealEmpLog(sb, jsonObject.get("developerList").toString(), developerList, newProduct, AvaStatusTypeEnum.DEVEAVA.getCode());
+				//ued人员的变更
+				List<ProductEmployee> uedList = productEmployeeMapper.selectTypeList(oldProduct.getId(),AvaStatusEnum.MEMBERAVA.getCode(),new Long(AvaStatusEnum.UEDAVA.getCode()));
+				this.dealEmpLog(sb, jsonObject.get("uedList").toString(), uedList, newProduct, AvaStatusTypeEnum.UEDAVA.getCode());
+				//测试人员的变更
+				List<ProductEmployee> testingList = productEmployeeMapper.selectTypeList(oldProduct.getId(),AvaStatusEnum.MEMBERAVA.getCode(),new Long(AvaStatusEnum.TESTINGAVA.getCode()));
+				this.dealEmpLog(sb, jsonObject.get("testingList").toString(), testingList, newProduct, AvaStatusTypeEnum.TESTINGAVA.getCode());
+				//业务人员的变更
+				List<ProductEmployee> businessList = productEmployeeMapper.selectTypeList(oldProduct.getId(),AvaStatusEnum.MEMBERAVA.getCode(),new Long(AvaStatusEnum.BUSINESSAVA.getCode()));
+				this.dealEmpLog(sb, jsonObject.get("businessList").toString(), businessList, newProduct, AvaStatusTypeEnum.BUSINESSAVA.getCode());
+				if (StringUtils.isNotBlank(sb.toString())) {
+					textList.add(sb.toString());
+				}
+			}
+		}
 		return textList;
+	}
+
+	private void dealEmpLog(StringBuilder sb,String str,List<ProductEmployee> empList,Product newProduct, int type){
+		boolean f = false;
+		if(StringUtils.isBlank(str)) {
+			str = ",";
+		}
+		String[] split = null;
+		if (!",".equals(str)) {
+			split = str.replaceFirst(",","").split(",");
+		}
+		if (split==null && (empList==null || empList.isEmpty())) {
+			f = false;
+		} else if(split==null && empList!=null && !empList.isEmpty()
+				|| (split!=null && (empList==null || empList.isEmpty()))) {
+			f = true;
+		} else if(split!=null && empList!=null && !empList.isEmpty() && split.length!=empList.size()) {
+			f = true;
+		} else {
+			for (int i = 0; i < split.length; i++) {
+				boolean k = false;
+				String loginName = split[i];
+				if (StringUtils.isNotBlank(loginName)) {
+					for (ProductEmployee e:empList) {
+						if (loginName.equals(e.getAccountId())) {
+							k = true;
+							break;
+						}
+					}
+				}
+				if(k){
+					continue;
+				} else {
+					f = true;
+					break;
+				}
+			}
+		}
+		if (f) {
+			String oldEmp = "";
+			String newEmp = "";
+			if (empList != null && !empList.isEmpty()) {
+				for (ProductEmployee e:empList) {
+					oldEmp += e.getEmployeeName() + ",";
+				}
+				if (oldEmp != null) {
+					oldEmp = oldEmp.substring(0,oldEmp.length()-1);
+				}
+			} else {
+				oldEmp = "无";
+			}
+			if (split != null && split.length>0) {
+				for (int i = 0; i < split.length; i++) {
+					String loginName = split[i];
+					AccountLongfor accountInfo =
+							AccountUitl.getAccountByAccountTypes(loginName, adsHelp, edsHelper);
+					newEmp += accountInfo.getName() + ",";
+				}
+				if (StringUtils.isNotBlank(newEmp)) {
+					newEmp = newEmp.substring(0,newEmp.length()-1);
+				}
+			}  else {
+				newEmp = "无";
+			}
+
+			if(StringUtils.isNotBlank(sb.toString())){
+				sb.append(",");
+			} else {
+				sb.append(newProduct.getModifiedName());
+			}
+			sb.append(" 将 "+ AvaStatusTypeEnum.getTextByCode(type)+" 从 [")
+					.append(oldEmp)
+					.append("] 更新为 [")
+					.append(newEmp)
+					.append("]");
+		}
 	}
 
 	//产品状态修改日志
