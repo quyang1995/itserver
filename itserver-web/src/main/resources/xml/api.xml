@@ -908,6 +908,36 @@
         </request>
     </item>
 
+    <!--
+    URL:
+    /api/index/demandTj
+    说明:需求统计
+    -->
+    <item id="api_index_demandTj" description="需求统计">
+        <request>
+            <property name="relationType" type="string" required="false" maxLength="30" description="1=产品，2=项目"/>
+            <property name="relationId" type="string" required="false" maxLength="30" description="产品或项目id"/>
+            <!--<property name="status" type="string" required="false" maxLength="30" description="-1=全部，0=已取消，1=已关闭，2=待处理，3=处理中，4=已完成"/>-->
+            <property name="isPart" type="string" required="true" maxLength="30" description="0：全部，1：我创建的，2：我参与的"/>
+            <property name="accountId" type="string" required="true" maxLength="30" description="oa账号"/>
+        </request>
+    </item>
+
+    <!--
+    URL:
+    /api/index/bugTj
+    说明:bug统计
+    -->
+    <item id="api_index_bugTj" description="bug统计">
+        <request>
+            <property name="relationType" type="string" required="false" maxLength="30" description="1=产品，2=项目"/>
+            <property name="relationId" type="string" required="false" maxLength="30" description="产品或项目id"/>
+            <!--<property name="status" type="string" required="true" maxLength="30" description="-1=全部，0=已取消，1=已关闭，2=待处理，3=处理中，4=已完成"/>-->
+            <property name="isPart" type="string" required="true" maxLength="30" description="0：全部，1：我创建的，2：我参与的"/>
+            <property name="accountId" type="string" required="true" maxLength="30" description="oa账号"/>
+        </request>
+    </item>
+
 
 
     <!--

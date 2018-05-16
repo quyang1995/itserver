@@ -629,4 +629,10 @@ public class BugInfoServiceImpl extends AdminBaseService<BugInfo> implements IBu
         bugInfoMapper.delete(bugInfo);
     }
 
+    @Override
+    public Integer bugTj(Map<String, Object> paramsMap) {
+
+        return bugInfoMapper.bugTj(paramsMap);
+    }
+
 }

@@ -35,4 +35,11 @@ public interface DemandMapper extends BeeMapper<Demand> {
 	 * @return
 	 */
 	List<Map<String,Object>> newExport(Map<String, Object> paramsMap);
+
+	/**
+	 * 移动统计
+	 * @param paramsMap
+	 * @return
+	 */
+	Integer demandTj(Map<String, Object> paramsMap);
 }

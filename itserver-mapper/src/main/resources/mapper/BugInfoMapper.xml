@@ -346,4 +346,28 @@
         ORDER BY field(d.status,2,3,4,1,0),d.modified_time DESC
     </select>
 
+    <select id="bugTj" parameterType="map" resultType="Integer">
+        SELECT COUNT(1) from bug_info
+        <where>
+            <if test="relationType != null and relationType != ''">
+                relation_type = #{relationType}
+            </if>
+            <if test="relationId != null and relationId != ''">
+                and relation_id = #{relationId}
+            </if>
+            <if test="status != null and status != '' and status != -1">
+                and status = #{status}
+            </if>
+            <if test="isPart == 1">
+                and drafted_account_id = #{accountId}
+            </if>
+            <if test="isPart == 2">
+                and callon_account_id = #{accountId}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time <![CDATA[ >= ]]> #{createTime}
+            </if>
+        </where>
+    </select>
+
 </mapper>

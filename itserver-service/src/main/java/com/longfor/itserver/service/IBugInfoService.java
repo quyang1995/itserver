@@ -51,4 +51,11 @@ public interface IBugInfoService extends IAdminService<BugInfo> {
      * @param relationType
      */
     void deleteBugInfo(Long id,Integer relationType);
+
+    /**
+     * 移动统计
+     * @param paramsMap
+     * @return
+     */
+    Integer bugTj(Map<String, Object> paramsMap);
 }

@@ -673,4 +673,10 @@ public class DemandServiceImpl extends AdminBaseService<Demand> implements IDema
 		//删除demand
 		demandMapper.delete(demand);
 	}
+
+	@Override
+	public Integer demandTj(Map<String, Object> paramsMap) {
+
+		return demandMapper.demandTj(paramsMap);
+	}
 }

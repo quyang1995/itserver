@@ -85,4 +85,11 @@ public interface IDemandService extends IAdminService<Demand> {
 	 * @param relationType
 	 */
 	void deleteDemand(Long id,Integer relationType);
+
+	/**
+	 * 移动统计
+	 * @param paramsMap
+	 * @return
+	 */
+	Integer demandTj(Map<String, Object> paramsMap);
 }

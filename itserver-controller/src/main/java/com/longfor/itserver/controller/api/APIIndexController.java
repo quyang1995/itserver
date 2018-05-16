@@ -1,13 +1,17 @@
 package com.longfor.itserver.controller.api;
 
+import com.alibaba.fastjson.JSON;
 import com.longfor.itserver.common.constant.ConfigConsts;
 import com.longfor.itserver.common.enums.BizEnum;
 import com.longfor.itserver.common.helper.DataPermissionHelper;
 import com.longfor.itserver.common.util.CommonUtils;
+import com.longfor.itserver.common.util.DateUtil;
 import com.longfor.itserver.common.vo.MoApprove.MoApproveListVo;
 import com.longfor.itserver.controller.base.BaseController;
 import com.longfor.itserver.entity.ps.PsIndex;
 import com.longfor.itserver.esi.MoApproveUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +34,8 @@ import java.util.Map;
 @RequestMapping(value = "/api/index")
 @Controller
 public class APIIndexController extends BaseController {
+
+	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	/**
 	 * PC首页统计
@@ -71,7 +77,10 @@ public class APIIndexController extends BaseController {
 			int wSum = warningSum + warningRemarksSum;
 			//待办
 			MoApproveListVo moApproveListVo = MoApproveUtil.flowapiList("0","0",accountId,null,0,1);
-			int dealtApprove = moApproveListVo.getTotal();
+			int dealtApprove = 0;
+			if (moApproveListVo!=null) {
+				dealtApprove = moApproveListVo.getTotal();
+			}
 			//我发起的
 			MoApproveListVo myApproveListVo = MoApproveUtil.flowapiList("1","0",accountId,null,0,1);
 			int myLaunchApprove = 0;
@@ -118,6 +127,76 @@ public class APIIndexController extends BaseController {
 		resultMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
 
 		return resultMap;
+	}
+
+	/**
+	 * bug 统计
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/bugTj" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+	@ResponseBody
+	public Map bugTj(HttpServletRequest request){
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try {
+			Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------bugTj:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+			//全部
+			paramsMap.put("status",-1);
+			resultMap.put("sum",this.getBugInfoService().bugTj(paramsMap));
+			//待处理
+			paramsMap.put("status",2);
+			resultMap.put("pending",this.getBugInfoService().bugTj(paramsMap));
+			//处理中
+			paramsMap.put("status",3);
+			resultMap.put("doing",this.getBugInfoService().bugTj(paramsMap));
+			//已完成
+			paramsMap.put("status",4);
+			resultMap.put("finish",this.getBugInfoService().bugTj(paramsMap));
+			//本周新增
+			paramsMap.put("status",-1);
+			paramsMap.put("createTime", DateUtil.date2String(DateUtil.getBeginDayOfWeek(),DateUtil.PATTERN_TIMESTAMP));
+			resultMap.put("week",this.getBugInfoService().bugTj(paramsMap));
+		} catch ( Exception e) {
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return  resultMap;
+	}
+
+	/**
+	 * 需求统计
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/demandTj" ,method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
+	@ResponseBody
+	public Map demandTj(HttpServletRequest request){
+		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
+		try {
+			Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
+			LOG.info("------demandTj:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
+			//全部
+			paramsMap.put("status",-1);
+			resultMap.put("sum",this.getDemandService().demandTj(paramsMap));
+			//待处理
+			paramsMap.put("status",2);
+			resultMap.put("pending",this.getDemandService().demandTj(paramsMap));
+			//处理中
+			paramsMap.put("status",3);
+			resultMap.put("doing",this.getDemandService().demandTj(paramsMap));
+			//已完成
+			paramsMap.put("status",4);
+			resultMap.put("finish",this.getDemandService().demandTj(paramsMap));
+			//本周新增
+			paramsMap.put("status",-1);
+			paramsMap.put("createTime", DateUtil.date2String(DateUtil.getBeginDayOfWeek(),DateUtil.PATTERN_TIMESTAMP));
+			resultMap.put("week",this.getDemandService().demandTj(paramsMap));
+		} catch ( Exception e) {
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
+		return  resultMap;
 	}
 
 }

@@ -30,4 +30,11 @@ public interface BugInfoMapper extends BeeMapper<BugInfo> {
      */
     List<Map<String,Object>> newExport(Map map);
 
+    /**
+     * 移动统计
+     * @param paramsMap
+     * @return
+     */
+    Integer bugTj(Map<String, Object> paramsMap);
+
 }
