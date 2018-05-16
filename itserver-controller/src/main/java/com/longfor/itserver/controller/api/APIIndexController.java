@@ -155,7 +155,7 @@ public class APIIndexController extends BaseController {
 			resultMap.put("finish",this.getBugInfoService().bugTj(paramsMap));
 			//本周新增
 			paramsMap.put("status",-1);
-			paramsMap.put("createTime", DateUtil.date2String(DateUtil.getBeginDayOfWeek(),DateUtil.PATTERN_TIMESTAMP));
+			paramsMap.put("createTime", DateUtil.date2String(DateUtil.getBeginDayOfWeek(),DateUtil.PATTERN_BEGTIMESTAMP));
 			resultMap.put("week",this.getBugInfoService().bugTj(paramsMap));
 		} catch ( Exception e) {
 			e.printStackTrace();
@@ -190,7 +190,7 @@ public class APIIndexController extends BaseController {
 			resultMap.put("finish",this.getDemandService().demandTj(paramsMap));
 			//本周新增
 			paramsMap.put("status",-1);
-			paramsMap.put("createTime", DateUtil.date2String(DateUtil.getBeginDayOfWeek(),DateUtil.PATTERN_TIMESTAMP));
+			paramsMap.put("createTime", DateUtil.date2String(DateUtil.getBeginDayOfWeek(),DateUtil.PATTERN_BEGTIMESTAMP));
 			resultMap.put("week",this.getDemandService().demandTj(paramsMap));
 		} catch ( Exception e) {
 			e.printStackTrace();
