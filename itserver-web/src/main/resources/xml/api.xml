@@ -2346,4 +2346,16 @@
             <property name="counterSignersName" type="string" required="false" description="会签人oa账号名称，多个逗号隔开"/>
         </request>
     </item>
+
+    <!--
+        URL:
+        /api/jira/problem
+        说明:近90天的问题
+    -->
+    <item id="api_jira_problem" description="近90天的问题">
+        <request>
+            <property name="code" type="string" required="true" description="项目code"/>
+            <property name="type" type="string" required="true" area="0,1" description="type=0:近90天创建的问题，type=1:近90天解决的问题"/>
+        </request>
+    </item>
 </api>
