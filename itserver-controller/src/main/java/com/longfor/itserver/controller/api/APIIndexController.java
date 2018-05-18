@@ -47,7 +47,7 @@ public class APIIndexController extends BaseController {
 	 */
 	@RequestMapping(value = "/analysis", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map indexAnaly(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public Map indexAnaly(HttpServletRequest request) {
 		/* 获得已经验证过的参数map */
 		@SuppressWarnings("unchecked")
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -114,18 +114,20 @@ public class APIIndexController extends BaseController {
 	 */
 	@RequestMapping(value = "/isAdmin", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map isAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+	public Map isAdmin(HttpServletRequest request) {
 		/* 获得已经验证过的参数map */
 		@SuppressWarnings("unchecked")
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
-
 		/* 返回报文 */
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
-		/* 查询数据 and admin权限判断 */
-		String accountId = paramsMap.get("accountId").toString();
-		resultMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
-
+		try{
+			/* 查询数据 and admin权限判断 */
+			String accountId = paramsMap.get("accountId").toString();
+			resultMap.put("isAdmin", DataPermissionHelper.getInstance().isShowAllData(accountId) ? "1" : "0");
+		}catch (Exception e){
+			e.printStackTrace();
+			resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.E9999);
+		}
 		return resultMap;
 	}
 

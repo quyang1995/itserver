@@ -44,13 +44,12 @@ public class APIProductController extends BaseController {
     /**
      * 产品列表
      *
-     * @param response
      * @param request
      * @return Map
      */
     @RequestMapping(value = "/list", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map list(HttpServletRequest request, HttpServletResponse response) {
+    public Map list(HttpServletRequest request) {
         /* 获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
         Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -80,13 +79,12 @@ public class APIProductController extends BaseController {
     /**
      * 产品列表导出
      *
-     * @param response
      * @param request
      * @return Map
      */
     @RequestMapping(value = "/exportList", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map exportList(HttpServletRequest request, HttpServletResponse response) {
+    public Map exportList(HttpServletRequest request) {
         /* 获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
         Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -108,13 +106,12 @@ public class APIProductController extends BaseController {
     /**
      * 产品列表带各状态统计
      *
-     * @param response
      * @param request
      * @return Map
      */
     @RequestMapping(value = "/productList", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map productList(HttpServletRequest request, HttpServletResponse response) {
+    public Map productList(HttpServletRequest request) {
         /* 获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
         Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -137,13 +134,12 @@ public class APIProductController extends BaseController {
     /**
      * 根据产品名称获得前20条产品信息
      *
-     * @param response
      * @param request
      * @return Map
      */
     @RequestMapping(value = "/nameList", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map likeList(HttpServletRequest request, HttpServletResponse response) {
+    public Map likeList(HttpServletRequest request) {
         /* 获得已经验证过的参数map*/
         Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         /*查询数据*/
@@ -158,13 +154,12 @@ public class APIProductController extends BaseController {
     /**
      * 根据产品名称获得产品信息A-Z排序
      *
-     * @param response
      * @param request
      * @return Map
      */
     @RequestMapping(value = "/getListSort", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map sortList(HttpServletRequest request, HttpServletResponse response) {
+    public Map sortList(HttpServletRequest request) {
           /* 获得已经验证过的参数map*/
         Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         /*查询数据*/
@@ -183,7 +178,7 @@ public class APIProductController extends BaseController {
      */
     @RequestMapping(value = "/get", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map get(HttpServletRequest request, HttpServletResponse response) {
+    public Map get(HttpServletRequest request) {
         /* 获得已经验证过的参数map*/
         Map<String, String> map = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
@@ -267,7 +262,7 @@ public class APIProductController extends BaseController {
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map addProduct(HttpServletRequest request, HttpServletResponse response) {
+    public Map addProduct(HttpServletRequest request) {
         try{
             Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
             return this.getProductService().addProduct(paramsMap);
@@ -285,7 +280,7 @@ public class APIProductController extends BaseController {
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map updateProduct(HttpServletRequest request, HttpServletResponse response) {
+    public Map updateProduct(HttpServletRequest request) {
         try{
             /* 获得已经验证过的参数map*/
             Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -335,7 +330,7 @@ public class APIProductController extends BaseController {
      */
     @RequestMapping(value = "/update/productUrl", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map updateProductUrl(HttpServletRequest request, HttpServletResponse response) {
+    public Map updateProductUrl(HttpServletRequest request) {
         Map<String, String> paramsMap = (Map<String, String>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
         Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         try{
@@ -367,7 +362,7 @@ public class APIProductController extends BaseController {
      */
     @RequestMapping(value = "/delEmployee", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map delEmp(HttpServletRequest request, HttpServletResponse response) {
+    public Map delEmp(HttpServletRequest request) {
         try{
             Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
             String productId = (String) paramsMap.get("productId");
@@ -411,7 +406,7 @@ public class APIProductController extends BaseController {
 
     @RequestMapping(value = "/update/status" , method = RequestMethod.POST , produces = {"application/json;charset=utf-8"})
     @ResponseBody
-    public Map updateStatus(HttpServletRequest request , HttpServletResponse response){
+    public Map updateStatus(HttpServletRequest request ){
         try{
             Map paramsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 
@@ -495,13 +490,12 @@ public class APIProductController extends BaseController {
     /**
      * 产品汇列表
      *
-     * @param response
      * @param request
      * @return Map
      */
     @RequestMapping(value = "/productHui", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map productHui(HttpServletRequest request, HttpServletResponse response) {
+    public Map productHui(HttpServletRequest request) {
         Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         try{
             /* 获得已经验证过的参数map */
@@ -524,13 +518,12 @@ public class APIProductController extends BaseController {
     /**
      * 产品汇列表(新)
      *
-     * @param response
      * @param request
      * @return Map
      */
     @RequestMapping(value = "/newProductHui", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map newProductHui(HttpServletRequest request, HttpServletResponse response) {
+    public Map newProductHui(HttpServletRequest request) {
         Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         /* 获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
@@ -547,13 +540,12 @@ public class APIProductController extends BaseController {
     /**
      * 产品汇列表(常用搜素列表)
      *
-     * @param response
      * @param request
      * @return Map
      */
     @RequestMapping(value = "/searchText", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map searchText(HttpServletRequest request, HttpServletResponse response) {
+    public Map searchText(HttpServletRequest request) {
         Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
         /* 获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
@@ -571,13 +563,12 @@ public class APIProductController extends BaseController {
     /**
      * 产品标签类型列表
      *
-     * @param response
      * @param request
      * @return Map
      */
     @RequestMapping(value = "/productLabelTypeList", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map productLabelTypeList(HttpServletRequest request, HttpServletResponse response) {
+    public Map productLabelTypeList(HttpServletRequest request) {
         /* 获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
         Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -604,13 +595,12 @@ public class APIProductController extends BaseController {
     /**
      * 产品标签列表
      *
-     * @param response
      * @param request
      * @return Map
      */
     @RequestMapping(value = "/productLabelList", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map productLabelList(HttpServletRequest request, HttpServletResponse response) {
+    public Map productLabelList(HttpServletRequest request) {
         /* 获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
         Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -637,13 +627,12 @@ public class APIProductController extends BaseController {
     /**
      * 添加产品标签类型
      *
-     * @param response
      * @param request
      * @return Map
      */
     @RequestMapping(value = "/addProductLabelType", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map addProductLabelType(HttpServletRequest request, HttpServletResponse response) {
+    public Map addProductLabelType(HttpServletRequest request) {
         /* 获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
         Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -671,13 +660,12 @@ public class APIProductController extends BaseController {
     /**
      * 添加产品标签
      *
-     * @param response
      * @param request
      * @return Map
      */
     @RequestMapping(value = "/addProductLabel", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map addProductLabel(HttpServletRequest request, HttpServletResponse response) {
+    public Map addProductLabel(HttpServletRequest request) {
         /* 获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
         Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -706,13 +694,12 @@ public class APIProductController extends BaseController {
     /**
      * 删除产品标签类型
      *
-     * @param response
      * @param request
      * @return Map
      */
     @RequestMapping(value = "/delProductLabelType", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map delProductLabelType(HttpServletRequest request, HttpServletResponse response) {
+    public Map delProductLabelType(HttpServletRequest request) {
         /* 获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
         Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -739,13 +726,12 @@ public class APIProductController extends BaseController {
     /**
      * 删除产品标签
      *
-     * @param response
      * @param request
      * @return Map
      */
     @RequestMapping(value = "/delProductLabel", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map delProductLabel(HttpServletRequest request, HttpServletResponse response) {
+    public Map delProductLabel(HttpServletRequest request) {
         /* 获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
         Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -771,13 +757,12 @@ public class APIProductController extends BaseController {
     /**
      * 修改产品标签类型
      *
-     * @param response
      * @param request
      * @return Map
      */
     @RequestMapping(value = "/updateProductLabelType", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map updateProductLabelType(HttpServletRequest request, HttpServletResponse response) {
+    public Map updateProductLabelType(HttpServletRequest request) {
         /* 获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
         Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -800,13 +785,12 @@ public class APIProductController extends BaseController {
     /**
      * 修改产品标签
      *
-     * @param response
      * @param request
      * @return Map
      */
     @RequestMapping(value = "/updateProductLabel", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map updateProductLabel(HttpServletRequest request, HttpServletResponse response) {
+    public Map updateProductLabel(HttpServletRequest request) {
         /* 获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
         Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -830,13 +814,12 @@ public class APIProductController extends BaseController {
     /**
      * 获取产品标签类型
      *
-     * @param response
      * @param request
      * @return Map
      */
     @RequestMapping(value = "/getProductLabelType", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map getProductLabelType(HttpServletRequest request, HttpServletResponse response) {
+    public Map getProductLabelType(HttpServletRequest request) {
         /* 获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
         Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -856,13 +839,12 @@ public class APIProductController extends BaseController {
     /**
      * 获取产品标签
      *
-     * @param response
      * @param request
      * @return Map
      */
     @RequestMapping(value = "/getProductLabel", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map getProductLabel(HttpServletRequest request, HttpServletResponse response) {
+    public Map getProductLabel(HttpServletRequest request) {
         /* 获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
         Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -882,13 +864,12 @@ public class APIProductController extends BaseController {
     /**
      * 根据标签类型id获取标签列表
      *
-     * @param response
      * @param request
      * @return Map
      */
     @RequestMapping(value = "/getLabelListByTypeId", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map getLabelListByTypeId(HttpServletRequest request, HttpServletResponse response) {
+    public Map getLabelListByTypeId(HttpServletRequest request) {
         /* 获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
         Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -932,13 +913,12 @@ public class APIProductController extends BaseController {
     /**
      * 获取标签树形结构
      *
-     * @param response
      * @param request
      * @return Map
      */
     @RequestMapping(value = "/getLabelTree", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map getLabelTree(HttpServletRequest request, HttpServletResponse response) {
+    public Map getLabelTree(HttpServletRequest request) {
         /* 获得已经验证过的参数map */
         @SuppressWarnings("unchecked")
         Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);

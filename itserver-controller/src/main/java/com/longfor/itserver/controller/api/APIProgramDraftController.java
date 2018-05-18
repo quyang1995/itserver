@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 
@@ -26,13 +25,12 @@ public class APIProgramDraftController extends BaseController {
 	/**
 	 * 新增项目草稿
 	 *
-	 * @param response
 	 * @param request
 	 * @return
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map programAdd(HttpServletResponse response, HttpServletRequest request){
+	public Map programAdd( HttpServletRequest request){
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		try{
@@ -48,13 +46,12 @@ public class APIProgramDraftController extends BaseController {
 	/**
 	 * 项目节点申请（草稿）
 	 *
-	 * @param response
 	 * @param request
 	 * @return
 	 */
 	@RequestMapping(value = "/applyNode", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map applyNode(HttpServletResponse response, HttpServletRequest request){
+	public Map applyNode( HttpServletRequest request){
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		try{
@@ -70,13 +67,12 @@ public class APIProgramDraftController extends BaseController {
 	/**
 	 * 删除项目草稿
 	 *
-	 * @param response
 	 * @param request
 	 * @return
 	 */
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map programDelete(HttpServletResponse response, HttpServletRequest request){
+	public Map programDelete( HttpServletRequest request){
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		try{
@@ -92,13 +88,12 @@ public class APIProgramDraftController extends BaseController {
 	/**
 	 * 获取项目草稿
 	 *
-	 * @param response
 	 * @param request
 	 * @return
 	 */
 	@RequestMapping(value = "/get", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map programGet(HttpServletResponse response, HttpServletRequest request){
+	public Map programGet( HttpServletRequest request){
 		Map<String, Object> resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		try{

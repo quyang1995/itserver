@@ -91,7 +91,7 @@ public class APIProgramController extends BaseController {
 	 */
 	@RequestMapping(value = "/list1", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map programList1(HttpServletRequest request, HttpServletResponse response){
+	public Map programList1(HttpServletRequest request){
 		/* 参数 */
 		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		/* 返回报文 */
@@ -169,7 +169,7 @@ public class APIProgramController extends BaseController {
 	 */
 	@RequestMapping(value = "/limitList", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map programLimitList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public Map programLimitList(HttpServletRequest request) {
 		/* 获得已经验证过的参数map */
 		@SuppressWarnings("unchecked")
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -190,7 +190,7 @@ public class APIProgramController extends BaseController {
 	 */
 	@RequestMapping(value = "/get", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map programGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public Map programGet(HttpServletRequest request) {
 		/* 获得已经验证过的参数map */
 		@SuppressWarnings("unchecked")
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -301,7 +301,7 @@ public class APIProgramController extends BaseController {
 	 */
 	@RequestMapping(value = "/getChangeList", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map getChangeList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public Map getChangeList(HttpServletRequest request) {
 		/* 获得已经验证过的参数map */
 		@SuppressWarnings("unchecked")
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
@@ -325,6 +325,10 @@ public class APIProgramController extends BaseController {
 			Integer changeApprovalStatus = programApprovalSnapshot.getApprovalStatus();
 			program.setChangeStatus(changeStatus);
 			program.setChangeApprovalStatus(changeApprovalStatus);
+			//取审核中的流程bpmCode
+			if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHZ.getCode()) {
+				program.setBpmCode(programApprovalSnapshot.getBpmCode());
+			}
 		}
 	}
 
@@ -372,14 +376,13 @@ public class APIProgramController extends BaseController {
 	/**
 	 * 新增项目列表
 	 *
-	 * @param response
 	 * @param request
 	 * @return
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map programAdd(HttpServletResponse response, HttpServletRequest request) throws IOException, JSONException {
+	public Map programAdd(HttpServletRequest request) {
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		try{
 			LOG.info("------/add:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
@@ -400,8 +403,7 @@ public class APIProgramController extends BaseController {
 	}
 
 	/**
-	 * 
-	 * @param response
+	 *
 	 * @param request
 	 * @return
 	 * @throws IOException
@@ -409,7 +411,7 @@ public class APIProgramController extends BaseController {
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map programUpdate(HttpServletResponse response, HttpServletRequest request){
+	public Map programUpdate(HttpServletRequest request){
 		Map paramsMap = (Map) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		try{
 			LOG.info("------/update:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
@@ -493,7 +495,7 @@ public class APIProgramController extends BaseController {
 
 	@RequestMapping(value = "/changeLog/list" ,method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
-	public Map changeLogList(HttpServletResponse response,HttpServletRequest request){
+	public Map changeLogList(HttpServletRequest request){
 		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
@@ -565,7 +567,7 @@ public class APIProgramController extends BaseController {
 	 */
 	@RequestMapping(value = "/productIdAllList",method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})
 	@ResponseBody
-	public Map productIdAllList(HttpServletRequest request,	HttpServletResponse response){
+	public Map productIdAllList(HttpServletRequest request){
 		Map parsmsMap = (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{
@@ -582,7 +584,7 @@ public class APIProgramController extends BaseController {
 
 	@RequestMapping(value = "/update/status",method = RequestMethod.POST,produces = {"application/json;charset=utf-8"})
 	@ResponseBody
-	public Map updateStatus(HttpServletRequest request,HttpServletResponse response){
+	public Map updateStatus(HttpServletRequest request){
 		Map paramsMap= (Map)request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		try{
 			LOG.info("------/update/status:-----------------"+ JSON.toJSONString(paramsMap)+"-----------------------");
@@ -608,7 +610,7 @@ public class APIProgramController extends BaseController {
 	 */
 	@RequestMapping(value = "/exportProgramList" ,method = RequestMethod.POST ,produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
-	public Map exportProgramList(HttpServletResponse response,HttpServletRequest request){
+	public Map exportProgramList(HttpServletRequest request){
 		Map<String, Object> paramsMap = (Map<String, Object>) request.getAttribute(ConfigConsts.REQ_PARAMS_MAP);
 		Map resultMap = CommonUtils.getResultMapByBizEnum(BizEnum.SSSS);
 		try{

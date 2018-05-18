@@ -37,6 +37,12 @@ public class PsProgramDetail extends Program implements Serializable {
     @Transient
     private String personLiable;
 
+    /**
+     * 当前项目审批中的bpmCode
+     */
+    @Transient
+    private String bpmCode;
+
     @Transient
     private List<Product> productList;
 
@@ -220,5 +226,13 @@ public class PsProgramDetail extends Program implements Serializable {
 
     public void setPersonLiable(String personLiable) {
         this.personLiable = personLiable;
+    }
+
+    public String getBpmCode() {
+        return bpmCode;
+    }
+
+    public void setBpmCode(String bpmCode) {
+        this.bpmCode = bpmCode;
     }
 }

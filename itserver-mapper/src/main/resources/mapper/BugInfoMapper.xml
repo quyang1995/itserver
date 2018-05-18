@@ -367,6 +367,15 @@
             <if test="createTime != null and createTime != ''">
                 and create_time <![CDATA[ >= ]]> #{createTime}
             </if>
+            <if test=" relationType == 1 ">
+                or ( relation_id in (SELECT id from program where product_id in (SELECT id from product
+                    <if test="relationId != null and relationId != ''">
+                        where id = #{relationId}
+                    </if>
+                    ))
+                    and relation_type = 2
+                )
+            </if>
         </where>
     </select>
 
