@@ -39,7 +39,7 @@ public interface IProgramService extends IAdminService<Program> {
 
     boolean updateStatus(Map paramsMap);
 
-    List<ProgramApprovalSnapshot> milepost(Map<String,Object> map);
+    List<ProgramApprovalSnapshot> milepost(Map<String,Object> map,PsProgramDetail program);
 
     List<ProgramApprovalSnapshot> lookNodes(Map<String,Object> map);
 

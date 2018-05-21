@@ -769,7 +769,7 @@ public class APIProgramBpmController extends BaseController {
 
 	private Map actualTime(Map paramsMap) throws Exception{
 		Map map = new HashMap();
-		List<ProgramApprovalSnapshot> milepostList =this.getProgramService().milepost(paramsMap);
+		List<ProgramApprovalSnapshot> milepostList =this.getProgramService().milepost(paramsMap,null);
 		for (ProgramApprovalSnapshot model:milepostList) {
 			if (model.getProgramStatus() == ProgramStatusNewEnum.LX.getCode()) {
 				map.put("commitDate",DateUtil.date2String(model.getCreateTime(),DateUtil.PATTERN_DATE));

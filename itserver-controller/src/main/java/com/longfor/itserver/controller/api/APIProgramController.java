@@ -280,7 +280,7 @@ public class APIProgramController extends BaseController {
 			/*项目里程碑*/
 			Map milepostMap = new HashMap();
 			milepostMap.put("programId", new Long(id));
-			List<ProgramApprovalSnapshot> milepostList =this.getProgramService().milepost(milepostMap);
+			List<ProgramApprovalSnapshot> milepostList =this.getProgramService().milepost(milepostMap,program);
 			program.setMilepostList(milepostList);
 			/* 返回报文 */
 			resultMap.put("data", program);
@@ -326,7 +326,8 @@ public class APIProgramController extends BaseController {
 			program.setChangeStatus(changeStatus);
 			program.setChangeApprovalStatus(changeApprovalStatus);
 			//取审核中的流程bpmCode
-			if (program.getApprovalStatus()==ProgramApprovalStatusEnum.SHZ.getCode()) {
+			if (programApprovalSnapshot.getApprovalStatus()==ProgramApprovalStatusEnum.SHZ.getCode()
+					|| programApprovalSnapshot.getApprovalStatus()==ProgramApprovalStatusEnum.BGSHZ.getCode()) {
 				program.setBpmCode(programApprovalSnapshot.getBpmCode());
 			}
 		}
@@ -562,7 +563,6 @@ public class APIProgramController extends BaseController {
 	/**
 	 * 通过产品ID获取相关项目列表
 	 * @param request
-	 * @param response
 	 * @return
 	 */
 	@RequestMapping(value = "/productIdAllList",method = RequestMethod.POST ,produces = {"application/json;charset=utf-8"})

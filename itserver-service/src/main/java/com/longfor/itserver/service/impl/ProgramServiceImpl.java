@@ -212,7 +212,7 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
     }
 
     @Override
-    public List<ProgramApprovalSnapshot> milepost(Map<String,Object> paramMap) {
+    public List<ProgramApprovalSnapshot> milepost(Map<String,Object> paramMap,PsProgramDetail program) {
         List<ProgramApprovalSnapshot> resultList = new ArrayList<ProgramApprovalSnapshot>();
         paramMap.put("approvalStatus",ProgramApprovalStatusEnum.SHTG.getCode());
 		/*立项*/
@@ -239,12 +239,19 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         if (snapshot != null && !snapshot.isEmpty()) {
             resultList.add(snapshot.get(0));
         }
+        if(program != null && program.getProgramStatus() == ProgramStatusNewEnum.CPPS.getCode()
+                && program.getApprovalStatus() != ProgramApprovalStatusEnum.SHTG.getCode()){
+            return resultList;
+        }
 		/*产品评审*/
-
         paramMap.put("programStatus",ProgramStatusNewEnum.CPPS.getCode());
         snapshot =programApprovalSnapshotMapper.getListByProgramIdAndStatus(paramMap);
         if (snapshot != null && !snapshot.isEmpty()) {
             resultList.add(snapshot.get(0));
+        }
+        if(program != null && program.getProgramStatus() == ProgramStatusNewEnum.KFPS.getCode()
+                && program.getApprovalStatus() != ProgramApprovalStatusEnum.SHTG.getCode()){
+            return resultList;
         }
 		/*开发评审*/
         paramMap.put("programStatus",ProgramStatusNewEnum.KFPS.getCode());
@@ -252,11 +259,19 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         if (snapshot != null && !snapshot.isEmpty()) {
             resultList.add(snapshot.get(0));
         }
+        if(program != null && program.getProgramStatus() == ProgramStatusNewEnum.CSPS.getCode()
+                && program.getApprovalStatus() != ProgramApprovalStatusEnum.SHTG.getCode()){
+            return resultList;
+        }
 		/*测试评审*/
         paramMap.put("programStatus",ProgramStatusNewEnum.CSPS.getCode());
         snapshot =programApprovalSnapshotMapper.getListByProgramIdAndStatus(paramMap);
         if (snapshot != null && !snapshot.isEmpty()) {
             resultList.add(snapshot.get(0));
+        }
+        if(program != null && program.getProgramStatus() == ProgramStatusNewEnum.SXPS.getCode()
+                && program.getApprovalStatus() != ProgramApprovalStatusEnum.SHTG.getCode()){
+            return resultList;
         }
 		/*上线计划*/
         paramMap.put("programStatus",ProgramStatusNewEnum.SXPS.getCode());
@@ -264,17 +279,29 @@ public class ProgramServiceImpl extends AdminBaseService<Program> implements IPr
         if (snapshot != null && !snapshot.isEmpty()) {
             resultList.add(snapshot.get(0));
         }
+        if(program != null && program.getProgramStatus() == ProgramStatusNewEnum.HDFB.getCode()
+                && program.getApprovalStatus() != ProgramApprovalStatusEnum.SHTG.getCode()){
+            return resultList;
+        }
 		/*灰度发布*/
         paramMap.put("programStatus",ProgramStatusNewEnum.HDFB.getCode());
         snapshot =programApprovalSnapshotMapper.getListByProgramIdAndStatus(paramMap);
         if (snapshot != null && !snapshot.isEmpty()) {
             resultList.add(snapshot.get(0));
         }
+        if(program != null && program.getProgramStatus() == ProgramStatusNewEnum.QMTG.getCode()
+                && program.getApprovalStatus() != ProgramApprovalStatusEnum.SHTG.getCode()){
+            return resultList;
+        }
         /*全面推广*/
         paramMap.put("programStatus",ProgramStatusNewEnum.QMTG.getCode());
         snapshot =programApprovalSnapshotMapper.getListByProgramIdAndStatus(paramMap);
         if (snapshot != null && !snapshot.isEmpty()) {
             resultList.add(snapshot.get(0));
+        }
+        if(program != null && program.getProgramStatus() == ProgramStatusNewEnum.XMFP.getCode()
+                && program.getApprovalStatus() != ProgramApprovalStatusEnum.SHTG.getCode()){
+            return resultList;
         }
 		/*项目复盘*/
         paramMap.put("programStatus",ProgramStatusNewEnum.XMFP.getCode());
