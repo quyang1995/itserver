@@ -33,10 +33,6 @@
         <mybatis-ehcache.version>1.0.3</mybatis-ehcache.version>
         <persistence-api.version>1.0</persistence-api.version>
 
-        <!--<eds-helper.version>1.5.13-SNAPSHOT</eds-helper.version>-->
-        <eds-helper.version>1.6.7-SNAPSHOT</eds-helper.version>
-        <ads-helper.version>1.0.7-SNAPSHOT</ads-helper.version>
-
         <judi-encrypt.version>1.12</judi-encrypt.version>
         <judi-commons.version>1.19-SNAPSHOT</judi-commons.version>
         <judi-mysql.version>1.07-SNAPSHOT</judi-mysql.version>
@@ -205,17 +201,6 @@
                 <groupId>net.mayee</groupId>
                 <artifactId>judi-redis</artifactId>
                 <version>${judi-redis.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.longfor</groupId>
-                <artifactId>eds-helper</artifactId>
-                <version>${eds-helper.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.longfor</groupId>
-                <artifactId>ads-helper</artifactId>
-                <version>${ads-helper.version}</version>
             </dependency>
 
             <!--MQ-->

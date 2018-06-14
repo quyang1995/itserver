@@ -24,7 +24,7 @@
     <mvc:annotation-driven/>
 
     <mvc:default-servlet-handler/>
-    <mvc:view-controller path="/" view-name="redirect:${web.project.url}"/>
+    <!--<mvc:view-controller path="/" view-name="redirect:${web.project.url}"/>-->
     <!--<mvc:resources mapping="/image/**" location="/WEB-INF/image/"/>-->
 
     <context:component-scan base-package="com.longfor.itserver.controller"

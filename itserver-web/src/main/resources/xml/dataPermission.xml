@@ -3,27 +3,7 @@
              xsi:noNamespaceSchemaLocation="xsd/dataPermission.xsd">
 
     <accounts>
-        <account loginName="wang" />
-        <account loginName="wanggj" />
-        <account loginName="gaojianxiong" />
-        <account loginName="lichuan" />
-        <account loginName="liufq" />
-        <account loginName="zhouqiongshuo" />
-        <account loginName="fuzhihua" />
-        <account loginName="zuoenze" />
-        <account loginName="jiangzhenghao" />
-        <account loginName="wangfajin" />
-        <account loginName="dujie1" />
-        <account loginName="wenting" />
-        <account loginName="liangliang3" />
-        <account loginName="chengxiujin" />
-        <account loginName="zhangchi4" />
-        <account loginName="lijyan" />
-        <account loginName="chenzongning" />
-        <account loginName="wangsq" />
-        <account loginName="tianmeng" />
-        <account loginName="zhangnan11" />
-        <account loginName="syguwen" />
+        <account loginName="quyang" />
     </accounts>
 
 </dataPermission>

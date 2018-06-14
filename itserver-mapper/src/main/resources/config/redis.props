@@ -3,22 +3,22 @@
 #
 
 [redis<development>]
-pass=longfor_redis
+pass=ganenyouni
 pool.maxTotal=105
 pool.maxIdle=10
 pool.maxWaitMillis=5000
 pool.testOnBorrow=true
-ip=192.168.33.143
+ip=127.0.0.1
 port=6379
 database=6
 
 [redis<uat>]
-pass=longfor_redis
+pass=ganenyouni
 pool.maxTotal=105
 pool.maxIdle=10
 pool.maxWaitMillis=5000
 pool.testOnBorrow=true
-ip=192.168.33.143
+ip=127.0.0.1
 port=6379
 database=6
 

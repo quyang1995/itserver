@@ -1,19 +1,13 @@
-package generator.warehouse.client;
+package com.longfor.itserver.mapper;
 
-import generator.warehouse.entity.userTable;
-import generator.warehouse.entity.userTableExample;
+import com.longfor.itserver.entity.userTable;
+import com.longfor.itserver.mapper.base.BeeMapper;
+
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
-import tk.mybatis.mapper.common.Mapper;
 
-public interface userTableMapper extends Mapper<userTable> {
-    int countByExample(userTableExample example);
 
-    int deleteByExample(userTableExample example);
+public interface userTableMapper extends BeeMapper<userTable> {
 
-    List<userTable> selectByExample(userTableExample example);
+    List<userTable> selectUserTable();
 
-    int updateByExampleSelective(@Param("record") userTable record, @Param("example") userTableExample example);
-
-    int updateByExample(@Param("record") userTable record, @Param("example") userTableExample example);
 }

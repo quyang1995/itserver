@@ -42,7 +42,7 @@
                              targetProject="${MBG.config.client.targetProject}"
                              type="XMLMAPPER"/>
 
-        <table tableName="PS_HPS_COMPANY_VW" domainObjectName="Company"/>
+        <!--<table tableName="PS_HPS_COMPANY_VW" domainObjectName="Company"/>-->
 
     </context>
 

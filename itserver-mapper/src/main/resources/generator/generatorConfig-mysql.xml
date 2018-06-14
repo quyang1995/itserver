@@ -41,68 +41,8 @@
         <javaClientGenerator targetPackage="${MBG.config.client.targetPackage}"
                              targetProject="${MBG.config.client.targetProject}"
                              type="XMLMAPPER"/>
-<!--
-        <table tableName="product" domainObjectName="Product">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        <table tableName="product_employee" domainObjectName="ProductEmployee">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        <table tableName="product_employee_change_log" domainObjectName="ProductEmployeeChangeLog">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        <table tableName="product_comment" domainObjectName="ProductComment">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
 
-        <table tableName="program" domainObjectName="Program">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        <table tableName="program_employee" domainObjectName="ProgramEmployee">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        <table tableName="program_employee_change_log" domainObjectName="ProgramEmployeeChangeLog">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        <table tableName="program_comment" domainObjectName="ProgramComment">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        <table tableName="demand" domainObjectName="Demand">
-        <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        <table tableName="demand_change_log" domainObjectName="DemandChangeLog">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        <table tableName="demand_comment" domainObjectName="DemandComment">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        <table tableName="bug_info" domainObjectName="BugInfo">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        <table tableName="bug_change_log" domainObjectName="BugChangeLog">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        <table tableName="bug_comment" domainObjectName="BugComment">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-
-        <table tableName="employee_type" domainObjectName="EmployeeType">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        <table tableName="feed_back" domainObjectName="FeedBack">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        <table tableName="demand_file" domainObjectName="DemandFile">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        <table tableName="bug_file" domainObjectName="BugFile">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        <table tableName="feed_back" domainObjectName="FeedBack">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        -->
-        <table tableName="program_employee_draft" domainObjectName="ProgramEmployeeDraft">
+        <table tableName="USER_TABLE" domainObjectName="userTable">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
 
