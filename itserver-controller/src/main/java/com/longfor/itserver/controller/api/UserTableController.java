@@ -46,7 +46,7 @@ public class UserTableController extends BaseController {
 			if(userTableList!=null && userTableList.size()>0){
 				resultMap.put("list", userTableList);
 			}else{
-				//查询数据
+				//查询数据哈哈哈哈
 				List<userTable> userTables = this.getUserTableService().userList();
 				redisCache.putListCacheWithExpireTime(key, userTables, RedisCache.CAHCETIME_600S);
 			}
